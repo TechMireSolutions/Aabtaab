@@ -50,28 +50,50 @@ export const courseSlugsQuery = `*[_type == "course" && defined(slug.current)]{ 
 
 // ─── Services ────────────────────────────────────────────────────────────────
 
+/* Top-level listing page (/services) */
 export const topLevelServicesQuery = `
   *[_type == "service" && !defined(parent)] | order(order asc) {
-    _id, title, slug, description, icon, isBookable, price,
+    _id, title, slug, excerpt, icon, price,
+    "childCount": count(*[_type == "service" && references(^._id)])
+  }
+`
+
+/* Catch-all route — fetch by slug with full ancestry (4 levels deep) + children */
+export const serviceBySlugDeepQuery = `
+  *[_type == "service" && slug.current == $slug][0] {
+    _id, title, slug, excerpt, body, icon, isBookable, price, faq,
+    "seoTitle": seoTitle, "seoDescription": seoDescription,
+    "parent": parent->{
+      _id, title, "slug": slug.current,
+      "parent": parent->{
+        _id, title, "slug": slug.current,
+        "parent": parent->{
+          _id, title, "slug": slug.current
+        }
+      }
+    },
     "children": *[_type == "service" && references(^._id)] | order(order asc) {
-      _id, title, slug, isBookable, price,
-      "children": *[_type == "service" && references(^._id)] | order(order asc) {
-        _id, title, slug, isBookable, price
+      _id, title, "slug": slug.current, excerpt, icon, price,
+      "childCount": count(*[_type == "service" && references(^._id)])
+    }
+  }
+`
+
+/* Used by generateStaticParams — full ancestry per service */
+export const allServicePathsQuery = `
+  *[_type == "service" && defined(slug.current)] {
+    "slug": slug.current,
+    "parent": parent->{
+      "slug": slug.current,
+      "parent": parent->{
+        "slug": slug.current,
+        "parent": parent->{ "slug": slug.current }
       }
     }
   }
 `
 
-export const serviceBySlugQuery = `
-  *[_type == "service" && slug.current == $slug][0] {
-    _id, title, slug, description, icon, isBookable, price,
-    "parent": parent->{ _id, title, slug },
-    "children": *[_type == "service" && references(^._id)] | order(order asc) {
-      _id, title, slug, isBookable, price
-    }
-  }
-`
-
+/* Keep for any other references */
 export const serviceSlugsQuery = `*[_type == "service" && defined(slug.current)]{ "slug": slug.current }`
 
 // ─── Pages (About, Donate, Contact) ──────────────────────────────────────────
