@@ -47,7 +47,7 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
               {course.quranType && <span className="text-xs font-medium bg-gold-400 text-white px-3 py-1 rounded-full">{course.quranType}</span>}
             </div>
             <h1 className="text-3xl font-bold text-primary-800 mb-2">{course.title}</h1>
-            {course.instructor && <p className="text-gray-500 mb-6">Instructor: <span className="font-medium text-primary-600">{course.instructor.name}</span></p>}
+            {course.instructor && <p className="text-gray-500 mb-6">Instructor: <span className="font-medium text-primary-600">{course.instructor}</span></p>}
 
             <div className="flex flex-wrap gap-6 text-sm mb-8">
               {course.duration && <span className="text-gray-600">Duration: <strong>{course.duration}</strong></span>}

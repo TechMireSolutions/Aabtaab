@@ -30,8 +30,7 @@ export const postSlugsQuery = `*[_type == "post" && defined(slug.current)]{ "slu
 
 export const coursesQuery = `
   *[_type == "course"] | order(order asc) {
-    _id, title, slug, subject, quranType, description, featuredImage, price, duration, enrollmentLink,
-    "instructor": instructor->{ name, image },
+    _id, title, slug, subject, quranType, description, featuredImage, price, duration, enrollmentLink, instructor,
     "levels": *[_type == "courseLevel" && references(^._id)] | order(title asc) {
       _id, title, description, duration
     }
@@ -40,8 +39,7 @@ export const coursesQuery = `
 
 export const courseBySlugQuery = `
   *[_type == "course" && slug.current == $slug][0] {
-    _id, title, slug, subject, quranType, description, featuredImage, price, duration, enrollmentLink,
-    "instructor": instructor->{ name, image, bio },
+    _id, title, slug, subject, quranType, description, featuredImage, price, duration, enrollmentLink, instructor,
     "levels": *[_type == "courseLevel" && references(^._id)] | order(title asc) {
       _id, title, description, curriculum, duration, prerequisites
     }
@@ -76,16 +74,7 @@ export const serviceBySlugQuery = `
 
 export const serviceSlugsQuery = `*[_type == "service" && defined(slug.current)]{ "slug": slug.current }`
 
-// ─── Events ──────────────────────────────────────────────────────────────────
-
-export const upcomingEventsQuery = `
-  *[_type == "event" && dateTime(eventDate) >= dateTime(now())] | order(eventDate asc)[0...5] {
-    _id, title, slug, eventDate, location, topic,
-    "speaker": speaker->{ name, image }
-  }
-`
-
-// ─── Pages (About, Donate, etc.) ─────────────────────────────────────────────
+// ─── Pages (About, Donate, Contact) ──────────────────────────────────────────
 
 export const pageBySlugQuery = `
   *[_type == "page" && slug.current == $slug][0] {
@@ -96,14 +85,6 @@ export const pageBySlugQuery = `
 // ─── Homepage ────────────────────────────────────────────────────────────────
 
 export const homepageSettingsQuery = `*[_type == "homepageSettings"][0]`
-
-// ─── Donate ──────────────────────────────────────────────────────────────────
-
-export const donateCausesQuery = `
-  *[_type == "donateCause" && active == true] | order(order asc) {
-    _id, title, description, targetAmount
-  }
-`
 
 // ─── Site Settings ───────────────────────────────────────────────────────────
 

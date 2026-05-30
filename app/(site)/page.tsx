@@ -8,7 +8,6 @@ import {
   featuredPostsQuery,
   topLevelServicesQuery,
   coursesQuery,
-  upcomingEventsQuery,
   homepageSettingsQuery,
 } from '@/sanity/lib/queries'
 import HeroSection from '@/components/sections/HeroSection'
@@ -16,11 +15,10 @@ import HeroSection from '@/components/sections/HeroSection'
 export const revalidate = 60
 
 export default async function HomePage() {
-  const [posts, services, courses, events, hp] = await Promise.all([
+  const [posts, services, courses, hp] = await Promise.all([
     client.fetch(featuredPostsQuery),
     client.fetch(topLevelServicesQuery),
     client.fetch(coursesQuery),
-    client.fetch(upcomingEventsQuery),
     client.fetch(homepageSettingsQuery),
   ])
 
@@ -43,25 +41,6 @@ export default async function HomePage() {
       />
 
       {/* ── Upcoming Events ticker ── */}
-      {events?.length > 0 && (
-        <section className="bg-[#f8f8f8] border-b border-gray-100 py-3">
-          <div className="max-w-7xl mx-auto px-8 flex items-center gap-6 overflow-x-auto scrollbar-hide">
-            <span className="text-[11px] font-semibold text-cyan-500 uppercase tracking-widest flex-shrink-0">Upcoming</span>
-            <div className="flex gap-6">
-              {events.map((ev: any) => (
-                <div key={ev._id} className="flex items-center gap-3 flex-shrink-0">
-                  <span className="text-[11px] font-semibold text-gray-400">
-                    {new Date(ev.eventDate).toLocaleDateString('en-PK', { day: 'numeric', month: 'short' })}
-                  </span>
-                  <span className="text-[13px] text-gray-700 font-medium">{ev.title}</span>
-                  {ev.location && <span className="text-[12px] text-gray-400">— {ev.location}</span>}
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
       {/* ── Services ── */}
       {services?.length > 0 && (
         <section className="py-16 border-b border-gray-100">
