@@ -5,7 +5,7 @@ import { urlFor } from '@/sanity/lib/image'
 import {
   featuredPostsQuery,
   topLevelServicesQuery,
-  coursesQuery,
+  topLevelCoursesQuery,
   homepageSettingsQuery,
 } from '@/sanity/lib/queries'
 import HeroSection from '@/components/sections/HeroSection'
@@ -18,7 +18,7 @@ export default async function HomePage() {
   const [posts, services, courses, hp] = await Promise.all([
     client.fetch(featuredPostsQuery),
     client.fetch(topLevelServicesQuery),
-    client.fetch(coursesQuery),
+    client.fetch(topLevelCoursesQuery),
     client.fetch(homepageSettingsQuery),
   ])
 

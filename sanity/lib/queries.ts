@@ -28,20 +28,46 @@ export const postSlugsQuery = `*[_type == "post" && defined(slug.current)]{ "slu
 
 // ─── Courses ─────────────────────────────────────────────────────────────────
 
-export const coursesQuery = `
-  *[_type == "course"] | order(order asc) {
-    _id, title, slug, subject, quranType, description, featuredImage, price, duration, enrollmentLink, instructor,
-    "levels": *[_type == "courseLevel" && references(^._id)] | order(title asc) {
-      _id, title, description, duration
+/* Top-level listing page (/online-courses) */
+export const topLevelCoursesQuery = `
+  *[_type == "course" && !defined(parent)] | order(order asc) {
+    _id, title, slug, excerpt, subject, featuredImage, price, duration, instructor,
+    "childCount": count(*[_type == "course" && references(^._id)])
+  }
+`
+
+/* Catch-all route — fetch by slug with full ancestry (4 levels) + children */
+export const courseBySlugDeepQuery = `
+  *[_type == "course" && slug.current == $slug][0] {
+    _id, title, slug, excerpt, body, subject, featuredImage,
+    price, duration, instructor, enrollmentLink, faq,
+    "seoTitle": seoTitle, "seoDescription": seoDescription,
+    "parent": parent->{
+      _id, title, "slug": slug.current,
+      "parent": parent->{
+        _id, title, "slug": slug.current,
+        "parent": parent->{
+          _id, title, "slug": slug.current
+        }
+      }
+    },
+    "children": *[_type == "course" && references(^._id)] | order(order asc) {
+      _id, title, "slug": slug.current, excerpt, featuredImage, price, duration,
+      "childCount": count(*[_type == "course" && references(^._id)])
     }
   }
 `
 
-export const courseBySlugQuery = `
-  *[_type == "course" && slug.current == $slug][0] {
-    _id, title, slug, subject, quranType, description, featuredImage, price, duration, enrollmentLink, instructor,
-    "levels": *[_type == "courseLevel" && references(^._id)] | order(title asc) {
-      _id, title, description, curriculum, duration, prerequisites
+/* Used by generateStaticParams */
+export const allCoursePathsQuery = `
+  *[_type == "course" && defined(slug.current)] {
+    "slug": slug.current,
+    "parent": parent->{
+      "slug": slug.current,
+      "parent": parent->{
+        "slug": slug.current,
+        "parent": parent->{ "slug": slug.current }
+      }
     }
   }
 `
