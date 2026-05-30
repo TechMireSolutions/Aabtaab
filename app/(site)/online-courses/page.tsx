@@ -1,19 +1,18 @@
 import type { Metadata } from 'next'
-import Link from 'next/link'
-import Image from 'next/image'
 import { client } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
 import { coursesQuery } from '@/sanity/lib/queries'
+import ContentCard from '@/components/ui/ContentCard'
 
 export const revalidate = 60
 export const metadata: Metadata = { title: 'Online Courses' }
 
 const SUBJECTS = [
-  { value: 'quran',        label: 'Quran' },
-  { value: 'nejul-balagha',label: 'Nejul Balagha' },
-  { value: 'jurisprudence',label: 'Jurisprudence' },
-  { value: 'ethics',       label: 'Ethics' },
-  { value: 'history',      label: 'History' },
+  { value: 'quran',         label: 'Quran' },
+  { value: 'nejul-balagha', label: 'Nejul Balagha' },
+  { value: 'jurisprudence', label: 'Jurisprudence' },
+  { value: 'ethics',        label: 'Ethics' },
+  { value: 'history',       label: 'History' },
 ]
 
 export default async function CoursesPage() {
@@ -26,44 +25,36 @@ export default async function CoursesPage() {
 
   return (
     <div className="py-14">
-      <div className="container-main">
-        <h1 className="section-title text-4xl mb-2">Online Courses</h1>
-        <p className="text-gray-500 mb-10">Learn from qualified scholars — Quran, Fiqh, Ethics & more</p>
+      <div className="max-w-7xl mx-auto px-8">
+
+        <p className="text-[11px] font-semibold text-cyan-500 uppercase tracking-widest mb-1">Education</p>
+        <h1 className="text-[32px] font-bold text-gray-900 mb-1">Online Courses</h1>
+        <p className="text-[14px] text-gray-500 mb-12">Learn from qualified scholars — Quran, Fiqh, Ethics &amp; more</p>
 
         {grouped.map((group) => (
           <div key={group.value} className="mb-14">
-            <h2 className="text-2xl font-bold text-primary-700 mb-6 pb-2 border-b border-primary-100">{group.label}</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {group.courses.map((course: any) => (
-                <Link key={course._id} href={`/online-courses/${course.slug.current}`}
-                  className="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow border border-gray-100 flex flex-col">
-                  {course.featuredImage && (
-                    <div className="relative h-44 w-full">
-                      <Image src={urlFor(course.featuredImage).width(600).height(300).url()} alt={course.title} fill className="object-cover" />
-                    </div>
-                  )}
-                  <div className="p-5 flex-1 flex flex-col">
-                    {course.quranType && (
-                      <span className="text-xs font-medium bg-gold-400 text-white px-2 py-0.5 rounded w-fit mb-2">{course.quranType}</span>
-                    )}
-                    <h3 className="font-bold text-primary-800 text-lg mb-1">{course.title}</h3>
-                    {course.instructor && <p className="text-sm text-gray-500 mb-2">Instructor: {course.instructor.name}</p>}
-                    {course.levels?.length > 0 && (
-                      <p className="text-xs text-primary-600 mt-auto">{course.levels.length} level{course.levels.length > 1 ? 's' : ''} available</p>
-                    )}
-                    <div className="flex items-center justify-between mt-3">
-                      {course.price && <span className="text-sm font-semibold text-gold-600">{course.price}</span>}
-                      <span className="text-sm text-primary-500 font-medium">View details →</span>
-                    </div>
-                  </div>
-                </Link>
+            <h2 className="text-[20px] font-bold text-gray-900 mb-6 pb-3 border-b border-gray-100">
+              {group.label}
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {group.courses.map((course: any, i: number) => (
+                <ContentCard
+                  key={course._id}
+                  href={`/online-courses/${course.slug.current}`}
+                  image={course.featuredImage ? urlFor(course.featuredImage).width(600).height(450).url() : null}
+                  title={course.title}
+                  description={course.price ? `${course.price}${course.duration ? ' · ' + course.duration : ''}` : course.duration || null}
+                  badge={course.quranType || undefined}
+                  ctaLabel="Enroll Now"
+                  active={i % 3 === 1}
+                />
               ))}
             </div>
           </div>
         ))}
 
         {courses.length === 0 && (
-          <p className="text-gray-400 text-center py-20">Courses coming soon. Please check back.</p>
+          <p className="text-gray-400 text-center py-24">Courses coming soon.</p>
         )}
       </div>
     </div>

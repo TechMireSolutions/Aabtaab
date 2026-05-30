@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight } from 'lucide-react'
+import ContentCard from '@/components/ui/ContentCard'
 import { client } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
 import {
@@ -101,21 +102,18 @@ export default async function HomePage() {
                 View all →
               </Link>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {courses.slice(0, 3).map((course: any) => (
-                <Link key={course._id} href={`/online-courses/${course.slug.current}`}
-                  className="group bg-white rounded-xl overflow-hidden border border-gray-200 hover:border-cyan-300 transition-colors duration-150">
-                  {course.featuredImage && (
-                    <div className="relative h-44 w-full">
-                      <Image src={urlFor(course.featuredImage).width(600).height(300).url()} alt={course.title} fill className="object-cover" />
-                    </div>
-                  )}
-                  <div className="p-5">
-                    <span className="text-[11px] font-semibold text-cyan-500 uppercase tracking-wider">{course.subject}</span>
-                    <h3 className="font-semibold text-gray-900 mt-1.5 mb-1 group-hover:text-cyan-600 transition-colors">{course.title}</h3>
-                    {course.price && <p className="text-[13px] text-gray-500">{course.price}</p>}
-                  </div>
-                </Link>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {courses.slice(0, 3).map((course: any, i: number) => (
+                <ContentCard
+                  key={course._id}
+                  href={`/online-courses/${course.slug.current}`}
+                  image={course.featuredImage ? urlFor(course.featuredImage).width(600).height(450).url() : null}
+                  title={course.title}
+                  description={course.price || null}
+                  badge={course.subject}
+                  ctaLabel="Enroll Now"
+                  active={i === 1}
+                />
               ))}
             </div>
           </div>
@@ -136,23 +134,18 @@ export default async function HomePage() {
                 View all →
               </Link>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-              {posts.slice(0, 3).map((post: any) => (
-                <Link key={post._id} href={`/articles/${post.slug.current}`}
-                  className="group flex flex-col bg-white rounded-xl overflow-hidden border border-gray-200 hover:border-cyan-300 transition-colors duration-150">
-                  {post.mainImage && (
-                    <div className="relative h-44 w-full">
-                      <Image src={urlFor(post.mainImage).width(600).height(350).url()} alt={post.mainImage.alt ?? post.title} fill className="object-cover" />
-                    </div>
-                  )}
-                  <div className="p-5 flex-1 flex flex-col">
-                    <p className="text-[11px] text-gray-400 mb-2">
-                      {post.publishedAt && new Date(post.publishedAt).toLocaleDateString('en-PK', { year: 'numeric', month: 'long', day: 'numeric' })}
-                    </p>
-                    <h3 className="font-semibold text-gray-900 group-hover:text-cyan-600 transition-colors leading-snug flex-1">{post.title}</h3>
-                    {post.excerpt && <p className="text-[13px] text-gray-500 mt-2 line-clamp-2">{post.excerpt}</p>}
-                  </div>
-                </Link>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {posts.slice(0, 3).map((post: any, i: number) => (
+                <ContentCard
+                  key={post._id}
+                  href={`/articles/${post.slug.current}`}
+                  image={post.mainImage ? urlFor(post.mainImage).width(600).height(450).url() : null}
+                  title={post.title}
+                  description={post.excerpt || null}
+                  badge={post.categories?.[0]?.title || null}
+                  ctaLabel="Read More"
+                  active={i === 1}
+                />
               ))}
             </div>
           </div>
