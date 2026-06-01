@@ -21,7 +21,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
         logoUrl={logoUrl}
       />
       <main className="min-h-screen">{children}</main>
-      <Footer settings={settings} />
+      <Footer settings={settings} logoUrl={logoUrl} />
     </>
   )
 }
