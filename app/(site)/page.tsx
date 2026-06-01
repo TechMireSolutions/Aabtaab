@@ -91,24 +91,24 @@ export default async function HomePage() {
 
       {/* ── Latest Articles ── */}
       {posts?.length > 0 && (
-        <section className="py-16 border-b border-gray-100 bg-white">
-          <div className="max-w-7xl mx-auto px-8">
-            <div className="flex items-end justify-between mb-10">
+        <section className="py-10 md:py-16 border-b border-gray-100 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-7 sm:mb-10">
               <div>
                 <p className="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.18em] text-cyan-600 mb-2">
                   <span className="w-6 h-px bg-cyan-400 inline-block" />
                   Knowledge
                 </p>
-                <h2 className="font-bold text-[27px] text-slate-900 leading-tight tracking-[-0.02em]">
+                <h2 className="font-bold text-[24px] sm:text-[27px] text-slate-900 leading-tight tracking-[-0.02em]">
                   {hp?.articlesHeading || 'Latest Articles'}
                 </h2>
                 {hp?.articlesSubheading && (
-                  <p className="text-[13.5px] text-gray-500 mt-1.5">{hp.articlesSubheading}</p>
+                  <p className="text-[13px] text-gray-500 mt-1.5">{hp.articlesSubheading}</p>
                 )}
               </div>
               <Link
                 href="/articles"
-                className="group inline-flex items-center gap-1.5 text-[13px] font-semibold text-cyan-600 hover:text-cyan-700 transition-colors flex-shrink-0 ml-6"
+                className="group inline-flex items-center gap-1.5 text-[13px] font-semibold text-cyan-600 hover:text-cyan-700 transition-colors flex-shrink-0 sm:ml-6"
               >
                 View all
                 <ArrowRight size={13} strokeWidth={2.5} className="group-hover:translate-x-0.5 transition-transform duration-150" />
@@ -132,13 +132,13 @@ export default async function HomePage() {
       )}
 
       {/* ── Donate CTA ── */}
-      <section className="relative overflow-hidden bg-slate-50 border-y border-slate-200 py-12">
+      <section className="relative overflow-hidden bg-slate-50 border-y border-slate-200 py-10 sm:py-12">
 
         {/* Subtle dot grid */}
         <div className="absolute inset-0 opacity-40 pointer-events-none"
           style={{ backgroundImage: 'radial-gradient(circle, #cbd5e1 1px, transparent 1px)', backgroundSize: '24px 24px' }}/>
 
-        <div className="relative max-w-2xl mx-auto px-6 text-center">
+        <div className="relative max-w-2xl mx-auto px-4 sm:px-6 text-center">
 
           {/* Arabic eyebrow */}
           <div className="inline-flex items-center gap-2.5 mb-4">

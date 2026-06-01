@@ -69,11 +69,11 @@ export default function CarouselSection({
   const bgClass = bg === 'gray' ? 'bg-slate-50' : 'bg-white'
 
   return (
-    <section className={`py-16 border-b border-gray-100 ${bgClass}`}>
-      <div className="max-w-7xl mx-auto px-8">
+    <section className={`py-10 md:py-16 border-b border-gray-100 ${bgClass}`}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Header row */}
-        <div className="flex items-end justify-between mb-10">
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-7 sm:mb-10">
           <div>
             <p className="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.18em] text-cyan-600 mb-2">
               <span className="w-6 h-px bg-cyan-400 inline-block" />
@@ -85,7 +85,7 @@ export default function CarouselSection({
             )}
           </div>
 
-          <div className="flex items-center gap-3 flex-shrink-0 ml-6">
+          <div className="flex items-center gap-3 flex-shrink-0 sm:ml-6">
             {/* Prev / Next */}
             <div className="flex items-center gap-1.5">
               <button

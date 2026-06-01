@@ -70,8 +70,8 @@ export default function Footer({ settings, logoUrl }: FooterProps) {
     <footer className="bg-gray-50 border-t border-gray-200">
 
       {/* ── Main body ── */}
-      <div className="max-w-7xl mx-auto px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10">
 
           {/* Col 1 — Logo + Brand */}
           <div className="lg:col-span-1">
@@ -219,7 +219,7 @@ export default function Footer({ settings, logoUrl }: FooterProps) {
 
       {/* ── Bottom bar ── */}
       <div className="border-t border-gray-200 bg-white">
-        <div className="max-w-7xl mx-auto px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
           <p className="text-[11.5px] text-gray-400">
             &copy; {new Date().getFullYear()} {siteName}. All rights reserved.
           </p>
