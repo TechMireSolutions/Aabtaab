@@ -11,31 +11,40 @@ export default async function ArticlesPage() {
   const posts = await client.fetch(postsQuery)
 
   return (
-    <div className="py-14">
-      <div className="max-w-7xl mx-auto px-8">
-
-        <p className="text-[11px] font-semibold text-cyan-500 uppercase tracking-widest mb-1">Knowledge</p>
-        <h1 className="text-[32px] font-bold text-gray-900 mb-1">Articles</h1>
-        <p className="text-[14px] text-gray-500 mb-12">Islamic knowledge, news &amp; reflections</p>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {posts.map((post: any, i: number) => (
-            <ContentCard
-              key={post._id}
-              href={`/articles/${post.slug.current}`}
-              image={post.mainImage ? urlFor(post.mainImage).width(600).height(450).url() : null}
-              title={post.title}
-              description={post.excerpt || null}
-              badge={post.categories?.[0]?.title || null}
-              ctaLabel="Read More"
-              active={i % 3 === 1}
-            />
-          ))}
+    <div>
+      {/* Page header */}
+      <div className="bg-white border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-8 py-12">
+          <p className="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.18em] text-cyan-600 mb-3">
+            <span className="w-5 h-px bg-cyan-400 inline-block" />
+            Knowledge
+          </p>
+          <h1 className="font-bold text-[30px] text-slate-900 tracking-[-0.02em] mb-2">Articles</h1>
+          <p className="text-[14px] text-gray-500">Islamic knowledge, news &amp; reflections</p>
         </div>
+      </div>
 
-        {posts.length === 0 && (
-          <p className="text-gray-400 text-center py-24">No articles published yet.</p>
-        )}
+      {/* Grid */}
+      <div className="py-12 bg-slate-50/40 min-h-[50vh]">
+        <div className="max-w-7xl mx-auto px-8">
+          {posts.length === 0 ? (
+            <p className="text-center text-gray-400 text-[15px] py-24">No articles published yet.</p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {posts.map((post: any) => (
+                <ContentCard
+                  key={post._id}
+                  href={`/articles/${post.slug.current}`}
+                  image={post.mainImage ? urlFor(post.mainImage).width(600).height(450).url() : null}
+                  title={post.title}
+                  description={post.excerpt || null}
+                  badge={post.categories?.[0]?.title || null}
+                  ctaLabel="Read More"
+                />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )

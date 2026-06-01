@@ -70,104 +70,100 @@ export default async function CourseCatchAllPage(
     : null
 
   return (
-    <div className="py-14">
-      <div className="max-w-7xl mx-auto px-8">
+    <div>
+      {/* Breadcrumb bar */}
+      <div className="bg-white border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-8 py-3">
+          <nav className="flex items-center flex-wrap gap-1 text-[12.5px] text-gray-400">
+            <Link href="/online-courses" className="hover:text-cyan-600 transition-colors font-medium">Online Courses</Link>
+            {ancestry.map(({ title, slug: aSlug }, i) => {
+              const href = `/online-courses/${[...ancestry.slice(0, i + 1).map(a => a.slug)].join('/')}`
+              return (
+                <span key={aSlug} className="flex items-center gap-1">
+                  <ChevronRight size={12} className="text-gray-300" />
+                  <Link href={href} className="hover:text-cyan-600 transition-colors">{title}</Link>
+                </span>
+              )
+            })}
+            <span className="flex items-center gap-1">
+              <ChevronRight size={12} className="text-gray-300" />
+              <span className="text-slate-700 font-medium">{course.title}</span>
+            </span>
+          </nav>
+        </div>
+      </div>
 
-        {/* ── Breadcrumb ── */}
-        <nav className="flex items-center flex-wrap gap-1 text-[13px] text-gray-400 mb-8">
-          <Link href="/online-courses" className="hover:text-cyan-500 transition-colors">
-            Online Courses
-          </Link>
-          {ancestry.map(({ title, slug: aSlug }, i) => {
-            const href = `/online-courses/${[...ancestry.slice(0, i + 1).map(a => a.slug)].join('/')}`
-            return (
-              <span key={aSlug} className="flex items-center gap-1">
-                <ChevronRight size={13} className="text-gray-300" />
-                <Link href={href} className="hover:text-cyan-500 transition-colors">{title}</Link>
-              </span>
-            )
-          })}
-          <span className="flex items-center gap-1">
-            <ChevronRight size={13} className="text-gray-300" />
-            <span className="text-gray-700 font-medium">{course.title}</span>
-          </span>
-        </nav>
+      <div className="max-w-7xl mx-auto px-8 py-12">
 
         {hasChildren ? (
-          /* ════════════════════════════════
-             HAS CHILDREN → show child cards
-             ════════════════════════════════ */
+          /* ── Parent: show child cards ── */
           <>
-            <p className="text-[11px] font-semibold text-cyan-500 uppercase tracking-widest mb-1">
+            <p className="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.18em] text-cyan-600 mb-3">
+              <span className="w-5 h-px bg-cyan-400 inline-block" />
               Courses
             </p>
-            <h1 className="text-[32px] font-bold text-gray-900 mb-2">{course.title}</h1>
-
+            <h1 className="font-bold text-[30px] text-slate-900 tracking-[-0.02em] mb-2">{course.title}</h1>
             {course.excerpt && (
-              <p className="text-[14px] text-gray-500 mb-10 max-w-2xl leading-relaxed">
-                {course.excerpt}
-              </p>
+              <p className="text-[14px] text-gray-500 mb-10 max-w-2xl leading-relaxed">{course.excerpt}</p>
             )}
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {course.children.map((child: any, i: number) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {course.children.map((child: any) => (
                 <ContentCard
                   key={child._id}
                   href={`${currentPath}/${child.slug}`}
-                  image={child.featuredImage
-                    ? urlFor(child.featuredImage).width(600).height(450).url()
-                    : null}
+                  image={child.featuredImage ? urlFor(child.featuredImage).width(600).height(450).url() : null}
                   title={child.title}
-                  description={
-                    child.excerpt ||
-                    [child.price, child.duration].filter(Boolean).join(' · ') ||
-                    null
-                  }
+                  description={child.excerpt || [child.price, child.duration].filter(Boolean).join(' · ') || null}
                   ctaLabel={child.childCount > 0 ? 'View Courses' : 'Enroll Now'}
-                  active={i % 3 === 1}
                 />
               ))}
             </div>
           </>
         ) : (
-          /* ════════════════════════════════
-             LEAF COURSE → detail page
-             ════════════════════════════════ */
+          /* ── Leaf: detail page ── */
           <div className="max-w-3xl">
 
             {imageUrl && (
-              <div className="relative w-full aspect-[16/7] rounded-xl overflow-hidden mb-8">
+              <div className="relative w-full aspect-[16/7] rounded-2xl overflow-hidden mb-8 shadow-sm">
                 <Image src={imageUrl} alt={course.title} fill className="object-cover" />
               </div>
             )}
 
-            <p className="text-[11px] font-semibold text-cyan-500 uppercase tracking-widest mb-1">
+            <p className="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.18em] text-cyan-600 mb-3">
+              <span className="w-5 h-px bg-cyan-400 inline-block" />
               Course
             </p>
-            <h1 className="text-[32px] font-bold text-gray-900 mb-2">{course.title}</h1>
+            <h1 className="font-bold text-[30px] text-slate-900 tracking-[-0.02em] mb-4">{course.title}</h1>
 
-            {/* Meta row */}
-            <div className="flex flex-wrap items-center gap-4 text-[13.5px] text-gray-500 mb-6">
+            {/* Meta pills */}
+            <div className="flex flex-wrap items-center gap-2 mb-6">
               {course.instructor && (
-                <span>Instructor: <strong className="text-gray-700">{course.instructor}</strong></span>
+                <span className="text-[12.5px] text-gray-600 bg-slate-100 rounded-full px-3 py-1">
+                  Instructor: <strong className="text-slate-800">{course.instructor}</strong>
+                </span>
               )}
               {course.duration && (
-                <span>Duration: <strong className="text-gray-700">{course.duration}</strong></span>
+                <span className="text-[12.5px] text-gray-600 bg-slate-100 rounded-full px-3 py-1">
+                  {course.duration}
+                </span>
               )}
               {course.price && (
-                <span className="font-semibold text-cyan-600 text-[15px]">{course.price}</span>
+                <span className="text-[13px] font-semibold text-cyan-700 bg-cyan-50 border border-cyan-100 rounded-full px-3 py-1">
+                  {course.price}
+                </span>
               )}
             </div>
 
             {course.excerpt && (
-              <p className="text-[15px] text-gray-500 leading-relaxed mb-8 border-l-2 border-cyan-400 pl-4">
+              <p className="text-[15px] text-gray-600 leading-[1.8] mb-8 border-l-[3px] border-cyan-400 pl-4">
                 {course.excerpt}
               </p>
             )}
 
-            {/* Rich text body */}
             {course.body?.length > 0 && (
-              <div className="prose prose-gray max-w-none mb-10">
+              <div className="prose prose-slate prose-lg max-w-none mb-10
+                prose-headings:font-bold prose-headings:tracking-tight
+                prose-a:text-cyan-600 prose-a:no-underline hover:prose-a:underline">
                 <PortableText value={course.body} />
               </div>
             )}
@@ -175,15 +171,11 @@ export default async function CourseCatchAllPage(
             {/* FAQs */}
             {course.faq?.length > 0 && (
               <div className="mt-10 mb-10">
-                <h2 className="text-[20px] font-bold text-gray-900 mb-5">
-                  Frequently Asked Questions
-                </h2>
+                <h2 className="font-bold text-[20px] text-slate-900 tracking-[-0.01em] mb-5">Frequently Asked Questions</h2>
                 <div className="space-y-3">
                   {course.faq.map((item: any, i: number) => (
-                    <div key={i} className="border border-gray-200 rounded-xl p-5">
-                      <h3 className="font-semibold text-gray-900 mb-2 text-[15px]">
-                        {item.question}
-                      </h3>
+                    <div key={i} className="bg-slate-50 border border-gray-100 rounded-xl p-5">
+                      <h3 className="font-semibold text-slate-900 mb-2 text-[14.5px]">{item.question}</h3>
                       {item.answer?.length > 0 && (
                         <div className="prose prose-sm text-gray-600 max-w-none">
                           <PortableText value={item.answer} />
@@ -196,28 +188,20 @@ export default async function CourseCatchAllPage(
             )}
 
             {/* CTAs */}
-            <div className="flex flex-wrap items-center gap-3 pt-4 border-t border-gray-100">
+            <div className="flex flex-wrap items-center gap-3 pt-6 border-t border-gray-100">
               {course.enrollmentLink ? (
-                <a
-                  href={course.enrollmentLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 bg-cyan-500 hover:bg-cyan-600 text-white text-[13.5px] font-medium px-6 py-2.5 rounded-full transition-colors"
-                >
-                  Enroll Now <ArrowRight size={14} strokeWidth={2.5} />
+                <a href={course.enrollmentLink} target="_blank" rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-2 bg-cyan-600 hover:bg-cyan-700 text-white text-[13.5px] font-semibold px-6 py-2.5 rounded-full shadow-[0_4px_16px_rgba(8,145,178,0.3)] hover:-translate-y-px transition-all duration-200">
+                  Enroll Now <ArrowRight size={13} strokeWidth={2.5} className="group-hover:translate-x-0.5 transition-transform" />
                 </a>
               ) : (
-                <Link
-                  href="/contact"
-                  className="inline-flex items-center gap-2 bg-cyan-500 hover:bg-cyan-600 text-white text-[13.5px] font-medium px-6 py-2.5 rounded-full transition-colors"
-                >
-                  Enroll Now <ArrowRight size={14} strokeWidth={2.5} />
+                <Link href="/contact"
+                  className="group inline-flex items-center gap-2 bg-cyan-600 hover:bg-cyan-700 text-white text-[13.5px] font-semibold px-6 py-2.5 rounded-full shadow-[0_4px_16px_rgba(8,145,178,0.3)] hover:-translate-y-px transition-all duration-200">
+                  Enroll Now <ArrowRight size={13} strokeWidth={2.5} className="group-hover:translate-x-0.5 transition-transform" />
                 </Link>
               )}
-              <Link
-                href="/online-courses"
-                className="inline-flex items-center text-[13.5px] font-medium text-gray-600 hover:text-gray-900 border border-gray-300 hover:border-gray-400 px-6 py-2.5 rounded-full transition-colors"
-              >
+              <Link href="/online-courses"
+                className="inline-flex items-center text-[13.5px] font-medium text-slate-700 hover:text-slate-900 border border-gray-300 hover:border-gray-400 bg-white px-6 py-2.5 rounded-full transition-all duration-200">
                 All Courses
               </Link>
             </div>

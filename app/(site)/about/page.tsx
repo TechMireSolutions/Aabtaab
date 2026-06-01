@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { client } from '@/sanity/lib/client'
 import { pageBySlugQuery, siteSettingsQuery } from '@/sanity/lib/queries'
 import { PortableText } from '@portabletext/react'
+import { ArrowRight, BookOpen, Heart, Star } from 'lucide-react'
 
 export const revalidate = 60
 
@@ -23,40 +24,88 @@ export default async function AboutPage() {
   const siteName = settings?.siteName || 'Aabtaab'
 
   return (
-    <div className="py-14">
-      <div className="container-main max-w-3xl">
-        <h1 className="section-title text-4xl mb-2">{page?.title || 'About Us'}</h1>
-        <p className="text-gray-500 mb-10">Who we are and what drives us</p>
+    <div>
+      {/* Page header */}
+      <div className="bg-white border-b border-gray-100">
+        <div className="max-w-3xl mx-auto px-8 py-12">
+          <p className="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.18em] text-cyan-600 mb-3">
+            <span className="w-5 h-px bg-cyan-400 inline-block" />
+            Our Story
+          </p>
+          <h1 className="font-bold text-[30px] text-slate-900 tracking-[-0.02em] mb-2">
+            {page?.title || 'About Us'}
+          </h1>
+          <p className="text-[14px] text-gray-500">Who we are and what drives us</p>
+        </div>
+      </div>
 
-        {page?.body ? (
-          <div className="prose prose-lg text-gray-700 max-w-none">
-            <PortableText value={page.body} />
-          </div>
-        ) : (
-          /* Fallback content shown until a Sanity page doc is created */
-          <div className="prose prose-lg text-gray-700 max-w-none">
-            <p>
-              <strong>{siteName}</strong> is a dedicated platform for the promotion of Islamic knowledge rooted in the
-              teachings of the Holy Quran and the Ahlul Bayt (A.S.). Our name — meaning <em>&ldquo;luminous&rdquo;</em> —
-              reflects our mission to spread light through education and authentic Islamic content.
-            </p>
-            <h2>Our Mission</h2>
-            <ul>
-              <li>Provide accessible online Islamic education — Quran, Fiqh, Ethics &amp; History</li>
-              <li>Offer authentic religious services including Niyabat Ziarat, Zakat, and Khums</li>
-              <li>Publish reliable articles on Islamic knowledge and current affairs</li>
-              <li>Organize Majalis, events, and religious programs</li>
-            </ul>
-            <h2>Dar Ul Quran</h2>
-            <p>We are also affiliated with <strong>Dar Ul Quran</strong>, our dedicated Quranic institute.</p>
-          </div>
-        )}
+      {/* Content */}
+      <div className="py-12 bg-white">
+        <div className="max-w-3xl mx-auto px-8">
 
-        <div className="mt-12 flex flex-wrap gap-4">
-          <Link href="/contact" className="btn-primary">Contact Us</Link>
-          <Link href="/online-courses" className="bg-gray-100 text-gray-700 font-semibold px-6 py-3 rounded-lg hover:bg-gray-200 transition-colors">
-            Our Courses
-          </Link>
+          {page?.body ? (
+            <div className="prose prose-slate prose-lg max-w-none
+              prose-headings:font-bold prose-headings:tracking-tight
+              prose-a:text-cyan-600 prose-a:no-underline hover:prose-a:underline
+              prose-strong:text-slate-900">
+              <PortableText value={page.body} />
+            </div>
+          ) : (
+            <div className="space-y-8">
+              <p className="text-[15px] text-gray-600 leading-[1.8]">
+                <strong className="text-slate-900">{siteName}</strong> is a dedicated platform for the promotion of
+                Islamic knowledge rooted in the teachings of the Holy Quran and the Ahlul Bayt (A.S.). Our name —
+                meaning <em>&ldquo;luminous&rdquo;</em> — reflects our mission to spread light through education
+                and authentic Islamic content.
+              </p>
+
+              <div className="grid sm:grid-cols-3 gap-4">
+                {[
+                  { Icon: BookOpen, title: 'Education', desc: 'Online Quran, Fiqh, Ethics & History courses from qualified scholars' },
+                  { Icon: Heart,    title: 'Services',  desc: 'Authentic religious services — Niyabat Ziarat, Zakat, Khums & more' },
+                  { Icon: Star,     title: 'Community', desc: 'Majalis, programs and reliable Islamic content for the Ummah' },
+                ].map(({ Icon, title, desc }) => (
+                  <div key={title} className="bg-slate-50 rounded-xl p-5 border border-gray-100">
+                    <div className="w-9 h-9 bg-cyan-50 border border-cyan-100 rounded-xl flex items-center justify-center mb-3">
+                      <Icon size={15} className="text-cyan-600" strokeWidth={1.75} />
+                    </div>
+                    <h3 className="font-semibold text-slate-900 text-[14px] mb-1">{title}</h3>
+                    <p className="text-[13px] text-gray-500 leading-relaxed">{desc}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="bg-slate-50 rounded-xl p-6 border border-gray-100">
+                <h3 className="font-semibold text-slate-900 mb-2 text-[15px]">Dar Ul Quran</h3>
+                <p className="text-[14px] text-gray-600 leading-relaxed">
+                  We are affiliated with <strong className="text-slate-800">Dar Ul Quran</strong>, our dedicated
+                  Quranic institute providing structured Quran education programs for students of all ages.
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* CTAs */}
+          <div className="mt-10 pt-8 border-t border-gray-100 flex flex-wrap gap-3">
+            <Link
+              href="/contact"
+              className="group inline-flex items-center gap-2 bg-cyan-600 hover:bg-cyan-700 text-white text-[13.5px] font-semibold px-6 py-2.5 rounded-full
+                shadow-[0_4px_16px_rgba(8,145,178,0.3)] hover:shadow-[0_6px_22px_rgba(8,145,178,0.42)]
+                transition-all duration-200 hover:-translate-y-px"
+            >
+              Contact Us
+              <ArrowRight size={13} strokeWidth={2.5} className="group-hover:translate-x-0.5 transition-transform duration-150" />
+            </Link>
+            <Link
+              href="/online-courses"
+              className="inline-flex items-center text-[13.5px] font-medium text-slate-700 hover:text-slate-900
+                border border-gray-300 hover:border-gray-400 bg-white hover:bg-gray-50
+                px-6 py-2.5 rounded-full transition-all duration-200"
+            >
+              Our Courses
+            </Link>
+          </div>
+
         </div>
       </div>
     </div>
