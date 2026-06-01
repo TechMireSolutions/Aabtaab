@@ -1,5 +1,6 @@
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
+import WhatsAppButton from '@/components/ui/WhatsAppButton'
 import { client } from '@/sanity/lib/client'
 import { siteSettingsQuery } from '@/sanity/lib/queries'
 import { urlFor } from '@/sanity/lib/image'
@@ -22,6 +23,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
       />
       <main className="min-h-screen">{children}</main>
       <Footer settings={settings} logoUrl={logoUrl} />
+      {settings?.whatsapp && <WhatsAppButton number={settings.whatsapp} />}
     </>
   )
 }
