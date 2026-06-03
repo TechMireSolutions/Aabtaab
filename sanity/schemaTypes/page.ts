@@ -5,8 +5,10 @@ export const page = defineType({
   title: 'Page',
   type: 'document',
   fields: [
-    defineField({ name: 'title', type: 'string', validation: (r) => r.required() }),
-    defineField({ name: 'slug', type: 'slug', options: { source: 'title' }, validation: (r) => r.required() }),
+    defineField({ name: 'title',    type: 'string', validation: (r) => r.required() }),
+    defineField({ name: 'slug',     type: 'slug', options: { source: 'title' }, validation: (r) => r.required() }),
+    defineField({ name: 'eyebrow',  type: 'string', title: 'Eyebrow Label', description: 'Small label shown above the page title (e.g. "Our Story", "Knowledge")' }),
+    defineField({ name: 'subtitle', type: 'string', title: 'Subtitle / Description', description: 'Short description shown below the page title' }),
     defineField({
       name: 'body', type: 'array',
       of: [

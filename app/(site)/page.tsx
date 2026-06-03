@@ -7,19 +7,21 @@ import {
   topLevelServicesQuery,
   topLevelCoursesQuery,
   homepageSettingsQuery,
+  testimonialsQuery,
 } from '@/sanity/lib/queries'
 import HeroSection from '@/components/sections/HeroSection'
 import CarouselSection, { CarouselItem } from '@/components/sections/CarouselSection'
 import ContentCard from '@/components/ui/ContentCard'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 export default async function HomePage() {
-  const [posts, services, courses, hp] = await Promise.all([
+  const [posts, services, courses, hp, testimonials] = await Promise.all([
     client.fetch(featuredPostsQuery),
     client.fetch(topLevelServicesQuery),
     client.fetch(topLevelCoursesQuery),
     client.fetch(homepageSettingsQuery),
+    client.fetch(testimonialsQuery),
   ])
 
   const heroImageUrl = hp?.heroImage
@@ -63,6 +65,104 @@ export default async function HomePage() {
         cta2Link={hp?.heroCta2Link      || undefined}
       />
 
+      {/* ── About Us ── */}
+      <section className="relative py-14 md:py-20 bg-white overflow-hidden border-b border-gray-100">
+        <div
+          className="absolute inset-0 opacity-30 pointer-events-none"
+          style={{ backgroundImage: 'radial-gradient(circle, #dde5ef 1px, transparent 1px)', backgroundSize: '28px 28px' }}
+        />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+
+            {/* Text */}
+            <div>
+              <p className="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.18em] text-cyan-600 mb-3">
+                <span className="w-6 h-px bg-cyan-400 inline-block" />
+                {hp?.aboutEyebrow || 'Who We Are'}
+              </p>
+              <h2 className="font-bold text-[26px] sm:text-[32px] text-slate-900 leading-tight tracking-[-0.02em] mb-4">
+                {hp?.aboutHeading || 'Bringing Shia Islamic Knowledge to Every Corner of the World'}
+              </h2>
+              {(hp?.aboutBody1 || true) && (
+                <p className="text-[14px] text-gray-500 leading-relaxed mb-4">
+                  {hp?.aboutBody1 || 'Aabtaab was founded with a single purpose — to make authentic Shia Islamic education and religious services accessible to every Muslim, regardless of location or background.'}
+                </p>
+              )}
+              {(hp?.aboutBody2 || true) && (
+                <p className="text-[14px] text-gray-500 leading-relaxed mb-7">
+                  {hp?.aboutBody2 || 'Through online courses taught by qualified scholars, and services like Niyabat Ziarat and Ijara performed with sincerity, we proudly serve thousands of families across the globe.'}
+                </p>
+              )}
+              <div className="flex flex-wrap gap-2.5 mb-8">
+                {(hp?.aboutPillars?.length ? hp.aboutPillars : ['Faith', 'Knowledge', 'Access', 'Sincerity']).map((pillar: string) => (
+                  <span
+                    key={pillar}
+                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-cyan-50 border border-cyan-100 text-[12px] font-semibold text-cyan-700"
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 flex-shrink-0" />
+                    {pillar}
+                  </span>
+                ))}
+              </div>
+              <Link
+                href="/about"
+                className="group inline-flex items-center gap-2 bg-cyan-600 hover:bg-cyan-700 text-white
+                  text-[13px] font-semibold px-6 py-2.5 rounded-full
+                  shadow-[0_4px_16px_rgba(8,145,178,0.3)] hover:shadow-[0_6px_22px_rgba(8,145,178,0.45)]
+                  transition-all duration-200 hover:-translate-y-px"
+              >
+                {hp?.aboutCtaLabel || 'Learn About Us'}
+                <ArrowRight size={13} strokeWidth={2.5} className="group-hover:translate-x-0.5 transition-transform duration-150" />
+              </Link>
+            </div>
+
+            {/* Visual card */}
+            <div className="relative pb-10">
+              <div className="bg-slate-900 rounded-3xl p-8 sm:p-10 text-white relative overflow-hidden">
+                <div
+                  className="absolute top-0 right-0 w-72 h-72 rounded-full pointer-events-none opacity-20"
+                  style={{ background: 'radial-gradient(circle, rgba(8,145,178,0.6) 0%, transparent 70%)', transform: 'translate(30%, -30%)' }}
+                />
+                <p className="text-center text-[28px] sm:text-[32px] leading-relaxed text-amber-400 font-light mb-3" dir="rtl">
+                  {hp?.aboutHadithArabic || 'اطلبوا العلم من المهد إلى اللحد'}
+                </p>
+                <div className="w-10 h-px bg-amber-400/40 mx-auto mb-3" />
+                <p className="text-center text-[13px] text-gray-400 italic leading-relaxed">
+                  &quot;{hp?.aboutHadithTranslation || 'Seek knowledge from the cradle to the grave.'}&quot;
+                </p>
+                <p className="text-center text-[11px] text-amber-500 font-semibold mt-2 tracking-wide">
+                  — {hp?.aboutHadithAttribution || 'Prophet Muhammad (S.A.W.W.)'}
+                </p>
+                <div className="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-white/10">
+                  {[
+                    { value: hp?.aboutStat1Value || '500+', label: hp?.aboutStat1Label || 'Students' },
+                    { value: hp?.aboutStat2Value || '10+',  label: hp?.aboutStat2Label || 'Scholars' },
+                    { value: hp?.aboutStat3Value || '5+',   label: hp?.aboutStat3Label || 'Countries' },
+                  ].map(s => (
+                    <div key={s.label} className="text-center">
+                      <p className="text-[22px] font-bold text-white leading-none">{s.value}</p>
+                      <p className="text-[11px] text-gray-400 mt-1">{s.label}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Floating badge */}
+              <div className="absolute bottom-0 left-6 bg-white border border-gray-200 rounded-2xl px-4 py-3 shadow-lg flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center flex-shrink-0">
+                  <span className="text-emerald-600 font-bold text-[16px]">✓</span>
+                </div>
+                <div>
+                  <p className="text-[12px] font-semibold text-slate-800">{hp?.aboutBadgeText || 'Qualified Scholars'}</p>
+                  <p className="text-[11px] text-gray-400">{hp?.aboutBadgeSubtext || 'Certified & trusted'}</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
       {/* ── Online Courses Carousel ── */}
       {courseItems.length > 0 && (
         <CarouselSection
@@ -91,31 +191,31 @@ export default async function HomePage() {
 
       {/* ── Latest Articles ── */}
       {posts?.length > 0 && (
-        <section className="py-16 border-b border-gray-100 bg-white">
-          <div className="max-w-7xl mx-auto px-8">
-            <div className="flex items-end justify-between mb-10">
+        <section className="py-10 md:py-16 border-b border-gray-100 bg-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-7 sm:mb-10">
               <div>
                 <p className="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.18em] text-cyan-600 mb-2">
                   <span className="w-6 h-px bg-cyan-400 inline-block" />
                   Knowledge
                 </p>
-                <h2 className="font-bold text-[27px] text-slate-900 leading-tight tracking-[-0.02em]">
+                <h2 className="font-bold text-[24px] sm:text-[27px] text-slate-900 leading-tight tracking-[-0.02em]">
                   {hp?.articlesHeading || 'Latest Articles'}
                 </h2>
                 {hp?.articlesSubheading && (
-                  <p className="text-[13.5px] text-gray-500 mt-1.5">{hp.articlesSubheading}</p>
+                  <p className="text-[13px] text-gray-500 mt-1.5">{hp.articlesSubheading}</p>
                 )}
               </div>
               <Link
                 href="/articles"
-                className="group inline-flex items-center gap-1.5 text-[13px] font-semibold text-cyan-600 hover:text-cyan-700 transition-colors flex-shrink-0 ml-6"
+                className="group inline-flex items-center gap-1.5 text-[13px] font-semibold text-cyan-600 hover:text-cyan-700 transition-colors flex-shrink-0 sm:ml-6"
               >
                 View all
                 <ArrowRight size={13} strokeWidth={2.5} className="group-hover:translate-x-0.5 transition-transform duration-150" />
               </Link>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {posts.slice(0, 3).map((post: any, i: number) => (
+              {posts.slice(0, 3).map((post: any) => (
                 <ContentCard
                   key={post._id}
                   href={`/articles/${post.slug.current}`}
@@ -131,14 +231,58 @@ export default async function HomePage() {
         </section>
       )}
 
+      {/* ── Testimonials ── */}
+      {testimonials?.length > 0 && (
+      <section className="py-12 md:py-16 bg-slate-50 border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-10">
+            <p className="flex items-center justify-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.18em] text-cyan-600 mb-3">
+              <span className="w-6 h-px bg-cyan-400 inline-block" />
+              {hp?.testimonialsEyebrow || 'Community'}
+              <span className="w-6 h-px bg-cyan-400 inline-block" />
+            </p>
+            <h2 className="font-bold text-[24px] sm:text-[28px] text-slate-900 leading-tight tracking-[-0.02em]">
+              {hp?.testimonialsHeading || 'What Our Community Says'}
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {testimonials.map((t: any) => (
+              <div
+                key={t.name}
+                className="bg-white rounded-2xl border border-gray-100 shadow-sm px-6 py-6 flex flex-col"
+              >
+                <div className="flex gap-0.5 mb-4">
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <span key={i} className="text-amber-400 text-[15px] leading-none">★</span>
+                  ))}
+                </div>
+                <p className="text-[13.5px] text-gray-600 leading-relaxed flex-1 mb-5">
+                  &quot;{t.quote}&quot;
+                </p>
+                <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
+                  <div className="w-9 h-9 rounded-full bg-cyan-100 flex items-center justify-center flex-shrink-0">
+                    <span className="text-[14px] font-bold text-cyan-700">{t.name[0]}</span>
+                  </div>
+                  <div>
+                    <p className="text-[13px] font-semibold text-slate-800">{t.name}</p>
+                    <p className="text-[11.5px] text-gray-400">{t.role}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+      )}
+
       {/* ── Donate CTA ── */}
-      <section className="relative overflow-hidden bg-slate-50 border-y border-slate-200 py-12">
+      <section className="relative overflow-hidden bg-slate-50 border-y border-slate-200 py-10 sm:py-12">
 
         {/* Subtle dot grid */}
         <div className="absolute inset-0 opacity-40 pointer-events-none"
           style={{ backgroundImage: 'radial-gradient(circle, #cbd5e1 1px, transparent 1px)', backgroundSize: '24px 24px' }}/>
 
-        <div className="relative max-w-2xl mx-auto px-6 text-center">
+        <div className="relative max-w-2xl mx-auto px-4 sm:px-6 text-center">
 
           {/* Arabic eyebrow */}
           <div className="inline-flex items-center gap-2.5 mb-4">
@@ -163,11 +307,11 @@ export default async function HomePage() {
               <span className="text-amber-500 text-[15px] font-bold leading-none">"</span>
             </div>
             <p className="text-[13.5px] text-slate-600 italic leading-relaxed">
-              Sadaqah extinguishes the Lord&apos;s anger and wards off an evil death.
+              {hp?.donateQuote || 'Sadaqah extinguishes the Lord\'s anger and wards off an evil death.'}
             </p>
             <div className="mt-3 flex items-center justify-center gap-2">
               <span className="w-5 h-px bg-amber-300"/>
-              <cite className="not-italic text-[11px] font-semibold text-amber-600 tracking-wide">Imam Sadiq (A.S.)</cite>
+              <cite className="not-italic text-[11px] font-semibold text-amber-600 tracking-wide">{hp?.donateQuoteAttribution || 'Imam Sadiq (A.S.)'}</cite>
               <span className="w-5 h-px bg-amber-300"/>
             </div>
           </div>

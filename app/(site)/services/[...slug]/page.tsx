@@ -5,11 +5,11 @@ import Image from 'next/image'
 import { ArrowRight, ChevronRight } from 'lucide-react'
 import { client } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
-import { serviceBySlugDeepQuery, allServicePathsQuery } from '@/sanity/lib/queries'
+import { serviceBySlugDeepQuery } from '@/sanity/lib/queries'
 import { PortableText } from '@portabletext/react'
 import ContentCard from '@/components/ui/ContentCard'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 /* ─── Helpers ─────────────────────────────────────────────────────────────── */
 
@@ -27,22 +27,6 @@ function getAncestry(service: any): { title: string; slug: string }[] {
 /** Build the full /services/a/b/c href for a given ancestor list + current slug */
 function buildPath(slugArray: string[]): string {
   return `/services/${slugArray.join('/')}`
-}
-
-/* ─── Static params ───────────────────────────────────────────────────────── */
-
-export async function generateStaticParams() {
-  const services = await client.fetch(allServicePathsQuery)
-
-  return services.map((s: any) => {
-    const slugs: string[] = [s.slug]
-    let cur = s
-    while (cur.parent) {
-      slugs.unshift(cur.parent.slug)
-      cur = cur.parent
-    }
-    return { slug: slugs }
-  })
 }
 
 /* ─── Metadata ────────────────────────────────────────────────────────────── */
@@ -78,7 +62,7 @@ export default async function ServiceCatchAllPage(
     <div>
       {/* Breadcrumb bar */}
       <div className="bg-white border-b border-gray-100">
-        <div className="max-w-7xl mx-auto px-8 py-3">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <nav className="flex items-center flex-wrap gap-1 text-[12.5px] text-gray-400">
             <Link href="/services" className="hover:text-cyan-600 transition-colors font-medium">Services</Link>
             {ancestry.map(({ title, slug: aSlug }, i) => {
@@ -98,7 +82,7 @@ export default async function ServiceCatchAllPage(
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
 
         {hasChildren ? (
           /* ── Parent: show child cards ── */
@@ -111,7 +95,7 @@ export default async function ServiceCatchAllPage(
             {service.excerpt && (
               <p className="text-[14px] text-gray-500 mb-10 max-w-2xl leading-relaxed">{service.excerpt}</p>
             )}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
               {service.children.map((child: any) => (
                 <ContentCard
                   key={child._id}

@@ -28,7 +28,6 @@ export const postSlugsQuery = `*[_type == "post" && defined(slug.current)]{ "slu
 
 // ─── Courses ─────────────────────────────────────────────────────────────────
 
-/* Top-level listing page (/online-courses) */
 export const topLevelCoursesQuery = `
   *[_type == "course" && !defined(parent)] | order(order asc) {
     _id, title, slug, excerpt, subject, featuredImage, price, duration, instructor,
@@ -36,12 +35,23 @@ export const topLevelCoursesQuery = `
   }
 `
 
-/* Catch-all route — fetch by slug with full ancestry (4 levels) + children */
 export const courseBySlugDeepQuery = `
   *[_type == "course" && slug.current == $slug][0] {
     _id, title, slug, excerpt, body, subject, featuredImage,
     price, duration, instructor, enrollmentLink, faq,
     "seoTitle": seoTitle, "seoDescription": seoDescription,
+
+    heroSubtitle, heroCtaLabel,
+    overviewHeading, overviewBody,
+    outcomesHeading, outcomes[]{ title, desc },
+    whyUsHeading, whyUs[]{ title, desc },
+    howItWorksHeading, howItWorks[]{ label, desc },
+    pricingHeading,
+    pricingTables[]{ label, rows[]{ plan, weeklyFrequency, monthlyClasses, feePerClass, monthlyTotal } },
+    ctaHeading, ctaSubtitle, ctaBtn1Label, ctaBtn2Label,
+    promiseHeading, promiseBody,
+    faqSectionHeading,
+
     "parent": parent->{
       _id, title, "slug": slug.current,
       "parent": parent->{
@@ -58,7 +68,6 @@ export const courseBySlugDeepQuery = `
   }
 `
 
-/* Used by generateStaticParams */
 export const allCoursePathsQuery = `
   *[_type == "course" && defined(slug.current)] {
     "slug": slug.current,
@@ -76,7 +85,6 @@ export const courseSlugsQuery = `*[_type == "course" && defined(slug.current)]{ 
 
 // ─── Services ────────────────────────────────────────────────────────────────
 
-/* Top-level listing page (/services) */
 export const topLevelServicesQuery = `
   *[_type == "service" && !defined(parent)] | order(order asc) {
     _id, title, slug, excerpt, icon, price,
@@ -84,7 +92,6 @@ export const topLevelServicesQuery = `
   }
 `
 
-/* Catch-all route — fetch by slug with full ancestry (4 levels deep) + children */
 export const serviceBySlugDeepQuery = `
   *[_type == "service" && slug.current == $slug][0] {
     _id, title, slug, excerpt, body, icon, isBookable, price, faq,
@@ -105,7 +112,6 @@ export const serviceBySlugDeepQuery = `
   }
 `
 
-/* Used by generateStaticParams — full ancestry per service */
 export const allServicePathsQuery = `
   *[_type == "service" && defined(slug.current)] {
     "slug": slug.current,
@@ -119,20 +125,39 @@ export const allServicePathsQuery = `
   }
 `
 
-/* Keep for any other references */
 export const serviceSlugsQuery = `*[_type == "service" && defined(slug.current)]{ "slug": slug.current }`
 
-// ─── Pages (About, Donate, Contact) ──────────────────────────────────────────
+// ─── Pages ───────────────────────────────────────────────────────────────────
 
 export const pageBySlugQuery = `
   *[_type == "page" && slug.current == $slug][0] {
-    _id, title, slug, body, seoTitle, seoDescription
+    _id, title, slug, eyebrow, subtitle, body, seoTitle, seoDescription
+  }
+`
+
+// ─── Navigation ──────────────────────────────────────────────────────────────
+
+export const headerNavQuery = `
+  *[_type == "navigation" && title == "header"][0]{
+    items[]{ label, href, external }
+  }
+`
+
+export const footerServicesQuery = `
+  *[_type == "service" && !defined(parent)] | order(order asc) {
+    _id, title, "slug": slug.current
   }
 `
 
 // ─── Homepage ────────────────────────────────────────────────────────────────
 
 export const homepageSettingsQuery = `*[_type == "homepageSettings"][0]`
+
+export const testimonialsQuery = `
+  *[_type == "testimonial"] | order(order asc) {
+    _id, quote, name, role
+  }
+`
 
 // ─── Site Settings ───────────────────────────────────────────────────────────
 
