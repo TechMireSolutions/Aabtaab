@@ -10,7 +10,8 @@
       "Bash(git commit -m ' *)",
       "Bash(git checkout *)",
       "Bash(git merge *)",
-      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\DELL\\\\Desktop\\\\Aabtaab\\\\sanity\" -Recurse -Filter \"*.ts\")"
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\DELL\\\\Desktop\\\\Aabtaab\\\\sanity\" -Recurse -Filter \"*.ts\")",
+      "Bash(git branch *)"
     ]
   }
 }
