@@ -19,7 +19,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" dir="ltr">
       <body
         className={`${jakarta.variable} font-sans antialiased`}
-        suppressHydrationWarning
+        suppressHydrationWarning 
       >
         {children}
       </body>
