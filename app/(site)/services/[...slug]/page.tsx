@@ -5,11 +5,11 @@ import Image from 'next/image'
 import { ArrowRight, ChevronRight } from 'lucide-react'
 import { client } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
-import { serviceBySlugDeepQuery, allServicePathsQuery } from '@/sanity/lib/queries'
+import { serviceBySlugDeepQuery } from '@/sanity/lib/queries'
 import { PortableText } from '@portabletext/react'
 import ContentCard from '@/components/ui/ContentCard'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 /* ─── Helpers ─────────────────────────────────────────────────────────────── */
 
@@ -27,22 +27,6 @@ function getAncestry(service: any): { title: string; slug: string }[] {
 /** Build the full /services/a/b/c href for a given ancestor list + current slug */
 function buildPath(slugArray: string[]): string {
   return `/services/${slugArray.join('/')}`
-}
-
-/* ─── Static params ───────────────────────────────────────────────────────── */
-
-export async function generateStaticParams() {
-  const services = await client.fetch(allServicePathsQuery)
-
-  return services.map((s: any) => {
-    const slugs: string[] = [s.slug]
-    let cur = s
-    while (cur.parent) {
-      slugs.unshift(cur.parent.slug)
-      cur = cur.parent
-    }
-    return { slug: slugs }
-  })
 }
 
 /* ─── Metadata ────────────────────────────────────────────────────────────── */

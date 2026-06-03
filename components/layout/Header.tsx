@@ -5,13 +5,17 @@ import { useState, useEffect } from 'react'
 import { Search, Menu, X } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
 
+interface NavItem { label: string; href: string; external?: boolean }
+
 interface HeaderProps {
-  darulQuranUrl?: string
-  siteName?: string
-  logoUrl?: string | null
+  darulQuranUrl?:     string
+  siteName?:          string
+  logoUrl?:           string | null
+  navItems?:          NavItem[]
+  searchPlaceholder?: string
 }
 
-const NAV_LINKS = [
+const FALLBACK_NAV: NavItem[] = [
   { label: 'Online Classes', href: '/online-courses' },
   { label: 'Services',       href: '/services' },
   { label: 'Articles',       href: '/articles' },
@@ -19,7 +23,7 @@ const NAV_LINKS = [
   { label: 'About',          href: '/about' },
 ]
 
-export default function Header({ darulQuranUrl, siteName = 'Aabtaab', logoUrl }: HeaderProps) {
+export default function Header({ darulQuranUrl, siteName = 'Aabtaab', logoUrl, navItems, searchPlaceholder = 'Search articles…' }: HeaderProps) {
   const [menuOpen,     setMenuOpen]     = useState(false)
   const [query,        setQuery]        = useState('')
   const [searchOpen,   setSearchOpen]   = useState(false)
@@ -27,7 +31,6 @@ export default function Header({ darulQuranUrl, siteName = 'Aabtaab', logoUrl }:
   const pathname = usePathname()
   const router   = useRouter()
 
-  /* Scroll-aware glass header */
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 12)
     window.addEventListener('scroll', fn, { passive: true })
@@ -35,10 +38,9 @@ export default function Header({ darulQuranUrl, siteName = 'Aabtaab', logoUrl }:
     return () => window.removeEventListener('scroll', fn)
   }, [])
 
-  const navLinks = [
-    ...NAV_LINKS,
-    { label: 'Dar ul Quran', href: darulQuranUrl || '#', external: true },
-  ]
+  const navLinks: NavItem[] = navItems?.length
+    ? navItems
+    : [...FALLBACK_NAV, { label: 'Dar ul Quran', href: darulQuranUrl || '#', external: true }]
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault()
@@ -105,7 +107,7 @@ export default function Header({ darulQuranUrl, siteName = 'Aabtaab', logoUrl }:
                   value={query}
                   onChange={e => setQuery(e.target.value)}
                   onBlur={() => { if (!query) setSearchOpen(false) }}
-                  placeholder="Search articles…"
+                  placeholder={searchPlaceholder}
                   className="px-4 py-2 text-[13px] outline-none w-[180px] text-slate-700 placeholder:text-gray-400 bg-white"
                 />
                 <button type="submit" aria-label="Search"
@@ -137,7 +139,6 @@ export default function Header({ darulQuranUrl, siteName = 'Aabtaab', logoUrl }:
       </header>
 
       {/* ── Mobile menu ── */}
-      {/* Backdrop */}
       <div
         onClick={() => setMenuOpen(false)}
         className={`fixed inset-0 z-[60] bg-slate-900/50 backdrop-blur-sm lg:hidden
@@ -199,7 +200,7 @@ export default function Header({ darulQuranUrl, siteName = 'Aabtaab', logoUrl }:
               type="text"
               value={query}
               onChange={e => setQuery(e.target.value)}
-              placeholder="Search articles…"
+              placeholder={searchPlaceholder}
               className="flex-1 px-4 py-3 text-[14px] outline-none text-slate-700 placeholder:text-gray-400 bg-white"
             />
             <button type="submit"

@@ -5,13 +5,13 @@ import { pageBySlugQuery, siteSettingsQuery } from '@/sanity/lib/queries'
 import { PortableText } from '@portabletext/react'
 import { ArrowRight, BookOpen, Heart, Star } from 'lucide-react'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await client.fetch(pageBySlugQuery, { slug: 'about' })
   return {
-    title: page?.seoTitle || 'About Us',
-    description: page?.seoDescription,
+    title: page?.seoTitle || page?.title || 'About Us',
+    description: page?.seoDescription || page?.subtitle,
   }
 }
 
@@ -29,12 +29,14 @@ export default async function AboutPage() {
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
           <p className="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.18em] text-cyan-600 mb-3">
             <span className="w-5 h-px bg-cyan-400 inline-block" />
-            Our Story
+            {page?.eyebrow || 'Our Story'}
           </p>
           <h1 className="font-bold text-[26px] sm:text-[30px] text-slate-900 tracking-[-0.02em] mb-2">
             {page?.title || 'About Us'}
           </h1>
-          <p className="text-[13.5px] text-gray-500">Who we are and what drives us</p>
+          <p className="text-[13.5px] text-gray-500">
+            {page?.subtitle || 'Who we are and what drives us'}
+          </p>
         </div>
       </div>
 

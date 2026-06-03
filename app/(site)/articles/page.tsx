@@ -1,14 +1,24 @@
 import type { Metadata } from 'next'
 import { client } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
-import { postsQuery } from '@/sanity/lib/queries'
+import { postsQuery, pageBySlugQuery } from '@/sanity/lib/queries'
 import ContentCard from '@/components/ui/ContentCard'
 
-export const revalidate = 60
-export const metadata: Metadata = { title: 'Articles' }
+export const dynamic = 'force-dynamic'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await client.fetch(pageBySlugQuery, { slug: 'articles' })
+  return {
+    title: page?.seoTitle || page?.title || 'Articles',
+    description: page?.seoDescription || page?.subtitle,
+  }
+}
 
 export default async function ArticlesPage() {
-  const posts = await client.fetch(postsQuery)
+  const [posts, page] = await Promise.all([
+    client.fetch(postsQuery),
+    client.fetch(pageBySlugQuery, { slug: 'articles' }),
+  ])
 
   return (
     <div>
@@ -16,10 +26,14 @@ export default async function ArticlesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
           <p className="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.18em] text-cyan-600 mb-3">
             <span className="w-5 h-px bg-cyan-400 inline-block" />
-            Knowledge
+            {page?.eyebrow || 'Knowledge'}
           </p>
-          <h1 className="font-bold text-[26px] sm:text-[30px] text-slate-900 tracking-[-0.02em] mb-2">Articles</h1>
-          <p className="text-[13.5px] text-gray-500">Islamic knowledge, news &amp; reflections</p>
+          <h1 className="font-bold text-[26px] sm:text-[30px] text-slate-900 tracking-[-0.02em] mb-2">
+            {page?.title || 'Articles'}
+          </h1>
+          <p className="text-[13.5px] text-gray-500">
+            {page?.subtitle || 'Islamic knowledge, news & reflections'}
+          </p>
         </div>
       </div>
 

@@ -4,8 +4,15 @@ import { siteSettingsQuery, pageBySlugQuery } from '@/sanity/lib/queries'
 import { PortableText } from '@portabletext/react'
 import { Mail, Phone, MessageCircle, MapPin, Facebook, Youtube } from 'lucide-react'
 
-export const revalidate = 60
-export const metadata: Metadata = { title: 'Contact' }
+export const dynamic = 'force-dynamic'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await client.fetch(pageBySlugQuery, { slug: 'contact' })
+  return {
+    title: page?.seoTitle || page?.title || 'Contact Us',
+    description: page?.seoDescription || page?.subtitle,
+  }
+}
 
 export default async function ContactPage() {
   const [settings, page] = await Promise.all([
@@ -20,18 +27,26 @@ export default async function ContactPage() {
     settings?.address  && { Icon: MapPin,        label: 'Address',  value: settings.address,  href: null },
   ].filter(Boolean) as { Icon: any; label: string; value: string; href: string | null }[]
 
+  const subjects: string[] = settings?.contactFormSubjects?.length
+    ? settings.contactFormSubjects
+    : ['General Inquiry', 'Course Enrollment', 'Service Request', 'Donation']
+
+  const submitLabel: string = settings?.contactFormSubmitLabel || 'Send Message'
+
   return (
     <div>
       <div className="bg-white border-b border-gray-100">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
           <p className="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.18em] text-cyan-600 mb-3">
             <span className="w-5 h-px bg-cyan-400 inline-block" />
-            Reach Out
+            {page?.eyebrow || 'Reach Out'}
           </p>
           <h1 className="font-bold text-[26px] sm:text-[30px] text-slate-900 tracking-[-0.02em] mb-2">
             {page?.title || 'Contact Us'}
           </h1>
-          <p className="text-[13.5px] text-gray-500">Get in touch for services, courses, or general inquiries</p>
+          <p className="text-[13.5px] text-gray-500">
+            {page?.subtitle || 'Get in touch for services, courses, or general inquiries'}
+          </p>
         </div>
       </div>
 
@@ -110,10 +125,7 @@ export default async function ContactPage() {
                 <select name="subject"
                   className="w-full border border-gray-200 rounded-lg px-3.5 py-2.5 text-[13.5px] text-slate-700 bg-white
                     focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all">
-                  <option>General Inquiry</option>
-                  <option>Course Enrollment</option>
-                  <option>Service Request</option>
-                  <option>Donation</option>
+                  {subjects.map(s => <option key={s}>{s}</option>)}
                 </select>
               </div>
               <div>
@@ -126,7 +138,7 @@ export default async function ContactPage() {
                 className="w-full bg-cyan-600 hover:bg-cyan-700 text-white text-[13.5px] font-semibold py-3 rounded-lg
                   shadow-[0_4px_14px_rgba(8,145,178,0.28)] hover:shadow-[0_6px_20px_rgba(8,145,178,0.4)]
                   transition-all duration-200 hover:-translate-y-px">
-                Send Message
+                {submitLabel}
               </button>
             </form>
 

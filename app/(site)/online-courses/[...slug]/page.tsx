@@ -5,11 +5,11 @@ import Image from 'next/image'
 import { ArrowRight, ChevronRight } from 'lucide-react'
 import { client } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
-import { courseBySlugDeepQuery, allCoursePathsQuery } from '@/sanity/lib/queries'
+import { courseBySlugDeepQuery } from '@/sanity/lib/queries'
 import { PortableText } from '@portabletext/react'
 import ContentCard from '@/components/ui/ContentCard'
 
-export const revalidate = 60
+export const dynamic = 'force-dynamic'
 
 /* ─── Helpers ─────────────────────────────────────────────────────────────── */
 
@@ -21,21 +21,6 @@ function getAncestry(course: any): { title: string; slug: string }[] {
     cur = cur.parent
   }
   return chain
-}
-
-/* ─── Static params ───────────────────────────────────────────────────────── */
-
-export async function generateStaticParams() {
-  const courses = await client.fetch(allCoursePathsQuery)
-  return courses.map((c: any) => {
-    const slugs: string[] = [c.slug]
-    let cur = c
-    while (cur.parent) {
-      slugs.unshift(cur.parent.slug)
-      cur = cur.parent
-    }
-    return { slug: slugs }
-  })
 }
 
 /* ─── Metadata ────────────────────────────────────────────────────────────── */

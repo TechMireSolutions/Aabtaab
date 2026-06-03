@@ -64,18 +64,22 @@ export default function HeroSection({
       <div className="absolute -left-24 top-1/2 -translate-y-1/2 w-[600px] h-[600px] pointer-events-none rounded-full"
         style={{ background: 'radial-gradient(circle, rgba(8,145,178,0.05) 0%, transparent 65%)' }} />
 
-      {/* Right hero image — hidden on xs, visible md+ */}
+      {/* Hero image — full bg on mobile, right-panel on md+ */}
       <div
-        className="hidden md:block absolute right-0 top-0 h-full w-[55%] pointer-events-none select-none"
+        className="absolute inset-0 md:inset-auto md:right-0 md:top-0 md:h-full md:w-[55%] pointer-events-none select-none"
         style={{ opacity: show ? 1 : 0, transition: 'opacity 1s ease 100ms' }}
       >
         {heroImage ? (
-          <Image src={heroImage} alt="Hero" fill priority className="object-cover object-left-top" />
+          <Image src={heroImage} alt="Hero" fill priority className="object-cover object-center md:object-left-top" />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-slate-100 via-cyan-50/20 to-white" />
         )}
-        <div className="absolute inset-0 bg-gradient-to-r from-white via-white/55 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-white/15 to-transparent" />
+        {/* Mobile overlay — keeps text readable over the full-bleed image */}
+        <div className="absolute inset-0 bg-white/90 md:hidden" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/60 via-transparent to-white/80 md:hidden" />
+        {/* Desktop overlays */}
+        <div className="absolute inset-0 hidden md:block bg-gradient-to-r from-white via-white/55 to-transparent" />
+        <div className="absolute inset-0 hidden md:block bg-gradient-to-t from-white/15 to-transparent" />
       </div>
 
       {/* Content */}

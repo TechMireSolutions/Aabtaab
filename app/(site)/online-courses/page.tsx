@@ -1,14 +1,24 @@
 import type { Metadata } from 'next'
 import { client } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
-import { topLevelCoursesQuery } from '@/sanity/lib/queries'
+import { topLevelCoursesQuery, pageBySlugQuery } from '@/sanity/lib/queries'
 import ContentCard from '@/components/ui/ContentCard'
 
-export const revalidate = 60
-export const metadata: Metadata = { title: 'Online Courses' }
+export const dynamic = 'force-dynamic'
+
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await client.fetch(pageBySlugQuery, { slug: 'online-courses' })
+  return {
+    title: page?.seoTitle || page?.title || 'Online Courses',
+    description: page?.seoDescription || page?.subtitle,
+  }
+}
 
 export default async function CoursesPage() {
-  const courses = await client.fetch(topLevelCoursesQuery)
+  const [courses, page] = await Promise.all([
+    client.fetch(topLevelCoursesQuery),
+    client.fetch(pageBySlugQuery, { slug: 'online-courses' }),
+  ])
 
   return (
     <div>
@@ -16,11 +26,13 @@ export default async function CoursesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
           <p className="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.18em] text-cyan-600 mb-3">
             <span className="w-5 h-px bg-cyan-400 inline-block" />
-            Education
+            {page?.eyebrow || 'Education'}
           </p>
-          <h1 className="font-bold text-[26px] sm:text-[30px] text-slate-900 tracking-[-0.02em] mb-2">Online Courses</h1>
+          <h1 className="font-bold text-[26px] sm:text-[30px] text-slate-900 tracking-[-0.02em] mb-2">
+            {page?.title || 'Online Courses'}
+          </h1>
           <p className="text-[13.5px] text-gray-500 max-w-xl leading-relaxed">
-            Learn from qualified scholars — Quran, Nahjul Balagha, Jurisprudence, Ethics &amp; History.
+            {page?.subtitle || 'Learn from qualified scholars — Quran, Nahjul Balagha, Jurisprudence, Ethics & History.'}
           </p>
         </div>
       </div>

@@ -7,6 +7,7 @@ import { service }          from './service'
 import { siteSettings }     from './siteSettings'
 import { navigation }       from './navigation'
 import { homepageSettings } from './homepageSettings'
+import { testimonial }      from './testimonial'
 
 export const schemaTypes = [
   post,
@@ -18,4 +19,5 @@ export const schemaTypes = [
   siteSettings,
   navigation,
   homepageSettings,
+  testimonial,
 ]
