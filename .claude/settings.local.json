@@ -9,7 +9,8 @@
       "Bash(Select-Object -ExpandProperty FullName)",
       "Bash(git commit -m ' *)",
       "Bash(git checkout *)",
-      "Bash(git merge *)"
+      "Bash(git merge *)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\DELL\\\\Desktop\\\\Aabtaab\\\\sanity\" -Recurse -Filter \"*.ts\")"
     ]
   }
 }
