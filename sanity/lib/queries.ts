@@ -96,6 +96,14 @@ export const serviceBySlugDeepQuery = `
   *[_type == "service" && slug.current == $slug][0] {
     _id, title, slug, excerpt, body, icon, isBookable, price, faq,
     "seoTitle": seoTitle, "seoDescription": seoDescription,
+
+    heroImage, heroSubtitle, heroBody,
+    whyUsHeading, whyUsImage, whyUs[]{ title, desc },
+    commitmentHeading, commitment[]{ title, desc },
+    howItWorksHeading, howItWorks[]{ label, desc },
+    ctaHeading, ctaSubtitle, ctaBtn1Label, ctaBtn2Label,
+    faqSectionHeading,
+
     "parent": parent->{
       _id, title, "slug": slug.current,
       "parent": parent->{
