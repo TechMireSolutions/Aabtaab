@@ -6,7 +6,13 @@ export const siteSettings = defineType({
   type: 'document',
   fields: [
     defineField({ name: 'siteName', type: 'string', initialValue: 'Aabtaab' }),
-    defineField({ name: 'logo', type: 'image', options: { hotspot: true } }),
+    defineField({ name: 'logo',    type: 'image', options: { hotspot: true } }),
+    defineField({
+      name:        'favicon',
+      type:        'image',
+      title:       'Favicon',
+      description: 'Square image recommended — 256×256 or 512×512 PNG/ICO',
+    }),
     defineField({ name: 'tagline', type: 'string' }),
     defineField({ name: 'description', type: 'text', rows: 3, title: 'Site Meta Description' }),
     defineField({ name: 'email', type: 'string' }),
