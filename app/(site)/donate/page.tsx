@@ -81,16 +81,21 @@ export default async function DonatePage() {
               {settings?.donateHowToText || 'Contact us for bank transfer details or use the online payment link below.'}
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              {settings?.donateUrl && (
-                <a href={settings.donateUrl} target="_blank" rel="noopener noreferrer"
-                  className="group inline-flex items-center justify-center gap-2 bg-cyan-500 hover:bg-cyan-400 text-white text-[13px] font-semibold px-6 py-2.5 rounded-full
-                    shadow-[0_4px_16px_rgba(6,182,212,0.4)] transition-all duration-200 hover:-translate-y-px">
-                  {settings?.donatePayOnlineLabel || 'Pay Online'}
-                  <ArrowRight size={13} strokeWidth={2.5} className="group-hover:translate-x-0.5 transition-transform" />
-                </a>
-              )}
+              <a
+                href={settings?.donateUrl || 'https://www.paypal.com/donate/?hosted_button_id=Q22WVGY8WWZ4C'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group inline-flex items-center justify-center gap-2.5 bg-[#0070BA] hover:bg-[#005ea6] text-white text-[14px] font-bold px-8 py-3 rounded-full
+                  shadow-[0_4px_20px_rgba(0,112,186,0.45)] transition-all duration-200 hover:-translate-y-px"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                  <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 2.28a.78.78 0 0 1 .77-.65h7.794c2.728 0 4.636.602 5.668 1.79.49.56.802 1.147.952 1.795.157.676.13 1.484-.08 2.47l-.007.045v.387l.277.157c.232.13.442.29.625.472.31.318.524.72.636 1.194.115.483.103 1.056-.036 1.705-.164.76-.428 1.42-.785 1.963a5.09 5.09 0 0 1-1.247 1.39c-.478.365-1.04.64-1.674.82-.617.175-1.32.264-2.09.264h-.497a1.41 1.41 0 0 0-1.393 1.19l-.112.61-.58 3.672-.026.14a.78.78 0 0 1-.77.648z" />
+                </svg>
+                {settings?.donatePayOnlineLabel || 'Donate via PayPal'}
+                <ArrowRight size={14} strokeWidth={2.5} className="group-hover:translate-x-0.5 transition-transform" />
+              </a>
               <Link href="/contact"
-                className="inline-flex items-center justify-center text-[13px] font-medium text-slate-300 hover:text-white border border-white/20 hover:border-white/50 px-6 py-2.5 rounded-full transition-all duration-200">
+                className="inline-flex items-center justify-center text-[13px] font-medium text-slate-300 hover:text-white border border-white/20 hover:border-white/50 px-6 py-3 rounded-full transition-all duration-200">
                 {settings?.donateContactLabel || 'Contact Us'}
               </Link>
             </div>
