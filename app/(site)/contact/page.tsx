@@ -1,8 +1,9 @@
 import type { Metadata } from 'next'
 import { client } from '@/sanity/lib/client'
-import { siteSettingsQuery, pageBySlugQuery } from '@/sanity/lib/queries'
+import { siteSettingsQuery, pageBySlugQuery, allCoursesForFormQuery, allServicesForFormQuery } from '@/sanity/lib/queries'
 import { PortableText } from '@portabletext/react'
 import { Mail, Phone, MessageCircle, MapPin, Facebook, Youtube } from 'lucide-react'
+import ContactForm from './ContactForm'
 
 export const dynamic = 'force-dynamic'
 
@@ -15,9 +16,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ContactPage() {
-  const [settings, page] = await Promise.all([
+  const [settings, page, courses, services] = await Promise.all([
     client.fetch(siteSettingsQuery),
     client.fetch(pageBySlugQuery, { slug: 'contact' }),
+    client.fetch(allCoursesForFormQuery),
+    client.fetch(allServicesForFormQuery),
   ])
 
   const contactItems = [
@@ -105,42 +108,12 @@ export default async function ContactPage() {
             </div>
 
             {/* Form */}
-            <form className="lg:col-span-3 bg-white border border-gray-100 rounded-2xl shadow-sm p-5 sm:p-6 space-y-4" action="#" method="POST">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">Name</label>
-                  <input type="text" name="name" required placeholder="Your full name"
-                    className="w-full border border-gray-200 rounded-lg px-3.5 py-2.5 text-[13.5px] text-slate-700 placeholder:text-gray-400
-                      focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all" />
-                </div>
-                <div>
-                  <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">Email</label>
-                  <input type="email" name="email" required placeholder="your@email.com"
-                    className="w-full border border-gray-200 rounded-lg px-3.5 py-2.5 text-[13.5px] text-slate-700 placeholder:text-gray-400
-                      focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all" />
-                </div>
-              </div>
-              <div>
-                <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">Subject</label>
-                <select name="subject"
-                  className="w-full border border-gray-200 rounded-lg px-3.5 py-2.5 text-[13.5px] text-slate-700 bg-white
-                    focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all">
-                  {subjects.map(s => <option key={s}>{s}</option>)}
-                </select>
-              </div>
-              <div>
-                <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">Message</label>
-                <textarea name="message" rows={5} required placeholder="Write your message here..."
-                  className="w-full border border-gray-200 rounded-lg px-3.5 py-2.5 text-[13.5px] text-slate-700 placeholder:text-gray-400 resize-none
-                    focus:outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20 transition-all" />
-              </div>
-              <button type="submit"
-                className="w-full bg-cyan-600 hover:bg-cyan-700 text-white text-[13.5px] font-semibold py-3 rounded-lg
-                  shadow-[0_4px_14px_rgba(8,145,178,0.28)] hover:shadow-[0_6px_20px_rgba(8,145,178,0.4)]
-                  transition-all duration-200 hover:-translate-y-px">
-                {submitLabel}
-              </button>
-            </form>
+            <ContactForm
+              subjects={subjects}
+              submitLabel={submitLabel}
+              courses={courses  ?? []}
+              services={services ?? []}
+            />
 
           </div>
         </div>

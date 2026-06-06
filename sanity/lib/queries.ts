@@ -162,3 +162,17 @@ export const testimonialsQuery = `
 // ─── Site Settings ───────────────────────────────────────────────────────────
 
 export const siteSettingsQuery = `*[_type == "siteSettings"][0]`
+
+// ─── Contact Form — Courses & Services flat lists ─────────────────────────────
+
+export const allCoursesForFormQuery = `
+  *[_type == "course"] | order(order asc) {
+    _id, title, "parentTitle": parent->title
+  }
+`
+
+export const allServicesForFormQuery = `
+  *[_type == "service"] | order(order asc) {
+    _id, title, "parentTitle": parent->title
+  }
+`
