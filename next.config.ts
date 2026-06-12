@@ -16,14 +16,6 @@ const nextConfig: NextConfig = {
     formats: ['image/webp', 'image/avif'],
   },
 
-  // ── Partial Pre-rendering (PPR) ──────────────────────────────────────────
-  // PPR lets you ship a static HTML shell instantly (served from CDN / PM2 cache)
-  // while dynamic parts (e.g. "upcoming events today") stream in via Suspense.
-  // Opt individual routes in with: export const experimental_ppr = true
-  experimental: {
-    ppr: 'incremental',
-  },
-
   // ── HTTP Security & Cache Headers ─────────────────────────────────────────
   // Improves Core Web Vitals (LCP via caching), security posture, and
   // signals to Google that the site is well-maintained (indirect E-E-A-T).
