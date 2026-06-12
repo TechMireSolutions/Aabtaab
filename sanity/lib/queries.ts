@@ -1,3 +1,18 @@
+// ─── SEO fragment (reused across all queries) ─────────────────────────────────
+// Projection pulls the full seoObject so callers get one consistent shape.
+// Fallback fields (seoTitle → seo.metaTitle) handle legacy documents that
+// were created before the seoObject migration.
+const SEO_FRAGMENT = `
+  "seo": {
+    "metaTitle":      coalesce(seo.metaTitle, seoTitle, title),
+    "metaDescription": coalesce(seo.metaDescription, seoDescription, excerpt),
+    "ogImage":        seo.ogImage,
+    "canonicalUrl":   seo.canonicalUrl,
+    "noIndex":        seo.noIndex,
+    "keywords":       seo.keywords
+  }
+`
+
 // ─── Posts / Articles ────────────────────────────────────────────────────────
 
 export const postsQuery = `
@@ -16,15 +31,52 @@ export const featuredPostsQuery = `
   }
 `
 
+// Includes SEO fragment + faqItems for JSON-LD structured data on article pages
 export const postBySlugQuery = `
   *[_type == "post" && slug.current == $slug][0] {
     _id, title, slug, mainImage, body, publishedAt, excerpt,
     "categories": categories[]->{ _id, title, slug },
-    "author": author->{ name, image, bio }
+    "author": author->{ name, image, bio },
+    faqItems[]{ question, answer },
+    ${SEO_FRAGMENT}
   }
 `
 
 export const postSlugsQuery = `*[_type == "post" && defined(slug.current)]{ "slug": slug.current }`
+
+// ─── Events ──────────────────────────────────────────────────────────────────
+
+// Upcoming events (startDate in the future), soonest first
+export const upcomingEventsQuery = `
+  *[_type == "event" && startDate >= now()] | order(startDate asc) {
+    _id, title, slug, description, startDate, endDate,
+    eventType, status, image, isFree, price,
+    city, state, venueName, registrationUrl
+  }
+`
+
+// All events for listing page (includes past events, newest first)
+export const allEventsQuery = `
+  *[_type == "event"] | order(startDate desc) {
+    _id, title, slug, description, startDate, endDate,
+    eventType, status, image, isFree, price,
+    city, state, venueName, registrationUrl
+  }
+`
+
+// Full event detail — all fields needed for JSON-LD + page rendering
+export const eventBySlugQuery = `
+  *[_type == "event" && slug.current == $slug][0] {
+    _id, title, slug, description, body,
+    eventType, status, startDate, endDate,
+    image, isFree, price, registrationUrl,
+    venueName, streetAddress, city, state, postalCode, country,
+    onlineUrl, organizerName, organizerUrl,
+    ${SEO_FRAGMENT}
+  }
+`
+
+export const eventSlugsQuery = `*[_type == "event" && defined(slug.current)]{ "slug": slug.current }`
 
 // ─── Courses ─────────────────────────────────────────────────────────────────
 
@@ -39,7 +91,6 @@ export const courseBySlugDeepQuery = `
   *[_type == "course" && slug.current == $slug][0] {
     _id, title, slug, excerpt, body, subject, featuredImage,
     price, duration, instructor, enrollmentLink, faq,
-    "seoTitle": seoTitle, "seoDescription": seoDescription,
 
     heroSubtitle, heroCtaLabel,
     overviewHeading, overviewBody,
@@ -64,7 +115,8 @@ export const courseBySlugDeepQuery = `
     "children": *[_type == "course" && references(^._id)] | order(order asc) {
       _id, title, "slug": slug.current, excerpt, featuredImage, price, duration,
       "childCount": count(*[_type == "course" && references(^._id)])
-    }
+    },
+    ${SEO_FRAGMENT}
   }
 `
 
@@ -95,7 +147,6 @@ export const topLevelServicesQuery = `
 export const serviceBySlugDeepQuery = `
   *[_type == "service" && slug.current == $slug][0] {
     _id, title, slug, excerpt, body, icon, isBookable, price, faq,
-    "seoTitle": seoTitle, "seoDescription": seoDescription,
 
     heroImage, heroSubtitle, heroBody,
     whyUsHeading, whyUsImage, whyUs[]{ title, desc },
@@ -116,7 +167,8 @@ export const serviceBySlugDeepQuery = `
     "children": *[_type == "service" && references(^._id)] | order(order asc) {
       _id, title, "slug": slug.current, excerpt, icon, price,
       "childCount": count(*[_type == "service" && references(^._id)])
-    }
+    },
+    ${SEO_FRAGMENT}
   }
 `
 
@@ -139,7 +191,8 @@ export const serviceSlugsQuery = `*[_type == "service" && defined(slug.current)]
 
 export const pageBySlugQuery = `
   *[_type == "page" && slug.current == $slug][0] {
-    _id, title, slug, eyebrow, subtitle, body, seoTitle, seoDescription
+    _id, title, slug, eyebrow, subtitle, body,
+    ${SEO_FRAGMENT}
   }
 `
 
@@ -169,7 +222,14 @@ export const testimonialsQuery = `
 
 // ─── Site Settings ───────────────────────────────────────────────────────────
 
-export const siteSettingsQuery = `*[_type == "siteSettings"][0]`
+export const siteSettingsQuery = `
+  *[_type == "siteSettings"][0]{
+    siteName, description, favicon, logo,
+    siteUrl, twitterHandle,
+    email, phone, address, city, state, country,
+    facebookUrl, instagramUrl, youtubeUrl
+  }
+`
 
 // ─── Contact Form — Courses & Services flat lists ─────────────────────────────
 

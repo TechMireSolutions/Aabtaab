@@ -1,7 +1,10 @@
 import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
+  // ── Sanity packages require transpilation in Next.js App Router ─────────
   transpilePackages: ['sanity', '@sanity/ui', '@sanity/icons'],
+
+  // ── Image optimization ───────────────────────────────────────────────────
   images: {
     remotePatterns: [
       {
@@ -9,6 +12,54 @@ const nextConfig: NextConfig = {
         hostname: 'cdn.sanity.io',
       },
     ],
+    // Modern formats: WebP first, then AVIF for supported browsers
+    formats: ['image/webp', 'image/avif'],
+  },
+
+  // ── Partial Pre-rendering (PPR) ──────────────────────────────────────────
+  // PPR lets you ship a static HTML shell instantly (served from CDN / PM2 cache)
+  // while dynamic parts (e.g. "upcoming events today") stream in via Suspense.
+  // Opt individual routes in with: export const experimental_ppr = true
+  experimental: {
+    ppr: 'incremental',
+  },
+
+  // ── HTTP Security & Cache Headers ─────────────────────────────────────────
+  // Improves Core Web Vitals (LCP via caching), security posture, and
+  // signals to Google that the site is well-maintained (indirect E-E-A-T).
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          // Prevent clickjacking
+          { key: 'X-Frame-Options',           value: 'SAMEORIGIN' },
+          // Stop MIME-type sniffing
+          { key: 'X-Content-Type-Options',    value: 'nosniff' },
+          // Force HTTPS for 1 year (includeSubDomains)
+          { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains' },
+          // Control referrer info for privacy
+          { key: 'Referrer-Policy',           value: 'strict-origin-when-cross-origin' },
+          // Basic permissions policy
+          { key: 'Permissions-Policy',        value: 'camera=(), microphone=(), geolocation=()' },
+        ],
+      },
+      {
+        // Immutable cache for all static assets (_next/static)
+        // These are content-hashed so they're safe to cache forever
+        source: '/_next/static/(.*)',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+        ],
+      },
+      {
+        // Optimized images from Next.js Image component
+        source: '/_next/image(.*)',
+        headers: [
+          { key: 'Cache-Control', value: 'public, max-age=86400, stale-while-revalidate=604800' },
+        ],
+      },
+    ]
   },
 }
 
