@@ -1,49 +1,174 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@theme {
+  /* Font Families */
+  --font-sans:
+    var(--font-jakarta, system-ui), system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-display: var(--font-jakarta, system-ui), system-ui, sans-serif;
+
+  /* Brand Colors */
+  --color-brand-50: #ecfeff;
+  --color-brand-100: #cffafe;
+  --color-brand-200: #a5f3fc;
+  --color-brand-500: #06b6d4;
+  --color-brand-600: #0891b2;
+  --color-brand-700: #0e7490;
+  --color-brand-800: #155e75;
+  --color-brand-900: #164e63;
+
+  /* Gold Colors */
+  --color-gold-400: #fbbf24;
+  --color-gold-500: #f59e0b;
+  --color-gold-600: #d97706;
+
+  /* Custom Animations */
+  --animate-fade-up: fadeInUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-fade-left: fadeInLeft 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-scale-in: scaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-shimmer: shimmer 3s linear infinite;
+  --animate-float: floatY 4s ease-in-out infinite;
+
+  /* Custom Shadows */
+  --shadow-card:
+    0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.04);
+  --shadow-card-hover:
+    0 12px 32px -4px rgb(0 0 0 / 0.11), 0 4px 12px -2px rgb(0 0 0 / 0.06);
+  --shadow-cyan-glow: 0 6px 24px rgba(8, 145, 178, 0.38);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmer {
+  from {
+    background-position: -200% center;
+  }
+  to {
+    background-position: 200% center;
+  }
+}
+
+@keyframes floatY {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
 
 /* ─── Custom Scrollbar ─── */
-::-webkit-scrollbar          { width: 6px; height: 6px; }
-::-webkit-scrollbar-track    { background: #f1f5f9; }
-::-webkit-scrollbar-thumb    { background: #cbd5e1; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
 
 /* ─── Text Selection ─── */
-::selection { background: #cffafe; color: #0e7490; }
+::selection {
+  background: #cffafe;
+  color: #0e7490;
+}
 
 @layer base {
   html {
     scroll-behavior: smooth;
-    /* Safe sans-serif stack — overridden by font-sans utility when var loads */
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
-                 Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-family:
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      "Helvetica Neue",
+      Arial,
+      sans-serif;
   }
 
   body {
     @apply text-slate-900 bg-white;
-    /* Explicit font-family — var() with built-in fallback so it never collapses to serif */
-    font-family: var(--font-jakarta, system-ui), system-ui, -apple-system,
-                 BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family:
+      var(--font-jakarta, system-ui),
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      sans-serif;
     font-size: 15px;
     line-height: 1.6;
-    font-feature-settings: 'rlig' 1, 'calt' 1, 'cv11' 1;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1,
+      "cv11" 1;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-weight: 700;
     line-height: 1.15;
     letter-spacing: -0.02em;
     text-rendering: optimizeLegibility;
   }
 
-  p { line-height: 1.7; }
+  p {
+    line-height: 1.7;
+  }
 
-  /* Focus ring */
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-cyan-500 rounded;
+  }
+
+  * {
+    min-width: 0;
   }
 }
 
@@ -52,7 +177,9 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
 
 /* ─── Dot-grid background ─── */
 .bg-dot-grid {
@@ -65,7 +192,7 @@
   position: relative;
 }
 .link-underline::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -2px;
   left: 0;
@@ -80,22 +207,39 @@
   width: 100%;
 }
 
-/* ─── Stagger helpers ─── */
-.animate-delay-75  { animation-delay:  75ms; }
-.animate-delay-100 { animation-delay: 100ms; }
-.animate-delay-150 { animation-delay: 150ms; }
-.animate-delay-200 { animation-delay: 200ms; }
-.animate-delay-300 { animation-delay: 300ms; }
-.animate-delay-400 { animation-delay: 400ms; }
-.animate-delay-500 { animation-delay: 500ms; }
-.animate-delay-600 { animation-delay: 600ms; }
+/* ─── Animation delay helpers ─── */
+.animate-delay-75 {
+  animation-delay: 75ms;
+}
+.animate-delay-100 {
+  animation-delay: 100ms;
+}
+.animate-delay-150 {
+  animation-delay: 150ms;
+}
+.animate-delay-200 {
+  animation-delay: 200ms;
+}
+.animate-delay-300 {
+  animation-delay: 300ms;
+}
+.animate-delay-400 {
+  animation-delay: 400ms;
+}
+.animate-delay-500 {
+  animation-delay: 500ms;
+}
+.animate-delay-600 {
+  animation-delay: 600ms;
+}
 
 /* ─── Section reveal (JS adds .is-visible) ─── */
 .reveal {
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity 0.65s cubic-bezier(0.16,1,0.3,1),
-              transform 0.7s cubic-bezier(0.16,1,0.3,1);
+  transition:
+    opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .reveal.is-visible {
   opacity: 1;
@@ -116,7 +260,7 @@
   background-clip: text;
 }
 
-/* ─── Focus ring for buttons & links ─── */
+/* ─── Focus ring ─── */
 button:focus-visible,
 a:focus-visible {
   outline: 2px solid #0891b2;
@@ -124,7 +268,10 @@ a:focus-visible {
   border-radius: 6px;
 }
 
-/* ─── Prevent layout shift on font load ─── */
+/* ─── Typography plugin — link color override ─── */
 @layer base {
-  * { min-width: 0; }
+  :root {
+    --tw-prose-links: #0891b2;
+    --tw-prose-body: #374151;
+  }
 }

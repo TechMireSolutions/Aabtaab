@@ -3,7 +3,7 @@ name: Deploy Aabtaab Website
 on:
   push:
     branches:
-      - main  # Agar developer ki main branch ka naam 'master' hai, toh woh yahan master likh dega
+      - main # Agar developer ki main branch ka naam 'master' hai, toh woh yahan master likh dega
 
 jobs:
   deploy:

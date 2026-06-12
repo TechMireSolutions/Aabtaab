@@ -1,22 +1,64 @@
-import Header from '@/components/layout/Header'
-import Footer from '@/components/layout/Footer'
-import WhatsAppButton from '@/components/ui/WhatsAppButton'
-import { client } from '@/sanity/lib/client'
-import { siteSettingsQuery, headerNavQuery, footerServicesQuery } from '@/sanity/lib/queries'
-import { urlFor } from '@/sanity/lib/image'
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
+import WhatsAppButton from "@/components/ui/WhatsAppButton";
+import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/sanityFetch";
+import {
+  siteSettingsQuery,
+  headerNavQuery,
+  footerServicesQuery,
+} from "@/sanity/lib/queries";
+import { urlFor } from "@/sanity/lib/image";
 
-export const revalidate = 300
+interface LayoutSettings {
+  logo?: { asset: { _ref: string } };
+  darulQuranUrl?: string;
+  siteName?: string;
+  searchPlaceholder?: string;
+  whatsapp?: string;
+  tagline?: string;
+  email?: string;
+  phone?: string;
+  address?: string;
+  facebook?: string;
+  youtube?: string;
+}
 
-export default async function SiteLayout({ children }: { children: React.ReactNode }) {
+interface HeaderNav {
+  items?: { label: string; href: string; external?: boolean }[];
+}
+
+interface FooterService {
+  _id: string;
+  title: string;
+  slug: string;
+}
+
+export default async function SiteLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [settings, headerNav, footerServices] = await Promise.all([
-    client.fetch(siteSettingsQuery),
-    client.fetch(headerNavQuery),
-    client.fetch(footerServicesQuery),
-  ])
+    sanityFetch<LayoutSettings>({
+      query: siteSettingsQuery,
+      tags: [CACHE_TAGS.siteSettings],
+      revalidate: 86400,
+    }),
+    sanityFetch<HeaderNav>({
+      query: headerNavQuery,
+      tags: [CACHE_TAGS.siteSettings],
+      revalidate: 86400,
+    }),
+    sanityFetch<FooterService[]>({
+      query: footerServicesQuery,
+      tags: [CACHE_TAGS.services],
+      revalidate: 3600,
+    }),
+  ]);
 
   const logoUrl = settings?.logo
     ? urlFor(settings.logo).width(72).height(72).url()
-    : null
+    : null;
 
   return (
     <>
@@ -29,12 +71,12 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
       />
       <main className="min-h-screen">{children}</main>
       <Footer
-        settings={settings}
+        settings={settings ?? undefined}
         logoUrl={logoUrl}
         navItems={headerNav?.items}
-        footerServices={footerServices}
+        footerServices={footerServices ?? undefined}
       />
       {settings?.whatsapp && <WhatsAppButton number={settings.whatsapp} />}
     </>
-  )
+  );
 }

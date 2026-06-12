@@ -11,7 +11,7 @@ const SEO_FRAGMENT = `
     "noIndex":        seo.noIndex,
     "keywords":       seo.keywords
   }
-`
+`;
 
 // ─── Posts / Articles ────────────────────────────────────────────────────────
 
@@ -21,7 +21,7 @@ export const postsQuery = `
     "categories": categories[]->{ _id, title, slug },
     "author": author->{ name, image }
   }
-`
+`;
 
 export const featuredPostsQuery = `
   *[_type == "post" && featured == true] | order(publishedAt desc)[0...6] {
@@ -29,7 +29,7 @@ export const featuredPostsQuery = `
     "categories": categories[]->{ _id, title, slug },
     "author": author->{ name }
   }
-`
+`;
 
 // Includes SEO fragment + faqItems for JSON-LD structured data on article pages
 export const postBySlugQuery = `
@@ -40,9 +40,9 @@ export const postBySlugQuery = `
     faqItems[]{ question, answer },
     ${SEO_FRAGMENT}
   }
-`
+`;
 
-export const postSlugsQuery = `*[_type == "post" && defined(slug.current)]{ "slug": slug.current }`
+export const postSlugsQuery = `*[_type == "post" && defined(slug.current)]{ "slug": slug.current }`;
 
 // ─── Events ──────────────────────────────────────────────────────────────────
 
@@ -53,7 +53,7 @@ export const upcomingEventsQuery = `
     eventType, status, image, isFree, price,
     city, state, venueName, registrationUrl
   }
-`
+`;
 
 // All events for listing page (includes past events, newest first)
 export const allEventsQuery = `
@@ -62,7 +62,7 @@ export const allEventsQuery = `
     eventType, status, image, isFree, price,
     city, state, venueName, registrationUrl
   }
-`
+`;
 
 // Full event detail — all fields needed for JSON-LD + page rendering
 export const eventBySlugQuery = `
@@ -74,9 +74,9 @@ export const eventBySlugQuery = `
     onlineUrl, organizerName, organizerUrl,
     ${SEO_FRAGMENT}
   }
-`
+`;
 
-export const eventSlugsQuery = `*[_type == "event" && defined(slug.current)]{ "slug": slug.current }`
+export const eventSlugsQuery = `*[_type == "event" && defined(slug.current)]{ "slug": slug.current }`;
 
 // ─── Courses ─────────────────────────────────────────────────────────────────
 
@@ -85,7 +85,7 @@ export const topLevelCoursesQuery = `
     _id, title, slug, excerpt, subject, featuredImage, price, duration, instructor,
     "childCount": count(*[_type == "course" && references(^._id)])
   }
-`
+`;
 
 export const courseBySlugDeepQuery = `
   *[_type == "course" && slug.current == $slug][0] {
@@ -118,7 +118,7 @@ export const courseBySlugDeepQuery = `
     },
     ${SEO_FRAGMENT}
   }
-`
+`;
 
 export const allCoursePathsQuery = `
   *[_type == "course" && defined(slug.current)] {
@@ -131,9 +131,9 @@ export const allCoursePathsQuery = `
       }
     }
   }
-`
+`;
 
-export const courseSlugsQuery = `*[_type == "course" && defined(slug.current)]{ "slug": slug.current }`
+export const courseSlugsQuery = `*[_type == "course" && defined(slug.current)]{ "slug": slug.current }`;
 
 // ─── Services ────────────────────────────────────────────────────────────────
 
@@ -142,7 +142,7 @@ export const topLevelServicesQuery = `
     _id, title, slug, excerpt, icon, price,
     "childCount": count(*[_type == "service" && references(^._id)])
   }
-`
+`;
 
 export const serviceBySlugDeepQuery = `
   *[_type == "service" && slug.current == $slug][0] {
@@ -170,7 +170,7 @@ export const serviceBySlugDeepQuery = `
     },
     ${SEO_FRAGMENT}
   }
-`
+`;
 
 export const allServicePathsQuery = `
   *[_type == "service" && defined(slug.current)] {
@@ -183,9 +183,9 @@ export const allServicePathsQuery = `
       }
     }
   }
-`
+`;
 
-export const serviceSlugsQuery = `*[_type == "service" && defined(slug.current)]{ "slug": slug.current }`
+export const serviceSlugsQuery = `*[_type == "service" && defined(slug.current)]{ "slug": slug.current }`;
 
 // ─── Pages ───────────────────────────────────────────────────────────────────
 
@@ -194,7 +194,7 @@ export const pageBySlugQuery = `
     _id, title, slug, eyebrow, subtitle, body,
     ${SEO_FRAGMENT}
   }
-`
+`;
 
 // ─── Navigation ──────────────────────────────────────────────────────────────
 
@@ -202,23 +202,23 @@ export const headerNavQuery = `
   *[_type == "navigation" && title == "header"][0]{
     items[]{ label, href, external }
   }
-`
+`;
 
 export const footerServicesQuery = `
   *[_type == "service" && !defined(parent)] | order(order asc) {
     _id, title, "slug": slug.current
   }
-`
+`;
 
 // ─── Homepage ────────────────────────────────────────────────────────────────
 
-export const homepageSettingsQuery = `*[_type == "homepageSettings"][0]`
+export const homepageSettingsQuery = `*[_type == "homepageSettings"][0]`;
 
 export const testimonialsQuery = `
   *[_type == "testimonial"] | order(order asc) {
     _id, quote, name, role
   }
-`
+`;
 
 // ─── Site Settings ───────────────────────────────────────────────────────────
 
@@ -229,7 +229,7 @@ export const siteSettingsQuery = `
     email, phone, address, city, state, country,
     facebookUrl, instagramUrl, youtubeUrl
   }
-`
+`;
 
 // ─── Contact Form — Courses & Services flat lists ─────────────────────────────
 
@@ -237,10 +237,10 @@ export const allCoursesForFormQuery = `
   *[_type == "course"] | order(order asc) {
     _id, title, "parentTitle": parent->title
   }
-`
+`;
 
 export const allServicesForFormQuery = `
   *[_type == "service"] | order(order asc) {
     _id, title, "parentTitle": parent->title
   }
-`
+`;

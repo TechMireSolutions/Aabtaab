@@ -1,15 +1,15 @@
-import Image from 'next/image'
-import Link from 'next/link'
-import { ArrowUpRight } from 'lucide-react'
+import Image from "next/image";
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 
 interface ContentCardProps {
-  image?:       string | null
-  title:        string
-  description?: string | null
-  href:         string
-  ctaLabel?:    string
-  badge?:       string | null
-  active?:      boolean
+  image?: string | null;
+  title: string;
+  description?: string | null;
+  href: string;
+  ctaLabel?: string;
+  badge?: string | null;
+  active?: boolean;
 }
 
 export default function ContentCard({
@@ -17,7 +17,7 @@ export default function ContentCard({
   title,
   description,
   href,
-  ctaLabel = 'Book Now',
+  ctaLabel = "Book Now",
   badge,
   active = false,
 }: ContentCardProps) {
@@ -26,14 +26,15 @@ export default function ContentCard({
       className={`group relative flex flex-col rounded-2xl overflow-hidden bg-white
         transition-all duration-300 ease-out
         hover:-translate-y-2 hover:shadow-card-hover
-        ${active
-          ? 'shadow-[0_2px_16px_rgba(8,145,178,0.14)] border border-cyan-200/80'
-          : 'shadow-card border border-gray-100'
+        ${
+          active
+            ? "shadow-[0_2px_16px_rgba(8,145,178,0.14)] border border-cyan-200/80"
+            : "shadow-card border border-gray-100"
         }`}
     >
       {/* Active top accent stripe */}
       {active && (
-        <div className="absolute top-0 inset-x-0 h-[3px] bg-gradient-to-r from-cyan-400 via-cyan-500 to-sky-400 z-10" />
+        <div className="absolute top-0 inset-x-0 h-[3px] bg-linear-to-r from-cyan-400 via-cyan-500 to-sky-400 z-10" />
       )}
 
       {/* Image */}
@@ -44,10 +45,11 @@ export default function ContentCard({
               src={image}
               alt={title}
               fill
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.06]"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-cyan-50 via-sky-50 to-slate-100">
+            <div className="w-full h-full flex items-center justify-center bg-linear-to-br from-cyan-50 via-sky-50 to-slate-100">
               <span className="text-5xl opacity-25 select-none">📖</span>
             </div>
           )}
@@ -65,7 +67,10 @@ export default function ContentCard({
         )}
 
         <h3 className="font-semibold text-slate-900 text-[15px] leading-snug mb-2 line-clamp-2">
-          <Link href={href} className="hover:text-cyan-600 transition-colors duration-150">
+          <Link
+            href={href}
+            className="hover:text-cyan-600 transition-colors duration-150"
+          >
             {title}
           </Link>
         </h3>
@@ -90,5 +95,5 @@ export default function ContentCard({
         </Link>
       </div>
     </div>
-  )
+  );
 }
