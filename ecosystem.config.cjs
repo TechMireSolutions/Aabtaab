@@ -1,4 +1,6 @@
-/** PM2 process config — production server always listens on port 3000 */
+/** PM2 process config — port from server.config.cjs */
+const { PRODUCTION_PORT } = require("./server.config.cjs");
+
 module.exports = {
   apps: [
     {
@@ -10,7 +12,7 @@ module.exports = {
       exec_mode: "fork",
       env: {
         NODE_ENV: "production",
-        PORT: 3000,
+        PORT: PRODUCTION_PORT,
       },
     },
   ],

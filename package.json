@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start -p 3000",
+    "start": "node scripts/start-production.cjs",
     "lint": "eslint .",
     "migrate:sanity": "node scripts/migrate-sanity-fields.mjs",
     "migrate:sanity:dry": "DRY_RUN=1 node scripts/migrate-sanity-fields.mjs"
