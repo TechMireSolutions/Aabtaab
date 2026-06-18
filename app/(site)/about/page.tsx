@@ -4,6 +4,7 @@ import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/sanityFetch";
 import { pageBySlugQuery, siteSettingsQuery } from "@/sanity/lib/queries";
 import { PortableText } from "@portabletext/react";
 import { ArrowRight, BookOpen, Heart, Star } from "lucide-react";
+import { buildPageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await sanityFetch<{
@@ -16,10 +17,14 @@ export async function generateMetadata(): Promise<Metadata> {
     tags: [CACHE_TAGS.siteSettings],
     revalidate: 86400,
   });
-  return {
+  return buildPageMetadata({
     title: page?.seo?.metaTitle || page?.title || "About Us",
-    description: page?.seo?.metaDescription || page?.subtitle,
-  };
+    description:
+      page?.seo?.metaDescription ||
+      page?.subtitle ||
+      "Learn about Aabtaab — Shia Islamic education, services, and community.",
+    path: "/about",
+  });
 }
 
 export default async function AboutPage() {

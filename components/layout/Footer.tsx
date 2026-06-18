@@ -63,7 +63,6 @@ interface FooterService {
 interface FooterProps {
   settings?: SiteSettings;
   logoUrl?: string | null;
-  navItems?: NavItem[];
   footerServices?: FooterService[];
 }
 
@@ -119,14 +118,13 @@ function NavLink({
 export default function Footer({
   settings,
   logoUrl,
-  navItems,
   footerServices,
 }: FooterProps) {
   const siteName = settings?.siteName || "Aabtaab";
   const tagline =
     settings?.tagline ||
     "Spreading the light of Ahlul Bayt (A.S.) through education, authentic content, and spiritual services.";
-  const quickLinks = navItems?.length ? navItems : FALLBACK_QUICK_LINKS;
+  const quickLinks = FALLBACK_QUICK_LINKS;
   const services = footerServices?.length
     ? footerServices.map((s) => ({
         label: s.title,

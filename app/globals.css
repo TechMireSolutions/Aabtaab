@@ -115,6 +115,9 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    scroll-padding-top: calc(68px + env(safe-area-inset-top));
     font-family:
       system-ui,
       -apple-system,
@@ -231,6 +234,41 @@
 }
 .animate-delay-600 {
   animation-delay: 600ms;
+}
+
+/* ── Skip link (mobile + keyboard accessibility) ─── */
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -100%;
+  z-index: 100;
+  border-radius: 0.5rem;
+  background: #0e7490;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.625rem 1rem;
+  transition: top 0.2s ease;
+}
+.skip-link:focus {
+  top: calc(0.75rem + env(safe-area-inset-top));
+  outline: 2px solid #0891b2;
+  outline-offset: 2px;
+}
+
+/* ── Mobile touch targets in chrome (header/footer) ─── */
+@media (max-width: 1023px) {
+  header button,
+  header nav a,
+  footer a {
+    min-height: 44px;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
 }
 
 /* ─── Section reveal (JS adds .is-visible) ─── */

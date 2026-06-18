@@ -5,7 +5,8 @@ import {
   type SiteSettings,
 } from "@/sanity/lib/sanityFetch";
 import { urlFor } from "@/sanity/lib/image";
-import { JsonLd } from "@/components/JsonLd";
+import { JsonLd, WebSiteJsonLd } from "@/components/JsonLd";
+import { getSiteUrl } from "@/lib/seo";
 import "./globals.css";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -19,7 +20,12 @@ const jakarta = Plus_Jakarta_Sans({
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#1a1a2e",
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#1a1a2e" },
+  ],
+  colorScheme: "light",
 };
 
 // ── Site-level Metadata ──────────────────────────────────────────────────────
@@ -81,9 +87,19 @@ export async function generateMetadata(): Promise<Metadata> {
 
     // ── Canonical / Alternate ────────────────────────────────────────────────
     metadataBase: new URL(siteUrl),
-    alternates: { canonical: "/" },
 
-    // ── OpenGraph ────────────────────────────────────────────────────────────
+    formatDetection: {
+      telephone: false,
+      email: false,
+      address: false,
+    },
+
+    // ── Mobile web app hints ───────────────────────────────────────────────
+    appleWebApp: {
+      capable: true,
+      title: siteName,
+      statusBarStyle: "default",
+    },
     // Consumed by Facebook, LinkedIn, WhatsApp, Telegram
     openGraph: {
       type: "website",
@@ -130,14 +146,14 @@ export async function generateMetadata(): Promise<Metadata> {
 // ── Organization JSON-LD (site-wide structured data) ────────────────────────
 // Rendered in <head> on every page.
 // schema.org/Organization is the foundation of E-E-A-T trust signals.
-async function OrganizationSchema() {
+async function SiteSchemas() {
   const settings: SiteSettings = await fetchSiteSettings();
-  const siteUrl = settings?.siteUrl || "https://aabtaab.com";
+  const siteUrl = getSiteUrl();
   const logoUrl = settings?.logo
     ? urlFor(settings.logo).width(600).height(60).url()
     : undefined;
 
-  const schema = {
+  const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
     name: settings?.siteName || "Aabtaab",
@@ -155,14 +171,21 @@ async function OrganizationSchema() {
         addressCountry: settings.country || "US",
       },
     }),
-    sameAs: [
-      settings?.facebookUrl,
-      settings?.instagramUrl,
-      settings?.youtubeUrl,
-    ].filter(Boolean) as string[],
+    sameAs: [settings?.facebook, settings?.youtube].filter(
+      Boolean,
+    ) as string[],
   };
 
-  return <JsonLd schema={schema} />;
+  return (
+    <>
+      <JsonLd schema={organizationSchema} />
+      <WebSiteJsonLd
+        siteName={settings?.siteName || "Aabtaab"}
+        siteUrl={siteUrl}
+        description={settings?.description}
+      />
+    </>
+  );
 }
 
 // ── Root Layout ──────────────────────────────────────────────────────────────
@@ -174,11 +197,11 @@ export default function RootLayout({
   return (
     <html lang="en" dir="ltr">
       <body
-        className={`${jakarta.variable} font-sans antialiased`}
+        className={`${jakarta.variable} font-sans antialiased relative`}
         suppressHydrationWarning
       >
         {/* Organization schema injected into every page */}
-        <OrganizationSchema />
+        <SiteSchemas />
         {children}
       </body>
     </html>

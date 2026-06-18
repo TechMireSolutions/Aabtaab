@@ -7,7 +7,7 @@ import { CACHE_TAGS } from "@/sanity/lib/sanityFetch";
 // Setup: Sanity Dashboard → API → Webhooks
 //   URL:    https://yourdomain.com/api/revalidate
 //   Secret: match SANITY_REVALIDATE_SECRET in .env.local
-//   Filter: _type in ["post","event","course","service","siteSettings","homepageSettings"]
+//   Filter: _type in ["post","event","course","service","siteSettings","homepageSettings","page","navigation","testimonial"]
 
 const SANITY_REVALIDATE_SECRET = process.env.SANITY_REVALIDATE_SECRET;
 
@@ -83,6 +83,13 @@ export async function POST(request: NextRequest) {
     case "homepageSettings": {
       revalidateTag(CACHE_TAGS.homepage, OPT);
       revalidated.push(CACHE_TAGS.homepage);
+      break;
+    }
+    case "navigation":
+    case "page":
+    case "testimonial": {
+      revalidateTag(CACHE_TAGS.siteSettings, OPT);
+      revalidated.push(CACHE_TAGS.siteSettings);
       break;
     }
   }

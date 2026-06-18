@@ -8,8 +8,9 @@ import { urlFor } from "@/sanity/lib/image";
 import { postBySlugQuery } from "@/sanity/lib/queries";
 import { PortableText } from "@portabletext/react";
 import { ArticleJsonLd } from "@/components/JsonLd";
+import { buildPageMetadata, getSiteUrl } from "@/lib/seo";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://aabtaab.com";
+const SITE_URL = getSiteUrl();
 const SITE_NAME = "Aabtaab";
 
 export async function generateMetadata({
@@ -31,14 +32,32 @@ export async function generateMetadata({
       ? urlFor(post.mainImage).width(1200).height(630).url()
       : undefined;
 
+  const title = post?.seo?.metaTitle ?? post?.title ?? "Article";
+  const description = post?.seo?.metaDescription ?? post?.excerpt;
+  const path = `/articles/${slug}`;
+
+  const canonicalPath = post?.seo?.canonicalUrl
+    ? post.seo.canonicalUrl.startsWith("http")
+      ? new URL(post.seo.canonicalUrl).pathname
+      : post.seo.canonicalUrl
+    : path;
+
+  const base = buildPageMetadata({
+    title,
+    description,
+    path: canonicalPath,
+    noIndex: post?.seo?.noIndex,
+    ogImage: ogImageUrl,
+  });
+
   return {
-    title: post?.seo?.metaTitle ?? post?.title ?? "Article",
-    description: post?.seo?.metaDescription ?? post?.excerpt,
-    robots: post?.seo?.noIndex ? { index: false, follow: false } : undefined,
-    alternates: post?.seo?.canonicalUrl
-      ? { canonical: post.seo.canonicalUrl }
-      : undefined,
-    openGraph: ogImageUrl ? { images: [ogImageUrl] } : undefined,
+    ...base,
+    openGraph: {
+      ...base.openGraph,
+      type: "article",
+      publishedTime: post?.publishedAt,
+      authors: post?.author?.name ? [post.author.name] : undefined,
+    },
   };
 }
 
@@ -141,6 +160,8 @@ export default async function ArticleDetailPage({
               src={mainImageUrl}
               alt={post.mainImage?.alt ?? post.title}
               fill
+              sizes="(max-width: 768px) 100vw, 768px"
+              priority
               className="object-cover"
             />
           </div>

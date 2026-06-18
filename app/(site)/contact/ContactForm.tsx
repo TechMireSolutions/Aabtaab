@@ -9,7 +9,6 @@ interface Option {
 }
 
 interface Props {
-  subjects: string[];
   submitLabel: string;
   courses: Option[];
   services: Option[];

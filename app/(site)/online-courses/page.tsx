@@ -3,6 +3,7 @@ import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/sanityFetch";
 import { urlFor } from "@/sanity/lib/image";
 import { topLevelCoursesQuery, pageBySlugQuery } from "@/sanity/lib/queries";
 import ContentCard from "@/components/ui/ContentCard";
+import { buildPageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await sanityFetch<{
@@ -15,10 +16,14 @@ export async function generateMetadata(): Promise<Metadata> {
     tags: [CACHE_TAGS.siteSettings],
     revalidate: 86400,
   });
-  return {
+  return buildPageMetadata({
     title: page?.seo?.metaTitle || page?.title || "Online Courses",
-    description: page?.seo?.metaDescription || page?.subtitle,
-  };
+    description:
+      page?.seo?.metaDescription ||
+      page?.subtitle ||
+      "Online Shia Islamic courses — Quran, Fiqh, Ethics, and more from qualified scholars.",
+    path: "/online-courses",
+  });
 }
 
 export default async function CoursesPage() {

@@ -1,10 +1,21 @@
 import type { Metadata } from "next";
 import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/sanityFetch";
 import { urlFor } from "@/sanity/lib/image";
-import { postsQuery, pageBySlugQuery } from "@/sanity/lib/queries";
+import {
+  postsQuery,
+  postsSearchQuery,
+  pageBySlugQuery,
+} from "@/sanity/lib/queries";
 import ContentCard from "@/components/ui/ContentCard";
+import { buildPageMetadata } from "@/lib/seo";
 
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string }>;
+}): Promise<Metadata> {
+  const { q } = await searchParams;
+  const searchTerm = q?.trim() ?? "";
   const page = await sanityFetch<{
     seo?: { metaTitle?: string; metaDescription?: string };
     title?: string;
@@ -15,25 +26,43 @@ export async function generateMetadata(): Promise<Metadata> {
     tags: [CACHE_TAGS.siteSettings],
     revalidate: 86400,
   });
-  return {
-    title: page?.seo?.metaTitle || page?.title || "Articles",
-    description: page?.seo?.metaDescription || page?.subtitle,
-  };
+
+  return buildPageMetadata({
+    title: searchTerm
+      ? `Search: ${searchTerm}`
+      : page?.seo?.metaTitle || page?.title || "Articles",
+    description:
+      page?.seo?.metaDescription ||
+      page?.subtitle ||
+      "Islamic articles, knowledge, and reflections from Aabtaab scholars.",
+    path: searchTerm
+      ? `/articles?q=${encodeURIComponent(searchTerm)}`
+      : "/articles",
+    noIndex: Boolean(searchTerm),
+  });
 }
 
-export default async function ArticlesPage() {
+type ArticleCard = {
+  _id: string;
+  title: string;
+  slug: { current: string };
+  mainImage?: { asset: { _ref: string } };
+  excerpt?: string;
+  categories?: { _id: string; title: string }[];
+};
+
+export default async function ArticlesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string }>;
+}) {
+  const { q } = await searchParams;
+  const searchTerm = q?.trim() ?? "";
+
   const [posts, page] = await Promise.all([
-    sanityFetch<
-      {
-        _id: string;
-        title: string;
-        slug: { current: string };
-        mainImage?: { asset: { _ref: string } };
-        excerpt?: string;
-        categories?: { _id: string; title: string }[];
-      }[]
-    >({
-      query: postsQuery,
+    sanityFetch<ArticleCard[]>({
+      query: searchTerm ? postsSearchQuery : postsQuery,
+      params: searchTerm ? { term: searchTerm } : {},
       tags: [CACHE_TAGS.posts],
       revalidate: 3600,
     }),
@@ -56,10 +85,14 @@ export default async function ArticlesPage() {
             {page?.eyebrow || "Knowledge"}
           </p>
           <h1 className="font-bold text-[26px] sm:text-[30px] text-slate-900 tracking-[-0.02em] mb-2">
-            {page?.title || "Articles"}
+            {searchTerm
+              ? `Search: “${searchTerm}”`
+              : page?.title || "Articles"}
           </h1>
           <p className="text-[13.5px] text-gray-500">
-            {page?.subtitle || "Islamic knowledge, news & reflections"}
+            {searchTerm
+              ? `${postList.length} result${postList.length === 1 ? "" : "s"} found`
+              : page?.subtitle || "Islamic knowledge, news & reflections"}
           </p>
         </div>
       </div>
@@ -68,7 +101,9 @@ export default async function ArticlesPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {postList.length === 0 ? (
             <p className="text-center text-gray-400 text-[15px] py-24">
-              No articles published yet.
+              {searchTerm
+                ? `No articles found for “${searchTerm}”.`
+                : "No articles published yet."}
             </p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">

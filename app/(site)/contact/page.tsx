@@ -9,6 +9,7 @@ import {
 import { PortableText } from "@portabletext/react";
 import { Mail, Phone, MessageCircle, MapPin } from "lucide-react";
 import ContactForm from "./ContactForm";
+import { buildPageMetadata } from "@/lib/seo";
 
 interface ContactSettings {
   email?: string;
@@ -17,7 +18,6 @@ interface ContactSettings {
   address?: string;
   facebook?: string;
   youtube?: string;
-  contactFormSubjects?: string[];
   contactFormSubmitLabel?: string;
 }
 
@@ -37,11 +37,15 @@ export async function generateMetadata(): Promise<Metadata> {
     tags: [CACHE_TAGS.siteSettings],
     revalidate: 86400,
   });
-  return {
+  return buildPageMetadata({
     title:
       page?.seo?.metaTitle || page?.seoTitle || page?.title || "Contact Us",
-    description: page?.seo?.metaDescription || page?.subtitle,
-  };
+    description:
+      page?.seo?.metaDescription ||
+      page?.subtitle ||
+      "Contact Aabtaab for courses, religious services, and general inquiries.",
+    path: "/contact",
+  });
 }
 
 function FacebookIcon({ size }: { size: number }) {
@@ -128,10 +132,6 @@ export default async function ContactPage() {
     value: string;
     href: string | null;
   }[];
-
-  const subjects: string[] = settings?.contactFormSubjects?.length
-    ? settings.contactFormSubjects
-    : ["General Inquiry", "Course Enrollment", "Service Request", "Donation"];
 
   const submitLabel: string =
     settings?.contactFormSubmitLabel || "Send Message";
@@ -235,7 +235,6 @@ export default async function ContactPage() {
 
             {/* Form */}
             <ContactForm
-              subjects={subjects}
               submitLabel={submitLabel}
               courses={courses ?? []}
               services={services ?? []}

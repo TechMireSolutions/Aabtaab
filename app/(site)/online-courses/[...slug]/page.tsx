@@ -16,6 +16,7 @@ import { courseBySlugDeepQuery, siteSettingsQuery } from "@/sanity/lib/queries";
 import { PortableText } from "@portabletext/react";
 import ContentCard from "@/components/ui/ContentCard";
 import { BreadcrumbJsonLd } from "@/components/JsonLd";
+import { buildPageMetadata } from "@/lib/seo";
 
 function getAncestry(course: {
   parent?: { title: string; slug: string; parent?: unknown };
@@ -99,11 +100,12 @@ export async function generateMetadata({
     tags: [CACHE_TAGS.course(slug[slug.length - 1])],
     revalidate: 3600,
   });
-  return {
+  return buildPageMetadata({
     title: course?.seo?.metaTitle || course?.title || "Course",
     description: course?.seo?.metaDescription || course?.excerpt,
-    robots: course?.seo?.noIndex ? { index: false, follow: false } : undefined,
-  };
+    path: `/online-courses/${slug.join("/")}`,
+    noIndex: course?.seo?.noIndex,
+  });
 }
 
 export default async function CourseCatchAllPage({
@@ -627,8 +629,7 @@ export default async function CourseCatchAllPage({
                           </div>
                         )}
                       </details>
-                    ),
-                  )}
+                    ))}
                 </div>
               </div>
             </section>

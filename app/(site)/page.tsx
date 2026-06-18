@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/sanityFetch";
+import type { Metadata } from "next";
+import { sanityFetch, CACHE_TAGS, fetchSiteSettings } from "@/sanity/lib/sanityFetch";
+import { buildPageMetadata } from "@/lib/seo";
 import { urlFor } from "@/sanity/lib/image";
 import {
   featuredPostsQuery,
@@ -88,6 +90,18 @@ interface HomepageSettings {
   donateQuote?: string;
   donateQuoteAttribution?: string;
   donateCtaLabel?: string;
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await fetchSiteSettings();
+  return buildPageMetadata({
+    title: settings?.siteName || "Aabtaab",
+    description:
+      settings?.description ||
+      "Shia Islamic knowledge, online courses, and community services for Muslims worldwide.",
+    path: "/",
+    absoluteTitle: true,
+  });
 }
 
 export default async function HomePage() {

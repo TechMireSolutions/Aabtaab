@@ -18,6 +18,7 @@ import {
 import { PortableText } from "@portabletext/react";
 import ContentCard from "@/components/ui/ContentCard";
 import { BreadcrumbJsonLd } from "@/components/JsonLd";
+import { buildPageMetadata } from "@/lib/seo";
 
 function getAncestry(service: {
   parent?: { title: string; slug: string; parent?: unknown };
@@ -83,11 +84,12 @@ export async function generateMetadata({
     tags: [CACHE_TAGS.service(slug[slug.length - 1])],
     revalidate: 3600,
   });
-  return {
+  return buildPageMetadata({
     title: service?.seo?.metaTitle || service?.title || "Service",
     description: service?.seo?.metaDescription || service?.excerpt,
-    robots: service?.seo?.noIndex ? { index: false, follow: false } : undefined,
-  };
+    path: `/services/${slug.join("/")}`,
+    noIndex: service?.seo?.noIndex,
+  });
 }
 
 export default async function ServiceCatchAllPage({

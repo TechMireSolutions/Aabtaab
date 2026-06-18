@@ -3,6 +3,7 @@ import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/sanityFetch";
 import { urlFor } from "@/sanity/lib/image";
 import { topLevelServicesQuery, pageBySlugQuery } from "@/sanity/lib/queries";
 import ContentCard from "@/components/ui/ContentCard";
+import { buildPageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const page = await sanityFetch<{
@@ -15,10 +16,14 @@ export async function generateMetadata(): Promise<Metadata> {
     tags: [CACHE_TAGS.siteSettings],
     revalidate: 86400,
   });
-  return {
+  return buildPageMetadata({
     title: page?.seo?.metaTitle || page?.title || "Services",
-    description: page?.seo?.metaDescription || page?.subtitle,
-  };
+    description:
+      page?.seo?.metaDescription ||
+      page?.subtitle ||
+      "Religious services — Niyabat Ziarat, Zakat, Khums, Ijara, and more.",
+    path: "/services",
+  });
 }
 
 export default async function ServicesPage() {

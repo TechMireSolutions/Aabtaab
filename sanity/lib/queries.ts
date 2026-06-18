@@ -23,6 +23,18 @@ export const postsQuery = `
   }
 `;
 
+export const postsSearchQuery = `
+  *[_type == "post" && (
+    title match $term + "*" ||
+    defined(excerpt) && excerpt match $term + "*" ||
+    pt::text(body) match $term + "*"
+  )] | order(publishedAt desc) {
+    _id, title, slug, mainImage, excerpt, publishedAt, featured,
+    "categories": categories[]->{ _id, title, slug },
+    "author": author->{ name, image }
+  }
+`;
+
 export const featuredPostsQuery = `
   *[_type == "post" && featured == true] | order(publishedAt desc)[0...6] {
     _id, title, slug, mainImage, excerpt, publishedAt,
@@ -224,10 +236,14 @@ export const testimonialsQuery = `
 
 export const siteSettingsQuery = `
   *[_type == "siteSettings"][0]{
-    siteName, description, favicon, logo,
+    siteName, description, favicon, logo, tagline,
     siteUrl, twitterHandle,
     email, phone, address, city, state, country,
-    facebookUrl, instagramUrl, youtubeUrl
+    facebook, youtube, whatsapp, darulQuranUrl, donateUrl,
+    searchPlaceholder, contactFormSubjects, contactFormSubmitLabel,
+    donateArabicVerse, donateHowToHeading, donateHowToText,
+    donateClosingMessage, donatePayOnlineLabel, donateContactLabel,
+    donateCauses[]{ title, desc }
   }
 `;
 

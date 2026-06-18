@@ -48,12 +48,27 @@ export default function Header({
     return () => window.removeEventListener("scroll", fn);
   }, []);
 
-  const navLinks: NavItem[] = navItems?.length
-    ? navItems
-    : [
-        ...FALLBACK_NAV,
-        { label: "Dar ul Quran", href: darulQuranUrl || "#", external: true },
-      ];
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
+
+  const navLinks: NavItem[] = (() => {
+    const base = navItems?.length ? [...navItems] : [...FALLBACK_NAV];
+    const hasDarUlQuran = base.some((item) =>
+      /dar\s*ul\s*quran/i.test(item.label),
+    );
+    if (!hasDarUlQuran) {
+      base.push({
+        label: "Dar ul Quran",
+        href: darulQuranUrl || "#",
+        external: Boolean(darulQuranUrl),
+      });
+    }
+    return base;
+  })();
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
@@ -161,15 +176,57 @@ export default function Header({
             )}
           </div>
 
-          {/* Mobile hamburger */}
-          <button
-            className="lg:hidden ml-auto w-9 h-9 flex items-center justify-center rounded-full text-gray-600 hover:bg-gray-100 transition-colors"
-            onClick={() => setMenuOpen(true)}
-            aria-label="Open menu"
-          >
-            <Menu size={20} />
-          </button>
+          {/* Mobile: search + menu */}
+          <div className="lg:hidden ml-auto flex items-center gap-0.5">
+            <button
+              onClick={() => {
+                setSearchOpen((open) => !open);
+                setMenuOpen(false);
+              }}
+              aria-label="Open search"
+              aria-expanded={searchOpen}
+              className="w-11 h-11 flex items-center justify-center rounded-full text-gray-600 hover:bg-gray-100 transition-colors"
+            >
+              <Search size={20} />
+            </button>
+            <button
+              className="w-11 h-11 flex items-center justify-center rounded-full text-gray-600 hover:bg-gray-100 transition-colors"
+              onClick={() => {
+                setMenuOpen(true);
+                setSearchOpen(false);
+              }}
+              aria-label="Open menu"
+              aria-expanded={menuOpen}
+            >
+              <Menu size={20} />
+            </button>
+          </div>
         </div>
+
+        {searchOpen && (
+          <div className="lg:hidden border-t border-gray-100 px-4 py-3 bg-white">
+            <form onSubmit={handleSearch} className="flex items-center gap-2">
+              <input
+                autoFocus
+                type="search"
+                enterKeyHint="search"
+                inputMode="search"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder={searchPlaceholder}
+                aria-label="Search articles"
+                className="flex-1 border border-gray-200 rounded-xl px-4 py-3 text-base outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20"
+              />
+              <button
+                type="submit"
+                aria-label="Search"
+                className="w-11 h-11 flex items-center justify-center rounded-xl bg-cyan-500 text-white hover:bg-cyan-600"
+              >
+                <Search size={16} strokeWidth={2.5} />
+              </button>
+            </form>
+          </div>
+        )}
       </header>
 
       {/* ── Mobile menu ── */}
@@ -214,7 +271,8 @@ export default function Header({
           </Link>
           <button
             onClick={() => setMenuOpen(false)}
-            className="w-8 h-8 flex items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 transition-colors"
+            aria-label="Close menu"
+            className="w-11 h-11 flex items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 transition-colors"
           >
             <X size={18} />
           </button>
@@ -254,15 +312,19 @@ export default function Header({
             className="flex items-center border border-gray-200 rounded-xl overflow-hidden focus-within:border-cyan-500 focus-within:shadow-[0_0_0_3px_rgba(8,145,178,0.12)] transition-all duration-200"
           >
             <input
-              type="text"
+              type="search"
+              enterKeyHint="search"
+              inputMode="search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder={searchPlaceholder}
-              className="flex-1 px-4 py-3 text-[14px] outline-none text-slate-700 placeholder:text-gray-400 bg-white"
+              aria-label="Search articles"
+              className="flex-1 px-4 py-3 text-base outline-none text-slate-700 placeholder:text-gray-400 bg-white"
             />
             <button
               type="submit"
-              className="bg-cyan-500 hover:bg-cyan-600 transition-colors px-4 py-3 flex items-center self-stretch"
+              aria-label="Search"
+              className="bg-cyan-500 hover:bg-cyan-600 transition-colors px-4 py-3 flex items-center self-stretch min-w-[44px]"
             >
               <Search size={14} className="text-white" strokeWidth={2.5} />
             </button>

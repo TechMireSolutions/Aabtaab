@@ -19,13 +19,15 @@ export default function WhatsAppButton({ number }: WhatsAppButtonProps) {
       aria-label="Chat on WhatsApp"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="fixed bottom-5 right-5 z-50 flex items-center
+      className="fixed z-50 flex items-center
         bg-[#25D366] hover:bg-[#20bc5a]
         text-white rounded-full shadow-[0_4px_20px_rgba(37,211,102,0.45)]
         hover:shadow-[0_6px_28px_rgba(37,211,102,0.6)]
         transition-all duration-300 hover:-translate-y-0.5
-        h-[52px] overflow-hidden"
+        h-[52px] min-w-[52px] overflow-hidden"
       style={{
+        bottom: "max(1.25rem, env(safe-area-inset-bottom))",
+        right: "max(1.25rem, env(safe-area-inset-right))",
         width: hovered ? "auto" : "52px",
         paddingLeft: hovered ? "14px" : "0",
         paddingRight: hovered ? "16px" : "0",

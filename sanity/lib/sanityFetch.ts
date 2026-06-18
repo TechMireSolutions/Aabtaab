@@ -93,11 +93,14 @@ export interface SiteSettings {
   description?: string;
   favicon?: { asset: { _ref: string } };
   logo?: { asset: { _ref: string }; alt?: string };
+  tagline?: string;
   siteUrl?: string;
   twitterHandle?: string;
-  facebookUrl?: string;
-  instagramUrl?: string;
-  youtubeUrl?: string;
+  facebook?: string;
+  youtube?: string;
+  whatsapp?: string;
+  darulQuranUrl?: string;
+  donateUrl?: string;
   email?: string;
   phone?: string;
   address?: string;

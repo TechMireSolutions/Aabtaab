@@ -62,6 +62,9 @@ export default async function SiteLayout({
 
   return (
     <>
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
       <Header
         darulQuranUrl={settings?.darulQuranUrl}
         siteName={settings?.siteName}
@@ -69,11 +72,17 @@ export default async function SiteLayout({
         navItems={headerNav?.items}
         searchPlaceholder={settings?.searchPlaceholder}
       />
-      <main className="min-h-screen">{children}</main>
+      <main
+        id="main-content"
+        className={`min-h-screen scroll-mt-[68px] ${
+          settings?.whatsapp ? "pb-[calc(5.5rem+env(safe-area-inset-bottom))] lg:pb-0" : ""
+        }`}
+      >
+        {children}
+      </main>
       <Footer
         settings={settings ?? undefined}
         logoUrl={logoUrl}
-        navItems={headerNav?.items}
         footerServices={footerServices ?? undefined}
       />
       {settings?.whatsapp && <WhatsAppButton number={settings.whatsapp} />}

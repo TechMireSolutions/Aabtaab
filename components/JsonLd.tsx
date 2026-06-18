@@ -219,3 +219,35 @@ export function BreadcrumbJsonLd({ items }: { items: BreadcrumbItem[] }) {
 
   return <JsonLd schema={schema} />;
 }
+
+// ── WebSite JSON-LD (sitelinks search box on mobile SERPs) ─────────────────────
+interface WebSiteSchemaProps {
+  siteName: string;
+  siteUrl: string;
+  description?: string;
+}
+
+export function WebSiteJsonLd({
+  siteName,
+  siteUrl,
+  description,
+}: WebSiteSchemaProps) {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: siteName,
+    url: siteUrl,
+    ...(description && { description }),
+    inLanguage: "en-US",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: `${siteUrl}/articles?q={search_term_string}`,
+      },
+      "query-input": "required name=search_term_string",
+    },
+  };
+
+  return <JsonLd schema={schema} />;
+}
