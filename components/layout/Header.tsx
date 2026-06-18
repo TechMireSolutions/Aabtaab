@@ -222,7 +222,7 @@ export default function Header({
 
         {/* Links */}
         <nav className="flex-1 overflow-y-auto px-3 py-3">
-          {navLinks.map(({ label, href, external }: any) => {
+          {navLinks.map(({ label, href, external }: NavItem) => {
             const isActive =
               href !== "#" &&
               (pathname === href ||

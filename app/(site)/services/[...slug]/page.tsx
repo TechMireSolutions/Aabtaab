@@ -32,6 +32,41 @@ function getAncestry(service: {
   return chain;
 }
 
+interface ServiceChild {
+  _id: string;
+  slug: string;
+  title: string;
+  excerpt?: string;
+  icon?: { asset: { _ref: string } };
+  price?: string;
+  childCount?: number;
+}
+
+interface ServiceDetail {
+  title: string;
+  excerpt?: string;
+  price?: string;
+  heroImage?: { asset: { _ref: string }; alt?: string };
+  whyUsImage?: { asset: { _ref: string }; alt?: string };
+  heroSubtitle?: string;
+  heroBody?: string;
+  whyUsHeading?: string;
+  whyUs?: Array<{ title?: string; desc?: string }>;
+  commitmentHeading?: string;
+  commitment?: Array<{ title?: string; desc?: string }>;
+  howItWorksHeading?: string;
+  howItWorks?: Array<{ label?: string; desc?: string }>;
+  ctaHeading?: string;
+  ctaSubtitle?: string;
+  ctaBtn1Label?: string;
+  ctaBtn2Label?: string;
+  faqSectionHeading?: string;
+  faq?: Array<{ question?: string; answer?: unknown[] }>;
+  body?: unknown[];
+  children?: ServiceChild[];
+  parent?: { title: string; slug: string; parent?: unknown };
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -63,9 +98,8 @@ export default async function ServiceCatchAllPage({
   const { slug } = await params;
   const currentSlug = slug[slug.length - 1];
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [service, site] = await Promise.all([
-    sanityFetch<any>({
+    sanityFetch<ServiceDetail>({
       query: serviceBySlugDeepQuery,
       params: { slug: currentSlug },
       tags: [CACHE_TAGS.service(currentSlug)],
@@ -79,7 +113,8 @@ export default async function ServiceCatchAllPage({
   ]);
   if (!service) notFound();
 
-  const hasChildren = service.children?.length > 0;
+  const childItems = Array.isArray(service.children) ? service.children : [];
+  const hasChildren = childItems.length > 0;
   const ancestry = getAncestry(service);
   const currentPath = `/services/${slug.join("/")}`;
   const heroImageUrl = service.heroImage
@@ -163,7 +198,7 @@ export default async function ServiceCatchAllPage({
             </p>
           )}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {service.children.map(
+            {childItems.map(
               (child: {
                 _id: string;
                 slug: string;
@@ -233,7 +268,7 @@ export default async function ServiceCatchAllPage({
           </section>
 
           {/* ── 2. WHY US ────────────────────────────────────────────────────── */}
-          {service.whyUs?.length > 0 && (
+          {(service.whyUs?.length ?? 0) > 0 && (
             <section className="bg-white py-16 sm:py-20">
               <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -261,8 +296,8 @@ export default async function ServiceCatchAllPage({
                       {service.whyUsHeading || "Why Use Our Platform?"}
                     </h2>
                     <ul className="space-y-4">
-                      {service.whyUs.map(
-                        (item: { title: string; desc?: string }, i: number) => (
+                      {(service.whyUs ?? []).map(
+                        (item, i) => (
                           <li key={i} className="flex items-start gap-3">
                             <div className="w-6 h-6 rounded-md bg-cyan-50 border border-cyan-100 flex items-center justify-center shrink-0 mt-0.5">
                               <Check
@@ -293,15 +328,15 @@ export default async function ServiceCatchAllPage({
           )}
 
           {/* ── 3. COMMITMENT ────────────────────────────────────────────────── */}
-          {service.commitment?.length > 0 && (
+          {(service.commitment?.length ?? 0) > 0 && (
             <section className="bg-slate-900 py-16 sm:py-20">
               <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
                 <h2 className="font-bold text-[24px] sm:text-[32px] text-white tracking-[-0.02em] mb-10">
                   {service.commitmentHeading || "Our Commitment"}
                 </h2>
                 <ul className="space-y-5">
-                  {service.commitment.map(
-                    (item: { title: string; desc?: string }, i: number) => (
+                  {(service.commitment ?? []).map(
+                    (item, i) => (
                       <li
                         key={i}
                         className="text-[14.5px] text-slate-300 leading-relaxed"
@@ -319,7 +354,7 @@ export default async function ServiceCatchAllPage({
           )}
 
           {/* ── 4. HOW IT WORKS ──────────────────────────────────────────────── */}
-          {service.howItWorks?.length > 0 && (
+          {(service.howItWorks?.length ?? 0) > 0 && (
             <section className="bg-cyan-50 py-16 sm:py-20">
               <div className="max-w-2xl mx-auto px-4 sm:px-6">
                 <div className="text-center mb-12">
@@ -328,8 +363,8 @@ export default async function ServiceCatchAllPage({
                   </h2>
                 </div>
                 <ol className="space-y-4">
-                  {service.howItWorks.map(
-                    (step: { label: string; desc?: string }, i: number) => (
+                  {(service.howItWorks ?? []).map(
+                    (step, i) => (
                       <li
                         key={i}
                         className="flex items-start gap-5 bg-white rounded-2xl px-6 py-5 border border-cyan-100 shadow-sm"
@@ -397,7 +432,7 @@ export default async function ServiceCatchAllPage({
           )}
 
           {/* ── Extra body ───────────────────────────────────────────────────── */}
-          {service.body?.length > 0 && (
+          {(service.body?.length ?? 0) > 0 && (
             <section className="bg-white py-12 sm:py-16">
               <div className="max-w-3xl mx-auto px-4 sm:px-6 prose prose-slate prose-lg max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-cyan-600 prose-a:no-underline hover:prose-a:underline">
                 <PortableText
@@ -410,7 +445,7 @@ export default async function ServiceCatchAllPage({
           )}
 
           {/* ── 6. FAQs ──────────────────────────────────────────────────────── */}
-          {service.faq?.length > 0 && (
+          {(service.faq?.length ?? 0) > 0 && (
             <section className="bg-slate-50 py-16 sm:py-20">
               <div className="max-w-3xl mx-auto px-4 sm:px-6">
                 <div className="text-center mb-10">
@@ -419,11 +454,7 @@ export default async function ServiceCatchAllPage({
                   </h2>
                 </div>
                 <div className="space-y-3">
-                  {service.faq.map(
-                    (
-                      item: { question: string; answer?: unknown[] },
-                      i: number,
-                    ) => (
+                  {(service.faq ?? []).map((item, i) => (
                       <details
                         key={i}
                         className="group bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm"

@@ -45,6 +45,7 @@ export default async function ServicesPage() {
       revalidate: 86400,
     }),
   ]);
+  const serviceList = services ?? [];
 
   return (
     <div>
@@ -66,13 +67,13 @@ export default async function ServicesPage() {
 
       <div className="py-8 sm:py-12 bg-slate-50/40 min-h-[50vh]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {services.length === 0 ? (
+          {serviceList.length === 0 ? (
             <p className="text-center text-gray-400 text-[15px] py-24">
               Services coming soon.
             </p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-              {services.map((svc) => (
+              {serviceList.map((svc) => (
                 <ContentCard
                   key={svc._id}
                   href={`/services/${svc.slug.current}`}

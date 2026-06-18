@@ -30,6 +30,59 @@ function getAncestry(course: {
   return chain;
 }
 
+interface CourseChild {
+  _id: string;
+  slug: string;
+  title: string;
+  featuredImage?: { asset: { _ref: string } };
+  excerpt?: string;
+  price?: string;
+  duration?: string;
+  childCount?: number;
+}
+
+interface CourseDetail {
+  title: string;
+  excerpt?: string;
+  subject?: string;
+  duration?: string;
+  instructor?: string;
+  featuredImage?: { asset: { _ref: string }; alt?: string };
+  enrollmentLink?: string;
+  heroSubtitle?: string;
+  heroCtaLabel?: string;
+  overviewHeading?: string;
+  overviewBody?: string;
+  outcomesHeading?: string;
+  outcomes?: Array<{ title?: string; desc?: string }>;
+  whyUsHeading?: string;
+  whyUs?: Array<{ title?: string; desc?: string }>;
+  howItWorksHeading?: string;
+  howItWorks?: Array<{ label?: string; desc?: string }>;
+  pricingHeading?: string;
+  pricingTables?: Array<{
+    label?: string;
+    rows?: Array<{
+      plan?: string;
+      weeklyFrequency?: string;
+      monthlyClasses?: string;
+      feePerClass?: string;
+      monthlyTotal?: string;
+    }>;
+  }>;
+  ctaHeading?: string;
+  ctaSubtitle?: string;
+  ctaBtn1Label?: string;
+  ctaBtn2Label?: string;
+  promiseHeading?: string;
+  promiseBody?: string;
+  faqSectionHeading?: string;
+  faq?: Array<{ question?: string; answer?: unknown[] }>;
+  body?: unknown[];
+  children?: CourseChild[];
+  parent?: { title: string; slug: string; parent?: unknown };
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -61,9 +114,8 @@ export default async function CourseCatchAllPage({
   const { slug } = await params;
   const currentSlug = slug[slug.length - 1];
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [course, site] = await Promise.all([
-    sanityFetch<any>({
+    sanityFetch<CourseDetail>({
       query: courseBySlugDeepQuery,
       params: { slug: currentSlug },
       tags: [CACHE_TAGS.course(currentSlug)],
@@ -77,7 +129,8 @@ export default async function CourseCatchAllPage({
   ]);
   if (!course) notFound();
 
-  const hasChildren = course.children?.length > 0;
+  const childItems = Array.isArray(course.children) ? course.children : [];
+  const hasChildren = childItems.length > 0;
   const ancestry = getAncestry(course);
   const currentPath = `/online-courses/${slug.join("/")}`;
   const heroImageUrl = course.featuredImage
@@ -158,7 +211,7 @@ export default async function CourseCatchAllPage({
             </p>
           )}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {course.children.map(
+            {(course.children ?? []).map(
               (child: {
                 _id: string;
                 slug: string;
@@ -277,7 +330,7 @@ export default async function CourseCatchAllPage({
           )}
 
           {/* ── 3. OUTCOMES ──────────────────────────────────────────────────── */}
-          {course.outcomes?.length > 0 && (
+          {(course.outcomes?.length ?? 0) > 0 && (
             <section className="bg-slate-50 py-16 sm:py-20">
               <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-12">
@@ -286,8 +339,7 @@ export default async function CourseCatchAllPage({
                   </h2>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                  {course.outcomes.map(
-                    (item: { title: string; desc?: string }, i: number) => (
+                  {(course.outcomes ?? []).map((item, i) => (
                       <div
                         key={i}
                         className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-200"
@@ -308,15 +360,14 @@ export default async function CourseCatchAllPage({
                           </p>
                         )}
                       </div>
-                    ),
-                  )}
+                    ))}
                 </div>
               </div>
             </section>
           )}
 
           {/* ── 4. WHY US ────────────────────────────────────────────────────── */}
-          {course.whyUs?.length > 0 && (
+          {(course.whyUs?.length ?? 0) > 0 && (
             <section className="bg-white py-16 sm:py-20">
               <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-12">
@@ -325,8 +376,7 @@ export default async function CourseCatchAllPage({
                   </h2>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                  {course.whyUs.map(
-                    (item: { title: string; desc?: string }, i: number) => (
+                  {(course.whyUs ?? []).map((item, i) => (
                       <div
                         key={i}
                         className="flex gap-4 p-6 rounded-2xl border border-gray-100 hover:border-cyan-100 hover:bg-cyan-50/30 transition-colors duration-200"
@@ -345,15 +395,14 @@ export default async function CourseCatchAllPage({
                           )}
                         </div>
                       </div>
-                    ),
-                  )}
+                    ))}
                 </div>
               </div>
             </section>
           )}
 
           {/* ── 5. HOW IT WORKS ──────────────────────────────────────────────── */}
-          {course.howItWorks?.length > 0 && (
+          {(course.howItWorks?.length ?? 0) > 0 && (
             <section className="bg-cyan-50 py-16 sm:py-20">
               <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-12">
@@ -362,8 +411,7 @@ export default async function CourseCatchAllPage({
                   </h2>
                 </div>
                 <ol className="space-y-4">
-                  {course.howItWorks.map(
-                    (step: { label: string; desc?: string }, i: number) => (
+                  {(course.howItWorks ?? []).map((step, i) => (
                       <li
                         key={i}
                         className="flex items-start gap-5 bg-white rounded-2xl px-6 py-5 border border-cyan-100 shadow-sm"
@@ -391,7 +439,7 @@ export default async function CourseCatchAllPage({
           )}
 
           {/* ── 6. PRICING ───────────────────────────────────────────────────── */}
-          {course.pricingTables?.length > 0 && (
+          {(course.pricingTables?.length ?? 0) > 0 && (
             <section className="bg-white py-16 sm:py-20">
               <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-12">
@@ -403,20 +451,7 @@ export default async function CourseCatchAllPage({
                   </h2>
                 </div>
                 <div className="space-y-10">
-                  {course.pricingTables.map(
-                    (
-                      pricingTable: {
-                        label?: string;
-                        rows?: {
-                          plan: string;
-                          weeklyFrequency: string;
-                          monthlyClasses: string;
-                          feePerClass: string;
-                          monthlyTotal: string;
-                        }[];
-                      },
-                      ti: number,
-                    ) => (
+                  {(course.pricingTables ?? []).map((pricingTable, ti) => (
                       <div key={ti}>
                         {pricingTable.label && (
                           <h3 className="font-bold text-[14.5px] text-slate-700 mb-4 flex items-center gap-2">
@@ -474,8 +509,7 @@ export default async function CourseCatchAllPage({
                           </div>
                         )}
                       </div>
-                    ),
-                  )}
+                    ))}
                 </div>
               </div>
             </section>
@@ -560,7 +594,7 @@ export default async function CourseCatchAllPage({
           )}
 
           {/* ── 9. FAQs ──────────────────────────────────────────────────────── */}
-          {course.faq?.length > 0 && (
+          {(course.faq?.length ?? 0) > 0 && (
             <section className="bg-slate-50 py-16 sm:py-20">
               <div className="max-w-3xl mx-auto px-4 sm:px-6">
                 <div className="text-center mb-10">
@@ -569,11 +603,7 @@ export default async function CourseCatchAllPage({
                   </h2>
                 </div>
                 <div className="space-y-3">
-                  {course.faq.map(
-                    (
-                      item: { question: string; answer?: unknown[] },
-                      i: number,
-                    ) => (
+                  {(course.faq ?? []).map((item, i) => (
                       <details
                         key={i}
                         className="group bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm"
@@ -605,7 +635,7 @@ export default async function CourseCatchAllPage({
           )}
 
           {/* ── Extra body ───────────────────────────────────────────────────── */}
-          {course.body?.length > 0 && (
+          {(course.body?.length ?? 0) > 0 && (
             <section className="bg-white py-12 sm:py-16">
               <div className="max-w-3xl mx-auto px-4 sm:px-6 prose prose-slate prose-lg max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-cyan-600 prose-a:no-underline hover:prose-a:underline">
                 <PortableText

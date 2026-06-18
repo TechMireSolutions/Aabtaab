@@ -469,7 +469,7 @@ export default async function HomePage() {
           <div className="relative max-w-lg mx-auto mb-7 bg-white border border-slate-200 rounded-xl px-6 py-5 shadow-sm">
             <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 w-7 h-7 bg-white border border-slate-200 rounded-full flex items-center justify-center">
               <span className="text-amber-500 text-[15px] font-bold leading-none">
-                "
+                &ldquo;
               </span>
             </div>
             <p className="text-[13.5px] text-slate-600 italic leading-relaxed">

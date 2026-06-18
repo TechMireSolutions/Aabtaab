@@ -46,6 +46,7 @@ export default async function CoursesPage() {
       revalidate: 86400,
     }),
   ]);
+  const courseList = courses ?? [];
 
   return (
     <div>
@@ -67,13 +68,13 @@ export default async function CoursesPage() {
 
       <div className="py-8 sm:py-12 bg-slate-50/40 min-h-[50vh]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {courses.length === 0 ? (
+          {courseList.length === 0 ? (
             <p className="text-center text-gray-400 text-[15px] py-24">
               Courses coming soon.
             </p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-              {courses.map((course) => (
+              {courseList.map((course) => (
                 <ContentCard
                   key={course._id}
                   href={`/online-courses/${course.slug.current}`}

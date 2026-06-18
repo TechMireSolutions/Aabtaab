@@ -10,14 +10,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to Hetzner VPS via SSH
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.2.2
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            set -e
             cd /var/www/aabtaab_next
             git pull origin main
-            npm install
+            npm ci
             npm run build
-            pm2 restart aabtaab-next
+            if pm2 describe aabtaab-next > /dev/null 2>&1; then
+              pm2 restart aabtaab-next
+            else
+              pm2 start npm --name aabtaab-next -- start -- -p 3000
+            fi

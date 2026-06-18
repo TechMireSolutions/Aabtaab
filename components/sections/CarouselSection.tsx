@@ -161,7 +161,7 @@ export default function CarouselSection({
               WebkitOverflowScrolling: "touch",
             }}
           >
-            {items.map((item, i) => (
+            {items.map((item) => (
               <div
                 key={item.id}
                 data-card

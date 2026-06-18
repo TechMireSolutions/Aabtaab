@@ -2,23 +2,39 @@ import { createClient } from "@sanity/client";
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
-const sanity = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
-  token: process.env.SANITY_API_TOKEN!,
-  apiVersion: "2024-01-01",
-  useCdn: false,
-});
+function getSanityClient() {
+  const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+  const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET;
+  const token = process.env.SANITY_API_TOKEN;
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+  if (!projectId || !dataset || !token) {
+    throw new Error("Sanity write credentials are not configured");
+  }
+
+  return createClient({
+    projectId,
+    dataset,
+    token,
+    apiVersion: "2025-06-18",
+    useCdn: false,
+  });
+}
+
+function getMailTransporter() {
+  const user = process.env.EMAIL_USER;
+  const pass = process.env.EMAIL_PASS;
+
+  if (!user || !pass) {
+    return null;
+  }
+
+  return nodemailer.createTransport({
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false,
+    auth: { user, pass },
+  });
+}
 
 const purposeLabel: Record<string, string> = {
   general: "General Inquiry",
@@ -52,7 +68,7 @@ export async function POST(req: Request) {
     const purposeText = purposeLabel[purpose] || purpose || "General Inquiry";
 
     // 1. Save to Sanity
-    await sanity.create({
+    await getSanityClient().create({
       _type: "contactSubmission",
       firstName,
       lastName: lastName || undefined,
@@ -68,11 +84,8 @@ export async function POST(req: Request) {
     });
 
     // 2. Send email notification
-    if (
-      process.env.EMAIL_USER &&
-      process.env.EMAIL_PASS &&
-      process.env.EMAIL_TO
-    ) {
+    const transporter = getMailTransporter();
+    if (transporter && process.env.EMAIL_TO) {
       await transporter.sendMail({
         from: `"Aabtaab Contact" <${process.env.EMAIL_USER}>`,
         to: process.env.EMAIL_TO,

@@ -25,7 +25,8 @@ export const CACHE_TAGS = {
 // In production: wraps each GROQ call in unstable_cache keyed by (query, params)
 // and tagged for surgical on-demand revalidation via the /api/revalidate webhook.
 
-interface SanityFetchOptions<_T> {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+interface SanityFetchOptions<T> {
   query: string;
   params?: QueryParams;
   tags?: string[];

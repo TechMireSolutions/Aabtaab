@@ -22,6 +22,21 @@ function optionLabel(o: Option) {
   return o.parentTitle ? `${o.parentTitle} — ${o.title}` : o.title;
 }
 
+function Label({
+  children,
+  required: req,
+}: {
+  children: React.ReactNode;
+  required?: boolean;
+}) {
+  return (
+    <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">
+      {children}
+      {req && <span className="text-red-500 ml-0.5">*</span>}
+    </label>
+  );
+}
+
 export default function ContactForm({ submitLabel, courses, services }: Props) {
   const [purpose, setPurpose] = useState<Purpose>("general");
   const [appliedFor, setAppliedFor] = useState("");
@@ -71,19 +86,6 @@ export default function ContactForm({ submitLabel, courses, services }: Props) {
   const inputCls = `w-full border border-gray-200 rounded-lg px-3.5 py-2.5 text-[13.5px] text-slate-700
     placeholder:text-gray-400 bg-white focus:outline-none focus:border-cyan-400
     focus:ring-2 focus:ring-cyan-400/20 transition-all`;
-
-  const Label = ({
-    children,
-    required: req,
-  }: {
-    children: React.ReactNode;
-    required?: boolean;
-  }) => (
-    <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">
-      {children}
-      {req && <span className="text-red-500 ml-0.5">*</span>}
-    </label>
-  );
 
   return (
     <form
