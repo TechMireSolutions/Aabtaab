@@ -1,66 +1,29 @@
-import type { Metadata } from "next";
 import Link from "next/link";
-import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/fetch";
-import { siteSettingsQuery, pageBySlugQuery } from "@/sanity/lib/queries";
-import PortableTextBody from "@/components/portable-text/PortableTextBody";
+import ProseSection from "@/components/portable-text/ProseSection";
 import { ArrowRight } from "lucide-react";
-import { buildPageMetadata } from "@/lib/seo";
-import type { CmsPageSummary } from "@/types/cms-page";
-import type { DonatePageSettings } from "@/types/donate";
+import { defineCmsPageMetadata } from "@/lib/cms/page";
+import { getCmsPage, getSiteSettings } from "@/lib/cms/queries";
+import {
+  DEFAULT_DONATE_CAUSES,
+  DEFAULT_PAYPAL_DONATE_URL,
+} from "@/lib/fallbacks/donate";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const page = await sanityFetch<CmsPageSummary>({
-    query: pageBySlugQuery,
-    params: { slug: "donate" },
-    tags: [CACHE_TAGS.siteSettings],
-    revalidate: 86400,
-  });
-  return buildPageMetadata({
-    title: page?.seo?.metaTitle || page?.title || "Donate",
-    description:
-      page?.seo?.metaDescription ||
-      page?.subtitle ||
-      "Support Aabtaab's mission to spread Shia Islamic knowledge and community services.",
-    path: "/donate",
-  });
-}
+export const generateMetadata = defineCmsPageMetadata("donate", {
+  path: "/donate",
+  fallbackTitle: "Donate",
+  fallbackDescription:
+    "Support Aabtaab's mission to spread Shia Islamic knowledge and community services.",
+});
 
 export default async function DonatePage() {
   const [settings, page] = await Promise.all([
-    sanityFetch<DonatePageSettings>({
-      query: siteSettingsQuery,
-      tags: [CACHE_TAGS.siteSettings],
-      revalidate: 86400,
-    }),
-    sanityFetch<CmsPageSummary>({
-      query: pageBySlugQuery,
-      params: { slug: "donate" },
-      tags: [CACHE_TAGS.siteSettings],
-      revalidate: 86400,
-    }),
+    getSiteSettings(),
+    getCmsPage("donate"),
   ]);
 
-  const causes: { title: string; description: string }[] = settings?.donateCauses
-    ?.length
+  const causes = settings?.donateCauses?.length
     ? settings.donateCauses
-    : [
-        {
-          title: "General Donation",
-          description: "Support the overall mission of Aabtaab",
-        },
-        {
-          title: "Quran Education",
-          description: "Fund free Quran classes for children",
-        },
-        {
-          title: "Muharram Programs",
-          description: "Help organise Majalis and Aza events",
-        },
-        {
-          title: "Dar Ul Quran Support",
-          description: "Contribute to our sister Quranic institute",
-        },
-      ];
+    : [...DEFAULT_DONATE_CAUSES];
 
   return (
     <div>
@@ -89,7 +52,7 @@ export default async function DonatePage() {
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           {page?.body && (
             <div className="prose prose-sm max-w-none text-gray-700 mb-8 sm:mb-10">
-              <PortableTextBody value={page.body} />
+              <ProseSection value={page.body} variant="article" />
             </div>
           )}
 
@@ -124,10 +87,7 @@ export default async function DonatePage() {
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <a
-                href={
-                  settings?.donateUrl ||
-                  "https://www.paypal.com/donate/?hosted_button_id=Q22WVGY8WWZ4C"
-                }
+                href={settings?.donateUrl || DEFAULT_PAYPAL_DONATE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group inline-flex items-center justify-center gap-2.5 bg-[#0070BA] hover:bg-[#005ea6] text-white text-[14px] font-bold px-8 py-3 rounded-full

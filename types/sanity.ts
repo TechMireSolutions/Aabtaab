@@ -30,6 +30,13 @@ export interface SiteSettings {
   country?: string;
   searchPlaceholder?: string;
   contactFormSubmitLabel?: string;
+  donateArabicVerse?: string;
+  donatePayOnlineLabel?: string;
+  donateContactLabel?: string;
+  donateClosingMessage?: string;
+  donateHowToHeading?: string;
+  donateHowToText?: string;
+  donateCauses?: { title: string; description: string }[];
 }
 
 export interface FaqItem {

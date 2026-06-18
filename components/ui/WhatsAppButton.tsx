@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
 
+import { whatsappUrl } from "@/lib/urls";
+
 interface WhatsAppButtonProps {
   number: string;
 }
@@ -8,8 +10,7 @@ interface WhatsAppButtonProps {
 export default function WhatsAppButton({ number }: WhatsAppButtonProps) {
   const [hovered, setHovered] = useState(false);
 
-  const clean = number.replace(/\D/g, "");
-  const href = `https://wa.me/${clean}?text=${encodeURIComponent("Assalamu Alaikum, I have an inquiry about your services.")}`;
+  const href = whatsappUrl(number);
 
   return (
     <a

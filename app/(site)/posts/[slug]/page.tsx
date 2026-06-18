@@ -3,13 +3,11 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, CalendarDays, User } from "lucide-react";
-import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/fetch";
-import type { Post } from "@/types/sanity";
-import { urlFor } from "@/sanity/lib/image";
-import { postBySlugQuery } from "@/sanity/lib/queries";
-import PortableTextBody from "@/components/portable-text/PortableTextBody";
-import { ArticleJsonLd } from "@/lib/seo";
-import { buildPageMetadata, getSiteUrl } from "@/lib/seo";
+import FaqAccordionSection from "@/components/content/FaqAccordionSection";
+import ProseSection from "@/components/portable-text/ProseSection";
+import { buildPostPageMetadata, resolvePostImageUrls } from "@/lib/cms/post";
+import { getPostBySlug } from "@/lib/cms/queries";
+import { ArticleJsonLd, getSiteUrl } from "@/lib/seo";
 
 const siteUrl = getSiteUrl();
 const siteName = "Aabtaab";
@@ -20,46 +18,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const post = await sanityFetch<Post>({
-    query: postBySlugQuery,
-    params: { slug },
-    tags: [CACHE_TAGS.post(slug)],
-    revalidate: 3600,
-  });
-
-  const ogImageUrl = post?.seo?.ogImage
-    ? urlFor(post.seo.ogImage).width(1200).height(630).url()
-    : post?.mainImage
-      ? urlFor(post.mainImage).width(1200).height(630).url()
-      : undefined;
-
-  const title = post?.seo?.metaTitle ?? post?.title ?? "Article";
-  const description = post?.seo?.metaDescription ?? post?.excerpt;
-  const path = `/posts/${slug}`;
-
-  const canonicalPath = post?.seo?.canonicalUrl
-    ? post.seo.canonicalUrl.startsWith("http")
-      ? new URL(post.seo.canonicalUrl).pathname
-      : post.seo.canonicalUrl
-    : path;
-
-  const base = buildPageMetadata({
-    title,
-    description,
-    path: canonicalPath,
-    noIndex: post?.seo?.noIndex,
-    ogImage: ogImageUrl,
-  });
-
-  return {
-    ...base,
-    openGraph: {
-      ...base.openGraph,
-      type: "article",
-      publishedTime: post?.publishedAt,
-      authors: post?.author?.name ? [post.author.name] : undefined,
-    },
-  };
+  return buildPostPageMetadata(slug);
 }
 
 export default async function PostDetailPage({
@@ -68,25 +27,13 @@ export default async function PostDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = await sanityFetch<Post>({
-    query: postBySlugQuery,
-    params: { slug },
-    tags: [CACHE_TAGS.post(slug)],
-    revalidate: 3600,
-  });
+  const post = await getPostBySlug(slug);
   if (!post) notFound();
 
-  const mainImageUrl = post.mainImage
-    ? urlFor(post.mainImage).width(900).height(500).url()
-    : undefined;
-
-  const ogImageUrl = post.seo?.ogImage
-    ? urlFor(post.seo.ogImage).width(1200).height(630).url()
-    : mainImageUrl;
+  const { mainImageUrl, ogImageUrl } = resolvePostImageUrls(post);
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Article JSON-LD structured data */}
       <ArticleJsonLd
         title={post.title}
         description={post.seo?.metaDescription || post.excerpt}
@@ -99,7 +46,6 @@ export default async function PostDetailPage({
         faqItems={post.faqItems}
       />
 
-      {/* Back nav */}
       <div className="border-b border-gray-100 bg-white sticky top-[68px] z-10">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <Link
@@ -168,42 +114,9 @@ export default async function PostDetailPage({
           </div>
         )}
 
-        {post.body && (
-          <div
-            className="prose prose-slate prose-base sm:prose-lg max-w-none
-            prose-headings:font-bold prose-headings:tracking-tight prose-headings:text-slate-900
-            prose-p:text-gray-700 prose-p:leading-[1.8]
-            prose-a:text-cyan-600 prose-a:no-underline hover:prose-a:underline
-            prose-strong:text-slate-900 prose-strong:font-semibold
-            prose-blockquote:border-l-4 prose-blockquote:border-cyan-400 prose-blockquote:text-slate-600 prose-blockquote:not-italic
-            prose-li:text-gray-700"
-          >
-            <PortableTextBody value={post.body} />
-          </div>
-        )}
+        {post.body && <ProseSection value={post.body} variant="article" />}
 
-        {post.faqItems && post.faqItems.length > 0 && (
-          <div className="mt-12 pt-10 border-t border-gray-100">
-            <h2 className="font-bold text-[22px] text-slate-900 tracking-[-0.02em] mb-6">
-              Frequently Asked Questions
-            </h2>
-            <div className="space-y-3">
-              {post.faqItems.map((item, i) => (
-                <details
-                  key={i}
-                  className="group bg-slate-50 border border-gray-100 rounded-2xl overflow-hidden"
-                >
-                  <summary className="flex items-center justify-between gap-4 px-5 py-4 cursor-pointer list-none font-semibold text-[15px] text-slate-900 hover:text-cyan-700 transition-colors">
-                    {item.question}
-                  </summary>
-                  <p className="px-5 pb-4 pt-1 text-[14px] text-gray-600 leading-relaxed border-t border-gray-100">
-                    {item.answer}
-                  </p>
-                </details>
-              ))}
-            </div>
-          </div>
-        )}
+        <FaqAccordionSection items={post.faqItems} />
       </article>
     </div>
   );

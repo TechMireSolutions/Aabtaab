@@ -10,4 +10,4 @@ export {
   BreadcrumbJsonLd,
   WebSiteJsonLd,
 } from "./JsonLd";
-export { buildNestedContentPath, getContentAncestry } from "@/lib/paths";
+export { buildNestedContentPath, getContentAncestry, ancestryPathSegment, buildNestedBreadcrumbItems } from "@/lib/paths";

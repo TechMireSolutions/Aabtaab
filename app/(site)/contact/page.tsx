@@ -1,80 +1,29 @@
-import type { Metadata } from "next";
 import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/fetch";
 import {
-  siteSettingsQuery,
-  pageBySlugQuery,
   allCoursesForFormQuery,
   allServicesForFormQuery,
 } from "@/sanity/lib/queries";
-import PortableTextBody from "@/components/portable-text/PortableTextBody";
 import { Mail, Phone, MessageCircle, MapPin } from "lucide-react";
 import ContactForm from "./_components/ContactForm";
-import { buildPageMetadata } from "@/lib/seo";
-import type {
-  ContactFormOption,
-  ContactPageData,
-  ContactSettings,
-} from "@/types/contact";
+import PageHeader from "@/components/layout/PageHeader";
+import ProseSection from "@/components/portable-text/ProseSection";
+import { FacebookIcon, YoutubeIcon } from "@/components/icons/SocialIcons";
+import { defineCmsPageMetadata } from "@/lib/cms/page";
+import { getCmsPage, getSiteSettings } from "@/lib/cms/queries";
+import { whatsappUrl } from "@/lib/urls";
+import type { ContactFormOption } from "@/types/contact";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const page = await sanityFetch<ContactPageData>({
-    query: pageBySlugQuery,
-    params: { slug: "contact" },
-    tags: [CACHE_TAGS.siteSettings],
-    revalidate: 86400,
-  });
-  return buildPageMetadata({
-    title:
-      page?.seo?.metaTitle || page?.title || "Contact Us",
-    description:
-      page?.seo?.metaDescription ||
-      page?.subtitle ||
-      "Contact Aabtaab for courses, religious services, and general inquiries.",
-    path: "/contact",
-  });
-}
-
-function FacebookIcon({ size }: { size: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      aria-hidden="true"
-    >
-      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-    </svg>
-  );
-}
-
-function YoutubeIcon({ size }: { size: number }) {
-  return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      aria-hidden="true"
-    >
-      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
-    </svg>
-  );
-}
+export const generateMetadata = defineCmsPageMetadata("contact", {
+  path: "/contact",
+  fallbackTitle: "Contact Us",
+  fallbackDescription:
+    "Contact Aabtaab for courses, religious services, and general inquiries.",
+});
 
 export default async function ContactPage() {
   const [settings, page, courses, services] = await Promise.all([
-    sanityFetch<ContactSettings>({
-      query: siteSettingsQuery,
-      tags: [CACHE_TAGS.siteSettings],
-      revalidate: 86400,
-    }),
-    sanityFetch<ContactPageData>({
-      query: pageBySlugQuery,
-      params: { slug: "contact" },
-      tags: [CACHE_TAGS.siteSettings],
-      revalidate: 86400,
-    }),
+    getSiteSettings(),
+    getCmsPage("contact"),
     sanityFetch<ContactFormOption[]>({
       query: allCoursesForFormQuery,
       tags: [CACHE_TAGS.courses],
@@ -104,7 +53,7 @@ export default async function ContactPage() {
       Icon: MessageCircle,
       label: "WhatsApp",
       value: settings.whatsapp,
-      href: `https://wa.me/${settings.whatsapp.replace(/\D/g, "")}`,
+      href: whatsappUrl(settings.whatsapp),
     },
     settings?.address && {
       Icon: MapPin,
@@ -124,27 +73,21 @@ export default async function ContactPage() {
 
   return (
     <div>
-      <div className="bg-white border-b border-gray-100">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-          <p className="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.18em] text-cyan-600 mb-3">
-            <span className="w-5 h-px bg-cyan-400 inline-block" />
-            {page?.eyebrow || "Reach Out"}
-          </p>
-          <h1 className="font-bold text-[26px] sm:text-[30px] text-slate-900 tracking-[-0.02em] mb-2">
-            {page?.title || "Contact Us"}
-          </h1>
-          <p className="text-[13.5px] text-gray-500">
-            {page?.subtitle ||
-              "Get in touch for services, courses, or general inquiries"}
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        maxWidth="lg"
+        eyebrow={page?.eyebrow || "Reach Out"}
+        title={page?.title || "Contact Us"}
+        subtitle={
+          page?.subtitle ||
+          "Get in touch for services, courses, or general inquiries"
+        }
+      />
 
       <div className="py-8 sm:py-12 bg-slate-50/40">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {page?.body && (
             <div className="prose prose-sm max-w-2xl mb-8 text-gray-700">
-              <PortableTextBody value={page.body} />
+              <ProseSection value={page.body} variant="article" />
             </div>
           )}
 

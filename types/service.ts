@@ -1,5 +1,9 @@
-import type { ContentAncestor, SeoData } from "./sanity";
-import type { LabeledDescription, LabeledStep } from "./course";
+import type { ContentAncestor } from "./sanity";
+import type {
+  LabeledDescription,
+  LabeledStep,
+  NestedContentDetail,
+} from "./content-sections";
 
 export interface ServiceChild {
   _id: string;
@@ -11,9 +15,7 @@ export interface ServiceChild {
   childCount?: number;
 }
 
-export interface ServiceDetail {
-  title: string;
-  excerpt?: string;
+export interface ServiceDetail extends NestedContentDetail {
   price?: string;
   heroImage?: { asset: { _ref: string }; alt?: string };
   whyUsImage?: { asset: { _ref: string }; alt?: string };
@@ -25,14 +27,6 @@ export interface ServiceDetail {
   commitment?: LabeledDescription[];
   howItWorksHeading?: string;
   howItWorks?: LabeledStep[];
-  ctaHeading?: string;
-  ctaSubtitle?: string;
-  ctaPrimaryLabel?: string;
-  ctaSecondaryLabel?: string;
-  faqHeading?: string;
-  faqItems?: Array<{ question?: string; answer?: unknown[] }>;
-  body?: unknown[];
   children?: ServiceChild[];
   parent?: ContentAncestor;
-  seo?: SeoData;
 }

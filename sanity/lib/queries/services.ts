@@ -1,4 +1,4 @@
-import { SEO_FRAGMENT } from "./fragments";
+import { PARENT_ANCESTRY_FRAGMENT, PARENT_SLUG_CHAIN_FRAGMENT, SEO_FRAGMENT } from "./fragments";
 
 export const topLevelServicesQuery = `
   *[_type == "service" && !defined(parent)] | order(order asc) {
@@ -18,15 +18,7 @@ export const serviceBySlugDeepQuery = `
     ctaHeading, ctaSubtitle, ctaPrimaryLabel, ctaSecondaryLabel,
     faqHeading,
 
-    "parent": parent->{
-      _id, title, "slug": slug.current,
-      "parent": parent->{
-        _id, title, "slug": slug.current,
-        "parent": parent->{
-          _id, title, "slug": slug.current
-        }
-      }
-    },
+    ${PARENT_ANCESTRY_FRAGMENT},
     "children": *[_type == "service" && references(^._id)] | order(order asc) {
       _id, title, "slug": slug.current, excerpt, icon, price,
       "childCount": count(*[_type == "service" && references(^._id)])
@@ -38,13 +30,7 @@ export const serviceBySlugDeepQuery = `
 export const allServicePathsQuery = `
   *[_type == "service" && defined(slug.current)] {
     "slug": slug.current,
-    "parent": parent->{
-      "slug": slug.current,
-      "parent": parent->{
-        "slug": slug.current,
-        "parent": parent->{ "slug": slug.current }
-      }
-    }
+    ${PARENT_SLUG_CHAIN_FRAGMENT}
   }
 `;
 

@@ -1,4 +1,11 @@
-import type { ContentAncestor, SeoData } from "./sanity";
+import type { ContentAncestor } from "./sanity";
+import type {
+  LabeledDescription,
+  LabeledStep,
+  NestedContentDetail,
+} from "./content-sections";
+
+export type { LabeledDescription, LabeledStep } from "./content-sections";
 
 export interface CourseChild {
   _id: string;
@@ -11,19 +18,7 @@ export interface CourseChild {
   childCount?: number;
 }
 
-export interface LabeledDescription {
-  title?: string;
-  description?: string;
-}
-
-export interface LabeledStep {
-  label?: string;
-  description?: string;
-}
-
-export interface CourseDetail {
-  title: string;
-  excerpt?: string;
+export interface CourseDetail extends NestedContentDetail {
   subject?: string;
   duration?: string;
   instructor?: string;
@@ -50,16 +45,8 @@ export interface CourseDetail {
       monthlyTotal?: string;
     }>;
   }>;
-  ctaHeading?: string;
-  ctaSubtitle?: string;
-  ctaPrimaryLabel?: string;
-  ctaSecondaryLabel?: string;
   promiseHeading?: string;
   promiseBody?: string;
-  faqHeading?: string;
-  faqItems?: Array<{ question?: string; answer?: unknown[] }>;
-  body?: unknown[];
   children?: CourseChild[];
   parent?: ContentAncestor;
-  seo?: SeoData;
 }

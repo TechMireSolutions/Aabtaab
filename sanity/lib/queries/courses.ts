@@ -1,4 +1,4 @@
-import { SEO_FRAGMENT } from "./fragments";
+import { PARENT_ANCESTRY_FRAGMENT, PARENT_SLUG_CHAIN_FRAGMENT, SEO_FRAGMENT } from "./fragments";
 
 export const topLevelCoursesQuery = `
   *[_type == "course" && !defined(parent)] | order(order asc) {
@@ -23,15 +23,7 @@ export const courseBySlugDeepQuery = `
     promiseHeading, promiseBody,
     faqHeading,
 
-    "parent": parent->{
-      _id, title, "slug": slug.current,
-      "parent": parent->{
-        _id, title, "slug": slug.current,
-        "parent": parent->{
-          _id, title, "slug": slug.current
-        }
-      }
-    },
+    ${PARENT_ANCESTRY_FRAGMENT},
     "children": *[_type == "course" && references(^._id)] | order(order asc) {
       _id, title, "slug": slug.current, excerpt, featuredImage, price, duration,
       "childCount": count(*[_type == "course" && references(^._id)])
@@ -43,13 +35,7 @@ export const courseBySlugDeepQuery = `
 export const allCoursePathsQuery = `
   *[_type == "course" && defined(slug.current)] {
     "slug": slug.current,
-    "parent": parent->{
-      "slug": slug.current,
-      "parent": parent->{
-        "slug": slug.current,
-        "parent": parent->{ "slug": slug.current }
-      }
-    }
+    ${PARENT_SLUG_CHAIN_FRAGMENT}
   }
 `;
 

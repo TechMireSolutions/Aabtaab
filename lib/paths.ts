@@ -27,3 +27,33 @@ export function getContentAncestry(item: {
   }
   return chain;
 }
+
+export function ancestryPathSegment(
+  ancestry: ContentAncestor[],
+  index: number,
+): string {
+  return ancestry
+    .slice(0, index + 1)
+    .map((item) => item.slug)
+    .join("/");
+}
+
+export function buildNestedBreadcrumbItems(
+  base: "online-courses" | "services",
+  baseLabel: string,
+  ancestry: ContentAncestor[],
+  currentTitle: string,
+  currentPath: string,
+  siteUrl: string,
+): Array<{ name: string; url: string }> {
+  const basePath = `/${base}`;
+  return [
+    { name: "Home", url: siteUrl },
+    { name: baseLabel, url: `${siteUrl}${basePath}` },
+    ...ancestry.map((item, index) => ({
+      name: item.title,
+      url: `${siteUrl}${basePath}/${ancestryPathSegment(ancestry, index)}`,
+    })),
+    { name: currentTitle, url: `${siteUrl}${currentPath}` },
+  ];
+}

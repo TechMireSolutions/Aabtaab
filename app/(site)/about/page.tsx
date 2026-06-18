@@ -1,82 +1,38 @@
-import type { Metadata } from "next";
 import Link from "next/link";
-import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/fetch";
-import { pageBySlugQuery, siteSettingsQuery } from "@/sanity/lib/queries";
-import PortableTextBody from "@/components/portable-text/PortableTextBody";
+import PageHeader from "@/components/layout/PageHeader";
+import ProseSection from "@/components/portable-text/ProseSection";
+import { defineCmsPageMetadata } from "@/lib/cms/page";
+import { getCmsPage, getSiteSettings } from "@/lib/cms/queries";
 import { ArrowRight, BookOpen, Heart, Star } from "lucide-react";
-import { buildPageMetadata } from "@/lib/seo";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const page = await sanityFetch<{
-    seo?: { metaTitle?: string; metaDescription?: string };
-    title?: string;
-    subtitle?: string;
-  }>({
-    query: pageBySlugQuery,
-    params: { slug: "about" },
-    tags: [CACHE_TAGS.siteSettings],
-    revalidate: 86400,
-  });
-  return buildPageMetadata({
-    title: page?.seo?.metaTitle || page?.title || "About Us",
-    description:
-      page?.seo?.metaDescription ||
-      page?.subtitle ||
-      "Learn about Aabtaab — Shia Islamic education, services, and community.",
-    path: "/about",
-  });
-}
+export const generateMetadata = defineCmsPageMetadata("about", {
+  path: "/about",
+  fallbackTitle: "About Us",
+  fallbackDescription:
+    "Learn about Aabtaab — Shia Islamic education, services, and community.",
+});
 
 export default async function AboutPage() {
   const [page, settings] = await Promise.all([
-    sanityFetch<{
-      eyebrow?: string;
-      title?: string;
-      subtitle?: string;
-      body?: unknown[];
-    }>({
-      query: pageBySlugQuery,
-      params: { slug: "about" },
-      tags: [CACHE_TAGS.siteSettings],
-      revalidate: 86400,
-    }),
-    sanityFetch<{ siteName?: string }>({
-      query: siteSettingsQuery,
-      tags: [CACHE_TAGS.siteSettings],
-      revalidate: 86400,
-    }),
+    getCmsPage("about"),
+    getSiteSettings(),
   ]);
 
   const siteName = settings?.siteName || "Aabtaab";
 
   return (
     <div>
-      <div className="bg-white border-b border-gray-100">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-          <p className="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.18em] text-cyan-600 mb-3">
-            <span className="w-5 h-px bg-cyan-400 inline-block" />
-            {page?.eyebrow || "Our Story"}
-          </p>
-          <h1 className="font-bold text-[26px] sm:text-[30px] text-slate-900 tracking-[-0.02em] mb-2">
-            {page?.title || "About Us"}
-          </h1>
-          <p className="text-[13.5px] text-gray-500">
-            {page?.subtitle || "Who we are and what drives us"}
-          </p>
-        </div>
-      </div>
+      <PageHeader
+        maxWidth="md"
+        eyebrow={page?.eyebrow || "Our Story"}
+        title={page?.title || "About Us"}
+        subtitle={page?.subtitle || "Who we are and what drives us"}
+      />
 
       <div className="py-8 sm:py-12 bg-white">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           {page?.body ? (
-            <div
-              className="prose prose-slate prose-base sm:prose-lg max-w-none
-              prose-headings:font-bold prose-headings:tracking-tight
-              prose-a:text-cyan-600 prose-a:no-underline hover:prose-a:underline
-              prose-strong:text-slate-900"
-            >
-              <PortableTextBody value={page.body} />
-            </div>
+            <ProseSection value={page.body} variant="article" />
           ) : (
             <div className="space-y-6 sm:space-y-8">
               <p className="text-[14.5px] text-gray-600 leading-[1.8]">

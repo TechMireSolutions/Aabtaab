@@ -1,13 +1,10 @@
 import { revalidateTag } from "next/cache";
 import { type NextRequest, NextResponse } from "next/server";
 import { CACHE_TAGS } from "@/sanity/lib/fetch";
-
-// Webhook called by Sanity on publish/unpublish/delete events.
-// expire: 0 forces immediate cache expiry (required for external webhook callers).
-// Setup: Sanity Dashboard → API → Webhooks
-//   URL:    https://yourdomain.com/api/revalidate
-//   Secret: match SANITY_REVALIDATE_SECRET in .env.local
-//   Filter: _type in ["post","event","course","service","siteSettings","homepageSettings","page","navigation","testimonial"]
+import {
+  REVALIDATE_OPTIONS,
+  revalidateSlugCollection,
+} from "@/lib/revalidate";
 
 const SANITY_REVALIDATE_SECRET = process.env.SANITY_REVALIDATE_SECRET;
 
@@ -29,69 +26,57 @@ export async function POST(request: NextRequest) {
 
   const { _type, slug } = body;
   const revalidated: string[] = [];
-  const REVALIDATE_OPTIONS = { expire: 0 } as const;
 
   revalidateTag(CACHE_TAGS.all, REVALIDATE_OPTIONS);
   revalidated.push(CACHE_TAGS.all);
 
   switch (_type) {
-    case "post": {
-      revalidateTag(CACHE_TAGS.posts, REVALIDATE_OPTIONS);
-      revalidated.push(CACHE_TAGS.posts);
-      if (slug?.current) {
-        const tag = CACHE_TAGS.post(slug.current);
-        revalidateTag(tag, REVALIDATE_OPTIONS);
-        revalidated.push(tag);
-      }
+    case "post":
+      revalidateSlugCollection(
+        revalidated,
+        CACHE_TAGS.posts,
+        CACHE_TAGS.post,
+        slug?.current,
+      );
       break;
-    }
-    case "event": {
-      revalidateTag(CACHE_TAGS.events, REVALIDATE_OPTIONS);
-      revalidated.push(CACHE_TAGS.events);
-      if (slug?.current) {
-        const tag = CACHE_TAGS.event(slug.current);
-        revalidateTag(tag, REVALIDATE_OPTIONS);
-        revalidated.push(tag);
-      }
+    case "event":
+      revalidateSlugCollection(
+        revalidated,
+        CACHE_TAGS.events,
+        CACHE_TAGS.event,
+        slug?.current,
+      );
       break;
-    }
-    case "course": {
-      revalidateTag(CACHE_TAGS.courses, REVALIDATE_OPTIONS);
-      revalidated.push(CACHE_TAGS.courses);
-      if (slug?.current) {
-        const tag = CACHE_TAGS.course(slug.current);
-        revalidateTag(tag, REVALIDATE_OPTIONS);
-        revalidated.push(tag);
-      }
+    case "course":
+      revalidateSlugCollection(
+        revalidated,
+        CACHE_TAGS.courses,
+        CACHE_TAGS.course,
+        slug?.current,
+      );
       break;
-    }
-    case "service": {
-      revalidateTag(CACHE_TAGS.services, REVALIDATE_OPTIONS);
-      revalidated.push(CACHE_TAGS.services);
-      if (slug?.current) {
-        const tag = CACHE_TAGS.service(slug.current);
-        revalidateTag(tag, REVALIDATE_OPTIONS);
-        revalidated.push(tag);
-      }
+    case "service":
+      revalidateSlugCollection(
+        revalidated,
+        CACHE_TAGS.services,
+        CACHE_TAGS.service,
+        slug?.current,
+      );
       break;
-    }
-    case "siteSettings": {
+    case "siteSettings":
       revalidateTag(CACHE_TAGS.siteSettings, REVALIDATE_OPTIONS);
       revalidated.push(CACHE_TAGS.siteSettings);
       break;
-    }
-    case "homepageSettings": {
+    case "homepageSettings":
       revalidateTag(CACHE_TAGS.homepage, REVALIDATE_OPTIONS);
       revalidated.push(CACHE_TAGS.homepage);
       break;
-    }
     case "navigation":
     case "page":
-    case "testimonial": {
+    case "testimonial":
       revalidateTag(CACHE_TAGS.siteSettings, REVALIDATE_OPTIONS);
       revalidated.push(CACHE_TAGS.siteSettings);
       break;
-    }
   }
 
   return NextResponse.json({ revalidated, now: new Date().toISOString() });
