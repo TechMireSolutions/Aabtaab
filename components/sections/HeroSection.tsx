@@ -40,7 +40,7 @@ export default function HeroSection({
     return () => clearTimeout(id);
   }, []);
 
-  function a(delay: number, dist = 20): React.CSSProperties {
+  function fadeInStyle(delay: number, dist = 20): React.CSSProperties {
     return {
       opacity: show ? 1 : 0,
       transform: show ? "none" : `translateY(${dist}px)`,
@@ -105,7 +105,7 @@ export default function HeroSection({
         <div className="w-full md:max-w-[520px]">
           {/* Badge */}
           <div
-            style={a(0)}
+            style={fadeInStyle(0)}
             className="inline-flex items-center gap-2 mb-5 bg-white border border-gray-200 shadow-sm rounded-full px-3.5 py-1.5"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
@@ -116,7 +116,7 @@ export default function HeroSection({
 
           {/* Kicker */}
           <p
-            style={a(80)}
+            style={fadeInStyle(80)}
             className="text-[11px] sm:text-[11.5px] font-semibold text-gray-400 uppercase tracking-[0.15em] mb-4"
           >
             {subtitle}
@@ -133,7 +133,7 @@ export default function HeroSection({
             }}
           >
             {titleLines.map((line, i) => (
-              <span key={i} style={{ ...a(140 + i * 80), display: "block" }}>
+              <span key={i} style={{ ...fadeInStyle(140 + i * 80), display: "block" }}>
                 {i === titleLines.length - 1 ? (
                   <span style={{ color: "#0891b2" }}>{line}</span>
                 ) : (
@@ -145,14 +145,14 @@ export default function HeroSection({
 
           {/* Description */}
           <p
-            style={a(380)}
+            style={fadeInStyle(380)}
             className="text-[13.5px] sm:text-[14px] text-gray-500 leading-[1.8] mb-7 max-w-[400px]"
           >
             {description}
           </p>
 
           {/* CTAs */}
-          <div style={a(450)} className="flex items-center gap-3 flex-wrap">
+          <div style={fadeInStyle(450)} className="flex items-center gap-3 flex-wrap">
             <Link
               href={cta1Link}
               className="group inline-flex items-center gap-2 bg-cyan-600 hover:bg-cyan-700 text-white text-[13px] sm:text-[13.5px] font-semibold px-5 sm:px-6 py-2.5 rounded-full
@@ -178,7 +178,7 @@ export default function HeroSection({
 
           {/* Stats */}
           <div
-            style={a(550)}
+            style={fadeInStyle(550)}
             className="flex items-center gap-5 sm:gap-6 mt-8 pt-7 border-t border-gray-100 flex-wrap"
           >
             {STATS.map(({ value, label, Icon }) => (

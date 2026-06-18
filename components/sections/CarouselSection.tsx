@@ -2,7 +2,7 @@
 import { useRef, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
-import ContentCard from "@/components/ui/ContentCard";
+import ContentCard from "@/components/cards/ContentCard";
 
 export interface CarouselItem {
   id: string;
@@ -37,7 +37,7 @@ export default function CarouselSection({
   const [canLeft, setCanLeft] = useState(false);
   const [canRight, setCanRight] = useState(false);
 
-  const sync = useCallback(() => {
+  const updateScrollButtons = useCallback(() => {
     const el = trackRef.current;
     if (!el) return;
     setCanLeft(el.scrollLeft > 4);
@@ -45,16 +45,16 @@ export default function CarouselSection({
   }, []);
 
   useEffect(() => {
-    sync();
+    updateScrollButtons();
     const el = trackRef.current;
     if (!el) return;
-    el.addEventListener("scroll", sync, { passive: true });
-    window.addEventListener("resize", sync);
+    el.addEventListener("scroll", updateScrollButtons, { passive: true });
+    window.addEventListener("resize", updateScrollButtons);
     return () => {
-      el.removeEventListener("scroll", sync);
-      window.removeEventListener("resize", sync);
+      el.removeEventListener("scroll", updateScrollButtons);
+      window.removeEventListener("resize", updateScrollButtons);
     };
-  }, [sync, items]);
+  }, [updateScrollButtons, items]);
 
   function scrollBy(dir: "left" | "right") {
     const el = trackRef.current;

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/sanityFetch";
+import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/fetch";
 import { urlFor } from "@/sanity/lib/image";
 import { topLevelServicesQuery, pageBySlugQuery } from "@/sanity/lib/queries";
-import ContentCard from "@/components/ui/ContentCard";
+import ContentCard from "@/components/cards/ContentCard";
 import { buildPageMetadata } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {

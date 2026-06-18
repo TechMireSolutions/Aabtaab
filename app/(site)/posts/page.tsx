@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
-import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/sanityFetch";
+import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/fetch";
 import { urlFor } from "@/sanity/lib/image";
 import {
   postsQuery,
   postsSearchQuery,
   pageBySlugQuery,
 } from "@/sanity/lib/queries";
-import ContentCard from "@/components/ui/ContentCard";
+import ContentCard from "@/components/cards/ContentCard";
 import { buildPageMetadata } from "@/lib/seo";
+import type { PostCardSummary, CmsPageSummary } from "@/types/cms-page";
+import type { SeoData } from "@/types/sanity";
 
 export async function generateMetadata({
   searchParams,
@@ -16,13 +18,9 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { q } = await searchParams;
   const searchTerm = q?.trim() ?? "";
-  const page = await sanityFetch<{
-    seo?: { metaTitle?: string; metaDescription?: string };
-    title?: string;
-    subtitle?: string;
-  }>({
+  const page = await sanityFetch<CmsPageSummary & { seo?: SeoData }>({
     query: pageBySlugQuery,
-    params: { slug: "articles" },
+    params: { slug: "posts" },
     tags: [CACHE_TAGS.siteSettings],
     revalidate: 86400,
   });
@@ -36,22 +34,13 @@ export async function generateMetadata({
       page?.subtitle ||
       "Islamic articles, knowledge, and reflections from Aabtaab scholars.",
     path: searchTerm
-      ? `/articles?q=${encodeURIComponent(searchTerm)}`
-      : "/articles",
+      ? `/posts?q=${encodeURIComponent(searchTerm)}`
+      : "/posts",
     noIndex: Boolean(searchTerm),
   });
 }
 
-type ArticleCard = {
-  _id: string;
-  title: string;
-  slug: { current: string };
-  mainImage?: { asset: { _ref: string } };
-  excerpt?: string;
-  categories?: { _id: string; title: string }[];
-};
-
-export default async function ArticlesPage({
+export default async function PostsPage({
   searchParams,
 }: {
   searchParams: Promise<{ q?: string }>;
@@ -60,15 +49,15 @@ export default async function ArticlesPage({
   const searchTerm = q?.trim() ?? "";
 
   const [posts, page] = await Promise.all([
-    sanityFetch<ArticleCard[]>({
+    sanityFetch<PostCardSummary[]>({
       query: searchTerm ? postsSearchQuery : postsQuery,
       params: searchTerm ? { term: searchTerm } : {},
       tags: [CACHE_TAGS.posts],
       revalidate: 3600,
     }),
-    sanityFetch<{ eyebrow?: string; title?: string; subtitle?: string }>({
+    sanityFetch<CmsPageSummary>({
       query: pageBySlugQuery,
-      params: { slug: "articles" },
+      params: { slug: "posts" },
       tags: [CACHE_TAGS.siteSettings],
       revalidate: 86400,
     }),
@@ -110,7 +99,7 @@ export default async function ArticlesPage({
               {postList.map((post) => (
                 <ContentCard
                   key={post._id}
-                  href={`/articles/${post.slug.current}`}
+                  href={`/posts/${post.slug.current}`}
                   image={
                     post.mainImage
                       ? urlFor(post.mainImage).width(600).height(450).url()

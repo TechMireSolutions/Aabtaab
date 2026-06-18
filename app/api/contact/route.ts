@@ -1,24 +1,7 @@
-import { createClient } from "@sanity/client";
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
-
-function getSanityClient() {
-  const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
-  const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET;
-  const token = process.env.SANITY_API_TOKEN;
-
-  if (!projectId || !dataset || !token) {
-    throw new Error("Sanity write credentials are not configured");
-  }
-
-  return createClient({
-    projectId,
-    dataset,
-    token,
-    apiVersion: "2025-06-18",
-    useCdn: false,
-  });
-}
+import { CONTACT_PURPOSE_LABELS } from "@/lib/constants";
+import { getSanityWriteClient } from "@/sanity/lib/writeClient";
 
 function getMailTransporter() {
   const user = process.env.EMAIL_USER;
@@ -35,13 +18,6 @@ function getMailTransporter() {
     auth: { user, pass },
   });
 }
-
-const purposeLabel: Record<string, string> = {
-  general: "General Inquiry",
-  course: "Course Enrollment",
-  service: "Service Request",
-  other: "Other",
-};
 
 export async function POST(req: Request) {
   try {
@@ -65,10 +41,13 @@ export async function POST(req: Request) {
     }
 
     const fullName = [firstName, lastName].filter(Boolean).join(" ");
-    const purposeText = purposeLabel[purpose] || purpose || "General Inquiry";
+    const purposeText =
+      CONTACT_PURPOSE_LABELS[purpose as keyof typeof CONTACT_PURPOSE_LABELS] ||
+      purpose ||
+      "General Inquiry";
 
     // 1. Save to Sanity
-    await getSanityClient().create({
+    await getSanityWriteClient().create({
       _type: "contactSubmission",
       firstName,
       lastName: lastName || undefined,

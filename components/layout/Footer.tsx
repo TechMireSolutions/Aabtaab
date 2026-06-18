@@ -8,6 +8,8 @@ import {
   ExternalLink,
   ArrowRight,
 } from "lucide-react";
+import type { FooterService, NavItem } from "@/types/site-navigation";
+import type { SiteSettings } from "@/types/sanity";
 
 function FacebookIcon() {
   return (
@@ -37,29 +39,6 @@ function YoutubeIcon() {
   );
 }
 
-interface SiteSettings {
-  siteName?: string;
-  tagline?: string;
-  email?: string;
-  phone?: string;
-  address?: string;
-  facebook?: string;
-  youtube?: string;
-  whatsapp?: string;
-  darulQuranUrl?: string;
-}
-
-interface NavItem {
-  label: string;
-  href: string;
-  external?: boolean;
-}
-interface FooterService {
-  _id: string;
-  title: string;
-  slug: string;
-}
-
 interface FooterProps {
   settings?: SiteSettings;
   logoUrl?: string | null;
@@ -70,7 +49,7 @@ const FALLBACK_QUICK_LINKS: NavItem[] = [
   { label: "Home", href: "/" },
   { label: "Online Classes", href: "/online-courses" },
   { label: "Services", href: "/services" },
-  { label: "Articles", href: "/articles" },
+  { label: "Articles", href: "/posts" },
   { label: "Donate", href: "/donate" },
   { label: "About Us", href: "/about" },
   { label: "Contact", href: "/contact" },

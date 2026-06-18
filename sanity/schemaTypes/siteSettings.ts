@@ -173,7 +173,7 @@ export const siteSettings = defineType({
               title: "Cause Title",
             }),
             defineField({
-              name: "desc",
+              name: "description",
               type: "string",
               title: "Cause Description",
             }),
@@ -183,19 +183,19 @@ export const siteSettings = defineType({
       initialValue: [
         {
           title: "General Donation",
-          desc: "Support the overall mission of Aabtaab",
+          description: "Support the overall mission of Aabtaab",
         },
         {
           title: "Quran Education",
-          desc: "Fund free Quran classes for children",
+          description: "Fund free Quran classes for children",
         },
         {
           title: "Muharram Programs",
-          desc: "Help organise Majalis and Aza events",
+          description: "Help organise Majalis and Aza events",
         },
         {
           title: "Dar Ul Quran Support",
-          desc: "Contribute to our sister Quranic institute",
+          description: "Contribute to our sister Quranic institute",
         },
       ],
     }),

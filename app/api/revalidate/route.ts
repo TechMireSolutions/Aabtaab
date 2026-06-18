@@ -1,6 +1,6 @@
 import { revalidateTag } from "next/cache";
 import { type NextRequest, NextResponse } from "next/server";
-import { CACHE_TAGS } from "@/sanity/lib/sanityFetch";
+import { CACHE_TAGS } from "@/sanity/lib/fetch";
 
 // Webhook called by Sanity on publish/unpublish/delete events.
 // expire: 0 forces immediate cache expiry (required for external webhook callers).
@@ -29,66 +29,66 @@ export async function POST(request: NextRequest) {
 
   const { _type, slug } = body;
   const revalidated: string[] = [];
-  const OPT = { expire: 0 } as const;
+  const REVALIDATE_OPTIONS = { expire: 0 } as const;
 
-  revalidateTag(CACHE_TAGS.all, OPT);
+  revalidateTag(CACHE_TAGS.all, REVALIDATE_OPTIONS);
   revalidated.push(CACHE_TAGS.all);
 
   switch (_type) {
     case "post": {
-      revalidateTag(CACHE_TAGS.posts, OPT);
+      revalidateTag(CACHE_TAGS.posts, REVALIDATE_OPTIONS);
       revalidated.push(CACHE_TAGS.posts);
       if (slug?.current) {
         const tag = CACHE_TAGS.post(slug.current);
-        revalidateTag(tag, OPT);
+        revalidateTag(tag, REVALIDATE_OPTIONS);
         revalidated.push(tag);
       }
       break;
     }
     case "event": {
-      revalidateTag(CACHE_TAGS.events, OPT);
+      revalidateTag(CACHE_TAGS.events, REVALIDATE_OPTIONS);
       revalidated.push(CACHE_TAGS.events);
       if (slug?.current) {
         const tag = CACHE_TAGS.event(slug.current);
-        revalidateTag(tag, OPT);
+        revalidateTag(tag, REVALIDATE_OPTIONS);
         revalidated.push(tag);
       }
       break;
     }
     case "course": {
-      revalidateTag(CACHE_TAGS.courses, OPT);
+      revalidateTag(CACHE_TAGS.courses, REVALIDATE_OPTIONS);
       revalidated.push(CACHE_TAGS.courses);
       if (slug?.current) {
         const tag = CACHE_TAGS.course(slug.current);
-        revalidateTag(tag, OPT);
+        revalidateTag(tag, REVALIDATE_OPTIONS);
         revalidated.push(tag);
       }
       break;
     }
     case "service": {
-      revalidateTag(CACHE_TAGS.services, OPT);
+      revalidateTag(CACHE_TAGS.services, REVALIDATE_OPTIONS);
       revalidated.push(CACHE_TAGS.services);
       if (slug?.current) {
         const tag = CACHE_TAGS.service(slug.current);
-        revalidateTag(tag, OPT);
+        revalidateTag(tag, REVALIDATE_OPTIONS);
         revalidated.push(tag);
       }
       break;
     }
     case "siteSettings": {
-      revalidateTag(CACHE_TAGS.siteSettings, OPT);
+      revalidateTag(CACHE_TAGS.siteSettings, REVALIDATE_OPTIONS);
       revalidated.push(CACHE_TAGS.siteSettings);
       break;
     }
     case "homepageSettings": {
-      revalidateTag(CACHE_TAGS.homepage, OPT);
+      revalidateTag(CACHE_TAGS.homepage, REVALIDATE_OPTIONS);
       revalidated.push(CACHE_TAGS.homepage);
       break;
     }
     case "navigation":
     case "page":
     case "testimonial": {
-      revalidateTag(CACHE_TAGS.siteSettings, OPT);
+      revalidateTag(CACHE_TAGS.siteSettings, REVALIDATE_OPTIONS);
       revalidated.push(CACHE_TAGS.siteSettings);
       break;
     }

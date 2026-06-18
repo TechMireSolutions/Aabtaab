@@ -1,11 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
-import {
-  fetchSiteSettings,
-  type SiteSettings,
-} from "@/sanity/lib/sanityFetch";
+import { fetchSiteSettings } from "@/sanity/lib/fetch";
+import type { SiteSettings } from "@/types/sanity";
 import { urlFor } from "@/sanity/lib/image";
-import { JsonLd, WebSiteJsonLd } from "@/components/JsonLd";
+import { JsonLd, WebSiteJsonLd } from "@/lib/seo";
 import { getSiteUrl } from "@/lib/seo";
 import "./globals.css";
 

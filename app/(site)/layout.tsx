@@ -1,37 +1,15 @@
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
-import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/sanityFetch";
+import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/fetch";
 import {
   siteSettingsQuery,
   headerNavQuery,
   footerServicesQuery,
 } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
-
-interface LayoutSettings {
-  logo?: { asset: { _ref: string } };
-  darulQuranUrl?: string;
-  siteName?: string;
-  searchPlaceholder?: string;
-  whatsapp?: string;
-  tagline?: string;
-  email?: string;
-  phone?: string;
-  address?: string;
-  facebook?: string;
-  youtube?: string;
-}
-
-interface HeaderNav {
-  items?: { label: string; href: string; external?: boolean }[];
-}
-
-interface FooterService {
-  _id: string;
-  title: string;
-  slug: string;
-}
+import type { SiteSettings } from "@/types/sanity";
+import type { FooterService, HeaderNav } from "@/types/site-navigation";
 
 export default async function SiteLayout({
   children,
@@ -39,7 +17,7 @@ export default async function SiteLayout({
   children: React.ReactNode;
 }) {
   const [settings, headerNav, footerServices] = await Promise.all([
-    sanityFetch<LayoutSettings>({
+    sanityFetch<SiteSettings>({
       query: siteSettingsQuery,
       tags: [CACHE_TAGS.siteSettings],
       revalidate: 86400,

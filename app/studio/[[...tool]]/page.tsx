@@ -1,4 +1,4 @@
-import SanityStudio from "@/components/SanityStudio";
+import SanityStudio from "@/components/studio/SanityStudio";
 
 export const dynamic = "force-static";
 

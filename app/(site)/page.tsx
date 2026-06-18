@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
-import { sanityFetch, CACHE_TAGS, fetchSiteSettings } from "@/sanity/lib/sanityFetch";
+import { sanityFetch, CACHE_TAGS, fetchSiteSettings } from "@/sanity/lib/fetch";
 import { buildPageMetadata } from "@/lib/seo";
 import { urlFor } from "@/sanity/lib/image";
 import {
@@ -15,82 +15,14 @@ import HeroSection from "@/components/sections/HeroSection";
 import CarouselSection, {
   CarouselItem,
 } from "@/components/sections/CarouselSection";
-import ContentCard from "@/components/ui/ContentCard";
-
-interface Post {
-  _id: string;
-  title: string;
-  slug: { current: string };
-  mainImage?: { asset: { _ref: string }; alt?: string };
-  excerpt?: string;
-  categories?: { title: string }[];
-}
-
-interface Course {
-  _id: string;
-  title: string;
-  slug: { current: string };
-  featuredImage?: { asset: { _ref: string } };
-  price?: string;
-  duration?: string;
-  subject?: string;
-}
-
-interface Service {
-  _id: string;
-  title: string;
-  slug: { current: string };
-  icon?: { asset: { _ref: string } };
-  price?: string;
-  children?: { title: string }[];
-}
-
-interface Testimonial {
-  name: string;
-  role?: string;
-  quote: string;
-}
-
-interface HomepageSettings {
-  heroImage?: { asset: { _ref: string } };
-  heroArabicText?: string;
-  heroTitle?: string;
-  heroSubtitle?: string;
-  heroCta1Label?: string;
-  heroCta1Link?: string;
-  heroCta2Label?: string;
-  heroCta2Link?: string;
-  aboutEyebrow?: string;
-  aboutHeading?: string;
-  aboutBody1?: string;
-  aboutBody2?: string;
-  aboutPillars?: string[];
-  aboutCtaLabel?: string;
-  aboutHadithArabic?: string;
-  aboutHadithTranslation?: string;
-  aboutHadithAttribution?: string;
-  aboutStat1Value?: string;
-  aboutStat1Label?: string;
-  aboutStat2Value?: string;
-  aboutStat2Label?: string;
-  aboutStat3Value?: string;
-  aboutStat3Label?: string;
-  aboutBadgeText?: string;
-  aboutBadgeSubtext?: string;
-  coursesHeading?: string;
-  coursesSubheading?: string;
-  servicesHeading?: string;
-  servicesSubheading?: string;
-  articlesHeading?: string;
-  articlesSubheading?: string;
-  testimonialsEyebrow?: string;
-  testimonialsHeading?: string;
-  donateHeading?: string;
-  donateText?: string;
-  donateQuote?: string;
-  donateQuoteAttribution?: string;
-  donateCtaLabel?: string;
-}
+import ContentCard from "@/components/cards/ContentCard";
+import type {
+  HomeCourseSummary,
+  HomePostSummary,
+  HomeServiceSummary,
+  HomepageSettings,
+  Testimonial,
+} from "@/types/homepage";
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await fetchSiteSettings();
@@ -106,17 +38,17 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function HomePage() {
   const [posts, services, courses, hp, testimonials] = await Promise.all([
-    sanityFetch<Post[]>({
+    sanityFetch<HomePostSummary[]>({
       query: featuredPostsQuery,
       tags: [CACHE_TAGS.posts],
       revalidate: 3600,
     }),
-    sanityFetch<Service[]>({
+    sanityFetch<HomeServiceSummary[]>({
       query: topLevelServicesQuery,
       tags: [CACHE_TAGS.services],
       revalidate: 3600,
     }),
-    sanityFetch<Course[]>({
+    sanityFetch<HomeCourseSummary[]>({
       query: topLevelCoursesQuery,
       tags: [CACHE_TAGS.courses],
       revalidate: 3600,
@@ -366,7 +298,7 @@ export default async function HomePage() {
                 )}
               </div>
               <Link
-                href="/articles"
+                href="/posts"
                 className="group inline-flex items-center gap-1.5 text-[13px] font-semibold text-cyan-600 hover:text-cyan-700 transition-colors shrink-0 sm:ml-6"
               >
                 View all
@@ -381,7 +313,7 @@ export default async function HomePage() {
               {(posts ?? []).slice(0, 3).map((post) => (
                 <ContentCard
                   key={post._id}
-                  href={`/articles/${post.slug.current}`}
+                  href={`/posts/${post.slug.current}`}
                   image={
                     post.mainImage
                       ? urlFor(post.mainImage).width(600).height(450).url()

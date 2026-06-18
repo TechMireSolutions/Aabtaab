@@ -1,17 +1,15 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/sanityFetch";
+import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/fetch";
 import { siteSettingsQuery, pageBySlugQuery } from "@/sanity/lib/queries";
-import { PortableText } from "@portabletext/react";
+import PortableTextBody from "@/components/portable-text/PortableTextBody";
 import { ArrowRight } from "lucide-react";
 import { buildPageMetadata } from "@/lib/seo";
+import type { CmsPageSummary } from "@/types/cms-page";
+import type { DonatePageSettings } from "@/types/donate";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const page = await sanityFetch<{
-    seo?: { metaTitle?: string; metaDescription?: string };
-    title?: string;
-    subtitle?: string;
-  }>({
+  const page = await sanityFetch<CmsPageSummary>({
     query: pageBySlugQuery,
     params: { slug: "donate" },
     tags: [CACHE_TAGS.siteSettings],
@@ -27,30 +25,14 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-interface DonateSettings {
-  donateArabicVerse?: string;
-  donateUrl?: string;
-  donatePayOnlineLabel?: string;
-  donateContactLabel?: string;
-  donateClosingMessage?: string;
-  donateHowToHeading?: string;
-  donateHowToText?: string;
-  donateCauses?: { title: string; desc: string }[];
-}
-
 export default async function DonatePage() {
   const [settings, page] = await Promise.all([
-    sanityFetch<DonateSettings>({
+    sanityFetch<DonatePageSettings>({
       query: siteSettingsQuery,
       tags: [CACHE_TAGS.siteSettings],
       revalidate: 86400,
     }),
-    sanityFetch<{
-      eyebrow?: string;
-      title?: string;
-      subtitle?: string;
-      body?: unknown[];
-    }>({
+    sanityFetch<CmsPageSummary>({
       query: pageBySlugQuery,
       params: { slug: "donate" },
       tags: [CACHE_TAGS.siteSettings],
@@ -58,25 +40,25 @@ export default async function DonatePage() {
     }),
   ]);
 
-  const causes: { title: string; desc: string }[] = settings?.donateCauses
+  const causes: { title: string; description: string }[] = settings?.donateCauses
     ?.length
     ? settings.donateCauses
     : [
         {
           title: "General Donation",
-          desc: "Support the overall mission of Aabtaab",
+          description: "Support the overall mission of Aabtaab",
         },
         {
           title: "Quran Education",
-          desc: "Fund free Quran classes for children",
+          description: "Fund free Quran classes for children",
         },
         {
           title: "Muharram Programs",
-          desc: "Help organise Majalis and Aza events",
+          description: "Help organise Majalis and Aza events",
         },
         {
           title: "Dar Ul Quran Support",
-          desc: "Contribute to our sister Quranic institute",
+          description: "Contribute to our sister Quranic institute",
         },
       ];
 
@@ -107,14 +89,12 @@ export default async function DonatePage() {
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
           {page?.body && (
             <div className="prose prose-sm max-w-none text-gray-700 mb-8 sm:mb-10">
-              <PortableText
-                value={page.body as Parameters<typeof PortableText>[0]["value"]}
-              />
+              <PortableTextBody value={page.body} />
             </div>
           )}
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 sm:mb-10">
-            {causes.map(({ title, desc }, i) => (
+            {causes.map(({ title, description }, i) => (
               <div
                 key={title}
                 className="bg-white border border-gray-100 rounded-xl p-4 sm:p-5 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
@@ -128,7 +108,7 @@ export default async function DonatePage() {
                   {title}
                 </h3>
                 <p className="text-[13px] text-gray-500 leading-relaxed">
-                  {desc}
+                  {description}
                 </p>
               </div>
             ))}

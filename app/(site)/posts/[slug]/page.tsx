@@ -3,15 +3,16 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft, CalendarDays, User } from "lucide-react";
-import { sanityFetch, CACHE_TAGS, type Post } from "@/sanity/lib/sanityFetch";
+import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/fetch";
+import type { Post } from "@/types/sanity";
 import { urlFor } from "@/sanity/lib/image";
 import { postBySlugQuery } from "@/sanity/lib/queries";
-import { PortableText } from "@portabletext/react";
-import { ArticleJsonLd } from "@/components/JsonLd";
+import PortableTextBody from "@/components/portable-text/PortableTextBody";
+import { ArticleJsonLd } from "@/lib/seo";
 import { buildPageMetadata, getSiteUrl } from "@/lib/seo";
 
-const SITE_URL = getSiteUrl();
-const SITE_NAME = "Aabtaab";
+const siteUrl = getSiteUrl();
+const siteName = "Aabtaab";
 
 export async function generateMetadata({
   params,
@@ -34,7 +35,7 @@ export async function generateMetadata({
 
   const title = post?.seo?.metaTitle ?? post?.title ?? "Article";
   const description = post?.seo?.metaDescription ?? post?.excerpt;
-  const path = `/articles/${slug}`;
+  const path = `/posts/${slug}`;
 
   const canonicalPath = post?.seo?.canonicalUrl
     ? post.seo.canonicalUrl.startsWith("http")
@@ -61,7 +62,7 @@ export async function generateMetadata({
   };
 }
 
-export default async function ArticleDetailPage({
+export default async function PostDetailPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
@@ -92,9 +93,9 @@ export default async function ArticleDetailPage({
         imageUrl={ogImageUrl}
         publishedAt={post.publishedAt}
         authorName={post.author?.name}
-        siteUrl={SITE_URL}
+        siteUrl={siteUrl}
         slug={slug}
-        siteName={SITE_NAME}
+        siteName={siteName}
         faqItems={post.faqItems}
       />
 
@@ -102,7 +103,7 @@ export default async function ArticleDetailPage({
       <div className="border-b border-gray-100 bg-white sticky top-[68px] z-10">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
           <Link
-            href="/articles"
+            href="/posts"
             className="inline-flex items-center gap-1.5 text-[13px] font-medium text-gray-500 hover:text-slate-900 transition-colors group"
           >
             <ArrowLeft
@@ -177,9 +178,7 @@ export default async function ArticleDetailPage({
             prose-blockquote:border-l-4 prose-blockquote:border-cyan-400 prose-blockquote:text-slate-600 prose-blockquote:not-italic
             prose-li:text-gray-700"
           >
-            <PortableText
-              value={post.body as Parameters<typeof PortableText>[0]["value"]}
-            />
+            <PortableTextBody value={post.body} />
           </div>
         )}
 

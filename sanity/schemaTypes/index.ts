@@ -11,6 +11,7 @@ import { navigation } from "./navigation";
 import { homepageSettings } from "./homepageSettings";
 import { testimonial } from "./testimonial";
 import { contactSubmission } from "./contactSubmission";
+import { courseLevel } from "./courseLevel";
 
 export const schemaTypes = [
   // Object types first — document schemas can reference them
@@ -21,6 +22,7 @@ export const schemaTypes = [
   author,
   page,
   course,
+  courseLevel,
   service,
   event,
   siteSettings,

@@ -4,12 +4,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Search, Menu, X } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
-
-interface NavItem {
-  label: string;
-  href: string;
-  external?: boolean;
-}
+import type { NavItem } from "@/types/site-navigation";
 
 interface HeaderProps {
   darulQuranUrl?: string;
@@ -22,7 +17,7 @@ interface HeaderProps {
 const FALLBACK_NAV: NavItem[] = [
   { label: "Online Classes", href: "/online-courses" },
   { label: "Services", href: "/services" },
-  { label: "Articles", href: "/articles" },
+  { label: "Articles", href: "/posts" },
   { label: "Donate", href: "/donate" },
   { label: "About", href: "/about" },
 ];
@@ -73,7 +68,7 @@ export default function Header({
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
     if (query.trim()) {
-      router.push(`/articles?q=${encodeURIComponent(query.trim())}`);
+      router.push(`/posts?q=${encodeURIComponent(query.trim())}`);
       setQuery("");
       setMenuOpen(false);
       setSearchOpen(false);

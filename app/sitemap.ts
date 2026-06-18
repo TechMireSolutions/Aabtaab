@@ -1,13 +1,12 @@
 import type { MetadataRoute } from "next";
 import { absoluteUrl, buildNestedContentPath } from "@/lib/seo";
-import { sanityFetch } from "@/sanity/lib/sanityFetch";
+import { sanityFetch } from "@/sanity/lib/fetch";
 import {
   postSlugsQuery,
   allCoursePathsQuery,
   allServicePathsQuery,
 } from "@/sanity/lib/queries";
-
-type SlugParent = { slug?: string; parent?: SlugParent | null };
+import type { SlugParent } from "@/types/sanity";
 
 const STATIC_ROUTES: MetadataRoute.Sitemap = [
   { url: absoluteUrl("/"), changeFrequency: "daily", priority: 1 },
@@ -18,7 +17,7 @@ const STATIC_ROUTES: MetadataRoute.Sitemap = [
     priority: 0.9,
   },
   { url: absoluteUrl("/services"), changeFrequency: "weekly", priority: 0.9 },
-  { url: absoluteUrl("/articles"), changeFrequency: "daily", priority: 0.9 },
+  { url: absoluteUrl("/posts"), changeFrequency: "daily", priority: 0.9 },
   { url: absoluteUrl("/donate"), changeFrequency: "monthly", priority: 0.7 },
   { url: absoluteUrl("/contact"), changeFrequency: "monthly", priority: 0.7 },
 ];
@@ -44,7 +43,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ]);
 
   const articleRoutes: MetadataRoute.Sitemap = (posts ?? []).map((post) => ({
-    url: absoluteUrl(`/articles/${post.slug}`),
+    url: absoluteUrl(`/posts/${post.slug}`),
     changeFrequency: "weekly",
     priority: 0.7,
   }));

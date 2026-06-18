@@ -68,20 +68,3 @@ export function buildPageMetadata({
     },
   };
 }
-
-type SlugParent = { slug?: string; parent?: SlugParent | null };
-
-export function buildNestedContentPath(
-  base: "online-courses" | "services",
-  slug: string,
-  parent?: SlugParent | null,
-): string {
-  const segments: string[] = [];
-  let cur: SlugParent | null | undefined = parent;
-  while (cur?.slug) {
-    segments.unshift(cur.slug);
-    cur = cur.parent;
-  }
-  segments.push(slug);
-  return `/${base}/${segments.join("/")}`;
-}

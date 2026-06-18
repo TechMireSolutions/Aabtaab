@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/sanityFetch";
+import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/fetch";
 import { pageBySlugQuery, siteSettingsQuery } from "@/sanity/lib/queries";
-import { PortableText } from "@portabletext/react";
+import PortableTextBody from "@/components/portable-text/PortableTextBody";
 import { ArrowRight, BookOpen, Heart, Star } from "lucide-react";
 import { buildPageMetadata } from "@/lib/seo";
 
@@ -75,9 +75,7 @@ export default async function AboutPage() {
               prose-a:text-cyan-600 prose-a:no-underline hover:prose-a:underline
               prose-strong:text-slate-900"
             >
-              <PortableText
-                value={page.body as Parameters<typeof PortableText>[0]["value"]}
-              />
+              <PortableTextBody value={page.body} />
             </div>
           ) : (
             <div className="space-y-6 sm:space-y-8">

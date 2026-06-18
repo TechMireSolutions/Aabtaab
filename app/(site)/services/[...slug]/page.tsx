@@ -9,64 +9,21 @@ import {
   Plus,
   Check,
 } from "lucide-react";
-import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/sanityFetch";
+import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/fetch";
 import { urlFor } from "@/sanity/lib/image";
 import {
   serviceBySlugDeepQuery,
   siteSettingsQuery,
 } from "@/sanity/lib/queries";
-import { PortableText } from "@portabletext/react";
-import ContentCard from "@/components/ui/ContentCard";
-import { BreadcrumbJsonLd } from "@/components/JsonLd";
-import { buildPageMetadata } from "@/lib/seo";
-
-function getAncestry(service: {
-  parent?: { title: string; slug: string; parent?: unknown };
-}): { title: string; slug: string }[] {
-  const chain: { title: string; slug: string }[] = [];
-  let cur: { title: string; slug: string; parent?: unknown } | undefined =
-    service.parent;
-  while (cur) {
-    chain.unshift({ title: cur.title, slug: cur.slug });
-    cur = cur.parent as typeof cur | undefined;
-  }
-  return chain;
-}
-
-interface ServiceChild {
-  _id: string;
-  slug: string;
-  title: string;
-  excerpt?: string;
-  icon?: { asset: { _ref: string } };
-  price?: string;
-  childCount?: number;
-}
-
-interface ServiceDetail {
-  title: string;
-  excerpt?: string;
-  price?: string;
-  heroImage?: { asset: { _ref: string }; alt?: string };
-  whyUsImage?: { asset: { _ref: string }; alt?: string };
-  heroSubtitle?: string;
-  heroBody?: string;
-  whyUsHeading?: string;
-  whyUs?: Array<{ title?: string; desc?: string }>;
-  commitmentHeading?: string;
-  commitment?: Array<{ title?: string; desc?: string }>;
-  howItWorksHeading?: string;
-  howItWorks?: Array<{ label?: string; desc?: string }>;
-  ctaHeading?: string;
-  ctaSubtitle?: string;
-  ctaBtn1Label?: string;
-  ctaBtn2Label?: string;
-  faqSectionHeading?: string;
-  faq?: Array<{ question?: string; answer?: unknown[] }>;
-  body?: unknown[];
-  children?: ServiceChild[];
-  parent?: { title: string; slug: string; parent?: unknown };
-}
+import ContentCard from "@/components/cards/ContentCard";
+import PortableTextBody from "@/components/portable-text/PortableTextBody";
+import {
+  BreadcrumbJsonLd,
+  buildPageMetadata,
+  getContentAncestry,
+  getSiteUrl,
+} from "@/lib/seo";
+import type { ServiceDetail } from "@/types/service";
 
 export async function generateMetadata({
   params,
@@ -117,7 +74,7 @@ export default async function ServiceCatchAllPage({
 
   const childItems = Array.isArray(service.children) ? service.children : [];
   const hasChildren = childItems.length > 0;
-  const ancestry = getAncestry(service);
+  const ancestry = getContentAncestry(service);
   const currentPath = `/services/${slug.join("/")}`;
   const heroImageUrl = service.heroImage
     ? urlFor(service.heroImage).width(1600).height(800).url()
@@ -129,18 +86,18 @@ export default async function ServiceCatchAllPage({
     ? `https://wa.me/${String(site.whatsapp).replace(/\D/g, "")}`
     : "/contact";
 
-  const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://aabtaab.com";
+  const siteUrl = getSiteUrl();
   const breadcrumbs = [
-    { name: "Home", url: SITE_URL },
-    { name: "Services", url: `${SITE_URL}/services` },
+    { name: "Home", url: siteUrl },
+    { name: "Services", url: `${siteUrl}/services` },
     ...ancestry.map((a, i) => ({
       name: a.title,
-      url: `${SITE_URL}/services/${ancestry
+      url: `${siteUrl}/services/${ancestry
         .slice(0, i + 1)
         .map((x) => x.slug)
         .join("/")}`,
     })),
-    { name: service.title, url: `${SITE_URL}${currentPath}` },
+    { name: service.title, url: `${siteUrl}${currentPath}` },
   ];
 
   return (
@@ -312,10 +269,10 @@ export default async function ServiceCatchAllPage({
                               <span className="font-semibold text-slate-900">
                                 {item.title}:
                               </span>
-                              {item.desc && (
+                              {item.description && (
                                 <span className="text-gray-600">
                                   {" "}
-                                  {item.desc}
+                                  {item.description}
                                 </span>
                               )}
                             </p>
@@ -346,7 +303,7 @@ export default async function ServiceCatchAllPage({
                         <span className="font-semibold text-white">
                           {item.title}:
                         </span>
-                        {item.desc && <span> {item.desc}</span>}
+                        {item.description && <span> {item.description}</span>}
                       </li>
                     ),
                   )}
@@ -378,10 +335,10 @@ export default async function ServiceCatchAllPage({
                           <span className="font-bold text-slate-900 text-[15px]">
                             {step.label}
                           </span>
-                          {step.desc && (
+                          {step.description && (
                             <span className="text-gray-500 text-[14px]">
                               {" "}
-                              — {step.desc}
+                              — {step.description}
                             </span>
                           )}
                         </div>
@@ -412,7 +369,7 @@ export default async function ServiceCatchAllPage({
                     href="/contact"
                     className="group inline-flex items-center gap-2 bg-cyan-500 hover:bg-cyan-400 text-slate-900 font-bold text-[14px] px-8 py-3.5 rounded-full shadow-[0_4px_20px_rgba(6,182,212,0.3)] transition-all duration-200 hover:-translate-y-px"
                   >
-                    {service.ctaBtn1Label || "Get Started"}
+                    {service.ctaPrimaryLabel || "Get Started"}
                     <ArrowRight
                       size={14}
                       strokeWidth={2.5}
@@ -426,7 +383,7 @@ export default async function ServiceCatchAllPage({
                     className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/15 text-white text-[14px] font-semibold px-8 py-3.5 rounded-full border border-white/20 transition-all duration-200 hover:-translate-y-px"
                   >
                     <MessageCircle size={14} />
-                    {service.ctaBtn2Label || "WhatsApp Us"}
+                    {service.ctaSecondaryLabel || "WhatsApp Us"}
                   </a>
                 </div>
               </div>
@@ -437,26 +394,22 @@ export default async function ServiceCatchAllPage({
           {(service.body?.length ?? 0) > 0 && (
             <section className="bg-white py-12 sm:py-16">
               <div className="max-w-3xl mx-auto px-4 sm:px-6 prose prose-slate prose-lg max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-cyan-600 prose-a:no-underline hover:prose-a:underline">
-                <PortableText
-                  value={
-                    service.body as Parameters<typeof PortableText>[0]["value"]
-                  }
-                />
+                <PortableTextBody value={service.body} />
               </div>
             </section>
           )}
 
           {/* ── 6. FAQs ──────────────────────────────────────────────────────── */}
-          {(service.faq?.length ?? 0) > 0 && (
+          {(service.faqItems?.length ?? 0) > 0 && (
             <section className="bg-slate-50 py-16 sm:py-20">
               <div className="max-w-3xl mx-auto px-4 sm:px-6">
                 <div className="text-center mb-10">
                   <h2 className="font-bold text-[24px] sm:text-[30px] text-slate-900 tracking-[-0.02em]">
-                    {service.faqSectionHeading || "Frequently Asked Questions"}
+                    {service.faqHeading || "Frequently Asked Questions"}
                   </h2>
                 </div>
                 <div className="space-y-3">
-                  {(service.faq ?? []).map((item, i) => (
+                  {(service.faqItems ?? []).map((item, i) => (
                       <details
                         key={i}
                         className="group bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm"
@@ -471,13 +424,7 @@ export default async function ServiceCatchAllPage({
                         </summary>
                         {item.answer && item.answer.length > 0 && (
                           <div className="px-6 pb-5 pt-1 text-[14px] text-gray-600 leading-relaxed border-t border-gray-50 prose prose-sm max-w-none">
-                            <PortableText
-                              value={
-                                item.answer as Parameters<
-                                  typeof PortableText
-                                >[0]["value"]
-                              }
-                            />
+                            <PortableTextBody value={item.answer} />
                           </div>
                         )}
                       </details>

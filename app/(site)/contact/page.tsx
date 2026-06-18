@@ -1,37 +1,23 @@
 import type { Metadata } from "next";
-import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/sanityFetch";
+import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/fetch";
 import {
   siteSettingsQuery,
   pageBySlugQuery,
   allCoursesForFormQuery,
   allServicesForFormQuery,
 } from "@/sanity/lib/queries";
-import { PortableText } from "@portabletext/react";
+import PortableTextBody from "@/components/portable-text/PortableTextBody";
 import { Mail, Phone, MessageCircle, MapPin } from "lucide-react";
-import ContactForm from "./ContactForm";
+import ContactForm from "./_components/ContactForm";
 import { buildPageMetadata } from "@/lib/seo";
-
-interface ContactSettings {
-  email?: string;
-  phone?: string;
-  whatsapp?: string;
-  address?: string;
-  facebook?: string;
-  youtube?: string;
-  contactFormSubmitLabel?: string;
-}
-
-interface ContactPage {
-  seo?: { metaTitle?: string; metaDescription?: string };
-  seoTitle?: string;
-  title?: string;
-  subtitle?: string;
-  eyebrow?: string;
-  body?: unknown[];
-}
+import type {
+  ContactFormOption,
+  ContactPageData,
+  ContactSettings,
+} from "@/types/contact";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const page = await sanityFetch<ContactPage>({
+  const page = await sanityFetch<ContactPageData>({
     query: pageBySlugQuery,
     params: { slug: "contact" },
     tags: [CACHE_TAGS.siteSettings],
@@ -39,7 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
   });
   return buildPageMetadata({
     title:
-      page?.seo?.metaTitle || page?.seoTitle || page?.title || "Contact Us",
+      page?.seo?.metaTitle || page?.title || "Contact Us",
     description:
       page?.seo?.metaDescription ||
       page?.subtitle ||
@@ -83,18 +69,18 @@ export default async function ContactPage() {
       tags: [CACHE_TAGS.siteSettings],
       revalidate: 86400,
     }),
-    sanityFetch<ContactPage>({
+    sanityFetch<ContactPageData>({
       query: pageBySlugQuery,
       params: { slug: "contact" },
       tags: [CACHE_TAGS.siteSettings],
       revalidate: 86400,
     }),
-    sanityFetch<{ _id: string; title: string }[]>({
+    sanityFetch<ContactFormOption[]>({
       query: allCoursesForFormQuery,
       tags: [CACHE_TAGS.courses],
       revalidate: 3600,
     }),
-    sanityFetch<{ _id: string; title: string }[]>({
+    sanityFetch<ContactFormOption[]>({
       query: allServicesForFormQuery,
       tags: [CACHE_TAGS.services],
       revalidate: 3600,
@@ -158,9 +144,7 @@ export default async function ContactPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {page?.body && (
             <div className="prose prose-sm max-w-2xl mb-8 text-gray-700">
-              <PortableText
-                value={page.body as Parameters<typeof PortableText>[0]["value"]}
-              />
+              <PortableTextBody value={page.body} />
             </div>
           )}
 

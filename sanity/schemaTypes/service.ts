@@ -85,7 +85,7 @@ export const service = defineType({
 
     /* ── FAQs ── */
     defineField({
-      name: "faq",
+      name: "faqItems",
       type: "array",
       title: "FAQs",
       of: [
@@ -159,9 +159,9 @@ export const service = defineType({
               type: "string",
               title: "Bold Label (e.g. Dedicated Support)",
             }),
-            defineField({ name: "desc", type: "string", title: "Description" }),
+            defineField({ name: "description", type: "string", title: "Description" }),
           ],
-          preview: { select: { title: "title", subtitle: "desc" } },
+          preview: { select: { title: "title", subtitle: "description" } },
         },
       ],
       group: "sections",
@@ -187,9 +187,9 @@ export const service = defineType({
               type: "string",
               title: "Bold Label (e.g. Sacred Trust)",
             }),
-            defineField({ name: "desc", type: "string", title: "Description" }),
+            defineField({ name: "description", type: "string", title: "Description" }),
           ],
-          preview: { select: { title: "title", subtitle: "desc" } },
+          preview: { select: { title: "title", subtitle: "description" } },
         },
       ],
       group: "sections",
@@ -216,12 +216,12 @@ export const service = defineType({
               title: "Step Label (e.g. Reach Out)",
             }),
             defineField({
-              name: "desc",
+              name: "description",
               type: "string",
               title: "Step Description",
             }),
           ],
-          preview: { select: { title: "label", subtitle: "desc" } },
+          preview: { select: { title: "label", subtitle: "description" } },
         },
       ],
       group: "sections",
@@ -241,32 +241,29 @@ export const service = defineType({
       group: "sections",
     }),
     defineField({
-      name: "ctaBtn1Label",
+      name: "ctaPrimaryLabel",
       type: "string",
-      title: "CTA Banner — Button 1 Label",
+      title: "CTA Banner — Primary Button Label",
       group: "sections",
     }),
     defineField({
-      name: "ctaBtn2Label",
+      name: "ctaSecondaryLabel",
       type: "string",
-      title: "CTA Banner — Button 2 (WhatsApp) Label",
+      title: "CTA Banner — Secondary (WhatsApp) Label",
       group: "sections",
     }),
 
-    /* ── FAQ section heading override ── */
     defineField({
-      name: "faqSectionHeading",
+      name: "faqHeading",
       type: "string",
       title: "FAQ — Section Heading Override",
       group: "sections",
     }),
 
-    /* ── SEO ── */
-    defineField({ name: "seoTitle", type: "string", group: "seo" }),
     defineField({
-      name: "seoDescription",
-      type: "text",
-      rows: 2,
+      name: "seo",
+      type: "seoObject",
+      title: "SEO Settings",
       group: "seo",
     }),
   ],

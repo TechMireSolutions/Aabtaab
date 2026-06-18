@@ -1,6 +1,5 @@
 import { createClient, type SanityClient } from "next-sanity";
-
-const API_VERSION = "2025-06-18";
+import { SANITY_API_VERSION } from "./constants";
 
 function createSanityClient(): SanityClient {
   const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
@@ -13,7 +12,7 @@ function createSanityClient(): SanityClient {
   return createClient({
     projectId,
     dataset,
-    apiVersion: API_VERSION,
+    apiVersion: SANITY_API_VERSION,
     useCdn: process.env.NODE_ENV === "production",
   });
 }

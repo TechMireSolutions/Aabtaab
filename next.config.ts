@@ -17,6 +17,22 @@ const nextConfig: NextConfig = {
   },
 
   // ── HTTP Security & Cache Headers ─────────────────────────────────────────
+  async redirects() {
+    return [
+      {
+        source: "/articles",
+        destination: "/posts",
+        permanent: true,
+      },
+      {
+        source: "/articles/:slug",
+        destination: "/posts/:slug",
+        permanent: true,
+      },
+    ];
+  },
+
+  // ── HTTP Security & Cache Headers ─────────────────────────────────────────
   // Improves Core Web Vitals (LCP via caching), security posture, and
   // signals to Google that the site is well-maintained (indirect E-E-A-T).
   async headers() {

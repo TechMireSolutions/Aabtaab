@@ -1,12 +1,9 @@
 // Server component — renders JSON-LD structured data into <script> tags.
-// Import and call the helpers below inside page.tsx Server Components,
-// then render <JsonLd schema={...} /> to inject the schema into <head>.
 
 interface JsonLdProps {
   schema: Record<string, unknown> | Record<string, unknown>[];
 }
 
-// Generic renderer — pass any valid schema.org object
 export function JsonLd({ schema }: JsonLdProps) {
   return (
     <script
@@ -16,9 +13,6 @@ export function JsonLd({ schema }: JsonLdProps) {
   );
 }
 
-// ── Article JSON-LD ───────────────────────────────────────────────────────────
-// Use on /articles/[slug]/page.tsx
-// Improves E-E-A-T signals and eligibility for Google Top Stories carousel.
 interface ArticleSchemaProps {
   title: string;
   description?: string;
@@ -42,7 +36,7 @@ export function ArticleJsonLd({
   siteName,
   faqItems,
 }: ArticleSchemaProps) {
-  const articleUrl = `${siteUrl}/articles/${slug}`;
+  const articleUrl = `${siteUrl}/posts/${slug}`;
 
   const schemas: Record<string, unknown>[] = [
     {
@@ -68,7 +62,6 @@ export function ArticleJsonLd({
     },
   ];
 
-  // FAQ schema — each item feeds Google "People Also Ask" and AI Overviews
   if (faqItems && faqItems.length > 0) {
     schemas.push({
       "@context": "https://schema.org",
@@ -84,9 +77,6 @@ export function ArticleJsonLd({
   return <JsonLd schema={schemas} />;
 }
 
-// ── Event JSON-LD ─────────────────────────────────────────────────────────────
-// Use on /events/[slug]/page.tsx
-// Enables the Google Events carousel for queries like "Muharram events near me".
 interface EventSchemaProps {
   title: string;
   description?: string;
@@ -148,8 +138,6 @@ export function EventJsonLd({
     eventStatus: `https://schema.org/${status || "EventScheduled"}`,
     eventAttendanceMode: `https://schema.org/${eventType || "OfflineEventAttendanceMode"}`,
     url: `${siteUrl}/events/${slug}`,
-
-    // Location — required for offline/hybrid events
     ...((venueName || streetAddress) && {
       location: isOnline
         ? undefined
@@ -166,8 +154,6 @@ export function EventJsonLd({
             },
           },
     }),
-
-    // Virtual location — required for online/hybrid events
     ...((isOnline || isHybrid) &&
       onlineUrl && {
         location: {
@@ -175,7 +161,6 @@ export function EventJsonLd({
           url: onlineUrl,
         },
       }),
-
     ...(organizerName && {
       organizer: {
         "@type": "Organization",
@@ -183,8 +168,6 @@ export function EventJsonLd({
         ...(organizerUrl && { url: organizerUrl }),
       },
     }),
-
-    // Offers block — enables ticket/registration data in search results
     offers: {
       "@type": "Offer",
       price: isFree ? "0" : price || undefined,
@@ -197,9 +180,6 @@ export function EventJsonLd({
   return <JsonLd schema={schema} />;
 }
 
-// ── BreadcrumbList JSON-LD ────────────────────────────────────────────────────
-// Use on any page with a breadcrumb trail.
-// Renders the path in Google search results as: Aabtaab > Courses > Arabic
 interface BreadcrumbItem {
   name: string;
   url: string;
@@ -220,7 +200,6 @@ export function BreadcrumbJsonLd({ items }: { items: BreadcrumbItem[] }) {
   return <JsonLd schema={schema} />;
 }
 
-// ── WebSite JSON-LD (sitelinks search box on mobile SERPs) ─────────────────────
 interface WebSiteSchemaProps {
   siteName: string;
   siteUrl: string;
@@ -243,7 +222,7 @@ export function WebSiteJsonLd({
       "@type": "SearchAction",
       target: {
         "@type": "EntryPoint",
-        urlTemplate: `${siteUrl}/articles?q={search_term_string}`,
+        urlTemplate: `${siteUrl}/posts?q={search_term_string}`,
       },
       "query-input": "required name=search_term_string",
     },
