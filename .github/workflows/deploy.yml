@@ -18,7 +18,8 @@ jobs:
           script: |
             set -e
             cd /var/www/aabtaab_next
-            git pull origin main
+            git fetch origin main
+            git reset --hard origin/main
             npm ci
             npm run build
             if pm2 describe aabtaab-next > /dev/null 2>&1; then
