@@ -10,8 +10,9 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     env:
-      NEXT_PUBLIC_SANITY_PROJECT_ID: ci-placeholder
-      NEXT_PUBLIC_SANITY_DATASET: production
+      NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}
+      NEXT_PUBLIC_SANITY_DATASET: ${{ secrets.NEXT_PUBLIC_SANITY_DATASET || 'production' }}
+      NEXT_PUBLIC_SITE_URL: https://aabtaab.com
     steps:
       - uses: actions/checkout@v4
 
@@ -38,6 +39,6 @@ jobs:
       - name: E2E smoke tests
         run: npm run test:e2e
         env:
-          NEXT_PUBLIC_SANITY_PROJECT_ID: ci-placeholder
-          NEXT_PUBLIC_SANITY_DATASET: production
+          NEXT_PUBLIC_SANITY_PROJECT_ID: ${{ secrets.NEXT_PUBLIC_SANITY_PROJECT_ID }}
+          NEXT_PUBLIC_SANITY_DATASET: ${{ secrets.NEXT_PUBLIC_SANITY_DATASET || 'production' }}
           NEXT_PUBLIC_SITE_URL: http://localhost:3000

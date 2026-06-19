@@ -99,14 +99,14 @@ export const getSiteLayoutData = cache(async () => {
 
 export const getHomepageData = cache(async () => {
   const data = await sanityFetch<{
-    featuredPosts: HomePostSummary[];
-    courses: HomeCourseSummary[];
-    services: HomeServiceSummary[];
-    homepage: HomepageSettings;
-    testimonials: Testimonial[];
-    upcomingEvents: EventSummary[];
-    settings: Awaited<ReturnType<typeof fetchSiteSettingsUncached>>;
-  }>({
+    featuredPosts?: HomePostSummary[] | null;
+    courses?: HomeCourseSummary[] | null;
+    services?: HomeServiceSummary[] | null;
+    homepage?: HomepageSettings | null;
+    testimonials?: Testimonial[] | null;
+    upcomingEvents?: EventSummary[] | null;
+    settings?: Awaited<ReturnType<typeof fetchSiteSettingsUncached>> | null;
+  } | null>({
     query: homepageDataQuery,
     tags: [
       CACHE_TAGS.posts,
@@ -120,14 +120,26 @@ export const getHomepageData = cache(async () => {
     revalidate: 3600,
   });
 
+  if (!data) {
+    return {
+      posts: [] as HomePostSummary[],
+      services: [] as HomeServiceSummary[],
+      courses: [] as HomeCourseSummary[],
+      homepage: null as HomepageSettings | null,
+      testimonials: [] as Testimonial[],
+      upcomingEvents: [] as EventSummary[],
+      settings: null,
+    };
+  }
+
   return {
-    posts: data.featuredPosts,
-    services: data.services,
-    courses: data.courses,
-    homepage: data.homepage,
-    testimonials: data.testimonials,
-    upcomingEvents: data.upcomingEvents,
-    settings: data.settings,
+    posts: data.featuredPosts ?? [],
+    services: data.services ?? [],
+    courses: data.courses ?? [],
+    homepage: data.homepage ?? null,
+    testimonials: data.testimonials ?? [],
+    upcomingEvents: data.upcomingEvents ?? [],
+    settings: data.settings ?? null,
   };
 });
 
