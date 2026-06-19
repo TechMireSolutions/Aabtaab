@@ -1,12 +1,9 @@
-import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/fetch";
-import { topLevelServicesQuery } from "@/sanity/lib/queries";
 import ContentCard from "@/components/cards/ContentCard";
 import CatalogPageLayout from "@/components/layout/CatalogPageLayout";
 import { defineCmsPageMetadata } from "@/lib/cms/page";
-import { getCmsPage } from "@/lib/cms/queries";
+import { getCmsPage, getTopLevelServices } from "@/lib/cms/queries";
 import { cardImageUrl } from "@/sanity/lib/image";
 import { nestedListCtaLabel } from "@/lib/urls";
-import type { TopLevelServiceSummary } from "@/types/catalog";
 
 export const generateMetadata = defineCmsPageMetadata("services", {
   path: "/services",
@@ -17,11 +14,7 @@ export const generateMetadata = defineCmsPageMetadata("services", {
 
 export default async function ServicesPage() {
   const [services, page] = await Promise.all([
-    sanityFetch<TopLevelServiceSummary[]>({
-      query: topLevelServicesQuery,
-      tags: [CACHE_TAGS.services],
-      revalidate: 3600,
-    }),
+    getTopLevelServices(),
     getCmsPage("services"),
   ]);
   const serviceList = services ?? [];

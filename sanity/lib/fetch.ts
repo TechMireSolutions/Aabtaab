@@ -1,7 +1,9 @@
 import { type QueryParams } from "next-sanity";
+import { draftMode } from "next/headers";
 import { unstable_cache } from "next/cache";
 import type { SiteSettings } from "@/types/sanity";
 import { client } from "./client";
+import { getPreviewClient } from "./previewClient";
 import { siteSettingsQuery } from "./queries";
 
 export const CACHE_TAGS = {
@@ -16,6 +18,8 @@ export const CACHE_TAGS = {
   service: (slug: string) => `sanity-service-${slug}`,
   siteSettings: "sanity-site-settings",
   homepage: "sanity-homepage",
+  pages: "sanity-pages",
+  page: (slug: string) => `sanity-page-${slug}`,
 } as const;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -26,17 +30,37 @@ interface SanityFetchOptions<T> {
   revalidate?: number | false;
 }
 
+async function isDraftModeEnabled(): Promise<boolean> {
+  try {
+    const { isEnabled } = await draftMode();
+    return isEnabled;
+  } catch {
+    return false;
+  }
+}
+
+async function fetchFromSanity<T>(
+  query: string,
+  params: QueryParams,
+): Promise<T> {
+  const preview = await isDraftModeEnabled();
+  const activeClient = preview ? getPreviewClient() : client;
+  return activeClient.fetch<T>(query, params);
+}
+
 export async function sanityFetch<T>({
   query,
   params = {},
   tags = [],
   revalidate = 3600,
 }: SanityFetchOptions<T>): Promise<T> {
-  if (process.env.NODE_ENV !== "production") {
+  const preview = await isDraftModeEnabled();
+
+  if (preview || process.env.NODE_ENV !== "production") {
     try {
-      return await client.fetch<T>(query, params);
+      return await fetchFromSanity<T>(query, params);
     } catch (error) {
-      console.error("Sanity fetch failed in development:", error);
+      console.error("Sanity fetch failed:", error);
       return null as unknown as T;
     }
   }
@@ -45,7 +69,8 @@ export async function sanityFetch<T>({
     async () => {
       try {
         return await client.fetch<T>(query, params);
-      } catch {
+      } catch (error) {
+        console.error("Sanity fetch failed in production:", error);
         return null as unknown as T;
       }
     },

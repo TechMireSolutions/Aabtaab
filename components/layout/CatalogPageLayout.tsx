@@ -20,12 +20,10 @@ export default function CatalogPageLayout({
   return (
     <div>
       <PageHeader eyebrow={eyebrow} title={title} subtitle={subtitle} />
-      <div className="py-8 sm:py-12 bg-slate-50/40 min-h-[50vh]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section-muted min-h-catalog">
+        <div className="container-page">
           {isEmpty ? (
-            <p className="text-center text-gray-400 text-[15px] py-24">
-              {emptyMessage}
-            </p>
+            <p className="empty-state">{emptyMessage}</p>
           ) : (
             children
           )}

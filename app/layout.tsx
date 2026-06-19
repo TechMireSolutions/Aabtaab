@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
-import { fetchSiteSettings } from "@/sanity/lib/fetch";
-import type { SiteSettings } from "@/types/sanity";
+import { resolveSiteName } from "@/lib/constants";
+import { getSiteSettings } from "@/lib/cms/queries";
 import { urlFor } from "@/sanity/lib/image";
 import { JsonLd, WebSiteJsonLd } from "@/lib/seo";
 import { getSiteUrl } from "@/lib/seo";
@@ -28,9 +28,9 @@ export const viewport: Viewport = {
 
 // ── Site-level Metadata ──────────────────────────────────────────────────────
 export async function generateMetadata(): Promise<Metadata> {
-  const settings: SiteSettings = await fetchSiteSettings();
+  const settings = await getSiteSettings();
 
-  const siteName = settings?.siteName || "Aabtaab";
+  const siteName = resolveSiteName(settings);
   const siteUrl = settings?.siteUrl || "https://aabtaab.com";
   const description =
     settings?.description ||
@@ -145,7 +145,7 @@ export async function generateMetadata(): Promise<Metadata> {
 // Rendered in <head> on every page.
 // schema.org/Organization is the foundation of E-E-A-T trust signals.
 async function SiteSchemas() {
-  const settings: SiteSettings = await fetchSiteSettings();
+  const settings = await getSiteSettings();
   const siteUrl = getSiteUrl();
   const logoUrl = settings?.logo
     ? urlFor(settings.logo).width(600).height(60).url()
@@ -154,7 +154,7 @@ async function SiteSchemas() {
   const organizationSchema = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: settings?.siteName || "Aabtaab",
+    name: resolveSiteName(settings),
     url: siteUrl,
     description: settings?.description,
     ...(logoUrl && { logo: logoUrl }),
@@ -178,7 +178,7 @@ async function SiteSchemas() {
     <>
       <JsonLd schema={organizationSchema} />
       <WebSiteJsonLd
-        siteName={settings?.siteName || "Aabtaab"}
+        siteName={resolveSiteName(settings)}
         siteUrl={siteUrl}
         description={settings?.description}
       />

@@ -72,10 +72,17 @@ export async function POST(request: NextRequest) {
       revalidated.push(CACHE_TAGS.homepage);
       break;
     case "navigation":
-    case "page":
     case "testimonial":
       revalidateTag(CACHE_TAGS.siteSettings, REVALIDATE_OPTIONS);
       revalidated.push(CACHE_TAGS.siteSettings);
+      break;
+    case "page":
+      revalidateTag(CACHE_TAGS.pages, REVALIDATE_OPTIONS);
+      revalidated.push(CACHE_TAGS.pages);
+      if (slug?.current) {
+        revalidateTag(CACHE_TAGS.page(slug.current), REVALIDATE_OPTIONS);
+        revalidated.push(CACHE_TAGS.page(slug.current));
+      }
       break;
   }
 

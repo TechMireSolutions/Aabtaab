@@ -1,0 +1,89 @@
+# file structure
+
+> Modern file and folder structure — where new code belongs in Aabtaab
+
+**Always apply:** yes
+
+# File Structure
+
+Follow **domain-first, layer-second** layout — group by feature/domain, not by file type at the root.
+
+Full layout reference: **`techstack.md`** § File structure.
+
+## Top-level layout
+
+```
+app/
+  (site)/              # Public site — route group, shared layout
+    {route}/page.tsx
+    {route}/_components/   # Private to that route (underscore prefix)
+  api/{name}/route.ts  # contact, revalidate, draft, draft/disable
+  studio/              # Embedded Sanity Studio
+  globals.css          # Tailwind v4 design system (single CSS source)
+  layout.tsx, sitemap.ts, robots.ts, global-error.tsx
+
+components/
+  content/             # Reusable CMS-driven sections (2+ pages)
+  layout/              # Site chrome (Header, Footer, PageHeader, PreviewBanner)
+  sections/            # Homepage-only blocks
+  cards/, portable-text/, icons/, ui/, studio/
+
+lib/
+  cms/                 # Cached queries + metadata builders + search
+  catalog/             # Nested catalog helpers
+  contact/             # Zod schema, email HTML, notify
+  seo/                 # Metadata + JSON-LD
+  fallbacks/           # Defaults when CMS empty
+  constants.ts, paths.ts, urls.ts, revalidate.ts
+  rate-limit.ts, request-ip.ts
+
+sanity/
+  schemaTypes/         # One schema file per document type
+  lib/                 # client, fetch, previewClient, writeClient, queries/, image
+
+types/                 # Shared TS by domain — not per component file
+
+scripts/               # Migrations, production start, agent sync, OG generator
+public/                # Static assets (og-default.png)
+e2e/                   # Playwright smoke tests
+```
+
+## Placement rules
+
+| Adding… | Put it in… |
+|---------|------------|
+| New public page | `app/(site)/{route}/page.tsx` |
+| Page-only client widget | `app/(site)/{route}/_components/` |
+| Reusable section (2+ pages) | `components/content/` |
+| CMS fetch helper | `lib/cms/queries.ts` or `sanity/lib/queries/{domain}.ts` |
+| GROQ for new domain | `sanity/lib/queries/{domain}.ts` + export in `index.ts` |
+| Shared type | `types/{domain}.ts` |
+| Default/fallback copy | `lib/fallbacks/{feature}.ts` |
+| One-off script | `scripts/{kebab-name}.mjs` |
+
+## Modern App Router conventions
+
+- **Route groups** `(site)` — shared layout without URL segment.
+- **Private folders** `_components/` — not routable; colocate page-specific UI.
+- **Catch-all** `[...slug]/page.tsx` — nested catalogs only (courses, services).
+- **Dynamic** `[slug]/page.tsx` — flat catalogs (posts, events).
+- **No** `pages/` directory — App Router only.
+- **Flat API** — one `route.ts` per endpoint under `app/api/`.
+
+## Layer boundaries
+
+| Layer | Responsibility |
+|-------|----------------|
+| `app/` | Routing, metadata exports, compose components + data |
+| `components/` | Presentation — props in, JSX out |
+| `lib/` | Pure helpers, fetch facades, URL/path logic |
+| `sanity/` | CMS schemas, GROQ, low-level client |
+| `types/` | Shared interfaces — no runtime code |
+
+## Do not
+
+- Put business logic in page files beyond composition — extract to `lib/` or `components/`.
+- Create catch-all `utils/` or `helpers/` folders — use domain folders.
+- Add per-component CSS files — extend `app/globals.css` `@utility` instead.
+- Colocate Sanity schemas outside `sanity/schemaTypes/`.
+- Barrel-export everything — only `sanity/lib/queries/index.ts` is an approved barrel.

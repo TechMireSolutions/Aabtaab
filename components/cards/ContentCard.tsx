@@ -23,23 +23,18 @@ export default function ContentCard({
 }: ContentCardProps) {
   return (
     <div
-      className={`group relative flex flex-col rounded-2xl overflow-hidden bg-white
-        transition-all duration-300 ease-out
-        hover:-translate-y-2 hover:shadow-card-hover
-        ${
-          active
-            ? "shadow-[0_2px_16px_rgba(8,145,178,0.14)] border border-cyan-200/80"
-            : "shadow-card border border-gray-100"
-        }`}
+      className={`card-interactive group relative flex flex-col overflow-hidden ${
+        active
+          ? "border-brand-200/80 shadow-card-active"
+          : ""
+      }`}
     >
-      {/* Active top accent stripe */}
       {active && (
-        <div className="absolute top-0 inset-x-0 h-[3px] bg-linear-to-r from-cyan-400 via-cyan-500 to-sky-400 z-10" />
+        <div className="absolute inset-x-0 top-0 z-10 h-card-accent bg-linear-to-r from-brand-400 via-brand-500 to-brand-300" />
       )}
 
-      {/* Image */}
-      <Link href={href} className="block overflow-hidden shrink-0">
-        <div className="relative w-full aspect-[3/2] bg-slate-100">
+      <Link href={href} className="block shrink-0 overflow-hidden">
+        <div className="relative aspect-3/2 w-full bg-slate-100">
           {image ? (
             <Image
               src={image}
@@ -49,43 +44,33 @@ export default function ContentCard({
               className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.06]"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-linear-to-br from-cyan-50 via-sky-50 to-slate-100">
+            <div className="flex h-full w-full items-center justify-center bg-linear-to-br from-brand-50 via-brand-50 to-slate-100">
               <span className="text-5xl opacity-25 select-none">📖</span>
             </div>
           )}
-          {/* Hover dim overlay */}
-          <div className="absolute inset-0 bg-slate-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <div className="absolute inset-0 bg-slate-900/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
         </div>
       </Link>
 
-      {/* Body */}
-      <div className="flex flex-col flex-1 px-4 pt-4 pb-5">
-        {badge && (
-          <span className="w-fit text-[10px] font-bold uppercase tracking-[0.12em] text-cyan-700 bg-cyan-50 border border-cyan-100/80 rounded-full px-2.5 py-0.5 mb-3">
-            {badge}
-          </span>
-        )}
+      <div className="flex flex-1 flex-col px-4 pt-4 pb-5">
+        {badge && <span className="badge-pill mb-3">{badge}</span>}
 
-        <h3 className="font-semibold text-slate-900 text-[15px] leading-snug mb-2 line-clamp-2">
+        <h3 className="mb-2 line-clamp-2 text-base-plus font-semibold leading-snug text-slate-900">
           <Link
             href={href}
-            className="hover:text-cyan-600 transition-colors duration-150"
+            className="transition-colors duration-150 hover:text-brand-600"
           >
             {title}
           </Link>
         </h3>
 
         {description && (
-          <p className="text-[12.5px] text-gray-500 leading-relaxed line-clamp-2 flex-1 mb-4">
+          <p className="mb-4 line-clamp-2 flex-1 text-sm-plus text-gray-500 leading-relaxed">
             {description}
           </p>
         )}
 
-        {/* CTA */}
-        <Link
-          href={href}
-          className="mt-auto inline-flex items-center gap-1 text-[12.5px] font-semibold text-cyan-600 hover:text-cyan-700 pt-0.5 group/cta"
-        >
+        <Link href={href} className="link-brand group/cta mt-auto inline-flex items-center gap-1 pt-0.5">
           {ctaLabel}
           <ArrowUpRight
             size={12}

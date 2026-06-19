@@ -12,15 +12,11 @@ export default function PostCardGrid({
   emptyMessage = "No articles published yet.",
 }: PostCardGridProps) {
   if (posts.length === 0) {
-    return (
-      <p className="text-center text-gray-400 text-[15px] py-24">
-        {emptyMessage}
-      </p>
-    );
+    return <p className="empty-state">{emptyMessage}</p>;
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
       {posts.map((post) => (
         <ContentCard
           key={post._id}

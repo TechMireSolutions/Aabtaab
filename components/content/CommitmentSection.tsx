@@ -14,14 +14,17 @@ export default function CommitmentSection({
   if (items.length === 0) return null;
 
   return (
-    <section className="bg-slate-900 py-16 sm:py-20">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-        <h2 className="font-bold text-[24px] sm:text-[32px] text-white tracking-[-0.02em] mb-10">
+    <section className="bg-slate-900 section-y">
+      <div className="container-content text-center">
+        <h2 className="heading-section-lg mb-10 text-white">
           {heading || defaultHeading}
         </h2>
         <ul className="space-y-5">
           {items.map((item, index) => (
-            <li key={index} className="text-[14.5px] text-slate-300 leading-relaxed">
+            <li
+              key={index}
+              className="text-base-plus leading-relaxed text-slate-300"
+            >
               <span className="font-semibold text-white">{item.title}:</span>
               {item.description && <span> {item.description}</span>}
             </li>

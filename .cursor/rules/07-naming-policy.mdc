@@ -1,0 +1,68 @@
+---
+description: Naming conventions for files, folders, functions, types, and CMS fields
+globs: "**/*.{ts,tsx,mjs,cjs}"
+alwaysApply: false
+---
+
+# Naming Policy
+
+Consistent names reduce search cost and merge conflicts. **Read surrounding files before inventing new patterns.**
+
+## Files & folders
+
+| Kind | Convention | Example |
+|------|------------|---------|
+| Route folders | `kebab-case` | `online-courses/`, `contact/` |
+| Lib folders | `camelCase` or domain word | `schemaTypes/`, `cms/` |
+| React components | `PascalCase.tsx` | `CourseHeroSection.tsx` |
+| Lib modules (multi-word) | `kebab-case.ts` | `nested-children.ts` |
+| Lib modules (single) | lowercase word | `page.ts`, `paths.ts`, `urls.ts` |
+| Scripts | `kebab-case.mjs` | `migrate-sanity-fields.mjs` |
+| Config (root) | framework convention | `next.config.ts`, `server.config.cjs` |
+| Private route UI | `_components/` folder | `_components/ContactForm.tsx` |
+| URL segments | `kebab-case` | `/online-courses`, `/posts` |
+
+## Code symbols
+
+| Kind | Convention | Example |
+|------|------------|---------|
+| React components | `PascalCase` | `PageHeader`, `ContentCard` |
+| Functions | `camelCase`, verb-first | `getCmsPage`, `buildNestedSlugMetadata` |
+| Event handlers | `handle` + event | `handleSubmit`, `handleSearch` |
+| React hooks | `use` + PascalCase | `useMenuOpen` (if extracted) |
+| Booleans | `is` / `has` / `can` prefix | `isLoading`, `hasChildren` |
+| Constants (frozen config) | `SCREAMING_SNAKE` | `CACHE_TAGS`, `STATIC_ROUTES` |
+| Types / interfaces | `PascalCase`, noun | `CourseDetail`, `SiteSettings` |
+| Enums / unions | `PascalCase` type, lowercase values | `ContactPurpose = "general" \| "course"` |
+| Sanity `_type` | `camelCase` | `contactSubmission`, `homepageSettings` |
+| Sanity fields | `camelCase`, full words | `faqItems`, `ctaPrimaryLabel`, `seo` |
+| Env vars | `SCREAMING_SNAKE` | `NEXT_PUBLIC_SANITY_PROJECT_ID` |
+
+## CMS field naming (canonical)
+
+Use migrated names — never reintroduce legacy:
+
+`faqItems` · `faqHeading` · `seo` · `ctaPrimaryLabel` · `ctaSecondaryLabel` · `description`
+
+Routes: `/posts` not `/articles`.
+
+## Imports & exports
+
+- Path alias **`@/`** always — no `../../../`.
+- **Named exports** for components and helpers.
+- **Default export** only for Next.js `page.tsx`, `layout.tsx`, `loading.tsx`, `error.tsx`.
+- One primary export per component file (the component name matches filename).
+
+## Sanity / GROQ
+
+- Query constants: `{entity}{Purpose}Query` — `courseBySlugDeepQuery`, `topLevelCoursesQuery`.
+- Fragments in `fragments.ts`: `{NAME}_FRAGMENT` — `SEO_FRAGMENT`, `PARENT_ANCESTRY_FRAGMENT`.
+- Schema files: match `_type` name — `course.ts` → `name: "course"`.
+
+## Avoid
+
+- Generic file names: `utils.ts`, `helpers.ts`, `data.ts`, `common.ts`.
+- Abbreviations except standard: `cms`, `seo`, `url`, `id`, `cta`, `og`.
+- Hungarian notation: `strName`, `objSettings`.
+- Duplicate type names — extend shared types in `types/`.
+- Renaming for style only in unrelated PRs — rename when touching the file for feature work.

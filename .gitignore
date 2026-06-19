@@ -34,3 +34,8 @@ next-env.d.ts
 # OS
 .DS_Store
 Thumbs.db
+
+# tests
+/test-results/
+/playwright-report/
+/coverage/

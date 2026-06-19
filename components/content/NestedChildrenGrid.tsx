@@ -29,20 +29,16 @@ export default function NestedChildrenGrid({
   items,
 }: NestedChildrenGridProps) {
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-      <p className="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.18em] text-cyan-600 mb-3">
-        <span className="w-5 h-px bg-cyan-400 inline-block" />
+    <div className="container-page section-y">
+      <p className="text-eyebrow mb-3 flex items-center gap-2">
+        <span className="eyebrow-line" />
         {eyebrow}
       </p>
-      <h1 className="font-bold text-[30px] text-slate-900 tracking-[-0.02em] mb-2">
-        {title}
-      </h1>
+      <h1 className="heading-page mb-2">{title}</h1>
       {excerpt && (
-        <p className="text-[14px] text-gray-500 mb-10 max-w-2xl leading-relaxed">
-          {excerpt}
-        </p>
+        <p className="text-body-muted mb-10 max-w-2xl">{excerpt}</p>
       )}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
         {items.map((child) => (
           <ContentCard
             key={child._id}

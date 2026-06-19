@@ -10,33 +10,45 @@
     "build": "next build",
     "start": "node scripts/start-production.cjs",
     "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
     "migrate:sanity": "node scripts/migrate-sanity-fields.mjs",
-    "migrate:sanity:dry": "DRY_RUN=1 node scripts/migrate-sanity-fields.mjs"
+    "migrate:sanity:dry": "DRY_RUN=1 node scripts/migrate-sanity-fields.mjs",
+    "sync:agents": "node scripts/sync-agent-config.mjs"
   },
   "dependencies": {
     "@portabletext/react": "^6.2.0",
     "@sanity/client": "^7.23.0",
     "@sanity/image-url": "^2.1.1",
     "@sanity/vision": "^6.1.0",
+    "@sentry/nextjs": "^10.58.0",
+    "@upstash/ratelimit": "^2.0.8",
+    "@upstash/redis": "^1.38.0",
     "lucide-react": "^1.21.0",
     "next": "^16.2.9",
-    "next-sanity": "^13.1.0",
+    "next-sanity": "^13.1.1",
     "nodemailer": "^9.0.1",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "sanity": "^6.1.0"
+    "resend": "^6.14.0",
+    "sanity": "^6.1.0",
+    "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@playwright/test": "^1.61.0",
     "@tailwindcss/postcss": "^4.3.1",
     "@tailwindcss/typography": "^0.5.20",
     "@types/node": "^25.9.3",
     "@types/nodemailer": "^8.0.1",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
+    "@vitest/coverage-v8": "^4.1.9",
     "eslint": "^9.39.4",
     "eslint-config-next": "^16.2.9",
     "postcss": "^8.5.15",
     "tailwindcss": "^4.3.1",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.9"
   }
 }

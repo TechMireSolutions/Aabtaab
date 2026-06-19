@@ -1,0 +1,55 @@
+---
+description: Aabtaab stack, paths, agent config, and universal coding principles
+alwaysApply: true
+---
+
+# Project Core
+
+## Stack
+
+Next.js **16** · React **19** · Sanity **6** · Tailwind **v4** · TypeScript · PM2 port **3000**
+
+Full reference: **`techstack.md`** (dependencies, SEO, production, env vars).
+
+## Paths
+
+| Area | Location |
+|------|----------|
+| Site pages | `app/(site)/` |
+| CMS schemas | `sanity/schemaTypes/` |
+| CMS queries | `sanity/lib/queries/`, `lib/cms/queries.ts` |
+| API routes | `app/api/` (contact, revalidate, draft) |
+| Shared UI | `components/content/`, `components/layout/` |
+| Design system | `app/globals.css` |
+| Production port | `server.config.cjs` → 3000 |
+
+## Agent config (single source of truth)
+
+| Tool | Rules | Skills |
+|------|-------|--------|
+| Cursor | `.cursor/rules/` | `.cursor/skills/` |
+| Antigravity | `.agents/rules/` | `.agents/skills/` |
+| Claude Code | `.claude/rules/` + `CLAUDE.md` | `.claude/skills/` |
+
+Edit **only** `.cursor/rules/` and `.cursor/skills/`, then run `npm run sync:agents`.
+
+## Universal principles
+
+1. **Minimize scope** — smallest correct diff; no drive-by refactors.
+2. **Match existing patterns** — read surrounding code before adding abstractions.
+3. **Use `@/` imports** — no deep relative paths when alias works.
+4. **Verify** — run `npm run lint`, `npm run test`, and `npm run build` after substantive changes.
+5. **No git commits/push** unless the user explicitly asks.
+
+## Rule index (applied by file type)
+
+| Rule file | When |
+|-----------|------|
+| `01-nextjs-react.mdc` | `app/`, `components/`, `lib/` |
+| `02-tailwind-design-system.mdc` | `*.tsx`, `*.css` |
+| `03-sanity-cms.mdc` | `sanity/`, `lib/cms/` |
+| `04-typescript-seo.mdc` | `*.ts`, `*.tsx` |
+| `05-dependencies-upgrade.mdc` | `package.json`, CI, deploy config |
+| `06-file-structure.mdc` | Always — where new files go |
+| `07-naming-policy.mdc` | `*.ts`, `*.tsx`, scripts |
+| `08-dry-policy.mdc` | Always — deduplication standards |

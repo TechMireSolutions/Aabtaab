@@ -4,9 +4,6 @@ import type { CmsPageSummary } from "@/types/cms-page";
 import type { SeoData } from "@/types/sanity";
 import { getCmsPage } from "./queries";
 
-/** @deprecated Use `getCmsPage` from `@/lib/cms/queries` */
-export const fetchCmsPage = getCmsPage;
-
 interface CmsMetadataOptions {
   path: string;
   fallbackTitle: string;

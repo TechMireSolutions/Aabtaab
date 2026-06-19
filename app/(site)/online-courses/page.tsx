@@ -1,12 +1,9 @@
-import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/fetch";
-import { topLevelCoursesQuery } from "@/sanity/lib/queries";
 import ContentCard from "@/components/cards/ContentCard";
 import CatalogPageLayout from "@/components/layout/CatalogPageLayout";
 import { defineCmsPageMetadata } from "@/lib/cms/page";
-import { getCmsPage } from "@/lib/cms/queries";
+import { getCmsPage, getTopLevelCourses } from "@/lib/cms/queries";
 import { cardImageUrl } from "@/sanity/lib/image";
 import { formatPriceDuration, nestedListCtaLabel } from "@/lib/urls";
-import type { TopLevelCourseSummary } from "@/types/catalog";
 
 export const generateMetadata = defineCmsPageMetadata("online-courses", {
   path: "/online-courses",
@@ -17,11 +14,7 @@ export const generateMetadata = defineCmsPageMetadata("online-courses", {
 
 export default async function CoursesPage() {
   const [courses, page] = await Promise.all([
-    sanityFetch<TopLevelCourseSummary[]>({
-      query: topLevelCoursesQuery,
-      tags: [CACHE_TAGS.courses],
-      revalidate: 3600,
-    }),
+    getTopLevelCourses(),
     getCmsPage("online-courses"),
   ]);
   const courseList = courses ?? [];

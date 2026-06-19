@@ -10,12 +10,18 @@ import HowItWorksSection from "@/components/content/HowItWorksSection";
 import CtaBandSection from "@/components/content/CtaBandSection";
 import FaqAccordionSection from "@/components/content/FaqAccordionSection";
 import PortableTextPageSection from "@/components/content/PortableTextPageSection";
+import { buildNestedCatalogPageContext } from "@/lib/catalog/nested-page";
+import type { ServiceChild } from "@/types/service";
 import { buildNestedSlugMetadata } from "@/lib/cms/page";
 import { getServiceBySlug, getSiteSettings } from "@/lib/cms/queries";
 import { mapServiceChildForGrid } from "@/lib/catalog/nested-children";
-import { buildNestedBreadcrumbItems, getContentAncestry } from "@/lib/paths";
-import { getSiteUrl } from "@/lib/seo";
-import { whatsappUrl } from "@/lib/urls";
+import { buildNestedBreadcrumbItems } from "@/lib/paths";
+
+const SERVICE_BASE = {
+  segment: "services" as const,
+  label: "Services",
+  eyebrow: "Services",
+};
 
 const SERVICE_CHILD_LABELS = { parent: "View Services", leaf: "Learn More" } as const;
 
@@ -35,34 +41,33 @@ export default async function ServiceCatchAllPage({
   params: Promise<{ slug: string[] }>;
 }) {
   const { slug } = await params;
-  const currentSlug = slug[slug.length - 1];
 
   const [service, site] = await Promise.all([
-    getServiceBySlug(currentSlug),
+    getServiceBySlug(slug[slug.length - 1]),
     getSiteSettings(),
   ]);
   if (!service) notFound();
 
-  const childItems = Array.isArray(service.children) ? service.children : [];
-  const hasChildren = childItems.length > 0;
-  const ancestry = getContentAncestry(service);
-  const currentPath = `/services/${slug.join("/")}`;
-  const siteUrl = getSiteUrl();
-  const whatsappHref = site?.whatsapp
-    ? whatsappUrl(site.whatsapp)
-    : "/contact";
+  const {
+    currentPath,
+    childItems,
+    hasChildren,
+    ancestry,
+    siteUrl,
+    whatsappHref,
+  } = buildNestedCatalogPageContext(SERVICE_BASE, slug, service, site);
 
   return (
     <div>
       <NestedBreadcrumbs
-        base="services"
-        baseLabel="Services"
+        base={SERVICE_BASE.segment}
+        baseLabel={SERVICE_BASE.label}
         ancestry={ancestry}
         currentTitle={service.title}
         currentPath={currentPath}
         breadcrumbItems={buildNestedBreadcrumbItems(
-          "services",
-          "Services",
+          SERVICE_BASE.segment,
+          SERVICE_BASE.label,
           ancestry,
           service.title,
           currentPath,
@@ -72,11 +77,11 @@ export default async function ServiceCatchAllPage({
 
       {hasChildren ? (
         <NestedChildrenGrid
-          eyebrow="Services"
+          eyebrow={SERVICE_BASE.eyebrow}
           title={service.title}
           excerpt={service.excerpt}
           currentPath={currentPath}
-          items={childItems.map((child) =>
+          items={(childItems as ServiceChild[]).map((child) =>
             mapServiceChildForGrid(child, SERVICE_CHILD_LABELS),
           )}
         />

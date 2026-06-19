@@ -12,43 +12,39 @@ export default function CoursePricingSection({
   if (tables.length === 0) return null;
 
   return (
-    <section className="bg-white py-16 sm:py-20">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <p className="text-[10.5px] font-bold uppercase tracking-[0.18em] text-cyan-600 mb-2">
-            Plans
-          </p>
-          <h2 className="font-bold text-[24px] sm:text-[32px] text-slate-900 tracking-[-0.02em]">
-            {heading}
-          </h2>
+    <section className="section-y bg-white">
+      <div className="container-narrow">
+        <div className="mb-12 text-center">
+          <p className="text-eyebrow mb-2">Plans</p>
+          <h2 className="heading-section-lg">{heading}</h2>
         </div>
         <div className="space-y-10">
           {tables.map((pricingTable, tableIndex) => (
             <div key={tableIndex}>
               {pricingTable.label && (
-                <h3 className="font-bold text-[14.5px] text-slate-700 mb-4 flex items-center gap-2">
-                  <span className="w-5 h-px bg-cyan-400 inline-block" />
+                <h3 className="mb-4 flex items-center gap-2 text-sm-plus font-bold text-slate-700">
+                  <span className="eyebrow-line" />
                   {pricingTable.label}
                 </h3>
               )}
               {(pricingTable.rows?.length ?? 0) > 0 && (
                 <div className="overflow-x-auto rounded-2xl border border-gray-200 shadow-sm">
-                  <table className="w-full text-[13.5px] border-collapse">
+                  <table className="w-full border-collapse text-sm-plus">
                     <thead>
                       <tr className="bg-slate-800 text-white">
-                        <th className="text-left font-semibold px-5 py-4 rounded-tl-2xl">
+                        <th className="rounded-tl-2xl px-5 py-4 text-left font-semibold">
                           Study Plan
                         </th>
-                        <th className="text-left font-semibold px-5 py-4">
+                        <th className="px-5 py-4 text-left font-semibold">
                           Weekly Frequency
                         </th>
-                        <th className="text-left font-semibold px-5 py-4">
+                        <th className="px-5 py-4 text-left font-semibold">
                           Monthly Classes
                         </th>
-                        <th className="text-left font-semibold px-5 py-4">
+                        <th className="px-5 py-4 text-left font-semibold">
                           Fee Per Class
                         </th>
-                        <th className="text-left font-semibold px-5 py-4 rounded-tr-2xl">
+                        <th className="rounded-tr-2xl px-5 py-4 text-left font-semibold">
                           Monthly Total
                         </th>
                       </tr>
@@ -71,7 +67,7 @@ export default function CoursePricingSection({
                           <td className="px-5 py-3.5 text-gray-600">
                             {row.feePerClass}
                           </td>
-                          <td className="px-5 py-3.5 font-semibold text-cyan-700">
+                          <td className="px-5 py-3.5 font-semibold text-brand-700">
                             {row.monthlyTotal}
                           </td>
                         </tr>

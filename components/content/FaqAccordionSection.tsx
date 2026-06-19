@@ -15,7 +15,7 @@ interface FaqAccordionSectionProps {
 function FaqAnswer({ answer }: { answer: unknown[] | string }) {
   if (typeof answer === "string") {
     return (
-      <p className="px-5 pb-4 pt-1 text-[14px] text-gray-600 leading-relaxed border-t border-gray-100">
+      <p className="border-t border-gray-100 px-5 pb-4 pt-1 text-sm-plus leading-relaxed text-gray-600">
         {answer}
       </p>
     );
@@ -24,7 +24,7 @@ function FaqAnswer({ answer }: { answer: unknown[] | string }) {
   if (!Array.isArray(answer) || answer.length === 0) return null;
 
   return (
-    <div className="px-6 pb-5 pt-1 text-[14px] text-gray-600 leading-relaxed border-t border-gray-50 prose prose-sm max-w-none">
+    <div className="prose prose-sm max-w-none border-t border-gray-50 px-6 pb-5 pt-1 text-sm-plus leading-relaxed text-gray-600">
       <PortableTextBody value={answer} />
     </div>
   );
@@ -40,20 +40,18 @@ export default function FaqAccordionSection({
   const ToggleIcon = icon === "chevron" ? ChevronRight : Plus;
 
   return (
-    <section className="bg-slate-50 py-16 sm:py-20">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6">
-        <div className="text-center mb-10">
-          <h2 className="font-bold text-[24px] sm:text-[30px] text-slate-900 tracking-[-0.02em]">
-            {heading}
-          </h2>
+    <section className="section-muted">
+      <div className="container-content">
+        <div className="mb-10 text-center">
+          <h2 className="heading-section">{heading}</h2>
         </div>
         <div className="space-y-3">
           {items.map((item, index) => (
             <details
               key={index}
-              className="group bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm"
+              className="group card-surface overflow-hidden"
             >
-              <summary className="flex items-center justify-between gap-4 px-6 py-5 cursor-pointer list-none font-semibold text-[15px] text-slate-900 hover:text-cyan-700 transition-colors">
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-6 py-5 text-base-plus font-semibold text-slate-900 transition-colors hover:text-brand-700">
                 {item.question}
                 <ToggleIcon
                   size={icon === "chevron" ? 15 : 16}

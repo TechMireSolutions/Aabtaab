@@ -1,0 +1,60 @@
+# dependencies upgrade
+
+> Upgrade dependencies and tech stack to latest compatible versions safely
+
+**Scope:** `{package.json,package-lock.json,.github/**,.nvmrc,ecosystem.config.cjs,server.config.cjs}`
+
+# Dependencies & Stack Upgrades
+
+**Goal:** Keep the stack on **latest stable, compatible** versions — not bleeding-edge canaries.
+
+Apply when upgrading deps, touching `package.json`, CI, or Node engine constraints.
+
+## Stack targets (keep aligned)
+
+| Layer | Target |
+|-------|--------|
+| Runtime | Node **24.17** (`.nvmrc`; `engines` ≥20.9) |
+| Framework | Next.js **16** (match `eslint-config-next`) |
+| UI | React **19** + React DOM **19** |
+| CMS | Sanity **6** + `next-sanity` + `@sanity/client` |
+| CSS | Tailwind **4** + `@tailwindcss/postcss` |
+| Language | TypeScript **6** (strict) |
+
+## Upgrade workflow
+
+1. **Audit:** `npm outdated` — list stale packages.
+2. **Preview:** `npx npm-check-updates` (no `-u` yet) — review major bumps.
+3. **Upgrade in groups:** framework → CMS → styling → dev tooling (not everything at once).
+4. **Install:** `npm install` — commit lockfile changes with the upgrade.
+5. **Security:** `npm audit` — use `npm audit fix`; never `--force` if it downgrades `next` or `sanity`.
+6. **Verify:** `npm run lint`, `npm run test`, then `npm run build` (Sanity env vars required).
+
+## Version policy
+
+- App dependencies: **`^`** semver range (not exact pins unless required).
+- Pin **only** when a known incompatibility exists — add a one-line comment in `package.json` or here.
+- Keep **`eslint-config-next`** version aligned with **`next`**.
+- Upgrade **peer-dependent** packages together (e.g. `@types/react` with `react`).
+
+## Known constraints (this repo)
+
+| Package | Constraint |
+|---------|------------|
+| **ESLint** | Stay on **v9.39.4** until `eslint-config-next` plugins support v10 (v10 tested — breaks `react/display-name` rule) |
+| **Sanity audit fixes** | Transitive `js-yaml`/`uuid` — do not downgrade Sanity to fix |
+| **Production port** | Change only `server.config.cjs` (`PRODUCTION_PORT = 3000`) |
+| **Studio** | `sanity`, `@sanity/vision`, `next-sanity` must stay on Sanity 6 matrix |
+
+## After upgrading
+
+- Update GitHub Actions pins in `.github/workflows/deploy.yml` (e.g. `appleboy/ssh-action`).
+- Run `npm run migrate:sanity:dry` if Sanity schema/field APIs changed.
+- Re-run `npm run sync:agents` only if agent config files changed — not for every dep bump.
+
+## Avoid
+
+- Mixing unrelated major upgrades in one change (hard to bisect failures).
+- Upgrading studio/CMS packages without checking Sanity 6 release notes.
+- Committing `.env`, tokens, or secrets.
+- Removing `package-lock.json` — always use lockfile-driven installs (`npm ci` on server).

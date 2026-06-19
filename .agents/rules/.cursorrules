@@ -1,49 +1,22 @@
-# AI System Prompt & Rules
+# Aabtaab Agent Rules (generated)
 
-You are an expert full-stack developer specialized in Next.js 15+, React 19, Tailwind CSS v4, Sanity CMS, and TypeScript.
-You prioritize clean, secure, performant, and highly aesthetic modern web applications.
+> **Do not edit.** Source: `.cursor/rules/` — run `npm run sync:agents`.
 
-## General Principles
-1. **Think Before Coding**: Analyze requirements and implications fully before making changes.
-2. **Concise Communication**: No fluff, no filler, no narration ("I will now...", "Let me..."). Provide the solution directly.
-3. **Iterative Process**: Build incrementally. Verify each step.
-4. **Clean Code**: Prioritize readability, modularity, and maintainability.
+Active rule files in this folder:
 
-## Next.js (App Router) & React 19 Best Practices
-1. **Server Components by Default**: All components should be Server Components (`RSC`) unless client-side interactivity or browser APIs are explicitly required.
-2. **Client/Server Boundaries**: Push `'use client'` directives as far down the component tree as possible (e.g., wrap a button in `'use client'` rather than the entire page).
-3. **React 19 Features**: 
-   - Prefer `useActionState` and native form actions (`action={myAction}`) over manual state management.
-   - Prefer the `use()` hook for consuming promises and contexts where appropriate over legacy patterns.
-   - Minimize use of `useEffect`.
-4. **Data Fetching**: 
-   - Fetch data on the server.
-   - Use Next.js caching APIs (`unstable_cache`, `revalidateTag`, `revalidatePath`) effectively to optimize performance while ensuring data freshness.
+- `00-project-core.md`
+- `01-nextjs-react.md`
+- `02-tailwind-design-system.md`
+- `03-sanity-cms.md`
+- `04-typescript-seo.md`
+- `05-dependencies-upgrade.md`
+- `06-file-structure.md`
+- `07-naming-policy.md`
+- `08-dry-policy.md`
 
-## Tailwind CSS v4 Best Practices
-1. **v4 Syntax**: Utilize the updated v4 configuration and features. Rely on CSS variables for theme definitions.
-2. **Utility Grouping**: Order utility classes logically: layout (display/position) -> spacing (margin/padding) -> typography -> visual (bg/border/shadow) -> interactive (hover/focus).
-3. **Responsive Design**: Ensure mobile-first development. Use standard breakpoints (`sm:`, `md:`, `lg:`, `xl:`).
+Skills: `.agents/skills/` (cache-revalidation, contact-form-api, content-sections, deploy-production, events-feature, github-ci-deploy, nested-catalog-routes, nextjs-react, sanity-cms, seo-metadata, sync-agent-config, tailwind-ui)
 
-## Website UI/UX & SEO Aesthetics
-1. **Dynamic & Premium Design**: Interfaces must feel responsive and alive. Utilize vibrant but curated color palettes, smooth gradients, and glassmorphism. Avoid generic default colors.
-2. **Micro-Animations**: Add subtle hover states, transition effects, and interactive micro-animations (e.g., button scale on hover, list item staggered entrances).
-3. **Typography**: Utilize modern, clean web fonts instead of browser defaults. Ensure strict heading hierarchy (one `h1` per page) and optimal line height for readability.
-4. **No Placeholders**: Never leave blank image placeholders. Generate working demonstration assets if needed.
-5. **SEO Built-In**: Include descriptive metadata, semantic HTML5 tags (e.g., `<article>`, `<section>`, `<nav>`), and unique descriptive IDs on interactive elements for accessibility and browser testing.
+**Canonical docs:** `techstack.md` (stack) → `.cursor/rules/` (standards) → `.cursor/skills/` (workflows).
 
-## Sanity CMS & Data Management
-1. **GROQ Queries**: Ensure all GROQ queries are strongly typed.
-2. **Caching Strategy**: Use Next.js `unstable_cache` around `client.fetch` for production builds, utilizing tags for granular on-demand webhook revalidation.
-3. **Error Handling**: Handle network failures gracefully in development mode (e.g., catching fetch errors to prevent Turbopack crashes).
-4. **Image Optimization**: Always leverage Next.js `<Image>` components with Sanity URLs. Configure `sizes` appropriately based on rendered viewport widths.
-
-## TypeScript & Clean Architecture
-1. **Strict Mode**: Ensure strict typing. Avoid `any`.
-2. **Interfaces**: Prefer `interface` over `type` for defining object shapes.
-3. **Colocation**: Keep components, hooks, utilities, and specific types closely colocated by feature domain.
-4. **Error Boundaries**: Implement global and local error boundaries to gracefully handle client and server errors.
-
-## Global User Rules Adherence
-- Adhere strictly to the `[user_global]` core response rules.
-- Maintain dense formatting, omit filler words, output structure (INPUT -> PROCESS SILENTLY -> FINAL OUTPUT), and never expose internal reasoning.
+**Caching policy:** use `sanityFetch` + `lib/cms/queries.ts`; `unstable_cache` lives only in `sanity/lib/fetch.ts`.
+**Styling:** `02-tailwind-design-system` — `brand-*` tokens, `@utility` in `globals.css`.

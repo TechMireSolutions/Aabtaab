@@ -1,0 +1,56 @@
+# typescript seo
+
+> TypeScript strictness, SEO, accessibility, and semantic HTML
+
+**Scope:** `**/*.{ts,tsx}`
+
+# TypeScript & SEO
+
+## TypeScript
+
+- `strict` mode — avoid `any`; prefer `interface` for object shapes.
+- Types live in `types/` by domain (`sanity.ts`, `course.ts`, `content-sections.ts`, `search.ts`).
+- Colocate only when truly local; reuse shared types before duplicating.
+
+## SEO & metadata
+
+- Site metadata: `app/layout.tsx` `generateMetadata`.
+- Pages: `defineCmsPageMetadata`, `buildPageMetadata`, `buildNestedSlugMetadata`, `buildPostPageMetadata`.
+- JSON-LD: `lib/seo/JsonLd.tsx` — use existing helpers (do not hand-roll schema).
+- Sitemap/robots: `app/sitemap.ts`, `app/robots.ts`.
+- Full SEO reference: **`techstack.md`** § SEO.
+
+## JSON-LD helpers (use these)
+
+| Helper | Use |
+|--------|-----|
+| Organization + WebSite | Root layout (every page) |
+| `ArticleJsonLd` | Post detail (+ optional FAQPage) |
+| `EventJsonLd` | Event detail |
+| `BreadcrumbJsonLd` | Nested course/service pages |
+| WebSite `SearchAction` | Points to `/search?q={search_term_string}` |
+
+## Search & index control
+
+- Unified search: `/search?q=…` — `noIndex: true` on result pages.
+- Legacy `/posts?q=…` redirects to `/search`.
+- CMS `seo.noIndex` on documents via `seoObject`.
+
+## HTML & a11y
+
+- One **`h1` per page**; logical heading hierarchy.
+- Semantic tags: `main`, `nav`, `section`, `article`, `header`, `footer`.
+- Skip link + `#main-content` (already in site layout).
+- Interactive elements: labels, `aria-*` where needed; 44px touch targets on mobile chrome (see `globals.css`).
+
+## Images & content
+
+- Meaningful `alt` on all content images.
+- No blank image placeholders in production UI — use CMS image or styled fallback block.
+- OG fallback: `public/og-default.png` when no CMS logo.
+
+## Avoid
+
+- Client-only metadata hacks.
+- Duplicate SEO title/description logic outside `lib/cms/page.ts` / `lib/seo/`.
+- Hardcoded site name when `getSiteSettings()` is available.

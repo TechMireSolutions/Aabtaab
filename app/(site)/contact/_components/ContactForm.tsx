@@ -28,9 +28,9 @@ function FormLabel({
   required?: boolean;
 }) {
   return (
-    <label className="block text-[12px] font-semibold text-slate-700 mb-1.5">
+    <label className="text-caption mb-1.5 block font-semibold text-slate-700">
       {children}
-      {required && <span className="text-red-500 ml-0.5">*</span>}
+      {required && <span className="ml-0.5 text-red-500">*</span>}
     </label>
   );
 }
@@ -72,6 +72,7 @@ export default function ContactForm({
           purpose,
           appliedFor: appliedFor || undefined,
           message: getValue("message"),
+          website: getValue("website"),
         }),
       });
 
@@ -89,13 +90,23 @@ export default function ContactForm({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
+        <label htmlFor="website">Website</label>
+        <input
+          id="website"
+          name="website"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <FormLabel required>First Name</FormLabel>
           <input
             name="firstName"
             required
-            className="w-full rounded-xl border border-gray-200 px-4 py-3 text-[15px] text-slate-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/30 focus:border-cyan-500"
+            className="input-field"
             placeholder="Your first name"
           />
         </div>
@@ -103,20 +114,20 @@ export default function ContactForm({
           <FormLabel>Last Name</FormLabel>
           <input
             name="lastName"
-            className="w-full rounded-xl border border-gray-200 px-4 py-3 text-[15px] text-slate-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/30 focus:border-cyan-500"
+            className="input-field"
             placeholder="Your last name"
           />
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <FormLabel required>Email</FormLabel>
           <input
             name="email"
             type="email"
             required
-            className="w-full rounded-xl border border-gray-200 px-4 py-3 text-[15px] text-slate-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/30 focus:border-cyan-500"
+            className="input-field"
             placeholder="you@example.com"
           />
         </div>
@@ -126,19 +137,19 @@ export default function ContactForm({
             name="phone"
             type="tel"
             required
-            className="w-full rounded-xl border border-gray-200 px-4 py-3 text-[15px] text-slate-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/30 focus:border-cyan-500"
+            className="input-field"
             placeholder="+1 234 567 8900"
           />
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <FormLabel required>Country</FormLabel>
           <input
             name="country"
             required
-            className="w-full rounded-xl border border-gray-200 px-4 py-3 text-[15px] text-slate-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/30 focus:border-cyan-500"
+            className="input-field"
             placeholder="Your country"
           />
         </div>
@@ -147,7 +158,7 @@ export default function ContactForm({
           <input
             name="city"
             required
-            className="w-full rounded-xl border border-gray-200 px-4 py-3 text-[15px] text-slate-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/30 focus:border-cyan-500"
+            className="input-field"
             placeholder="Your city"
           />
         </div>
@@ -171,9 +182,9 @@ export default function ContactForm({
                 setPurpose(value);
                 setAppliedFor("");
               }}
-              className={`rounded-xl border px-3 py-2.5 text-[13px] font-medium transition-colors ${
+              className={`rounded-xl border px-3 py-2.5 text-sm-plus font-medium transition-colors ${
                 purpose === value
-                  ? "border-cyan-600 bg-cyan-50 text-cyan-800"
+                  ? "border-brand-600 bg-brand-50 text-brand-800"
                   : "border-gray-200 text-slate-600 hover:border-gray-300"
               }`}
             >
@@ -192,7 +203,7 @@ export default function ContactForm({
             value={appliedFor}
             onChange={(e) => setAppliedFor(e.target.value)}
             required
-            className="w-full rounded-xl border border-gray-200 px-4 py-3 text-[15px] text-slate-900 focus:outline-none focus:ring-2 focus:ring-cyan-500/30 focus:border-cyan-500 bg-white"
+            className="input-field bg-white"
           >
             <option value="">Choose one…</option>
             {options.map((option) => (
@@ -210,7 +221,7 @@ export default function ContactForm({
           name="message"
           required
           rows={5}
-          className="w-full rounded-xl border border-gray-200 px-4 py-3 text-[15px] text-slate-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-500/30 focus:border-cyan-500 resize-y"
+          className="input-field resize-y"
           placeholder="How can we help you?"
         />
       </div>
@@ -218,18 +229,18 @@ export default function ContactForm({
       <button
         type="submit"
         disabled={status === "loading"}
-        className="w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-cyan-700 hover:bg-cyan-800 disabled:opacity-60 text-white font-semibold text-[15px] px-8 py-3.5 transition-colors"
+        className="btn-primary w-full justify-center disabled:opacity-60 sm:w-auto"
       >
         {status === "loading" ? "Sending…" : submitLabel}
       </button>
 
       {status === "success" && (
-        <p className="text-[14px] text-green-700 font-medium">
+        <p className="text-sm-plus font-medium text-green-700">
           Thank you! Your message has been sent successfully.
         </p>
       )}
       {status === "error" && (
-        <p className="text-[14px] text-red-600 font-medium">
+        <p className="text-sm-plus font-medium text-red-600">
           Something went wrong. Please try again or email us directly.
         </p>
       )}
