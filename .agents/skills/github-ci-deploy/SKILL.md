@@ -15,7 +15,7 @@ disable-model-invocation: true
 | File | Trigger | Purpose |
 |------|---------|---------|
 | `.github/workflows/ci.yml` | PR + push to `main` | lint, test, build, Playwright E2E |
-| `.github/workflows/deploy.yml` | push to `main` | SSH deploy to Hetzner |
+| `.github/workflows/deploy.yml` | after CI on `main` + manual | SSH deploy to Hetzner |
 
 ## CI pipeline (`ci.yml`)
 
@@ -30,21 +30,19 @@ CI env placeholders: `NEXT_PUBLIC_SANITY_PROJECT_ID=ci-placeholder`, `NEXT_PUBLI
 
 ## Deploy pipeline (`deploy.yml`)
 
-Remote SSH via `appleboy/ssh-action@v1.2.5`:
-
-1. `cd /var/www/aabtaab_next`
-2. `git fetch origin main && git reset --hard origin/main`
-3. `npm ci`
-4. `npm run build`
-5. `pm2 startOrRestart ecosystem.config.cjs --update-env && pm2 save`
+1. Verify secrets + validate SSH key (`ssh-keygen -y`)
+2. Write key to `~/.ssh/deploy_key`, deploy via `appleboy/ssh-action@v1.2.5` using `key_path`
+3. On server: `git pull`, `npm ci`, `npm run build`, `pm2 startOrRestart`
 
 ## Required GitHub secrets (deploy only)
 
 | Secret | Purpose |
 |--------|---------|
-| `SERVER_HOST` | VPS IP/hostname |
+| `SERVER_HOST` | VPS IP/hostname only (no `https://`) |
 | `SERVER_USER` | SSH user |
-| `SSH_PRIVATE_KEY` | Deploy key |
+| `SSH_PRIVATE_KEY` | Full **private** PEM key — `cat ~/.ssh/your_key` (not `.pub`) |
+
+If deploy logs show `ssh: no key found`, re-paste the entire private key including `-----BEGIN ... PRIVATE KEY-----` lines. Validate locally: `ssh-keygen -y -f ~/.ssh/your_key`.
 
 ## CI vs deploy gaps
 

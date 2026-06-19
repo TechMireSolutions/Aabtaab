@@ -16,7 +16,7 @@ jobs:
       github.event.workflow_run.conclusion == 'success'
 
     steps:
-      - name: Verify deploy secrets
+      - name: Verify deploy secrets and SSH key
         env:
           SERVER_HOST: ${{ secrets.SERVER_HOST }}
           SERVER_USER: ${{ secrets.SERVER_USER }}
@@ -29,18 +29,35 @@ jobs:
           if [ -n "$missing" ]; then
             echo "::error::Missing GitHub Actions secrets:$missing"
             echo "Add them at: Repository → Settings → Secrets and variables → Actions"
-            echo "See .cursor/skills/github-ci-deploy/SKILL.md for details."
             exit 1
           fi
+          if echo "$SERVER_HOST" | grep -qE '[[:space:]/]|^https?://'; then
+            echo "::error::SERVER_HOST must be an IP or hostname only (no https://, no spaces)"
+            exit 1
+          fi
+          if ! echo "$SSH_PRIVATE_KEY" | grep -q 'BEGIN.*PRIVATE KEY'; then
+            echo "::error::SSH_PRIVATE_KEY must be the full PEM private key (starts with -----BEGIN ... PRIVATE KEY-----)"
+            exit 1
+          fi
+          umask 077
+          mkdir -p ~/.ssh
+          printf '%s\n' "$SSH_PRIVATE_KEY" | tr -d '\r' > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          if ! ssh-keygen -y -f ~/.ssh/deploy_key > /dev/null 2>&1; then
+            echo "::error::SSH_PRIVATE_KEY is not a valid private key. Re-paste the full key from:"
+            echo "  cat ~/.ssh/your_deploy_key"
+            echo "Include -----BEGIN ... PRIVATE KEY----- through -----END ... PRIVATE KEY-----"
+            exit 1
+          fi
+          echo "SSH key format OK"
 
       - name: Deploy to Hetzner VPS via SSH
         uses: appleboy/ssh-action@v1.2.5
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          key_path: ~/.ssh/deploy_key
           port: 22
-          script_stop: true
           command_timeout: 30m
           script: |
             set -e
