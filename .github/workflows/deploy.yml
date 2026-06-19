@@ -1,20 +1,47 @@
 name: Deploy Aabtaab Website
 
+# Deploy only after CI passes on main (lint, test, build, E2E).
 on:
-  push:
-    branches:
-      - main # Agar developer ki main branch ka naam 'master' hai, toh woh yahan master likh dega
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      github.event.workflow_run.conclusion == 'success'
+
     steps:
+      - name: Verify deploy secrets
+        env:
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          missing=""
+          [ -z "$SERVER_HOST" ] && missing="$missing SERVER_HOST"
+          [ -z "$SERVER_USER" ] && missing="$missing SERVER_USER"
+          [ -z "$SSH_PRIVATE_KEY" ] && missing="$missing SSH_PRIVATE_KEY"
+          if [ -n "$missing" ]; then
+            echo "::error::Missing GitHub Actions secrets:$missing"
+            echo "Add them at: Repository → Settings → Secrets and variables → Actions"
+            echo "See .cursor/skills/github-ci-deploy/SKILL.md for details."
+            exit 1
+          fi
+
       - name: Deploy to Hetzner VPS via SSH
         uses: appleboy/ssh-action@v1.2.5
         with:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script_stop: true
+          command_timeout: 30m
           script: |
             set -e
             cd /var/www/aabtaab_next
