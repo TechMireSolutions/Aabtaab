@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import ActiveNavLink from "@/components/layout/ActiveNavLink";
+import NavLinks from "@/components/layout/NavLinks";
 import { DEFAULT_SITE_NAME } from "@/lib/constants";
 import type { NavItem } from "@/types/site-navigation";
 
@@ -139,15 +139,7 @@ export default function Header({
             </div>
 
             <nav className="max-h-[min(60vh,24rem)] overflow-y-auto px-3 py-3">
-              {navLinks.map((item) => (
-                <ActiveNavLink
-                  key={item.label}
-                  href={item.href}
-                  label={item.label}
-                  external={item.external}
-                  variant="mobile"
-                />
-              ))}
+              <NavLinks links={navLinks} variant="mobile" />
             </nav>
 
             <div className="border-t border-gray-100 px-4 py-4">
@@ -186,14 +178,7 @@ export default function Header({
         </Link>
 
         <nav className="hidden flex-1 items-center justify-center gap-7 lg:flex">
-          {navLinks.map((item) => (
-            <ActiveNavLink
-              key={item.label}
-              href={item.href}
-              label={item.label}
-              external={item.external}
-            />
-          ))}
+          <NavLinks links={navLinks} variant="desktop" />
         </nav>
 
         <form

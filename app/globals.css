@@ -248,7 +248,7 @@
 }
 
 @utility min-h-hero {
-  min-height: 480px;
+  min-height: clamp(20rem, 62dvh, 480px);
 }
 
 @utility min-h-hero-lg {

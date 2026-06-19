@@ -87,7 +87,7 @@ export default function Footer({
       }));
 
   return (
-    <footer className="bg-gray-50 border-t border-gray-200">
+    <footer className="section-deferred bg-gray-50 border-t border-gray-200">
       {/* ── Main body ── */}
       <div className="container-page py-6 sm:py-10 lg:py-12">
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-6 sm:gap-8 lg:gap-10">

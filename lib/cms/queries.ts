@@ -23,6 +23,8 @@ import {
   allServicePathsQuery,
   eventSlugsQuery,
   homepageDataQuery,
+  homepageHeroQuery,
+  homepageSectionsQuery,
 } from "@/sanity/lib/queries";
 import type { EventDetail, EventSummary } from "@/types/event";
 import type { CmsPageSummary, PostCardSummary } from "@/types/cms-page";
@@ -95,6 +97,63 @@ export const getSiteLayoutData = cache(async () => {
   ]);
 
   return { settings, headerNav, footerServices };
+});
+
+export const getHomepageHeroData = cache(async () => {
+  const data = await sanityFetch<{
+    homepage?: HomepageSettings | null;
+    settings?: Awaited<ReturnType<typeof fetchSiteSettingsUncached>> | null;
+  } | null>({
+    query: homepageHeroQuery,
+    tags: [CACHE_TAGS.homepage, CACHE_TAGS.siteSettings],
+    revalidate: 3600,
+  });
+
+  return {
+    homepage: data?.homepage ?? null,
+    settings: data?.settings ?? null,
+  };
+});
+
+export const getHomepageSectionsData = cache(async () => {
+  const data = await sanityFetch<{
+    featuredPosts?: HomePostSummary[] | null;
+    courses?: HomeCourseSummary[] | null;
+    services?: HomeServiceSummary[] | null;
+    homepage?: HomepageSettings | null;
+    testimonials?: Testimonial[] | null;
+    upcomingEvents?: EventSummary[] | null;
+  } | null>({
+    query: homepageSectionsQuery,
+    tags: [
+      CACHE_TAGS.posts,
+      CACHE_TAGS.courses,
+      CACHE_TAGS.services,
+      CACHE_TAGS.homepage,
+      CACHE_TAGS.events,
+    ],
+    revalidate: 3600,
+  });
+
+  if (!data) {
+    return {
+      posts: [] as HomePostSummary[],
+      services: [] as HomeServiceSummary[],
+      courses: [] as HomeCourseSummary[],
+      homepage: null as HomepageSettings | null,
+      testimonials: [] as Testimonial[],
+      upcomingEvents: [] as EventSummary[],
+    };
+  }
+
+  return {
+    posts: data.featuredPosts ?? [],
+    services: data.services ?? [],
+    courses: data.courses ?? [],
+    homepage: data.homepage ?? null,
+    testimonials: data.testimonials ?? [],
+    upcomingEvents: data.upcomingEvents ?? [],
+  };
 });
 
 export const getHomepageData = cache(async () => {
