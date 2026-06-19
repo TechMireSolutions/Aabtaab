@@ -22,7 +22,7 @@ export default function PageHeader({
   return (
     <div className="border-b border-gray-100 bg-white">
       <div
-        className={`${containerClass[maxWidth]} py-8 sm:py-12 ${
+        className={`${containerClass[maxWidth]} section-header-py ${
           centered ? "text-center" : ""
         }`}
       >

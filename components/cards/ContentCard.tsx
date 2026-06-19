@@ -41,7 +41,7 @@ export default function ContentCard({
               alt={title}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.06]"
+              className="hover-scale-image"
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-linear-to-br from-brand-50 via-brand-50 to-slate-100">

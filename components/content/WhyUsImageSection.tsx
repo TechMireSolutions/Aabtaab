@@ -25,7 +25,7 @@ export default function WhyUsImageSection({
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <div className="order-2 flex justify-center lg:order-1 lg:justify-start">
             {imageUrl ? (
-              <div className="relative aspect-square w-full max-w-sm overflow-hidden rounded-2xl border border-gray-100 shadow-sm">
+              <div className="media-frame">
                 <Image
                   src={imageUrl}
                   alt={imageAlt || heading || defaultHeading}
@@ -35,7 +35,7 @@ export default function WhyUsImageSection({
                 />
               </div>
             ) : (
-              <div className="flex aspect-square w-full max-w-sm items-center justify-center rounded-2xl border border-gray-200 bg-slate-50">
+              <div className="media-placeholder">
                 <span className="text-2xs text-gray-400">Add image in Studio</span>
               </div>
             )}
@@ -47,7 +47,7 @@ export default function WhyUsImageSection({
             <ul className="space-y-4">
               {items.map((item, index) => (
                 <li key={index} className="flex items-start gap-3">
-                  <div className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md border border-brand-100 bg-brand-50">
+                  <div className="check-icon-sm">
                     <Check
                       size={13}
                       className="text-brand-600"

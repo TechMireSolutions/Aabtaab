@@ -64,7 +64,7 @@ Pages **compose** — they do not reimplement markup:
 | Same JSX in **2+ pages** | New component in `components/content/` |
 | Same fetch + cache pattern | Add to `lib/cms/queries.ts` |
 | Same GROQ field projection | Add fragment to `fragments.ts` |
-| Same class string **3+ times** | Add `@utility` in `globals.css` |
+| Same class string **2+ times** | Add `@utility` in `globals.css` (see `02-tailwind-design-system`) |
 | Same fallback copy in 2+ pages | Move to `lib/fallbacks/` |
 
 ## When NOT to DRY (acceptable duplication)

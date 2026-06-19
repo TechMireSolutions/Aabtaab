@@ -54,7 +54,7 @@ export default function CourseHeroSection({
         <h1 className="text-hero mb-5 text-white">{title}</h1>
 
         {subtitle && (
-          <p className="mx-auto mb-10 max-w-2xl text-base-plus leading-relaxed text-slate-300 sm:text-lg-plus">
+          <p className="mx-auto mb-10 max-w-copy text-base-plus leading-relaxed text-slate-300 sm:text-lg-plus">
             {subtitle}
           </p>
         )}

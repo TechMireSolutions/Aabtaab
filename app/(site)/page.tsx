@@ -148,7 +148,7 @@ export default async function HomePage() {
             {/* Visual card */}
             <div className="relative pb-10">
               <div className="bg-slate-900 rounded-3xl p-8 sm:p-10 text-white relative overflow-hidden">
-                <div className="bg-hero-glow pointer-events-none absolute top-0 right-0 size-72 translate-x-[30%] -translate-y-[30%] rounded-full opacity-60" />
+                <div className="bg-hero-glow pointer-events-none absolute top-0 right-0 size-72 hero-glow-offset rounded-full opacity-60" />
                 <p
                   className="mb-3 text-center text-2xl font-light leading-relaxed text-gold-400 sm:text-3xl"
                   dir="rtl"
@@ -366,7 +366,7 @@ export default async function HomePage() {
       <section className="relative overflow-hidden bg-slate-50 border-y border-slate-200 py-10 sm:py-12">
         <div className="bg-dot-grid pointer-events-none absolute inset-0 opacity-40" />
 
-        <div className="container-content relative max-w-2xl text-center">
+        <div className="container-content relative max-w-copy text-center">
           <div className="text-eyebrow-gold mb-4 inline-flex items-center gap-2.5">
             <span className="eyebrow-line-gold w-6" />
             <span>في سبيل الله</span>

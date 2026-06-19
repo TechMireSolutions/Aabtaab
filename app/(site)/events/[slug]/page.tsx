@@ -110,7 +110,7 @@ export default async function EventDetailPage({
         </div>
 
         {mainImageUrl && (
-          <div className="relative mb-8 aspect-video w-full overflow-hidden rounded-xl shadow-sm sm:mb-10 sm:rounded-2xl">
+          <div className="media-hero mb-8 sm:mb-10">
             <Image
               src={mainImageUrl}
               alt={event.image?.alt ?? event.title}

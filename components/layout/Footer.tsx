@@ -128,7 +128,7 @@ export default function Footer({
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Facebook"
-                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-gray-400 hover:border-brand-400 hover:text-brand-500 transition-all duration-200"
+                  className="icon-btn-subtle"
                 >
                   <FacebookIcon />
                 </a>
@@ -139,7 +139,7 @@ export default function Footer({
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="YouTube"
-                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-gray-400 hover:border-brand-400 hover:text-brand-500 transition-all duration-200"
+                  className="icon-btn-subtle"
                 >
                   <YoutubeIcon />
                 </a>
@@ -149,7 +149,7 @@ export default function Footer({
                   href={settings.darulQuranUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-xs-plus font-medium text-gray-500 hover:text-brand-600 bg-white border border-gray-200 hover:border-brand-400 rounded-lg px-2 py-1 sm:px-2.5 sm:py-1.5 transition-all duration-200"
+                  className="chip-outline-sm"
                 >
                   Dar ul Quran <ExternalLink size={9} />
                 </a>

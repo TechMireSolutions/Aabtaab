@@ -28,7 +28,7 @@ export default async function DonatePage() {
   return (
     <div>
       <div className="border-b border-gray-100 bg-white">
-        <div className="container-narrow py-8 text-center sm:py-12">
+        <div className="container-narrow section-header-py text-center">
           <p className="mb-3 text-xl-plus leading-none text-brand-600 sm:text-2xl">
             {settings?.donateArabicVerse ||
               "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ"}
@@ -60,7 +60,7 @@ export default async function DonatePage() {
             {causes.map(({ title, description }, i) => (
               <div
                 key={title}
-                className="card-surface p-4 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md sm:p-5"
+                className="card-surface card-hover-lift p-4 sm:p-5"
               >
                 <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl border border-brand-100 bg-brand-50">
                   <span className="text-base-plus font-bold leading-none text-brand-600">

@@ -227,6 +227,14 @@
   @apply py-14 md:py-20;
 }
 
+@utility section-y-cta {
+  @apply py-16 sm:py-20;
+}
+
+@utility section-header-py {
+  @apply py-8 sm:py-12;
+}
+
 @utility h-header {
   height: var(--spacing-header);
 }
@@ -301,6 +309,10 @@
   max-width: var(--width-tagline);
 }
 
+@utility max-w-copy {
+  @apply max-w-2xl;
+}
+
 @utility w-hero-image {
   width: var(--width-hero-image);
 }
@@ -342,6 +354,10 @@
 
 @utility pb-fab-safe {
   padding-bottom: calc(5.5rem + env(safe-area-inset-bottom));
+}
+
+@utility hero-glow-offset {
+  @apply translate-x-[30%] -translate-y-[30%];
 }
 
 /* ── Typography ── */
@@ -438,6 +454,46 @@
 
 @utility card-interactive {
   @apply card-surface hover:-translate-y-2 hover:shadow-card-hover;
+}
+
+@utility card-hover-lift {
+  @apply transition-all duration-200 hover:-translate-y-0.5 hover:shadow-card-hover;
+}
+
+@utility table-shell {
+  @apply overflow-x-auto rounded-2xl border border-gray-200 shadow-card;
+}
+
+@utility media-frame {
+  @apply relative aspect-square w-full max-w-sm overflow-hidden rounded-2xl border border-gray-100 shadow-card;
+}
+
+@utility media-placeholder {
+  @apply flex aspect-square w-full max-w-sm items-center justify-center rounded-2xl border border-gray-200 bg-slate-50;
+}
+
+@utility media-hero {
+  @apply relative aspect-video w-full overflow-hidden rounded-xl shadow-card sm:rounded-2xl;
+}
+
+@utility icon-btn-subtle {
+  @apply flex size-7 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-400 transition-all duration-200 hover:border-brand-400 hover:text-brand-500 sm:size-8;
+}
+
+@utility chip-outline {
+  @apply flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm-plus font-medium text-gray-500 transition-colors hover:text-brand-600;
+}
+
+@utility chip-outline-sm {
+  @apply flex items-center gap-1 rounded-lg border border-gray-200 bg-white px-2 py-1 text-xs-plus font-medium text-gray-500 transition-all duration-200 hover:border-brand-400 hover:text-brand-600 sm:px-2.5 sm:py-1.5;
+}
+
+@utility check-icon-sm {
+  @apply mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-md border border-brand-100 bg-brand-50;
+}
+
+@utility hover-scale-image {
+  @apply object-cover transition-transform duration-500 ease-out group-hover:scale-105;
 }
 
 @utility input-field {

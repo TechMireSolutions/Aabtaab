@@ -101,7 +101,7 @@ export default async function PostDetailPage({
         </div>
 
         {mainImageUrl && (
-          <div className="relative mb-8 aspect-video w-full overflow-hidden rounded-xl shadow-sm sm:mb-10 sm:aspect-2/1 sm:rounded-2xl">
+          <div className="media-hero mb-8 sm:mb-10 sm:aspect-2/1">
             <Image
               src={mainImageUrl}
               alt={post.mainImage?.alt ?? post.title}

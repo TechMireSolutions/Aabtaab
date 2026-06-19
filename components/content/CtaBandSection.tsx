@@ -27,7 +27,7 @@ export default function CtaBandSection({
   const useAnchor = primaryExternal || primaryHref.startsWith("http");
 
   return (
-    <section className="bg-slate-900 py-16 sm:py-20">
+    <section className="section-y-cta bg-slate-900">
       <div className="container-content text-center">
         {heading && (
           <h2 className="heading-section-lg mb-4 text-white">{heading}</h2>

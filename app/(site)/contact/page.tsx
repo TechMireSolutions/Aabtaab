@@ -77,7 +77,7 @@ export default async function ContactPage() {
       <div className="section-muted">
         <div className="container-wide">
           {page?.body && (
-            <div className="prose prose-sm max-w-2xl mb-8 text-gray-700">
+            <div className="prose prose-sm mb-8 max-w-copy text-gray-700">
               <ProseSection value={page.body} variant="article" />
             </div>
           )}
@@ -125,7 +125,7 @@ export default async function ContactPage() {
                       href={settings.facebook}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-sm-plus font-medium text-gray-500 hover:text-brand-600 bg-white border border-gray-200 rounded-lg px-3 py-2 transition-colors"
+                      className="chip-outline"
                     >
                       <FacebookIcon size={13} /> Facebook
                     </a>
@@ -135,7 +135,7 @@ export default async function ContactPage() {
                       href={settings.youtube}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-sm-plus font-medium text-gray-500 hover:text-brand-600 bg-white border border-gray-200 rounded-lg px-3 py-2 transition-colors"
+                      className="chip-outline"
                     >
                       <YoutubeIcon size={13} /> YouTube
                     </a>

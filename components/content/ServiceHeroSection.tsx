@@ -41,7 +41,7 @@ export default function ServiceHeroSection({
           </p>
         )}
         {bodyText && (
-          <p className="mx-auto max-w-2xl text-base-plus leading-relaxed text-slate-300">
+          <p className="mx-auto max-w-copy text-base-plus leading-relaxed text-slate-300">
             {bodyText}
           </p>
         )}

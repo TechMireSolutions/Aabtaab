@@ -28,7 +28,7 @@ export default function CoursePricingSection({
                 </h3>
               )}
               {(pricingTable.rows?.length ?? 0) > 0 && (
-                <div className="overflow-x-auto rounded-2xl border border-gray-200 shadow-sm">
+                <div className="table-shell">
                   <table className="w-full border-collapse text-sm-plus">
                     <thead>
                       <tr className="bg-slate-800 text-white">
