@@ -14,33 +14,29 @@ export default function HowItWorksSection({
   if (steps.length === 0) return null;
 
   const containerClass =
-    maxWidth === "lg"
-      ? "max-w-3xl mx-auto px-4 sm:px-6 lg:px-8"
-      : "max-w-2xl mx-auto px-4 sm:px-6";
+    maxWidth === "lg" ? "container-narrow" : "container-content";
 
   return (
-    <section className="bg-cyan-50 py-16 sm:py-20">
+    <section className="section-y bg-brand-50">
       <div className={containerClass}>
-        <div className="text-center mb-12">
-          <h2 className="font-bold text-[24px] sm:text-[32px] text-slate-900 tracking-[-0.02em]">
-            {heading}
-          </h2>
+        <div className="mb-12 text-center">
+          <h2 className="heading-section-lg">{heading}</h2>
         </div>
         <ol className="space-y-4">
           {steps.map((step, index) => (
             <li
               key={index}
-              className="flex items-start gap-5 bg-white rounded-2xl px-6 py-5 border border-cyan-100 shadow-sm"
+              className="card-surface flex items-start gap-5 px-6 py-5"
             >
-              <span className="shrink-0 w-9 h-9 rounded-full bg-cyan-600 text-white text-[13px] font-bold flex items-center justify-center">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-600 text-sm-plus font-bold text-white">
                 {index + 1}
               </span>
               <div className="pt-0.5">
-                <span className="font-bold text-slate-900 text-[15px]">
+                <span className="text-base-plus font-bold text-slate-900">
                   {step.label}
                 </span>
                 {step.description && (
-                  <span className="text-gray-500 text-[14px]">
+                  <span className="text-sm-plus text-gray-500">
                     {" "}
                     — {step.description}
                   </span>

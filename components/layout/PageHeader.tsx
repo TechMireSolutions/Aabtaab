@@ -6,10 +6,10 @@ interface PageHeaderProps {
   maxWidth?: "md" | "lg" | "xl";
 }
 
-const maxWidthClass = {
-  md: "max-w-3xl",
-  lg: "max-w-5xl",
-  xl: "max-w-7xl",
+const containerClass = {
+  md: "container-content",
+  lg: "container-narrow",
+  xl: "container-page",
 } as const;
 
 export default function PageHeader({
@@ -20,29 +20,25 @@ export default function PageHeader({
   maxWidth = "xl",
 }: PageHeaderProps) {
   return (
-    <div className="bg-white border-b border-gray-100">
+    <div className="border-b border-gray-100 bg-white">
       <div
-        className={`${maxWidthClass[maxWidth]} mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 ${
+        className={`${containerClass[maxWidth]} py-8 sm:py-12 ${
           centered ? "text-center" : ""
         }`}
       >
         <p
-          className={`flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.18em] text-cyan-600 mb-3 ${
+          className={`text-eyebrow mb-3 flex items-center gap-2 ${
             centered ? "justify-center" : ""
           }`}
         >
-          <span className="w-5 h-px bg-cyan-400 inline-block" />
+          <span className="eyebrow-line" />
           {eyebrow}
-          {centered && <span className="w-5 h-px bg-cyan-400 inline-block" />}
+          {centered && <span className="eyebrow-line" />}
         </p>
-        <h1 className="font-bold text-[26px] sm:text-[30px] text-slate-900 tracking-[-0.02em] mb-2">
-          {title}
-        </h1>
+        <h1 className="heading-page mb-2">{title}</h1>
         {subtitle && (
           <p
-            className={`text-[13.5px] text-gray-500 leading-relaxed ${
-              centered ? "mx-auto" : "max-w-xl"
-            }`}
+            className={`text-lead ${centered ? "mx-auto" : "max-w-xl"}`}
           >
             {subtitle}
           </p>

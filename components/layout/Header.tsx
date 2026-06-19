@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useState, useEffect } from "react";
 import { Search, Menu, X } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
+import { DEFAULT_SITE_NAME } from "@/lib/constants";
 import type { NavItem } from "@/types/site-navigation";
 
 interface HeaderProps {
@@ -17,6 +18,7 @@ interface HeaderProps {
 const FALLBACK_NAV: NavItem[] = [
   { label: "Online Classes", href: "/online-courses" },
   { label: "Services", href: "/services" },
+  { label: "Events", href: "/events" },
   { label: "Articles", href: "/posts" },
   { label: "Donate", href: "/donate" },
   { label: "About", href: "/about" },
@@ -24,10 +26,10 @@ const FALLBACK_NAV: NavItem[] = [
 
 export default function Header({
   darulQuranUrl,
-  siteName = "Aabtaab",
+  siteName = DEFAULT_SITE_NAME,
   logoUrl,
   navItems,
-  searchPlaceholder = "Search articles…",
+  searchPlaceholder = "Search the site…",
 }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -68,7 +70,7 @@ export default function Header({
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
     if (query.trim()) {
-      router.push(`/posts?q=${encodeURIComponent(query.trim())}`);
+      router.push(`/search?q=${encodeURIComponent(query.trim())}`);
       setQuery("");
       setMenuOpen(false);
       setSearchOpen(false);
@@ -81,18 +83,32 @@ export default function Header({
       <header
         className={`sticky top-0 z-50 transition-all duration-300 ${
           scrolled
-            ? "bg-white/95 backdrop-blur-md shadow-[0_2px_20px_rgba(0,0,0,0.07)] border-b border-transparent"
+            ? "border-b border-transparent bg-white/95 shadow-header backdrop-blur-md"
             : "bg-white border-b border-gray-200"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 h-[68px] flex items-center gap-8">
+        <div className="container-page flex h-header items-center gap-2 lg:gap-8">
+          {/* Mobile menu — left */}
+          <button
+            type="button"
+            className="lg:hidden flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-gray-600 transition-colors hover:bg-gray-100"
+            onClick={() => {
+              setMenuOpen(true);
+              setSearchOpen(false);
+            }}
+            aria-label="Open menu"
+            aria-expanded={menuOpen}
+          >
+            <Menu size={20} />
+          </button>
+
           {/* Logo + site name */}
           <Link
             href="/"
             aria-label={siteName}
             className="shrink-0 flex items-center gap-3 group"
           >
-            <div className="w-[42px] h-[42px] rounded-full overflow-hidden border-2 border-cyan-400 shrink-0 transition-transform duration-200 group-hover:scale-105">
+            <div className="size-logo rounded-full overflow-hidden border-2 border-brand-400 shrink-0 transition-transform duration-200 group-hover:scale-105">
               {logoUrl ? (
                 <Image
                   src={logoUrl}
@@ -102,12 +118,12 @@ export default function Header({
                   className="object-cover w-full h-full"
                 />
               ) : (
-                <div className="w-full h-full bg-linear-to-br from-cyan-100 to-sky-100 flex items-center justify-center text-lg select-none">
+                <div className="w-full h-full bg-linear-to-br from-brand-100 to-brand-50 flex items-center justify-center text-lg select-none">
                   ⛵
                 </div>
               )}
             </div>
-            <span className="font-bold text-[17px] text-slate-900 tracking-[-0.02em] hidden md:block">
+            <span className="hidden text-lg-plus font-bold tracking-heading text-slate-900 md:block">
               {siteName}
             </span>
           </Link>
@@ -125,8 +141,8 @@ export default function Header({
                   href={href}
                   target={external ? "_blank" : undefined}
                   rel={external ? "noopener noreferrer" : undefined}
-                  className={`link-underline text-[13.5px] font-medium whitespace-nowrap transition-colors duration-150
-                    ${isActive ? "text-cyan-600 active" : "text-gray-600 hover:text-slate-900"}`}
+                  className={`link-underline text-sm-plus font-medium whitespace-nowrap transition-colors duration-150
+                    ${isActive ? "text-brand-600 active" : "text-gray-600 hover:text-slate-900"}`}
                 >
                   {label}
                 </Link>
@@ -139,7 +155,7 @@ export default function Header({
             {searchOpen ? (
               <form
                 onSubmit={handleSearch}
-                className="flex items-center rounded-full overflow-hidden border border-cyan-400 shadow-[0_0_0_3px_rgba(8,145,178,0.12)] animate-scale-in"
+                className="animate-scale-in flex items-center overflow-hidden rounded-full border border-brand-400 shadow-focus-brand"
               >
                 <input
                   autoFocus
@@ -150,12 +166,12 @@ export default function Header({
                     if (!query) setSearchOpen(false);
                   }}
                   placeholder={searchPlaceholder}
-                  className="px-4 py-2 text-[13px] outline-none w-[180px] text-slate-700 placeholder:text-gray-400 bg-white"
+                  className="w-search-input bg-white px-4 py-2 text-sm-plus text-slate-700 outline-none placeholder:text-gray-400"
                 />
                 <button
                   type="submit"
                   aria-label="Search"
-                  className="bg-cyan-500 hover:bg-cyan-600 transition-colors px-3 py-2 flex items-center self-stretch"
+                  className="btn-search-submit px-3 py-2"
                 >
                   <Search size={13} className="text-white" strokeWidth={2.5} />
                 </button>
@@ -164,36 +180,26 @@ export default function Header({
               <button
                 onClick={() => setSearchOpen(true)}
                 aria-label="Open search"
-                className="w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center text-gray-500 hover:border-cyan-400 hover:text-cyan-600 transition-all duration-200"
+                className="w-9 h-9 rounded-full border border-gray-200 flex items-center justify-center text-gray-500 hover:border-brand-400 hover:text-brand-600 transition-all duration-200"
               >
                 <Search size={15} strokeWidth={2} />
               </button>
             )}
           </div>
 
-          {/* Mobile: search + menu */}
-          <div className="lg:hidden ml-auto flex items-center gap-0.5">
+          {/* Mobile search */}
+          <div className="lg:hidden ml-auto flex items-center">
             <button
+              type="button"
               onClick={() => {
                 setSearchOpen((open) => !open);
                 setMenuOpen(false);
               }}
               aria-label="Open search"
               aria-expanded={searchOpen}
-              className="w-11 h-11 flex items-center justify-center rounded-full text-gray-600 hover:bg-gray-100 transition-colors"
+              className="flex h-11 w-11 items-center justify-center rounded-full text-gray-600 transition-colors hover:bg-gray-100"
             >
               <Search size={20} />
-            </button>
-            <button
-              className="w-11 h-11 flex items-center justify-center rounded-full text-gray-600 hover:bg-gray-100 transition-colors"
-              onClick={() => {
-                setMenuOpen(true);
-                setSearchOpen(false);
-              }}
-              aria-label="Open menu"
-              aria-expanded={menuOpen}
-            >
-              <Menu size={20} />
             </button>
           </div>
         </div>
@@ -210,12 +216,12 @@ export default function Header({
                 onChange={(e) => setQuery(e.target.value)}
                 placeholder={searchPlaceholder}
                 aria-label="Search articles"
-                className="flex-1 border border-gray-200 rounded-xl px-4 py-3 text-base outline-none focus:border-cyan-400 focus:ring-2 focus:ring-cyan-400/20"
+                className="input-field flex-1 rounded-xl border-gray-200 focus:border-brand-400 focus:ring-brand-400/20"
               />
               <button
                 type="submit"
                 aria-label="Search"
-                className="w-11 h-11 flex items-center justify-center rounded-xl bg-cyan-500 text-white hover:bg-cyan-600"
+                className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-500 text-white transition-colors hover:bg-brand-600"
               >
                 <Search size={16} strokeWidth={2.5} />
               </button>
@@ -227,16 +233,16 @@ export default function Header({
       {/* ── Mobile menu ── */}
       <div
         onClick={() => setMenuOpen(false)}
-        className={`fixed inset-0 z-[60] bg-slate-900/50 backdrop-blur-sm lg:hidden
+        className={`fixed inset-0 z-drawer-overlay bg-slate-900/50 backdrop-blur-sm lg:hidden
           transition-opacity duration-300
           ${menuOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}
       />
 
-      {/* Slide-in panel (from right) */}
+      {/* Slide-in panel (from left) */}
       <div
-        className={`fixed top-0 right-0 bottom-0 w-[300px] z-[70] bg-white lg:hidden flex flex-col
-        shadow-2xl transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]
-        ${menuOpen ? "translate-x-0" : "translate-x-full"}`}
+        className={`fixed top-0 left-0 bottom-0 w-mobile-drawer z-drawer bg-white lg:hidden flex flex-col
+        shadow-2xl transition-transform duration-300 ease-drawer
+        ${menuOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
         {/* Panel header */}
         <div className="flex items-center justify-between px-6 py-5 border-b border-gray-100 shrink-0">
@@ -245,7 +251,7 @@ export default function Header({
             onClick={() => setMenuOpen(false)}
             className="flex items-center gap-2.5"
           >
-            <div className="w-[40px] h-[40px] rounded-full overflow-hidden border-2 border-cyan-400">
+            <div className="size-logo rounded-full overflow-hidden border-2 border-brand-400">
               {logoUrl ? (
                 <Image
                   src={logoUrl}
@@ -255,12 +261,12 @@ export default function Header({
                   className="object-cover w-full h-full"
                 />
               ) : (
-                <div className="w-full h-full bg-linear-to-br from-cyan-100 to-sky-100 flex items-center justify-center select-none">
+                <div className="w-full h-full bg-linear-to-br from-brand-100 to-brand-50 flex items-center justify-center select-none">
                   ⛵
                 </div>
               )}
             </div>
-            <span className="font-bold text-[16px] text-slate-900 tracking-[-0.02em]">
+            <span className="text-base font-bold tracking-heading text-slate-900">
               {siteName}
             </span>
           </Link>
@@ -287,10 +293,10 @@ export default function Header({
                 target={external ? "_blank" : undefined}
                 rel={external ? "noopener noreferrer" : undefined}
                 onClick={() => setMenuOpen(false)}
-                className={`flex items-center px-3 py-3 rounded-xl text-[14.5px] font-medium transition-all duration-150 mb-0.5
+                className={`mb-0.5 flex items-center rounded-xl px-3 py-3 text-sm-plus font-medium transition-all duration-150
                   ${
                     isActive
-                      ? "bg-cyan-50 text-cyan-700"
+                      ? "bg-brand-50 text-brand-700"
                       : "text-gray-700 hover:bg-gray-50 hover:text-slate-900"
                   }`}
               >
@@ -304,7 +310,7 @@ export default function Header({
         <div className="px-5 pb-8 pt-3 border-t border-gray-100 shrink-0">
           <form
             onSubmit={handleSearch}
-            className="flex items-center border border-gray-200 rounded-xl overflow-hidden focus-within:border-cyan-500 focus-within:shadow-[0_0_0_3px_rgba(8,145,178,0.12)] transition-all duration-200"
+            className="flex items-center overflow-hidden rounded-xl border border-gray-200 transition-all duration-200 focus-within:border-brand-500 focus-within:shadow-focus-brand"
           >
             <input
               type="search"
@@ -319,7 +325,7 @@ export default function Header({
             <button
               type="submit"
               aria-label="Search"
-              className="bg-cyan-500 hover:bg-cyan-600 transition-colors px-4 py-3 flex items-center self-stretch min-w-[44px]"
+              className="btn-search-submit min-touch px-4 py-3"
             >
               <Search size={14} className="text-white" strokeWidth={2.5} />
             </button>

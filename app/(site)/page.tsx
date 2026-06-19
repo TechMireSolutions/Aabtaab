@@ -1,33 +1,21 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
-import { sanityFetch, CACHE_TAGS, fetchSiteSettings } from "@/sanity/lib/fetch";
 import { buildPageMetadata } from "@/lib/seo";
+import { resolveSiteName } from "@/lib/constants";
+import { getHomepageData } from "@/lib/cms/queries";
+import { formatEventDateRange } from "@/lib/cms/event";
 import { urlFor } from "@/sanity/lib/image";
-import {
-  featuredPostsQuery,
-  topLevelServicesQuery,
-  topLevelCoursesQuery,
-  homepageSettingsQuery,
-  testimonialsQuery,
-} from "@/sanity/lib/queries";
 import HeroSection from "@/components/sections/HeroSection";
 import CarouselSection, {
   CarouselItem,
 } from "@/components/sections/CarouselSection";
 import ContentCard from "@/components/cards/ContentCard";
-import type {
-  HomeCourseSummary,
-  HomePostSummary,
-  HomeServiceSummary,
-  HomepageSettings,
-  Testimonial,
-} from "@/types/homepage";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const settings = await fetchSiteSettings();
+  const { settings } = await getHomepageData();
   return buildPageMetadata({
-    title: settings?.siteName || "Aabtaab",
+    title: resolveSiteName(settings),
     description:
       settings?.description ||
       "Shia Islamic knowledge, online courses, and community services for Muslims worldwide.",
@@ -37,33 +25,15 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const [posts, services, courses, hp, testimonials] = await Promise.all([
-    sanityFetch<HomePostSummary[]>({
-      query: featuredPostsQuery,
-      tags: [CACHE_TAGS.posts],
-      revalidate: 3600,
-    }),
-    sanityFetch<HomeServiceSummary[]>({
-      query: topLevelServicesQuery,
-      tags: [CACHE_TAGS.services],
-      revalidate: 3600,
-    }),
-    sanityFetch<HomeCourseSummary[]>({
-      query: topLevelCoursesQuery,
-      tags: [CACHE_TAGS.courses],
-      revalidate: 3600,
-    }),
-    sanityFetch<HomepageSettings>({
-      query: homepageSettingsQuery,
-      tags: [CACHE_TAGS.homepage],
-      revalidate: 3600,
-    }),
-    sanityFetch<Testimonial[]>({
-      query: testimonialsQuery,
-      tags: [CACHE_TAGS.all],
-      revalidate: 3600,
-    }),
-  ]);
+  const {
+    posts,
+    services,
+    courses,
+    homepage: hp,
+    testimonials,
+    upcomingEvents,
+    settings,
+  } = await getHomepageData();
 
   const heroImageUrl = hp?.heroImage
     ? urlFor(hp.heroImage).width(1400).height(800).url()
@@ -96,14 +66,32 @@ export default async function HomePage() {
     ctaLabel: "Book Now",
   }));
 
+  const eventItems: CarouselItem[] = (upcomingEvents ?? [])
+    .slice(0, 6)
+    .map((event) => ({
+      id: event._id,
+      image: event.image
+        ? urlFor(event.image).width(600).height(450).url()
+        : null,
+      title: event.title,
+      description: formatEventDateRange(event.startDate, event.endDate),
+      href: `/events/${event.slug.current}`,
+      badge: event.city || null,
+      ctaLabel: "View Event",
+    }));
+
   return (
     <>
       {/* ── Hero ── */}
       <HeroSection
+        siteName={resolveSiteName(settings)}
         subtitle={hp?.heroArabicText || undefined}
         title={hp?.heroTitle ? hp.heroTitle.replace(/\\n/g, "\n") : undefined}
         description={hp?.heroSubtitle || undefined}
         heroImage={heroImageUrl}
+        heroImageAlt={
+          hp?.heroTitle?.replace(/\\n/g, " ") || resolveSiteName(settings)
+        }
         cta1Label={hp?.heroCta1Label || undefined}
         cta1Link={hp?.heroCta1Link || undefined}
         cta2Label={hp?.heroCta2Label || undefined}
@@ -111,32 +99,25 @@ export default async function HomePage() {
       />
 
       {/* ── About Us ── */}
-      <section className="relative py-14 md:py-20 bg-white overflow-hidden border-b border-gray-100">
-        <div
-          className="absolute inset-0 opacity-30 pointer-events-none"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle, #dde5ef 1px, transparent 1px)",
-            backgroundSize: "28px 28px",
-          }}
-        />
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="relative section-y-xl overflow-hidden border-b border-gray-100 bg-white">
+        <div className="bg-dot-grid pointer-events-none absolute inset-0 opacity-30" />
+        <div className="container-page relative">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             {/* Text */}
             <div>
-              <p className="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.18em] text-cyan-600 mb-3">
-                <span className="w-6 h-px bg-cyan-400 inline-block" />
+              <p className="text-eyebrow mb-3 flex items-center gap-2">
+                <span className="eyebrow-line" />
                 {hp?.aboutEyebrow || "Who We Are"}
               </p>
-              <h2 className="font-bold text-[26px] sm:text-[32px] text-slate-900 leading-tight tracking-[-0.02em] mb-4">
+              <h2 className="heading-section-lg mb-4">
                 {hp?.aboutHeading ||
                   "Bringing Shia Islamic Knowledge to Every Corner of the World"}
               </h2>
-              <p className="text-[14px] text-gray-500 leading-relaxed mb-4">
+              <p className="text-body-muted mb-4">
                 {hp?.aboutBody1 ||
                   "Aabtaab was founded with a single purpose — to make authentic Shia Islamic education and religious services accessible to every Muslim, regardless of location or background."}
               </p>
-              <p className="text-[14px] text-gray-500 leading-relaxed mb-7">
+              <p className="text-body-muted mb-7">
                 {hp?.aboutBody2 ||
                   "Through online courses taught by qualified scholars, and services like Niyabat Ziarat and Ijara performed with sincerity, we proudly serve thousands of families across the globe."}
               </p>
@@ -147,20 +128,14 @@ export default async function HomePage() {
                 ).map((pillar: string) => (
                   <span
                     key={pillar}
-                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-cyan-50 border border-cyan-100 text-[12px] font-semibold text-cyan-700"
+                    className="badge-pill inline-flex items-center gap-1.5 normal-case tracking-normal text-sm-plus font-semibold px-3.5 py-1.5"
                   >
-                    <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 shrink-0" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-brand-500 shrink-0" />
                     {pillar}
                   </span>
                 ))}
               </div>
-              <Link
-                href="/about"
-                className="group inline-flex items-center gap-2 bg-cyan-600 hover:bg-cyan-700 text-white
-                  text-[13px] font-semibold px-6 py-2.5 rounded-full
-                  shadow-[0_4px_16px_rgba(8,145,178,0.3)] hover:shadow-[0_6px_22px_rgba(8,145,178,0.45)]
-                  transition-all duration-200 hover:-translate-y-px"
-              >
+              <Link href="/about" className="btn-primary group">
                 {hp?.aboutCtaLabel || "Learn About Us"}
                 <ArrowRight
                   size={13}
@@ -173,28 +148,21 @@ export default async function HomePage() {
             {/* Visual card */}
             <div className="relative pb-10">
               <div className="bg-slate-900 rounded-3xl p-8 sm:p-10 text-white relative overflow-hidden">
-                <div
-                  className="absolute top-0 right-0 w-72 h-72 rounded-full pointer-events-none opacity-20"
-                  style={{
-                    background:
-                      "radial-gradient(circle, rgba(8,145,178,0.6) 0%, transparent 70%)",
-                    transform: "translate(30%, -30%)",
-                  }}
-                />
+                <div className="bg-hero-glow pointer-events-none absolute top-0 right-0 size-72 translate-x-[30%] -translate-y-[30%] rounded-full opacity-60" />
                 <p
-                  className="text-center text-[28px] sm:text-[32px] leading-relaxed text-amber-400 font-light mb-3"
+                  className="mb-3 text-center text-2xl font-light leading-relaxed text-gold-400 sm:text-3xl"
                   dir="rtl"
                 >
                   {hp?.aboutHadithArabic || "اطلبوا العلم من المهد إلى اللحد"}
                 </p>
-                <div className="w-10 h-px bg-amber-400/40 mx-auto mb-3" />
-                <p className="text-center text-[13px] text-gray-400 italic leading-relaxed">
+                <div className="eyebrow-line-gold mx-auto mb-3 w-10" />
+                <p className="text-center text-sm-plus italic leading-relaxed text-gray-400">
                   &quot;
                   {hp?.aboutHadithTranslation ||
                     "Seek knowledge from the cradle to the grave."}
                   &quot;
                 </p>
-                <p className="text-center text-[11px] text-amber-500 font-semibold mt-2 tracking-wide">
+                <p className="text-caption mt-2 text-center font-semibold tracking-wide text-gold-500">
                   —{" "}
                   {hp?.aboutHadithAttribution || "Prophet Muhammad (S.A.W.W.)"}
                 </p>
@@ -214,10 +182,10 @@ export default async function HomePage() {
                     },
                   ].map((s) => (
                     <div key={s.label} className="text-center">
-                      <p className="text-[22px] font-bold text-white leading-none">
+                      <p className="text-xl-plus leading-none font-bold text-white">
                         {s.value}
                       </p>
-                      <p className="text-[11px] text-gray-400 mt-1">
+                      <p className="text-caption mt-1">
                         {s.label}
                       </p>
                     </div>
@@ -226,17 +194,15 @@ export default async function HomePage() {
               </div>
 
               {/* Floating badge */}
-              <div className="absolute bottom-0 left-6 bg-white border border-gray-200 rounded-2xl px-4 py-3 shadow-lg flex items-center gap-3">
-                <div className="w-9 h-9 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center shrink-0">
-                  <span className="text-emerald-600 font-bold text-[16px]">
-                    ✓
-                  </span>
+              <div className="card-surface absolute bottom-0 left-6 flex items-center gap-3 px-4 py-3">
+                <div className="badge-trust">
+                  ✓
                 </div>
                 <div>
-                  <p className="text-[12px] font-semibold text-slate-800">
+                  <p className="text-xs font-semibold text-slate-800">
                     {hp?.aboutBadgeText || "Qualified Scholars"}
                   </p>
-                  <p className="text-[11px] text-gray-400">
+                  <p className="text-caption">
                     {hp?.aboutBadgeSubtext || "Certified & trusted"}
                   </p>
                 </div>
@@ -278,28 +244,41 @@ export default async function HomePage() {
         />
       )}
 
+      {/* ── Upcoming Events ── */}
+      {eventItems.length > 0 && (
+        <CarouselSection
+          eyebrow="Community"
+          title="Upcoming Events"
+          subtitle="Majalis, programs, and gatherings for the Ummah"
+          items={eventItems}
+          viewAllHref="/events"
+          viewAllLabel="All Events"
+          bg="white"
+        />
+      )}
+
       {/* ── Latest Articles ── */}
       {(posts?.length ?? 0) > 0 && (
-        <section className="py-10 md:py-16 border-b border-gray-100 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="section-y-lg border-b border-gray-100 bg-white">
+          <div className="container-page">
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-7 sm:mb-10">
               <div>
-                <p className="flex items-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.18em] text-cyan-600 mb-2">
-                  <span className="w-6 h-px bg-cyan-400 inline-block" />
+                <p className="text-eyebrow mb-2 flex items-center gap-2">
+                  <span className="eyebrow-line" />
                   Knowledge
                 </p>
-                <h2 className="font-bold text-[24px] sm:text-[27px] text-slate-900 leading-tight tracking-[-0.02em]">
+                <h2 className="heading-section">
                   {hp?.articlesHeading || "Latest Articles"}
                 </h2>
                 {hp?.articlesSubheading && (
-                  <p className="text-[13px] text-gray-500 mt-1.5">
+                  <p className="text-body-muted mt-1.5">
                     {hp.articlesSubheading}
                   </p>
                 )}
               </div>
               <Link
                 href="/posts"
-                className="group inline-flex items-center gap-1.5 text-[13px] font-semibold text-cyan-600 hover:text-cyan-700 transition-colors shrink-0 sm:ml-6"
+                className="link-brand group inline-flex shrink-0 items-center gap-1.5 sm:ml-6"
               >
                 View all
                 <ArrowRight
@@ -332,15 +311,15 @@ export default async function HomePage() {
 
       {/* ── Testimonials ── */}
       {(testimonials?.length ?? 0) > 0 && (
-        <section className="py-12 md:py-16 bg-slate-50 border-b border-gray-100">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="section-y-lg border-b border-gray-100 bg-slate-50">
+          <div className="container-page">
             <div className="text-center mb-10">
-              <p className="flex items-center justify-center gap-2 text-[10.5px] font-bold uppercase tracking-[0.18em] text-cyan-600 mb-3">
-                <span className="w-6 h-px bg-cyan-400 inline-block" />
+              <p className="text-eyebrow mb-3 flex items-center justify-center gap-2">
+                <span className="eyebrow-line" />
                 {hp?.testimonialsEyebrow || "Community"}
-                <span className="w-6 h-px bg-cyan-400 inline-block" />
+                <span className="eyebrow-line" />
               </p>
-              <h2 className="font-bold text-[24px] sm:text-[28px] text-slate-900 leading-tight tracking-[-0.02em]">
+              <h2 className="heading-section">
                 {hp?.testimonialsHeading || "What Our Community Says"}
               </h2>
             </div>
@@ -348,32 +327,32 @@ export default async function HomePage() {
               {(testimonials ?? []).map((t) => (
                 <div
                   key={t.name}
-                  className="bg-white rounded-2xl border border-gray-100 shadow-sm px-6 py-6 flex flex-col"
+                  className="card-surface flex flex-col px-6 py-6"
                 >
                   <div className="flex gap-0.5 mb-4">
                     {Array.from({ length: 5 }).map((_, i) => (
                       <span
                         key={i}
-                        className="text-amber-400 text-[15px] leading-none"
+                        className="text-base-plus leading-none text-gold-400"
                       >
                         ★
                       </span>
                     ))}
                   </div>
-                  <p className="text-[13.5px] text-gray-600 leading-relaxed flex-1 mb-5">
+                  <p className="text-body-muted flex-1 mb-5 text-gray-600">
                     &quot;{t.quote}&quot;
                   </p>
                   <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
-                    <div className="w-9 h-9 rounded-full bg-cyan-100 flex items-center justify-center shrink-0">
-                      <span className="text-[14px] font-bold text-cyan-700">
+                    <div className="w-9 h-9 rounded-full bg-brand-100 flex items-center justify-center shrink-0">
+                      <span className="text-sm-plus font-bold text-brand-700">
                         {t.name[0]}
                       </span>
                     </div>
                     <div>
-                      <p className="text-[13px] font-semibold text-slate-800">
+                      <p className="text-sm-plus font-semibold text-slate-800">
                         {t.name}
                       </p>
-                      <p className="text-[11.5px] text-gray-400">{t.role}</p>
+                      <p className="text-caption">{t.role}</p>
                     </div>
                   </div>
                 </div>
@@ -385,59 +364,44 @@ export default async function HomePage() {
 
       {/* ── Donate CTA ── */}
       <section className="relative overflow-hidden bg-slate-50 border-y border-slate-200 py-10 sm:py-12">
-        <div
-          className="absolute inset-0 opacity-40 pointer-events-none"
-          style={{
-            backgroundImage:
-              "radial-gradient(circle, #cbd5e1 1px, transparent 1px)",
-            backgroundSize: "24px 24px",
-          }}
-        />
+        <div className="bg-dot-grid pointer-events-none absolute inset-0 opacity-40" />
 
-        <div className="relative max-w-2xl mx-auto px-4 sm:px-6 text-center">
-          <div className="inline-flex items-center gap-2.5 mb-4">
-            <span className="w-6 h-px bg-amber-400" />
-            <span className="text-[9.5px] font-bold uppercase tracking-[0.28em] text-amber-600">
-              في سبيل الله
-            </span>
-            <span className="w-6 h-px bg-amber-400" />
+        <div className="container-content relative max-w-2xl text-center">
+          <div className="text-eyebrow-gold mb-4 inline-flex items-center gap-2.5">
+            <span className="eyebrow-line-gold w-6" />
+            <span>في سبيل الله</span>
+            <span className="eyebrow-line-gold w-6" />
           </div>
 
-          <h2 className="font-bold text-[28px] lg:text-[34px] text-slate-900 leading-tight tracking-[-0.02em] mb-3">
+          <h2 className="heading-section-lg mb-3">
             {hp?.donateHeading || "Support Our Mission"}
           </h2>
 
-          <p className="text-[13.5px] text-gray-500 leading-relaxed mb-6 max-w-sm mx-auto">
+          <p className="text-body-muted mb-6 max-w-sm mx-auto">
             {hp?.donateText ||
               "Your Sadqah and donations help us continue spreading the teachings of Ahlul Bayt (A.S.)"}
           </p>
 
-          <div className="relative max-w-lg mx-auto mb-7 bg-white border border-slate-200 rounded-xl px-6 py-5 shadow-sm">
-            <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 w-7 h-7 bg-white border border-slate-200 rounded-full flex items-center justify-center">
-              <span className="text-amber-500 text-[15px] font-bold leading-none">
+          <div className="card-quote">
+            <div className="absolute -top-3.5 left-1/2 flex size-7 -translate-x-1/2 items-center justify-center rounded-full border border-slate-200 bg-white">
+              <span className="text-base-plus font-bold leading-none text-gold-500">
                 &ldquo;
               </span>
             </div>
-            <p className="text-[13.5px] text-slate-600 italic leading-relaxed">
+            <p className="text-body-muted italic text-slate-600">
               {hp?.donateQuote ||
                 "Sadaqah extinguishes the Lord's anger and wards off an evil death."}
             </p>
             <div className="mt-3 flex items-center justify-center gap-2">
-              <span className="w-5 h-px bg-amber-300" />
-              <cite className="not-italic text-[11px] font-semibold text-amber-600 tracking-wide">
+              <span className="eyebrow-line-gold w-5" />
+              <cite className="text-caption not-italic font-semibold tracking-wide text-gold-600">
                 {hp?.donateQuoteAttribution || "Imam Sadiq (A.S.)"}
               </cite>
-              <span className="w-5 h-px bg-amber-300" />
+              <span className="eyebrow-line-gold w-5" />
             </div>
           </div>
 
-          <Link
-            href="/donate"
-            className="group inline-flex items-center gap-2 bg-cyan-600 hover:bg-cyan-700 text-white
-              text-[13px] font-semibold px-7 py-2.5 rounded-full
-              shadow-[0_4px_16px_rgba(8,145,178,0.3)] hover:shadow-[0_6px_22px_rgba(8,145,178,0.45)]
-              transition-all duration-200 hover:-translate-y-px"
-          >
+          <Link href="/donate" className="btn-primary group">
             {hp?.donateCtaLabel || "Donate Now"}
             <ArrowRight
               size={13}

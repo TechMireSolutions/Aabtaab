@@ -1,17 +1,15 @@
-import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/fetch";
-import {
-  allCoursesForFormQuery,
-  allServicesForFormQuery,
-} from "@/sanity/lib/queries";
 import { Mail, Phone, MessageCircle, MapPin } from "lucide-react";
 import ContactForm from "./_components/ContactForm";
 import PageHeader from "@/components/layout/PageHeader";
 import ProseSection from "@/components/portable-text/ProseSection";
 import { FacebookIcon, YoutubeIcon } from "@/components/icons/SocialIcons";
 import { defineCmsPageMetadata } from "@/lib/cms/page";
-import { getCmsPage, getSiteSettings } from "@/lib/cms/queries";
+import {
+  getCmsPage,
+  getContactFormOptions,
+  getSiteSettings,
+} from "@/lib/cms/queries";
 import { whatsappUrl } from "@/lib/urls";
-import type { ContactFormOption } from "@/types/contact";
 
 export const generateMetadata = defineCmsPageMetadata("contact", {
   path: "/contact",
@@ -21,20 +19,13 @@ export const generateMetadata = defineCmsPageMetadata("contact", {
 });
 
 export default async function ContactPage() {
-  const [settings, page, courses, services] = await Promise.all([
+  const [settings, page, formOptions] = await Promise.all([
     getSiteSettings(),
     getCmsPage("contact"),
-    sanityFetch<ContactFormOption[]>({
-      query: allCoursesForFormQuery,
-      tags: [CACHE_TAGS.courses],
-      revalidate: 3600,
-    }),
-    sanityFetch<ContactFormOption[]>({
-      query: allServicesForFormQuery,
-      tags: [CACHE_TAGS.services],
-      revalidate: 3600,
-    }),
+    getContactFormOptions(),
   ]);
+
+  const { courses, services } = formOptions;
 
   const contactItems = [
     settings?.email && {
@@ -83,8 +74,8 @@ export default async function ContactPage() {
         }
       />
 
-      <div className="py-8 sm:py-12 bg-slate-50/40">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section-muted">
+        <div className="container-wide">
           {page?.body && (
             <div className="prose prose-sm max-w-2xl mb-8 text-gray-700">
               <ProseSection value={page.body} variant="article" />
@@ -92,22 +83,21 @@ export default async function ContactPage() {
           )}
 
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-8 items-start">
-            {/* Contact info */}
             <div className="lg:col-span-2 space-y-3">
               {contactItems.map(({ Icon, label, value, href }) => (
                 <div
                   key={label}
-                  className="flex items-start gap-3 sm:gap-3.5 bg-white border border-gray-100 rounded-xl px-4 py-3.5 shadow-sm"
+                  className="card-contact"
                 >
-                  <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-cyan-50 border border-cyan-100 flex items-center justify-center shrink-0">
+                  <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-brand-50 border border-brand-100 flex items-center justify-center shrink-0">
                     <Icon
                       size={14}
-                      className="text-cyan-600"
+                      className="text-brand-600"
                       strokeWidth={1.75}
                     />
                   </div>
                   <div className="min-w-0">
-                    <p className="text-[10px] font-bold uppercase tracking-[0.12em] text-gray-400 mb-0.5">
+                    <p className="heading-col mb-0.5">
                       {label}
                     </p>
                     {href ? (
@@ -115,12 +105,12 @@ export default async function ContactPage() {
                         href={href}
                         target={href.startsWith("http") ? "_blank" : undefined}
                         rel="noopener noreferrer"
-                        className="text-[13px] text-slate-700 hover:text-cyan-600 transition-colors break-all"
+                        className="text-sm-plus text-slate-700 hover:text-brand-600 transition-colors break-all"
                       >
                         {value}
                       </a>
                     ) : (
-                      <p className="text-[13px] text-slate-700 whitespace-pre-line">
+                      <p className="text-sm-plus text-slate-700 whitespace-pre-line">
                         {value}
                       </p>
                     )}
@@ -135,7 +125,7 @@ export default async function ContactPage() {
                       href={settings.facebook}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-[12px] font-medium text-gray-500 hover:text-cyan-600 bg-white border border-gray-200 rounded-lg px-3 py-2 transition-colors"
+                      className="flex items-center gap-1.5 text-sm-plus font-medium text-gray-500 hover:text-brand-600 bg-white border border-gray-200 rounded-lg px-3 py-2 transition-colors"
                     >
                       <FacebookIcon size={13} /> Facebook
                     </a>
@@ -145,7 +135,7 @@ export default async function ContactPage() {
                       href={settings.youtube}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 text-[12px] font-medium text-gray-500 hover:text-cyan-600 bg-white border border-gray-200 rounded-lg px-3 py-2 transition-colors"
+                      className="flex items-center gap-1.5 text-sm-plus font-medium text-gray-500 hover:text-brand-600 bg-white border border-gray-200 rounded-lg px-3 py-2 transition-colors"
                     >
                       <YoutubeIcon size={13} /> YouTube
                     </a>
@@ -154,17 +144,16 @@ export default async function ContactPage() {
               )}
 
               {contactItems.length === 0 && (
-                <p className="text-[13px] text-gray-400 italic">
+                <p className="text-body-muted italic">
                   Add contact details in Sanity Studio → Site Settings.
                 </p>
               )}
             </div>
 
-            {/* Form */}
             <ContactForm
               submitLabel={submitLabel}
-              courses={courses ?? []}
-              services={services ?? []}
+              courses={courses}
+              services={services}
             />
           </div>
         </div>

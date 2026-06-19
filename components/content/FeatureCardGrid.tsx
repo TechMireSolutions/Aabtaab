@@ -16,35 +16,33 @@ export default function FeatureCardGrid({
 }: FeatureCardGridProps) {
   if (items.length === 0) return null;
 
-  const bgClass = bg === "slate" ? "bg-slate-50" : "bg-white";
+  const sectionClass = bg === "slate" ? "section-muted" : "section-y bg-white";
 
   return (
-    <section className={`${bgClass} py-16 sm:py-20`}>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="font-bold text-[24px] sm:text-[32px] text-slate-900 tracking-[-0.02em]">
-            {heading}
-          </h2>
+    <section className={sectionClass}>
+      <div className="container-page">
+        <div className="mb-12 text-center">
+          <h2 className="heading-section-lg">{heading}</h2>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((item, index) =>
             variant === "check" ? (
               <div
                 key={index}
-                className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-200"
+                className="card-surface p-6 transition-shadow duration-200 hover:shadow-card-hover"
               >
-                <div className="w-10 h-10 rounded-xl bg-cyan-50 border border-cyan-100 flex items-center justify-center mb-4">
+                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl border border-brand-100 bg-brand-50">
                   <Check
                     size={17}
-                    className="text-cyan-600"
+                    className="text-brand-600"
                     strokeWidth={2.5}
                   />
                 </div>
-                <h3 className="font-bold text-[15px] text-slate-900 mb-2">
+                <h3 className="mb-2 text-base-plus font-bold text-slate-900">
                   {item.title}
                 </h3>
                 {item.description && (
-                  <p className="text-[13.5px] text-gray-500 leading-relaxed">
+                  <p className="text-sm-plus leading-relaxed text-gray-500">
                     {item.description}
                   </p>
                 )}
@@ -52,17 +50,17 @@ export default function FeatureCardGrid({
             ) : (
               <div
                 key={index}
-                className="flex gap-4 p-6 rounded-2xl border border-gray-100 hover:border-cyan-100 hover:bg-cyan-50/30 transition-colors duration-200"
+                className="card-surface flex gap-4 p-6 transition-colors duration-200 hover:border-brand-100 hover:bg-brand-50/30"
               >
-                <div className="shrink-0 w-8 h-8 rounded-lg bg-cyan-600 text-white text-[12px] font-bold flex items-center justify-center mt-0.5">
+                <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-600 text-2xs font-bold text-white">
                   {index + 1}
                 </div>
                 <div>
-                  <h3 className="font-bold text-[15px] text-slate-900 mb-1.5">
+                  <h3 className="mb-1.5 text-base-plus font-bold text-slate-900">
                     {item.title}
                   </h3>
                   {item.description && (
-                    <p className="text-[13.5px] text-gray-500 leading-relaxed">
+                    <p className="text-sm-plus leading-relaxed text-gray-500">
                       {item.description}
                     </p>
                   )}

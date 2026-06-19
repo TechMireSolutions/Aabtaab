@@ -1,14 +1,18 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Users, BookOpen, GraduationCap } from "lucide-react";
+import { DEFAULT_SITE_NAME } from "@/lib/constants";
 
 interface HeroSectionProps {
+  siteName?: string;
   subtitle?: string;
   title?: string;
   description?: string;
   heroImage?: string | null;
+  heroImageAlt?: string;
   cta1Label?: string;
   cta1Link?: string;
   cta2Label?: string;
@@ -24,10 +28,12 @@ const STATS = [
 ];
 
 export default function HeroSection({
-  subtitle = "Aabtaab — Faith. Knowledge. Access.",
+  siteName = DEFAULT_SITE_NAME,
+  subtitle,
   title,
-  description = "At Aabtaab, we bring accessible and affordable Shia Islamic education to everyone, no matter where you are in the world.",
+  description,
   heroImage,
+  heroImageAlt,
   cta1Label = "Explore Courses",
   cta1Link = "/online-courses",
   cta2Label = "Our Services",
@@ -35,171 +41,132 @@ export default function HeroSection({
 }: HeroSectionProps) {
   const [show, setShow] = useState(false);
 
+  const resolvedSubtitle =
+    subtitle ?? `${siteName} — Faith. Knowledge. Access.`;
+  const resolvedDescription =
+    description ??
+    `At ${siteName}, we bring accessible and affordable Shia Islamic education to everyone, no matter where you are in the world.`;
+
   useEffect(() => {
     const id = setTimeout(() => setShow(true), 80);
     return () => clearTimeout(id);
   }, []);
 
-  function fadeInStyle(delay: number, dist = 20): React.CSSProperties {
-    return {
-      opacity: show ? 1 : 0,
-      transform: show ? "none" : `translateY(${dist}px)`,
-      transition: `opacity 0.65s ease ${delay}ms, transform 0.75s cubic-bezier(0.16,1,0.3,1) ${delay}ms`,
-    };
+  function fadeInClass(delay?: string) {
+    const base = show
+      ? "motion-safe:animate-fade-up opacity-100"
+      : "translate-y-5 opacity-0";
+    return delay ? `${base} ${delay}` : base;
   }
 
   const titleLines = title ? title.split("\n") : DEFAULT_LINES;
+  const imageAlt =
+    heroImageAlt ?? `${siteName} — Shia Islamic education and community`;
 
   return (
-    <section className="relative w-full bg-white overflow-hidden min-h-[480px] md:min-h-[600px]">
-      {/* Dot-grid texture */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle, #dde5ef 1px, transparent 1px)",
-          backgroundSize: "28px 28px",
-          opacity: 0.5,
-        }}
-      />
+    <section className="relative min-h-hero w-full overflow-hidden bg-white md:min-h-hero-lg">
+      <div className="bg-dot-grid pointer-events-none absolute inset-0 opacity-50" />
 
-      {/* Soft cyan glow */}
-      <div
-        className="absolute -left-24 top-1/2 -translate-y-1/2 w-[600px] h-[600px] pointer-events-none rounded-full"
-        style={{
-          background:
-            "radial-gradient(circle, rgba(8,145,178,0.05) 0%, transparent 65%)",
-        }}
-      />
+      <div className="pointer-events-none absolute -left-24 top-1/2 size-hero-glow -translate-y-1/2 rounded-full bg-hero-glow" />
 
-      {/* Hero image — full bg on mobile, right-panel on md+ */}
       <div
-        className="absolute inset-0 md:inset-auto md:right-0 md:top-0 md:h-full md:w-[55%] pointer-events-none select-none"
-        style={{ opacity: show ? 1 : 0, transition: "opacity 1s ease 100ms" }}
+        className={`pointer-events-none absolute inset-0 select-none transition-opacity duration-1000 md:inset-auto md:top-0 md:right-0 md:h-full md:w-hero-image ${
+          show ? "opacity-100" : "opacity-0"
+        }`}
       >
         {heroImage ? (
           <Image
             src={heroImage}
-            alt="Hero"
+            alt={imageAlt}
             fill
             sizes="(max-width: 768px) 100vw, 55vw"
             priority
             className="object-cover object-center md:object-left-top"
           />
         ) : (
-          <div className="w-full h-full bg-linear-to-br from-slate-100 via-cyan-50/20 to-white" />
+          <div className="h-full w-full bg-linear-to-br from-slate-100 via-brand-50/20 to-white" />
         )}
-        {/* Mobile overlay — keeps text readable over the full-bleed image */}
         <div className="absolute inset-0 bg-white/90 md:hidden" />
         <div className="absolute inset-0 bg-linear-to-b from-white/60 via-transparent to-white/80 md:hidden" />
-        {/* Desktop overlays */}
-        <div className="absolute inset-0 hidden md:block bg-linear-to-r from-white via-white/55 to-transparent" />
-        <div className="absolute inset-0 hidden md:block bg-linear-to-t from-white/15 to-transparent" />
+        <div className="absolute inset-0 hidden bg-linear-to-r from-white via-white/55 to-transparent md:block" />
+        <div className="absolute inset-0 hidden bg-linear-to-t from-white/15 to-transparent md:block" />
       </div>
 
-      {/* Content */}
-      <div
-        className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 lg:px-14 flex flex-col justify-center
-        min-h-[480px] md:min-h-[600px] pt-12 pb-12 md:pt-[90px] md:pb-[90px]"
-      >
-        <div className="w-full md:max-w-[520px]">
-          {/* Badge */}
-          <div
-            style={fadeInStyle(0)}
-            className="inline-flex items-center gap-2 mb-5 bg-white border border-gray-200 shadow-sm rounded-full px-3.5 py-1.5"
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse shrink-0" />
-            <span className="text-[11px] font-semibold text-gray-600 tracking-wide">
+      <div className="container-page relative z-10 flex min-h-hero flex-col justify-center py-12 md:min-h-hero-lg md:px-14 md:py-hero-pad">
+        <div className="w-full max-w-hero-copy">
+          <div className={`badge-enrolling ${fadeInClass()}`}>
+            <span className="size-1.5 shrink-0 animate-pulse rounded-full bg-brand-500" />
+            <span className="text-2xs font-semibold tracking-wide text-gray-600">
               Enrolling Now
             </span>
           </div>
 
-          {/* Kicker */}
           <p
-            style={fadeInStyle(80)}
-            className="text-[11px] sm:text-[11.5px] font-semibold text-gray-400 uppercase tracking-[0.15em] mb-4"
+            className={`text-eyebrow mb-4 text-gray-400 ${fadeInClass("motion-safe:animate-delay-75")}`}
           >
-            {subtitle}
+            {resolvedSubtitle}
           </p>
 
-          {/* Headline */}
-          <h1
-            className="mb-4"
-            style={{
-              fontSize: "clamp(30px, 5vw, 52px)",
-              fontWeight: 800,
-              lineHeight: 1.08,
-              letterSpacing: "-0.025em",
-            }}
-          >
+          <h1 className="text-hero mb-4 font-extrabold">
             {titleLines.map((line, i) => (
-              <span key={i} style={{ ...fadeInStyle(140 + i * 80), display: "block" }}>
-                {i === titleLines.length - 1 ? (
-                  <span style={{ color: "#0891b2" }}>{line}</span>
-                ) : (
-                  <span style={{ color: "#0f172a" }}>{line}</span>
-                )}
+              <span
+                key={i}
+                className={`block ${fadeInClass(
+                  i === 0
+                    ? "motion-safe:animate-delay-150"
+                    : i === 1
+                      ? "motion-safe:animate-delay-200"
+                      : "motion-safe:animate-delay-300",
+                )} ${
+                  i === titleLines.length - 1
+                    ? "text-brand-600"
+                    : "text-slate-900"
+                }`}
+              >
+                {line}
               </span>
             ))}
           </h1>
 
-          {/* Description */}
           <p
-            style={fadeInStyle(380)}
-            className="text-[13.5px] sm:text-[14px] text-gray-500 leading-[1.8] mb-7 max-w-[400px]"
+            className={`text-body-muted mb-7 max-w-hero-lead ${fadeInClass("motion-safe:animate-delay-400")}`}
           >
-            {description}
+            {resolvedDescription}
           </p>
 
-          {/* CTAs */}
-          <div style={fadeInStyle(450)} className="flex items-center gap-3 flex-wrap">
-            <Link
-              href={cta1Link}
-              className="group inline-flex items-center gap-2 bg-cyan-600 hover:bg-cyan-700 text-white text-[13px] sm:text-[13.5px] font-semibold px-5 sm:px-6 py-2.5 rounded-full
-                shadow-[0_4px_16px_rgba(8,145,178,0.35)] hover:shadow-[0_6px_24px_rgba(8,145,178,0.5)]
-                transition-all duration-200 hover:-translate-y-px"
-            >
+          <div
+            className={`flex flex-wrap items-center gap-3 ${fadeInClass("motion-safe:animate-delay-500")}`}
+          >
+            <Link href={cta1Link} className="btn-primary group">
               {cta1Label}
               <ArrowRight
                 size={13}
                 strokeWidth={2.5}
-                className="group-hover:translate-x-0.5 transition-transform duration-150"
+                className="transition-transform duration-150 group-hover:translate-x-0.5"
               />
             </Link>
-            <Link
-              href={cta2Link}
-              className="inline-flex items-center text-[13px] sm:text-[13.5px] font-medium text-slate-700 hover:text-slate-900
-                border border-gray-300 hover:border-gray-400 bg-white hover:bg-gray-50
-                px-5 sm:px-6 py-2.5 rounded-full transition-all duration-200"
-            >
+            <Link href={cta2Link} className="btn-secondary">
               {cta2Label}
             </Link>
           </div>
 
-          {/* Stats */}
           <div
-            style={fadeInStyle(550)}
-            className="flex items-center gap-5 sm:gap-6 mt-8 pt-7 border-t border-gray-100 flex-wrap"
+            className={`mt-8 flex flex-wrap items-center gap-5 border-t border-gray-100 pt-7 sm:gap-6 ${fadeInClass("motion-safe:animate-delay-600")}`}
           >
             {STATS.map(({ value, label, Icon }) => (
               <div key={label} className="flex items-center gap-2.5">
-                <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-cyan-50 border border-cyan-100 flex items-center justify-center shrink-0">
+                <div className="flex size-8 shrink-0 items-center justify-center rounded-xl border border-brand-100 bg-brand-50 sm:size-9">
                   <Icon
                     size={14}
-                    className="text-cyan-600"
+                    className="text-brand-600"
                     strokeWidth={1.75}
                   />
                 </div>
                 <div>
-                  <p
-                    className="text-[16px] sm:text-[17px] font-bold leading-none tracking-tight"
-                    style={{ color: "#0f172a" }}
-                  >
+                  <p className="text-base sm:text-lg-plus font-bold leading-none tracking-tight text-slate-900">
                     {value}
                   </p>
-                  <p className="text-[10px] sm:text-[10.5px] text-gray-400 mt-0.5">
-                    {label}
-                  </p>
+                  <p className="text-caption mt-0.5">{label}</p>
                 </div>
               </div>
             ))}

@@ -2,6 +2,7 @@ import Link from "next/link";
 import PageHeader from "@/components/layout/PageHeader";
 import ProseSection from "@/components/portable-text/ProseSection";
 import { defineCmsPageMetadata } from "@/lib/cms/page";
+import { resolveSiteName } from "@/lib/constants";
 import { getCmsPage, getSiteSettings } from "@/lib/cms/queries";
 import { ArrowRight, BookOpen, Heart, Star } from "lucide-react";
 
@@ -18,7 +19,7 @@ export default async function AboutPage() {
     getSiteSettings(),
   ]);
 
-  const siteName = settings?.siteName || "Aabtaab";
+  const siteName = resolveSiteName(settings);
 
   return (
     <div>
@@ -29,13 +30,13 @@ export default async function AboutPage() {
         subtitle={page?.subtitle || "Who we are and what drives us"}
       />
 
-      <div className="py-8 sm:py-12 bg-white">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section-y bg-white">
+        <div className="container-content">
           {page?.body ? (
             <ProseSection value={page.body} variant="article" />
           ) : (
             <div className="space-y-6 sm:space-y-8">
-              <p className="text-[14.5px] text-gray-600 leading-[1.8]">
+              <p className="text-base-plus leading-relaxed text-gray-600">
                 <strong className="text-slate-900">{siteName}</strong> is a
                 dedicated platform for the promotion of Islamic knowledge rooted
                 in the teachings of the Holy Quran and the Ahlul Bayt (A.S.).
@@ -49,45 +50,48 @@ export default async function AboutPage() {
                   {
                     Icon: BookOpen,
                     title: "Education",
-                    desc: "Online Quran, Fiqh, Ethics & History courses from qualified scholars",
+                    description:
+                      "Online Quran, Fiqh, Ethics & History courses from qualified scholars",
                   },
                   {
                     Icon: Heart,
                     title: "Services",
-                    desc: "Authentic religious services — Niyabat Ziarat, Zakat, Khums & more",
+                    description:
+                      "Authentic religious services — Niyabat Ziarat, Zakat, Khums & more",
                   },
                   {
                     Icon: Star,
                     title: "Community",
-                    desc: "Majalis, programs and reliable Islamic content for the Ummah",
+                    description:
+                      "Majalis, programs and reliable Islamic content for the Ummah",
                   },
-                ].map(({ Icon, title, desc }) => (
+                ].map(({ Icon, title, description }) => (
                   <div
                     key={title}
                     className="bg-slate-50 rounded-xl p-4 sm:p-5 border border-gray-100"
                   >
-                    <div className="w-9 h-9 bg-cyan-50 border border-cyan-100 rounded-xl flex items-center justify-center mb-3">
+                    <div className="w-9 h-9 bg-brand-50 border border-brand-100 rounded-xl flex items-center justify-center mb-3">
                       <Icon
                         size={15}
-                        className="text-cyan-600"
+                        className="text-brand-600"
                         strokeWidth={1.75}
                       />
                     </div>
-                    <h3 className="font-semibold text-slate-900 text-[14px] mb-1">
+                    <h3 className="font-semibold text-slate-900 text-sm-plus mb-1">
                       {title}
                     </h3>
-                    <p className="text-[13px] text-gray-500 leading-relaxed">
-                      {desc}
+                    <p className="text-body-muted">
+                      {description}
                     </p>
                   </div>
                 ))}
               </div>
 
               <div className="bg-slate-50 rounded-xl p-4 sm:p-6 border border-gray-100">
-                <h3 className="font-semibold text-slate-900 mb-2 text-[15px]">
+                <h3 className="font-semibold text-slate-900 mb-2 text-base-plus">
                   Dar Ul Quran
                 </h3>
-                <p className="text-[13.5px] text-gray-600 leading-relaxed">
+                <p className="text-base-plus text-gray-600 leading-relaxed">
                   We are affiliated with{" "}
                   <strong className="text-slate-800">Dar Ul Quran</strong>, our
                   dedicated Quranic institute providing structured Quran
@@ -98,11 +102,7 @@ export default async function AboutPage() {
           )}
 
           <div className="mt-8 sm:mt-10 pt-7 sm:pt-8 border-t border-gray-100 flex flex-wrap gap-3">
-            <Link
-              href="/contact"
-              className="group inline-flex items-center gap-2 bg-cyan-600 hover:bg-cyan-700 text-white text-[13.5px] font-semibold px-5 sm:px-6 py-2.5 rounded-full
-                shadow-[0_4px_16px_rgba(8,145,178,0.3)] transition-all duration-200 hover:-translate-y-px"
-            >
+            <Link href="/contact" className="btn-primary group">
               Contact Us
               <ArrowRight
                 size={13}
@@ -110,12 +110,7 @@ export default async function AboutPage() {
                 className="group-hover:translate-x-0.5 transition-transform duration-150"
               />
             </Link>
-            <Link
-              href="/online-courses"
-              className="inline-flex items-center text-[13.5px] font-medium text-slate-700 hover:text-slate-900
-                border border-gray-300 hover:border-gray-400 bg-white hover:bg-gray-50
-                px-5 sm:px-6 py-2.5 rounded-full transition-all duration-200"
-            >
+            <Link href="/online-courses" className="btn-secondary">
               Our Courses
             </Link>
           </div>

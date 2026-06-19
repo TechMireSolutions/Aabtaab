@@ -6,11 +6,11 @@ import { ArrowLeft, CalendarDays, User } from "lucide-react";
 import FaqAccordionSection from "@/components/content/FaqAccordionSection";
 import ProseSection from "@/components/portable-text/ProseSection";
 import { buildPostPageMetadata, resolvePostImageUrls } from "@/lib/cms/post";
-import { getPostBySlug } from "@/lib/cms/queries";
+import { resolveSiteName } from "@/lib/constants";
+import { getPostBySlug, getSiteSettings } from "@/lib/cms/queries";
 import { ArticleJsonLd, getSiteUrl } from "@/lib/seo";
 
 const siteUrl = getSiteUrl();
-const siteName = "Aabtaab";
 
 export async function generateMetadata({
   params,
@@ -27,9 +27,13 @@ export default async function PostDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = await getPostBySlug(slug);
+  const [post, settings] = await Promise.all([
+    getPostBySlug(slug),
+    getSiteSettings(),
+  ]);
   if (!post) notFound();
 
+  const siteName = resolveSiteName(settings);
   const { mainImageUrl, ogImageUrl } = resolvePostImageUrls(post);
 
   return (
@@ -46,41 +50,36 @@ export default async function PostDetailPage({
         faqItems={post.faqItems}
       />
 
-      <div className="border-b border-gray-100 bg-white sticky top-[68px] z-10">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
+      <div className="sticky-below-header z-10 border-b border-gray-100 bg-white">
+        <div className="container-content py-3">
           <Link
             href="/posts"
-            className="inline-flex items-center gap-1.5 text-[13px] font-medium text-gray-500 hover:text-slate-900 transition-colors group"
+            className="inline-flex items-center gap-1.5 text-sm-plus font-medium text-gray-500 transition-colors hover:text-slate-900 group"
           >
             <ArrowLeft
               size={13}
               strokeWidth={2}
-              className="group-hover:-translate-x-0.5 transition-transform"
+              className="transition-transform group-hover:-translate-x-0.5"
             />
             Back to Articles
           </Link>
         </div>
       </div>
 
-      <article className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+      <article className="container-content section-y">
         {post.categories && post.categories.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-4 sm:mb-5">
+          <div className="mb-4 flex flex-wrap gap-2 sm:mb-5">
             {post.categories.map((cat) => (
-              <span
-                key={cat._id}
-                className="text-[10.5px] font-bold uppercase tracking-[0.1em] bg-cyan-50 text-cyan-700 border border-cyan-100 px-3 py-1 rounded-full"
-              >
+              <span key={cat._id} className="badge-pill">
                 {cat.title}
               </span>
             ))}
           </div>
         )}
 
-        <h1 className="font-bold text-[26px] sm:text-[30px] lg:text-[38px] text-slate-900 leading-[1.12] tracking-[-0.02em] mb-4 sm:mb-5">
-          {post.title}
-        </h1>
+        <h1 className="heading-page mb-4 sm:mb-5">{post.title}</h1>
 
-        <div className="flex items-center flex-wrap gap-3 sm:gap-4 text-[12.5px] sm:text-[13px] text-gray-400 mb-8 pb-7 border-b border-gray-100">
+        <div className="text-caption mb-8 flex flex-wrap items-center gap-3 border-b border-gray-100 pb-7 sm:gap-4">
           {post.author?.name && (
             <span className="flex items-center gap-1.5">
               <User size={13} strokeWidth={2} />
@@ -102,7 +101,7 @@ export default async function PostDetailPage({
         </div>
 
         {mainImageUrl && (
-          <div className="relative w-full aspect-[16/9] sm:aspect-[16/8] rounded-xl sm:rounded-2xl overflow-hidden mb-8 sm:mb-10 shadow-sm">
+          <div className="relative mb-8 aspect-video w-full overflow-hidden rounded-xl shadow-sm sm:mb-10 sm:aspect-2/1 sm:rounded-2xl">
             <Image
               src={mainImageUrl}
               alt={post.mainImage?.alt ?? post.title}

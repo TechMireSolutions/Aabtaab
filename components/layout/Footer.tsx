@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import type { FooterService, NavItem } from "@/types/site-navigation";
 import type { SiteSettings } from "@/types/sanity";
+import { resolveSiteName } from "@/lib/constants";
 import { FacebookIcon, YoutubeIcon } from "@/components/icons/SocialIcons";
 import { whatsappUrl } from "@/lib/urls";
 
@@ -23,6 +24,7 @@ const FALLBACK_QUICK_LINKS: NavItem[] = [
   { label: "Home", href: "/" },
   { label: "Online Classes", href: "/online-courses" },
   { label: "Services", href: "/services" },
+  { label: "Events", href: "/events" },
   { label: "Articles", href: "/posts" },
   { label: "Donate", href: "/donate" },
   { label: "About Us", href: "/about" },
@@ -39,11 +41,7 @@ const FALLBACK_SERVICES: FooterService[] = [
 ];
 
 function ColHeading({ children }: { children: React.ReactNode }) {
-  return (
-    <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400 mb-2.5 sm:mb-4">
-      {children}
-    </h3>
-  );
+  return <h3 className="heading-col">{children}</h3>;
 }
 
 function NavLink({
@@ -57,9 +55,9 @@ function NavLink({
     <li>
       <Link
         href={href}
-        className="group flex items-center gap-0 text-[12px] sm:text-[13px] text-gray-500 hover:text-cyan-600 transition-colors duration-150"
+        className="group flex items-center gap-0 text-sm-plus text-gray-500 hover:text-brand-600 transition-colors duration-150"
       >
-        <span className="inline-block w-0 overflow-hidden group-hover:w-3 transition-all duration-150 text-cyan-500 text-[11px] leading-none">
+        <span className="inline-block w-0 overflow-hidden group-hover:w-3 transition-all duration-150 text-brand-500 text-xs-plus leading-none">
           ›
         </span>
         {children}
@@ -73,7 +71,7 @@ export default function Footer({
   logoUrl,
   footerServices,
 }: FooterProps) {
-  const siteName = settings?.siteName || "Aabtaab";
+  const siteName = resolveSiteName(settings);
   const tagline =
     settings?.tagline ||
     "Spreading the light of Ahlul Bayt (A.S.) through education, authentic content, and spiritual services.";
@@ -91,7 +89,7 @@ export default function Footer({
   return (
     <footer className="bg-gray-50 border-t border-gray-200">
       {/* ── Main body ── */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 lg:py-12">
+      <div className="container-page py-6 sm:py-10 lg:py-12">
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-6 sm:gap-8 lg:gap-10">
           {/* Col 1 — Logo + Brand (full width on mobile) */}
           <div className="col-span-2 lg:col-span-1">
@@ -106,19 +104,19 @@ export default function Footer({
                   alt={siteName}
                   width={40}
                   height={40}
-                  className="rounded-full border-2 border-cyan-400 object-cover transition-transform duration-200 group-hover:scale-105 sm:w-[52px] sm:h-[52px]"
+                  className="size-10 rounded-full border-2 border-brand-400 object-cover transition-transform duration-200 group-hover:scale-105 sm:size-logo-lg"
                 />
               ) : (
-                <div className="w-10 h-10 sm:w-[52px] sm:h-[52px] rounded-full bg-linear-to-br from-cyan-100 to-sky-100 border-2 border-cyan-400 flex items-center justify-center text-xl sm:text-2xl select-none transition-transform duration-200 group-hover:scale-105">
+                <div className="size-10 rounded-full bg-linear-to-br from-brand-100 to-brand-50 border-2 border-brand-400 flex items-center justify-center text-xl sm:size-logo-lg sm:text-2xl select-none transition-transform duration-200 group-hover:scale-105">
                   ⛵
                 </div>
               )}
-              <span className="font-bold text-[16px] sm:text-[18px] text-slate-900 tracking-[-0.02em]">
+              <span className="font-bold text-base-plus sm:text-lg-plus text-slate-900 tracking-heading">
                 {siteName}
               </span>
             </Link>
 
-            <p className="text-[12px] sm:text-[13px] text-gray-500 leading-relaxed mb-3 sm:mb-5 max-w-[280px] line-clamp-2 sm:line-clamp-none">
+            <p className="text-body-muted mb-3 sm:mb-5 max-w-tagline line-clamp-2 sm:line-clamp-none">
               {tagline}
             </p>
 
@@ -130,7 +128,7 @@ export default function Footer({
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Facebook"
-                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-gray-400 hover:border-cyan-400 hover:text-cyan-500 transition-all duration-200"
+                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-gray-400 hover:border-brand-400 hover:text-brand-500 transition-all duration-200"
                 >
                   <FacebookIcon />
                 </a>
@@ -141,7 +139,7 @@ export default function Footer({
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="YouTube"
-                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-gray-400 hover:border-cyan-400 hover:text-cyan-500 transition-all duration-200"
+                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white border border-gray-200 flex items-center justify-center text-gray-400 hover:border-brand-400 hover:text-brand-500 transition-all duration-200"
                 >
                   <YoutubeIcon />
                 </a>
@@ -151,7 +149,7 @@ export default function Footer({
                   href={settings.darulQuranUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1 text-[11px] font-medium text-gray-500 hover:text-cyan-600 bg-white border border-gray-200 hover:border-cyan-400 rounded-lg px-2 py-1 sm:px-2.5 sm:py-1.5 transition-all duration-200"
+                  className="flex items-center gap-1 text-xs-plus font-medium text-gray-500 hover:text-brand-600 bg-white border border-gray-200 hover:border-brand-400 rounded-lg px-2 py-1 sm:px-2.5 sm:py-1.5 transition-all duration-200"
                 >
                   Dar ul Quran <ExternalLink size={9} />
                 </a>
@@ -191,9 +189,9 @@ export default function Footer({
                 <li>
                   <a
                     href={`mailto:${settings.email}`}
-                    className="flex items-center gap-2 text-[12px] sm:text-[12.5px] text-gray-500 hover:text-cyan-600 transition-colors duration-150"
+                    className="flex items-center gap-2 text-sm-plus text-gray-500 hover:text-brand-600 transition-colors duration-150"
                   >
-                    <Mail size={12} className="text-cyan-500 shrink-0" />
+                    <Mail size={12} className="text-brand-500 shrink-0" />
                     <span className="truncate">{settings.email}</span>
                   </a>
                 </li>
@@ -202,9 +200,9 @@ export default function Footer({
                 <li>
                   <a
                     href={`tel:${settings.phone}`}
-                    className="flex items-center gap-2 text-[12px] sm:text-[12.5px] text-gray-500 hover:text-cyan-600 transition-colors duration-150"
+                    className="flex items-center gap-2 text-sm-plus text-gray-500 hover:text-brand-600 transition-colors duration-150"
                   >
-                    <Phone size={12} className="text-cyan-500 shrink-0" />
+                    <Phone size={12} className="text-brand-500 shrink-0" />
                     {settings.phone}
                   </a>
                 </li>
@@ -215,11 +213,11 @@ export default function Footer({
                     href={whatsappUrl(settings.whatsapp)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-[12px] sm:text-[12.5px] text-gray-500 hover:text-cyan-600 transition-colors duration-150"
+                    className="flex items-center gap-2 text-sm-plus text-gray-500 hover:text-brand-600 transition-colors duration-150"
                   >
                     <MessageCircle
                       size={12}
-                      className="text-cyan-500 shrink-0"
+                      className="text-brand-500 shrink-0"
                     />
                     WhatsApp: {settings.whatsapp}
                   </a>
@@ -227,25 +225,20 @@ export default function Footer({
               )}
               {settings?.address && (
                 <li className="flex items-start gap-2">
-                  <MapPin size={12} className="text-cyan-500 shrink-0 mt-0.5" />
-                  <p className="text-[12px] sm:text-[12.5px] text-gray-500 leading-relaxed whitespace-pre-line">
+                  <MapPin size={12} className="text-brand-500 shrink-0 mt-0.5" />
+                  <p className="text-sm-plus text-gray-500 leading-relaxed whitespace-pre-line">
                     {settings.address}
                   </p>
                 </li>
               )}
               {!settings?.email && !settings?.phone && !settings?.address && (
-                <li className="text-[12px] text-gray-400 italic">
+                <li className="text-sm-plus text-gray-400 italic">
                   Add contact info in Sanity → Site Settings
                 </li>
               )}
             </ul>
 
-            <Link
-              href="/donate"
-              className="group inline-flex items-center gap-1.5 mt-4 px-4 py-2 sm:mt-5 sm:px-5 sm:py-2.5 bg-cyan-600 hover:bg-cyan-700 text-white text-[12px] font-semibold rounded-full
-                shadow-[0_4px_14px_rgba(8,145,178,0.3)] hover:shadow-[0_6px_20px_rgba(8,145,178,0.42)]
-                transition-all duration-200 hover:-translate-y-px"
-            >
+            <Link href="/donate" className="btn-primary group mt-4 sm:mt-5">
               Donate Now
               <ArrowRight
                 size={12}
@@ -259,28 +252,28 @@ export default function Footer({
 
       {/* ── Bottom bar ── */}
       <div className="border-t border-gray-200 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <p className="text-[11.5px] text-gray-400">
+        <div className="container-page py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+          <p className="text-caption">
             &copy; {new Date().getFullYear()} {siteName}. All rights reserved.
           </p>
           <div className="flex items-center gap-1 text-gray-300">
             <Link
               href="/about"
-              className="px-2 text-[11.5px] text-gray-400 hover:text-gray-700 transition-colors"
+              className="text-caption px-2 text-gray-400 hover:text-gray-700 transition-colors"
             >
               About
             </Link>
             <span>·</span>
             <Link
               href="/contact"
-              className="px-2 text-[11.5px] text-gray-400 hover:text-gray-700 transition-colors"
+              className="text-caption px-2 text-gray-400 hover:text-gray-700 transition-colors"
             >
               Contact
             </Link>
             <span>·</span>
             <Link
               href="/donate"
-              className="px-2 text-[11.5px] text-gray-400 hover:text-gray-700 transition-colors"
+              className="text-caption px-2 text-gray-400 hover:text-gray-700 transition-colors"
             >
               Donate
             </Link>
