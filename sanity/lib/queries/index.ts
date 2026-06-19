@@ -4,3 +4,4 @@ export * from "./courses";
 export * from "./services";
 export * from "./site";
 export * from "./search";
+export * from "./homepage";

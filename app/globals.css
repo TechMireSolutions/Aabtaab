@@ -671,3 +671,8 @@
     font-size: 16px;
   }
 }
+
+@utility section-deferred {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 32rem;
+}

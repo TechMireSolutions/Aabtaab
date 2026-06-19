@@ -1,8 +1,6 @@
-"use client";
-import { useRef, useState, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
 import ContentCard from "@/components/cards/ContentCard";
+import CarouselScrollButtons from "@/components/sections/CarouselScrollButtons";
 
 export interface CarouselItem {
   id: string;
@@ -22,6 +20,16 @@ interface CarouselSectionProps {
   viewAllHref: string;
   viewAllLabel?: string;
   bg?: "white" | "gray";
+  /** Stable id for scroll track — defaults from title */
+  trackId?: string;
+  deferImages?: boolean;
+}
+
+function slugify(value: string): string {
+  return value
+   .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "");
 }
 
 export default function CarouselSection({
@@ -32,47 +40,18 @@ export default function CarouselSection({
   viewAllHref,
   viewAllLabel = "View all",
   bg = "white",
+  trackId,
+  deferImages = true,
 }: CarouselSectionProps) {
-  const trackRef = useRef<HTMLDivElement>(null);
-  const [canLeft, setCanLeft] = useState(false);
-  const [canRight, setCanRight] = useState(false);
-
-  const updateScrollButtons = useCallback(() => {
-    const el = trackRef.current;
-    if (!el) return;
-    setCanLeft(el.scrollLeft > 4);
-    setCanRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 4);
-  }, []);
-
-  useEffect(() => {
-    updateScrollButtons();
-    const el = trackRef.current;
-    if (!el) return;
-    el.addEventListener("scroll", updateScrollButtons, { passive: true });
-    window.addEventListener("resize", updateScrollButtons);
-    return () => {
-      el.removeEventListener("scroll", updateScrollButtons);
-      window.removeEventListener("resize", updateScrollButtons);
-    };
-  }, [updateScrollButtons, items]);
-
-  function scrollBy(dir: "left" | "right") {
-    const el = trackRef.current;
-    if (!el) return;
-    const card = el.querySelector("[data-card]") as HTMLElement | null;
-    const amount = card ? card.offsetWidth + 24 : 320;
-    el.scrollBy({
-      left: dir === "left" ? -amount : amount,
-      behavior: "smooth",
-    });
-  }
-
   if (!items.length) return null;
 
+  const resolvedTrackId = trackId ?? `carousel-${slugify(title)}`;
   const bgClass = bg === "gray" ? "bg-slate-50" : "bg-white";
 
   return (
-    <section className={`section-y-lg border-b border-gray-100 ${bgClass}`}>
+    <section
+      className={`section-y-lg section-deferred border-b border-gray-100 ${bgClass}`}
+    >
       <div className="container-page">
         <div className="mb-7 flex flex-col gap-3 sm:mb-10 sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -87,58 +66,27 @@ export default function CarouselSection({
           </div>
 
           <div className="flex shrink-0 items-center gap-3 sm:ml-6">
-            <div className="flex items-center gap-1.5">
-              <button
-                onClick={() => scrollBy("left")}
-                disabled={!canLeft}
-                aria-label="Previous"
-                className={`flex min-h-11 min-w-11 items-center justify-center rounded-full border-2 transition-all duration-200 ${
-                  canLeft
-                    ? "border-gray-200 text-gray-500 hover:border-brand-500 hover:bg-brand-50 hover:text-brand-600"
-                    : "cursor-not-allowed border-gray-100 text-gray-300"
-                }`}
-              >
-                <ChevronLeft size={16} strokeWidth={2} />
-              </button>
-              <button
-                onClick={() => scrollBy("right")}
-                disabled={!canRight}
-                aria-label="Next"
-                className={`flex min-h-11 min-w-11 items-center justify-center rounded-full border-2 transition-all duration-200 ${
-                  canRight
-                    ? "border-gray-200 text-gray-500 hover:border-brand-500 hover:bg-brand-50 hover:text-brand-600"
-                    : "cursor-not-allowed border-gray-100 text-gray-300"
-                }`}
-              >
-                <ChevronRight size={16} strokeWidth={2} />
-              </button>
-            </div>
+            <CarouselScrollButtons trackId={resolvedTrackId} bg={bg} />
 
             <Link href={viewAllHref} className="link-brand group whitespace-nowrap">
               {viewAllLabel}
-              <ArrowRight
-                size={13}
-                strokeWidth={2.5}
-                className="transition-transform duration-150 group-hover:translate-x-0.5"
-              />
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                className="size-3.5 transition-transform duration-150 group-hover:translate-x-0.5"
+              >
+                <path d="M5 12h14M13 5l7 7-7 7" />
+              </svg>
             </Link>
           </div>
         </div>
 
         <div className="relative">
           <div
-            className={`pointer-events-none absolute bottom-0 left-0 top-0 z-10 w-10 bg-linear-to-r transition-opacity duration-200 ${
-              bg === "gray" ? "from-slate-50" : "from-white"
-            } to-transparent ${canLeft ? "opacity-100" : "opacity-0"}`}
-          />
-          <div
-            className={`pointer-events-none absolute bottom-0 right-0 top-0 z-10 w-10 bg-linear-to-l transition-opacity duration-200 ${
-              bg === "gray" ? "from-slate-50" : "from-white"
-            } to-transparent ${canRight ? "opacity-100" : "opacity-0"}`}
-          />
-
-          <div
-            ref={trackRef}
+            id={resolvedTrackId}
             className="scrollbar-hide flex snap-x snap-mandatory gap-6 overflow-x-auto pb-2 [-webkit-overflow-scrolling:touch]"
           >
             {items.map((item) => (
@@ -154,6 +102,7 @@ export default function CarouselSection({
                   href={item.href}
                   badge={item.badge}
                   ctaLabel={item.ctaLabel}
+                  lazyImage={deferImages}
                 />
               </div>
             ))}

@@ -10,22 +10,19 @@ import {
   postsQuery,
   courseBySlugDeepQuery,
   serviceBySlugDeepQuery,
-  featuredPostsQuery,
   topLevelServicesQuery,
   topLevelCoursesQuery,
-  homepageSettingsQuery,
-  testimonialsQuery,
   headerNavQuery,
   footerServicesQuery,
   allEventsQuery,
   eventBySlugQuery,
-  upcomingEventsQuery,
   allCoursesForFormQuery,
   allServicesForFormQuery,
   postSlugsQuery,
   allCoursePathsQuery,
   allServicePathsQuery,
   eventSlugsQuery,
+  homepageDataQuery,
 } from "@/sanity/lib/queries";
 import type { EventDetail, EventSummary } from "@/types/event";
 import type { CmsPageSummary, PostCardSummary } from "@/types/cms-page";
@@ -101,49 +98,36 @@ export const getSiteLayoutData = cache(async () => {
 });
 
 export const getHomepageData = cache(async () => {
-  const [posts, services, courses, homepage, testimonials, upcomingEvents, settings] =
-    await Promise.all([
-      sanityFetch<HomePostSummary[]>({
-        query: featuredPostsQuery,
-        tags: [CACHE_TAGS.posts],
-        revalidate: 3600,
-      }),
-      sanityFetch<HomeServiceSummary[]>({
-        query: topLevelServicesQuery,
-        tags: [CACHE_TAGS.services],
-        revalidate: 3600,
-      }),
-      sanityFetch<HomeCourseSummary[]>({
-        query: topLevelCoursesQuery,
-        tags: [CACHE_TAGS.courses],
-        revalidate: 3600,
-      }),
-      sanityFetch<HomepageSettings>({
-        query: homepageSettingsQuery,
-        tags: [CACHE_TAGS.homepage],
-        revalidate: 3600,
-      }),
-      sanityFetch<Testimonial[]>({
-        query: testimonialsQuery,
-        tags: [CACHE_TAGS.all],
-        revalidate: 3600,
-      }),
-      sanityFetch<EventSummary[]>({
-        query: upcomingEventsQuery,
-        tags: [CACHE_TAGS.events],
-        revalidate: 3600,
-      }),
-      getSiteSettings(),
-    ]);
+  const data = await sanityFetch<{
+    featuredPosts: HomePostSummary[];
+    courses: HomeCourseSummary[];
+    services: HomeServiceSummary[];
+    homepage: HomepageSettings;
+    testimonials: Testimonial[];
+    upcomingEvents: EventSummary[];
+    settings: Awaited<ReturnType<typeof fetchSiteSettingsUncached>>;
+  }>({
+    query: homepageDataQuery,
+    tags: [
+      CACHE_TAGS.posts,
+      CACHE_TAGS.courses,
+      CACHE_TAGS.services,
+      CACHE_TAGS.homepage,
+      CACHE_TAGS.events,
+      CACHE_TAGS.siteSettings,
+      CACHE_TAGS.all,
+    ],
+    revalidate: 3600,
+  });
 
   return {
-    posts,
-    services,
-    courses,
-    homepage,
-    testimonials,
-    upcomingEvents,
-    settings,
+    posts: data.featuredPosts,
+    services: data.services,
+    courses: data.courses,
+    homepage: data.homepage,
+    testimonials: data.testimonials,
+    upcomingEvents: data.upcomingEvents,
+    settings: data.settings,
   };
 });
 

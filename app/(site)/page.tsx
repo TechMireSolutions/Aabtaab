@@ -47,7 +47,7 @@ export default async function HomePage() {
   const courseItems: CarouselItem[] = (courses ?? []).map((c) => ({
     id: c._id,
     image: c.featuredImage
-      ? urlFor(c.featuredImage).width(600).height(450).url()
+      ? urlFor(c.featuredImage).width(480).height(360).url()
       : null,
     title: c.title,
     description: [c.price, c.duration].filter(Boolean).join(" · ") || null,
@@ -58,7 +58,7 @@ export default async function HomePage() {
 
   const serviceItems: CarouselItem[] = (services ?? []).map((s) => ({
     id: s._id,
-    image: s.icon ? urlFor(s.icon).width(600).height(450).url() : null,
+    image: s.icon ? urlFor(s.icon).width(480).height(360).url() : null,
     title: s.title,
     description: s.children?.length
       ? s.children
@@ -76,7 +76,7 @@ export default async function HomePage() {
     .map((event) => ({
       id: event._id,
       image: event.image
-        ? urlFor(event.image).width(600).height(450).url()
+        ? urlFor(event.image).width(480).height(360).url()
         : null,
       title: event.title,
       description: formatEventDateRange(event.startDate, event.endDate),
@@ -104,7 +104,7 @@ export default async function HomePage() {
       />
 
       {/* ── About Us ── */}
-      <section className="relative section-y-xl overflow-hidden border-b border-gray-100 bg-white">
+      <section className="section-deferred relative section-y-xl overflow-hidden border-b border-gray-100 bg-white">
         <div className="bg-dot-grid pointer-events-none absolute inset-0 opacity-30" />
         <div className="container-page relative">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
@@ -264,7 +264,7 @@ export default async function HomePage() {
 
       {/* ── Latest Articles ── */}
       {(posts?.length ?? 0) > 0 && (
-        <section className="section-y-lg border-b border-gray-100 bg-white">
+        <section className="section-deferred section-y-lg border-b border-gray-100 bg-white">
           <div className="container-page">
             <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-7 sm:mb-10">
               <div>
@@ -300,7 +300,7 @@ export default async function HomePage() {
                   href={`/posts/${post.slug.current}`}
                   image={
                     post.mainImage
-                      ? urlFor(post.mainImage).width(600).height(450).url()
+                      ? urlFor(post.mainImage).width(480).height(360).url()
                       : null
                   }
                   title={post.title}
@@ -316,7 +316,7 @@ export default async function HomePage() {
 
       {/* ── Testimonials ── */}
       {(testimonials?.length ?? 0) > 0 && (
-        <section className="section-y-lg border-b border-gray-100 bg-slate-50">
+        <section className="section-deferred section-y-lg border-b border-gray-100 bg-slate-50">
           <div className="container-page">
             <div className="text-center mb-10">
               <p className="text-eyebrow mb-3 flex items-center justify-center gap-2">
@@ -368,7 +368,7 @@ export default async function HomePage() {
       )}
 
       {/* ── Donate CTA ── */}
-      <section className="relative overflow-hidden bg-slate-50 border-y border-slate-200 py-10 sm:py-12">
+      <section className="section-deferred relative overflow-hidden border-y border-slate-200 bg-slate-50 py-10 sm:py-12">
         <div className="bg-dot-grid pointer-events-none absolute inset-0 opacity-40" />
 
         <div className="container-content relative max-w-copy text-center">

@@ -10,6 +10,7 @@ interface ContentCardProps {
   ctaLabel?: string;
   badge?: string | null;
   active?: boolean;
+  lazyImage?: boolean;
 }
 
 export default function ContentCard({
@@ -20,6 +21,7 @@ export default function ContentCard({
   ctaLabel = "Book Now",
   badge,
   active = false,
+  lazyImage = true,
 }: ContentCardProps) {
   return (
     <div
@@ -40,7 +42,8 @@ export default function ContentCard({
               src={image}
               alt={title}
               fill
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              sizes="(max-width: 640px) 85vw, (max-width: 1024px) 45vw, 320px"
+              loading={lazyImage ? "lazy" : undefined}
               className="hover-scale-image"
             />
           ) : (
