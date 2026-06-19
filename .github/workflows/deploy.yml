@@ -36,7 +36,18 @@ jobs:
             exit 1
           fi
           if ! echo "$SSH_PRIVATE_KEY" | grep -q 'BEGIN.*PRIVATE KEY'; then
-            echo "::error::SSH_PRIVATE_KEY must be the full PEM private key (starts with -----BEGIN ... PRIVATE KEY-----)"
+            echo "::error::SSH_PRIVATE_KEY is not a valid private key PEM."
+            if echo "$SSH_PRIVATE_KEY" | grep -qE '^(ssh-rsa|ssh-ed25519|ecdsa-sha2)'; then
+              echo "You pasted a PUBLIC key (one line starting with ssh-rsa/ssh-ed25519)."
+              echo "Use the PRIVATE key file instead: cat ~/.ssh/aabtaab_deploy"
+            elif echo "$SSH_PRIVATE_KEY" | grep -q 'BEGIN.*PUBLIC KEY'; then
+              echo "You pasted a PUBLIC key block. Use the matching private key file."
+            else
+              echo "Paste the full private key including:"
+              echo "  -----BEGIN OPENSSH PRIVATE KEY-----"
+              echo "  (multiple lines)"
+              echo "  -----END OPENSSH PRIVATE KEY-----"
+            fi
             exit 1
           fi
           umask 077
