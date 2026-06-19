@@ -11,7 +11,7 @@ import {
   resolveEventImageUrls,
 } from "@/lib/cms/event";
 import { getEventBySlug, getSiteSettings } from "@/lib/cms/queries";
-import { EventJsonLd, getSiteUrl } from "@/lib/seo";
+import { EventJsonLd, BreadcrumbJsonLd, getSiteUrl } from "@/lib/seo";
 
 const siteUrl = getSiteUrl();
 
@@ -64,6 +64,13 @@ export default async function EventDetailPage({
         price={event.price}
         siteUrl={siteUrl}
         slug={slug}
+      />
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", url: siteUrl },
+          { name: "Events", url: `${siteUrl}/events` },
+          { name: event.title, url: `${siteUrl}/events/${slug}` },
+        ]}
       />
 
       <div className="sticky-below-header z-10 border-b border-gray-100 bg-white">

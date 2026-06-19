@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { heroImageUrl, urlFor } from "@/sanity/lib/image";
+import { heroImageUrl, ogImageUrl, urlFor } from "@/sanity/lib/image";
 import NestedBreadcrumbs from "@/components/content/NestedBreadcrumbs";
 import NestedChildrenGrid from "@/components/content/NestedChildrenGrid";
 import ServiceHeroSection from "@/components/content/ServiceHeroSection";
@@ -16,6 +16,13 @@ import { buildNestedSlugMetadata } from "@/lib/cms/page";
 import { getServiceBySlug, getSiteSettings } from "@/lib/cms/queries";
 import { mapServiceChildForGrid } from "@/lib/catalog/nested-children";
 import { buildNestedBreadcrumbItems } from "@/lib/paths";
+import { resolveSiteName } from "@/lib/constants";
+import {
+  absoluteUrl,
+  FaqPageJsonLd,
+  faqItemsToSchema,
+  ServiceJsonLd,
+} from "@/lib/seo";
 
 const SERVICE_BASE = {
   segment: "services" as const,
@@ -57,8 +64,28 @@ export default async function ServiceCatchAllPage({
     whatsappHref,
   } = buildNestedCatalogPageContext(SERVICE_BASE, slug, service, site);
 
+  const servicePageUrl = absoluteUrl(currentPath);
+  const serviceImageUrl = service.heroImage
+    ? ogImageUrl(service.heroImage)
+    : undefined;
+  const serviceFaqSchema = faqItemsToSchema(service.faqItems);
+
   return (
     <div>
+      {!hasChildren && (
+        <>
+          <ServiceJsonLd
+            title={service.title}
+            description={service.excerpt || service.heroBody}
+            imageUrl={serviceImageUrl}
+            siteName={resolveSiteName(site)}
+            siteUrl={siteUrl}
+            url={servicePageUrl}
+            price={service.price}
+          />
+          <FaqPageJsonLd faqItems={serviceFaqSchema} />
+        </>
+      )}
       <NestedBreadcrumbs
         base={SERVICE_BASE.segment}
         baseLabel={SERVICE_BASE.label}

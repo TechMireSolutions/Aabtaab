@@ -51,6 +51,7 @@ export interface Post {
   excerpt?: string;
   mainImage?: { asset: { _ref: string }; alt?: string };
   publishedAt?: string;
+  updatedAt?: string;
   categories?: Array<{ _id: string; title: string; slug: { current: string } }>;
   author?: {
     name: string;

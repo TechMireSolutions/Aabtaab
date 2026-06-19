@@ -18,7 +18,7 @@ import { getCourseBySlug, getSiteSettings } from "@/lib/cms/queries";
 import { mapCourseChildForGrid } from "@/lib/catalog/nested-children";
 import { buildNestedBreadcrumbItems } from "@/lib/paths";
 import { resolveSiteName } from "@/lib/constants";
-import { absoluteUrl, CourseJsonLd } from "@/lib/seo";
+import { absoluteUrl, CourseJsonLd, FaqPageJsonLd, faqItemsToSchema } from "@/lib/seo";
 import { ogImageUrl } from "@/sanity/lib/image";
 
 const COURSE_BASE = {
@@ -67,20 +67,25 @@ export default async function CourseCatchAllPage({
   const courseImageUrl = course.featuredImage
     ? ogImageUrl(course.featuredImage)
     : undefined;
+  const courseFaqSchema = faqItemsToSchema(course.faqItems);
 
   return (
     <div>
       {!hasChildren && (
-        <CourseJsonLd
-          title={course.title}
-          description={course.excerpt}
-          imageUrl={courseImageUrl}
-          siteName={resolveSiteName(site)}
-          siteUrl={siteUrl}
-          url={coursePageUrl}
-          price={course.pricingTables?.[0]?.rows?.[0]?.monthlyTotal}
-          instructor={course.instructor}
-        />
+        <>
+          <CourseJsonLd
+            title={course.title}
+            description={course.excerpt}
+            imageUrl={courseImageUrl}
+            siteName={resolveSiteName(site)}
+            siteUrl={siteUrl}
+            url={coursePageUrl}
+            price={course.pricingTables?.[0]?.rows?.[0]?.monthlyTotal}
+            instructor={course.instructor}
+            duration={course.duration}
+          />
+          <FaqPageJsonLd faqItems={courseFaqSchema} />
+        </>
       )}
       <NestedBreadcrumbs
         base={COURSE_BASE.segment}

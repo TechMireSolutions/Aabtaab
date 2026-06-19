@@ -8,7 +8,7 @@ import ProseSection from "@/components/portable-text/ProseSection";
 import { buildPostPageMetadata, resolvePostImageUrls } from "@/lib/cms/post";
 import { resolveSiteName } from "@/lib/constants";
 import { getPostBySlug, getSiteSettings } from "@/lib/cms/queries";
-import { ArticleJsonLd, getDefaultOgImageUrl, getSiteUrl } from "@/lib/seo";
+import { ArticleJsonLd, BreadcrumbJsonLd, getDefaultOgImageUrl, getSiteUrl } from "@/lib/seo";
 import { urlFor } from "@/sanity/lib/image";
 
 const siteUrl = getSiteUrl();
@@ -48,11 +48,19 @@ export default async function PostDetailPage({
         imageUrl={ogImageUrl}
         publisherLogoUrl={publisherLogoUrl}
         publishedAt={post.publishedAt}
+        updatedAt={post.updatedAt}
         authorName={post.author?.name}
         siteUrl={siteUrl}
         slug={slug}
         siteName={siteName}
         faqItems={post.faqItems}
+      />
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Home", url: siteUrl },
+          { name: "Articles", url: `${siteUrl}/posts` },
+          { name: post.title, url: `${siteUrl}/posts/${slug}` },
+        ]}
       />
 
       <div className="sticky-below-header z-10 border-b border-gray-100 bg-white">

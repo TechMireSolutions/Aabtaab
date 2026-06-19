@@ -658,8 +658,11 @@
 @media (max-width: 1023px) {
   header button,
   header nav a,
-  footer a {
-    min-height: 44px;
+  footer a,
+  .btn-primary,
+  .btn-secondary,
+  .btn-pill-accent {
+    min-height: var(--size-touch-min);
   }
 
   input,

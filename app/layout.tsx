@@ -9,10 +9,11 @@ import "./globals.css";
 
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800"],
+  weight: ["400", "500", "600", "700"],
   variable: "--font-jakarta",
   display: "swap",
   preload: true,
+  adjustFontFallback: true,
 });
 
 // ── Viewport (separate export — required in Next.js 15) ──────────────────────
@@ -154,13 +155,32 @@ async function SiteSchemas() {
 
   const organizationSchema = {
     "@context": "https://schema.org",
-    "@type": "Organization",
+    "@type": "EducationalOrganization",
+    "@id": `${siteUrl}/#organization`,
     name: resolveSiteName(settings),
     url: siteUrl,
     description: settings?.description,
-    ...(logoUrl && { logo: logoUrl }),
+    ...(logoUrl && {
+      logo: {
+        "@type": "ImageObject",
+        url: logoUrl,
+        width: 600,
+        height: 60,
+      },
+    }),
     ...(settings?.email && { email: settings.email }),
     ...(settings?.phone && { telephone: settings.phone }),
+    ...(settings?.phone || settings?.email
+      ? {
+          contactPoint: {
+            "@type": "ContactPoint",
+            contactType: "customer service",
+            ...(settings?.phone && { telephone: settings.phone }),
+            ...(settings?.email && { email: settings.email }),
+            availableLanguage: ["English"],
+          },
+        }
+      : {}),
     ...(settings?.address && {
       address: {
         "@type": "PostalAddress",
@@ -195,6 +215,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" dir="ltr">
+      <head>
+        <link rel="preconnect" href="https://cdn.sanity.io" crossOrigin="" />
+        <link rel="dns-prefetch" href="https://cdn.sanity.io" />
+      </head>
       <body
         className={`${jakarta.variable} font-sans antialiased relative`}
         suppressHydrationWarning

@@ -92,7 +92,7 @@ export default function CarouselSection({
                 onClick={() => scrollBy("left")}
                 disabled={!canLeft}
                 aria-label="Previous"
-                className={`flex h-9 w-9 items-center justify-center rounded-full border-2 transition-all duration-200 ${
+                className={`flex min-h-11 min-w-11 items-center justify-center rounded-full border-2 transition-all duration-200 ${
                   canLeft
                     ? "border-gray-200 text-gray-500 hover:border-brand-500 hover:bg-brand-50 hover:text-brand-600"
                     : "cursor-not-allowed border-gray-100 text-gray-300"
@@ -104,7 +104,7 @@ export default function CarouselSection({
                 onClick={() => scrollBy("right")}
                 disabled={!canRight}
                 aria-label="Next"
-                className={`flex h-9 w-9 items-center justify-center rounded-full border-2 transition-all duration-200 ${
+                className={`flex min-h-11 min-w-11 items-center justify-center rounded-full border-2 transition-all duration-200 ${
                   canRight
                     ? "border-gray-200 text-gray-500 hover:border-brand-500 hover:bg-brand-50 hover:text-brand-600"
                     : "cursor-not-allowed border-gray-100 text-gray-300"

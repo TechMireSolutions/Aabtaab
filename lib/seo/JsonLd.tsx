@@ -19,6 +19,7 @@ interface ArticleSchemaProps {
   imageUrl?: string;
   publisherLogoUrl?: string;
   publishedAt?: string;
+  updatedAt?: string;
   authorName?: string;
   siteUrl: string;
   slug: string;
@@ -32,6 +33,7 @@ export function ArticleJsonLd({
   imageUrl,
   publisherLogoUrl,
   publishedAt,
+  updatedAt,
   authorName,
   siteUrl,
   slug,
@@ -47,10 +49,10 @@ export function ArticleJsonLd({
       headline: title,
       ...(description && { description }),
       ...(imageUrl && { image: [imageUrl] }),
-      ...(publishedAt && {
-        datePublished: publishedAt,
-        dateModified: publishedAt,
-      }),
+      ...(publishedAt && { datePublished: publishedAt }),
+      ...(updatedAt || publishedAt
+        ? { dateModified: updatedAt ?? publishedAt }
+        : {}),
       author: authorName
         ? { "@type": "Person", name: authorName }
         : { "@type": "Organization", name: siteName },
@@ -63,22 +65,40 @@ export function ArticleJsonLd({
       },
       mainEntityOfPage: { "@type": "WebPage", "@id": articleUrl },
       url: articleUrl,
+      inLanguage: "en-US",
     },
   ];
 
-  if (faqItems && faqItems.length > 0) {
-    schemas.push({
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: faqItems.map(({ question, answer }) => ({
-        "@type": "Question",
-        name: question,
-        acceptedAnswer: { "@type": "Answer", text: answer },
-      })),
-    });
-  }
+  const faqSchema = buildFaqPageSchema(faqItems);
+  if (faqSchema) schemas.push(faqSchema);
 
   return <JsonLd schema={schemas} />;
+}
+
+export function buildFaqPageSchema(
+  faqItems?: Array<{ question: string; answer: string }>,
+): Record<string, unknown> | null {
+  if (!faqItems?.length) return null;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqItems.map(({ question, answer }) => ({
+      "@type": "Question",
+      name: question,
+      acceptedAnswer: { "@type": "Answer", text: answer },
+    })),
+  };
+}
+
+export function FaqPageJsonLd({
+  faqItems,
+}: {
+  faqItems?: Array<{ question: string; answer: string }>;
+}) {
+  const schema = buildFaqPageSchema(faqItems);
+  if (!schema) return null;
+  return <JsonLd schema={schema} />;
 }
 
 interface EventSchemaProps {
@@ -105,6 +125,57 @@ interface EventSchemaProps {
   slug: string;
 }
 
+function buildEventLocation({
+  eventType,
+  venueName,
+  streetAddress,
+  city,
+  state,
+  postalCode,
+  country,
+  onlineUrl,
+}: Pick<
+  EventSchemaProps,
+  | "eventType"
+  | "venueName"
+  | "streetAddress"
+  | "city"
+  | "state"
+  | "postalCode"
+  | "country"
+  | "onlineUrl"
+>): Record<string, unknown> | Record<string, unknown>[] | undefined {
+  const isOnline = eventType === "OnlineEventAttendanceMode";
+  const isHybrid = eventType === "MixedEventAttendanceMode";
+  const hasPhysical = Boolean(venueName || streetAddress);
+  const hasVirtual = Boolean((isOnline || isHybrid) && onlineUrl);
+
+  const physical =
+    hasPhysical && !isOnline
+      ? {
+          "@type": "Place",
+          name: venueName,
+          address: {
+            "@type": "PostalAddress",
+            streetAddress,
+            addressLocality: city,
+            addressRegion: state,
+            postalCode,
+            addressCountry: country || "US",
+          },
+        }
+      : null;
+
+  const virtual = hasVirtual
+    ? { "@type": "VirtualLocation", url: onlineUrl }
+    : null;
+
+  if (physical && virtual) return [physical, virtual];
+  if (physical) return physical;
+  if (virtual) return virtual;
+  return undefined;
+}
+
 export function EventJsonLd({
   title,
   description,
@@ -128,8 +199,16 @@ export function EventJsonLd({
   siteUrl,
   slug,
 }: EventSchemaProps) {
-  const isOnline = eventType === "OnlineEventAttendanceMode";
-  const isHybrid = eventType === "MixedEventAttendanceMode";
+  const location = buildEventLocation({
+    eventType,
+    venueName,
+    streetAddress,
+    city,
+    state,
+    postalCode,
+    country,
+    onlineUrl,
+  });
 
   const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
@@ -142,29 +221,7 @@ export function EventJsonLd({
     eventStatus: `https://schema.org/${status || "EventScheduled"}`,
     eventAttendanceMode: `https://schema.org/${eventType || "OfflineEventAttendanceMode"}`,
     url: `${siteUrl}/events/${slug}`,
-    ...((venueName || streetAddress) && {
-      location: isOnline
-        ? undefined
-        : {
-            "@type": "Place",
-            name: venueName,
-            address: {
-              "@type": "PostalAddress",
-              streetAddress,
-              addressLocality: city,
-              addressRegion: state,
-              postalCode,
-              addressCountry: country || "US",
-            },
-          },
-    }),
-    ...((isOnline || isHybrid) &&
-      onlineUrl && {
-        location: {
-          "@type": "VirtualLocation",
-          url: onlineUrl,
-        },
-      }),
+    ...(location && { location }),
     ...(organizerName && {
       organizer: {
         "@type": "Organization",
@@ -179,6 +236,7 @@ export function EventJsonLd({
       availability: "https://schema.org/InStock",
       ...(registrationUrl && { url: registrationUrl }),
     },
+    inLanguage: "en-US",
   };
 
   return <JsonLd schema={schema} />;
@@ -193,6 +251,7 @@ interface CourseSchemaProps {
   url: string;
   price?: string;
   instructor?: string;
+  duration?: string;
 }
 
 export function CourseJsonLd({
@@ -204,6 +263,7 @@ export function CourseJsonLd({
   url,
   price,
   instructor,
+  duration,
 }: CourseSchemaProps) {
   const schema: Record<string, unknown> = {
     "@context": "https://schema.org",
@@ -212,6 +272,15 @@ export function CourseJsonLd({
     ...(description && { description }),
     ...(imageUrl && { image: [imageUrl] }),
     url,
+    courseMode: "Online",
+    inLanguage: "en-US",
+    ...(duration && {
+      hasCourseInstance: {
+        "@type": "CourseInstance",
+        courseMode: "Online",
+        ...(duration && { duration }),
+      },
+    }),
     provider: {
       "@type": "Organization",
       name: siteName,
@@ -220,6 +289,56 @@ export function CourseJsonLd({
     ...(instructor && {
       instructor: { "@type": "Person", name: instructor },
     }),
+    ...(price && {
+      offers: {
+        "@type": "Offer",
+        price,
+        priceCurrency: "USD",
+        availability: "https://schema.org/InStock",
+        url,
+      },
+    }),
+  };
+
+  return <JsonLd schema={schema} />;
+}
+
+interface ServiceSchemaProps {
+  title: string;
+  description?: string;
+  imageUrl?: string;
+  siteName: string;
+  siteUrl: string;
+  url: string;
+  price?: string;
+}
+
+export function ServiceJsonLd({
+  title,
+  description,
+  imageUrl,
+  siteName,
+  siteUrl,
+  url,
+  price,
+}: ServiceSchemaProps) {
+  const schema: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: title,
+    ...(description && { description }),
+    ...(imageUrl && { image: imageUrl }),
+    url,
+    serviceType: title,
+    areaServed: {
+      "@type": "Country",
+      name: "United States",
+    },
+    provider: {
+      "@type": "Organization",
+      name: siteName,
+      url: siteUrl,
+    },
     ...(price && {
       offers: {
         "@type": "Offer",
@@ -272,6 +391,11 @@ export function WebSiteJsonLd({
     url: siteUrl,
     ...(description && { description }),
     inLanguage: "en-US",
+    publisher: {
+      "@type": "Organization",
+      "@id": `${siteUrl}/#organization`,
+      name: siteName,
+    },
     potentialAction: {
       "@type": "SearchAction",
       target: {

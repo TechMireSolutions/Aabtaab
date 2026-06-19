@@ -18,7 +18,9 @@ export const featuredPostsQuery = `
 
 export const postBySlugQuery = `
   *[_type == "post" && slug.current == $slug][0] {
-    _id, title, slug, mainImage, body, publishedAt, excerpt,
+    _id, title, slug, mainImage, body, publishedAt,
+    "updatedAt": coalesce(_updatedAt, publishedAt),
+    excerpt,
     "categories": categories[]->{ _id, title, slug },
     "author": author->{ name, image, bio },
     faqItems[]{ question, answer },
