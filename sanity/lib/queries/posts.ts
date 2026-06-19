@@ -26,4 +26,7 @@ export const postBySlugQuery = `
   }
 `;
 
-export const postSlugsQuery = `*[_type == "post" && defined(slug.current)]{ "slug": slug.current }`;
+export const postSlugsQuery = `*[_type == "post" && defined(slug.current) && coalesce(seo.noIndex, false) != true]{
+  "slug": slug.current,
+  "lastModified": coalesce(_updatedAt, publishedAt, _createdAt)
+}`;

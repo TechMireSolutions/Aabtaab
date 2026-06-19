@@ -27,4 +27,7 @@ export const eventBySlugQuery = `
   }
 `;
 
-export const eventSlugsQuery = `*[_type == "event" && defined(slug.current)]{ "slug": slug.current }`;
+export const eventSlugsQuery = `*[_type == "event" && defined(slug.current) && coalesce(seo.noIndex, false) != true]{
+  "slug": slug.current,
+  "lastModified": coalesce(_updatedAt, startDate, _createdAt)
+}`;

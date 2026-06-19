@@ -28,8 +28,9 @@ export const serviceBySlugDeepQuery = `
 `;
 
 export const allServicePathsQuery = `
-  *[_type == "service" && defined(slug.current)] {
+  *[_type == "service" && defined(slug.current) && coalesce(seo.noIndex, false) != true] {
     "slug": slug.current,
+    "lastModified": coalesce(_updatedAt, _createdAt),
     ${PARENT_SLUG_CHAIN_FRAGMENT}
   }
 `;

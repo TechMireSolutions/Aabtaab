@@ -33,8 +33,9 @@ export const courseBySlugDeepQuery = `
 `;
 
 export const allCoursePathsQuery = `
-  *[_type == "course" && defined(slug.current)] {
+  *[_type == "course" && defined(slug.current) && coalesce(seo.noIndex, false) != true] {
     "slug": slug.current,
+    "lastModified": coalesce(_updatedAt, _createdAt),
     ${PARENT_SLUG_CHAIN_FRAGMENT}
   }
 `;

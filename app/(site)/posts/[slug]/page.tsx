@@ -8,7 +8,8 @@ import ProseSection from "@/components/portable-text/ProseSection";
 import { buildPostPageMetadata, resolvePostImageUrls } from "@/lib/cms/post";
 import { resolveSiteName } from "@/lib/constants";
 import { getPostBySlug, getSiteSettings } from "@/lib/cms/queries";
-import { ArticleJsonLd, getSiteUrl } from "@/lib/seo";
+import { ArticleJsonLd, getDefaultOgImageUrl, getSiteUrl } from "@/lib/seo";
+import { urlFor } from "@/sanity/lib/image";
 
 const siteUrl = getSiteUrl();
 
@@ -35,6 +36,9 @@ export default async function PostDetailPage({
 
   const siteName = resolveSiteName(settings);
   const { mainImageUrl, ogImageUrl } = resolvePostImageUrls(post);
+  const publisherLogoUrl = settings?.logo
+    ? urlFor(settings.logo).width(600).height(60).url()
+    : getDefaultOgImageUrl();
 
   return (
     <div className="min-h-screen bg-white">
@@ -42,6 +46,7 @@ export default async function PostDetailPage({
         title={post.title}
         description={post.seo?.metaDescription || post.excerpt}
         imageUrl={ogImageUrl}
+        publisherLogoUrl={publisherLogoUrl}
         publishedAt={post.publishedAt}
         authorName={post.author?.name}
         siteUrl={siteUrl}

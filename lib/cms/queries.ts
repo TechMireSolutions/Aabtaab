@@ -205,23 +205,25 @@ export const getContactFormOptions = cache(async () => {
 });
 
 export const getSitemapSlugs = cache(async () => {
+  type SitemapEntry = { slug: string; lastModified?: string; parent?: SlugParent | null };
+
   const [posts, courses, services, events] = await Promise.all([
-    sanityFetch<{ slug: string }[]>({
+    sanityFetch<SitemapEntry[]>({
       query: postSlugsQuery,
       tags: [CACHE_TAGS.posts],
       revalidate: 3600,
     }),
-    sanityFetch<{ slug: string; parent?: SlugParent | null }[]>({
+    sanityFetch<SitemapEntry[]>({
       query: allCoursePathsQuery,
       tags: [CACHE_TAGS.courses],
       revalidate: 3600,
     }),
-    sanityFetch<{ slug: string; parent?: SlugParent | null }[]>({
+    sanityFetch<SitemapEntry[]>({
       query: allServicePathsQuery,
       tags: [CACHE_TAGS.services],
       revalidate: 3600,
     }),
-    sanityFetch<{ slug: string }[]>({
+    sanityFetch<SitemapEntry[]>({
       query: eventSlugsQuery,
       tags: [CACHE_TAGS.events],
       revalidate: 3600,

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { buildPageMetadata } from "@/lib/seo/metadata";
+import { resolveDocOgImage } from "@/lib/seo/resolve-og-image";
 import type { CmsPageSummary } from "@/types/cms-page";
 import type { SeoData } from "@/types/sanity";
 import { getCmsPage } from "./queries";
@@ -27,7 +28,9 @@ export function buildCmsPageMetadata(
       page?.subtitle ||
       options.fallbackDescription,
     path: options.path,
-    noIndex: options.noIndex,
+    noIndex: options.noIndex ?? page?.seo?.noIndex,
+    ogImage: resolveDocOgImage(page),
+    keywords: page?.seo?.keywords,
   });
 }
 
@@ -45,6 +48,9 @@ interface NestedSlugDoc {
   seo?: SeoData;
   title?: string;
   excerpt?: string;
+  featuredImage?: { asset: { _ref: string } };
+  heroImage?: { asset: { _ref: string } };
+  icon?: { asset: { _ref: string } };
 }
 
 export function buildNestedSlugMetadata(
@@ -58,5 +64,7 @@ export function buildNestedSlugMetadata(
     description: doc?.seo?.metaDescription || doc?.excerpt,
     path: `${basePath}/${slugParts.join("/")}`,
     noIndex: doc?.seo?.noIndex,
+    ogImage: resolveDocOgImage(doc),
+    keywords: doc?.seo?.keywords,
   });
 }

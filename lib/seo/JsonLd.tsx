@@ -17,6 +17,7 @@ interface ArticleSchemaProps {
   title: string;
   description?: string;
   imageUrl?: string;
+  publisherLogoUrl?: string;
   publishedAt?: string;
   authorName?: string;
   siteUrl: string;
@@ -29,6 +30,7 @@ export function ArticleJsonLd({
   title,
   description,
   imageUrl,
+  publisherLogoUrl,
   publishedAt,
   authorName,
   siteUrl,
@@ -44,7 +46,7 @@ export function ArticleJsonLd({
       "@type": "Article",
       headline: title,
       ...(description && { description }),
-      ...(imageUrl && { image: imageUrl }),
+      ...(imageUrl && { image: [imageUrl] }),
       ...(publishedAt && {
         datePublished: publishedAt,
         dateModified: publishedAt,
@@ -55,7 +57,9 @@ export function ArticleJsonLd({
       publisher: {
         "@type": "Organization",
         name: siteName,
-        ...(imageUrl && { logo: { "@type": "ImageObject", url: imageUrl } }),
+        ...(publisherLogoUrl && {
+          logo: { "@type": "ImageObject", url: publisherLogoUrl },
+        }),
       },
       mainEntityOfPage: { "@type": "WebPage", "@id": articleUrl },
       url: articleUrl,
@@ -175,6 +179,56 @@ export function EventJsonLd({
       availability: "https://schema.org/InStock",
       ...(registrationUrl && { url: registrationUrl }),
     },
+  };
+
+  return <JsonLd schema={schema} />;
+}
+
+interface CourseSchemaProps {
+  title: string;
+  description?: string;
+  imageUrl?: string;
+  siteName: string;
+  siteUrl: string;
+  url: string;
+  price?: string;
+  instructor?: string;
+}
+
+export function CourseJsonLd({
+  title,
+  description,
+  imageUrl,
+  siteName,
+  siteUrl,
+  url,
+  price,
+  instructor,
+}: CourseSchemaProps) {
+  const schema: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name: title,
+    ...(description && { description }),
+    ...(imageUrl && { image: [imageUrl] }),
+    url,
+    provider: {
+      "@type": "Organization",
+      name: siteName,
+      url: siteUrl,
+    },
+    ...(instructor && {
+      instructor: { "@type": "Person", name: instructor },
+    }),
+    ...(price && {
+      offers: {
+        "@type": "Offer",
+        price,
+        priceCurrency: "USD",
+        availability: "https://schema.org/InStock",
+        url,
+      },
+    }),
   };
 
   return <JsonLd schema={schema} />;

@@ -2,6 +2,17 @@ import type { MetadataRoute } from "next";
 import { absoluteUrl, buildNestedContentPath } from "@/lib/seo";
 import { getSitemapSlugs } from "@/lib/cms/queries";
 
+interface SitemapSlug {
+  slug: string;
+  lastModified?: string;
+}
+
+function toLastModified(iso?: string): Date | undefined {
+  if (!iso) return undefined;
+  const date = new Date(iso);
+  return Number.isNaN(date.getTime()) ? undefined : date;
+}
+
 const STATIC_ROUTES: MetadataRoute.Sitemap = [
   { url: absoluteUrl("/"), changeFrequency: "daily", priority: 1 },
   { url: absoluteUrl("/about"), changeFrequency: "monthly", priority: 0.8 },
@@ -15,14 +26,14 @@ const STATIC_ROUTES: MetadataRoute.Sitemap = [
   { url: absoluteUrl("/events"), changeFrequency: "weekly", priority: 0.85 },
   { url: absoluteUrl("/donate"), changeFrequency: "monthly", priority: 0.7 },
   { url: absoluteUrl("/contact"), changeFrequency: "monthly", priority: 0.7 },
-  { url: absoluteUrl("/search"), changeFrequency: "monthly", priority: 0.5 },
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const { posts, courses, services, events } = await getSitemapSlugs();
 
-  const articleRoutes: MetadataRoute.Sitemap = posts.map((post) => ({
+  const articleRoutes: MetadataRoute.Sitemap = posts.map((post: SitemapSlug) => ({
     url: absoluteUrl(`/posts/${post.slug}`),
+    lastModified: toLastModified(post.lastModified),
     changeFrequency: "weekly",
     priority: 0.7,
   }));
@@ -31,6 +42,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url: absoluteUrl(
       buildNestedContentPath("online-courses", course.slug, course.parent),
     ),
+    lastModified: toLastModified(course.lastModified),
     changeFrequency: "weekly",
     priority: 0.8,
   }));
@@ -39,12 +51,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url: absoluteUrl(
       buildNestedContentPath("services", service.slug, service.parent),
     ),
+    lastModified: toLastModified(service.lastModified),
     changeFrequency: "weekly",
     priority: 0.8,
   }));
 
-  const eventRoutes: MetadataRoute.Sitemap = events.map((event) => ({
+  const eventRoutes: MetadataRoute.Sitemap = events.map((event: SitemapSlug) => ({
     url: absoluteUrl(`/events/${event.slug}`),
+    lastModified: toLastModified(event.lastModified),
     changeFrequency: "weekly",
     priority: 0.75,
   }));

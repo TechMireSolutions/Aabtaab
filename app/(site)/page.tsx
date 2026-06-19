@@ -5,7 +5,7 @@ import { buildPageMetadata } from "@/lib/seo";
 import { resolveSiteName } from "@/lib/constants";
 import { getHomepageData } from "@/lib/cms/queries";
 import { formatEventDateRange } from "@/lib/cms/event";
-import { urlFor } from "@/sanity/lib/image";
+import { ogImageUrl, urlFor } from "@/sanity/lib/image";
 import HeroSection from "@/components/sections/HeroSection";
 import CarouselSection, {
   CarouselItem,
@@ -13,7 +13,11 @@ import CarouselSection, {
 import ContentCard from "@/components/cards/ContentCard";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const { settings } = await getHomepageData();
+  const { settings, homepage: hp } = await getHomepageData();
+  const ogImage =
+    (hp?.heroImage ? ogImageUrl(hp.heroImage) : undefined) ??
+    (settings?.logo ? ogImageUrl(settings.logo) : undefined);
+
   return buildPageMetadata({
     title: resolveSiteName(settings),
     description:
@@ -21,6 +25,7 @@ export async function generateMetadata(): Promise<Metadata> {
       "Shia Islamic knowledge, online courses, and community services for Muslims worldwide.",
     path: "/",
     absoluteTitle: true,
+    ogImage,
   });
 }
 
@@ -150,7 +155,7 @@ export default async function HomePage() {
               <div className="bg-slate-900 rounded-3xl p-8 sm:p-10 text-white relative overflow-hidden">
                 <div className="bg-hero-glow pointer-events-none absolute top-0 right-0 size-72 hero-glow-offset rounded-full opacity-60" />
                 <p
-                  className="mb-3 text-center text-2xl font-light leading-relaxed text-gold-400 sm:text-3xl"
+                  className="mb-3 text-center text-2xl font-normal leading-relaxed text-gold-400 sm:text-3xl"
                   dir="rtl"
                 >
                   {hp?.aboutHadithArabic || "اطلبوا العلم من المهد إلى اللحد"}

@@ -38,6 +38,7 @@ export async function buildPostPageMetadata(slug: string): Promise<Metadata> {
     path: canonicalPath,
     noIndex: post?.seo?.noIndex,
     ogImage: ogImageUrl,
+    keywords: post?.seo?.keywords,
   });
 
   return {

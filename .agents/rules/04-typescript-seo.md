@@ -16,6 +16,8 @@ description: TypeScript strictness, SEO, accessibility, and semantic HTML
 
 - Site metadata: `app/layout.tsx` `generateMetadata`.
 - Pages: `defineCmsPageMetadata`, `buildPageMetadata`, `buildNestedSlugMetadata`, `buildPostPageMetadata`.
+- OG images: `resolveDocOgImage()` in `lib/seo/resolve-og-image.ts` — seo override → featured/hero/icon image.
+- Default OG: `getDefaultOgImageUrl()` → `/og-default.png` (applied in `buildPageMetadata` when no CMS image).
 - JSON-LD: `lib/seo/JsonLd.tsx` — use existing helpers (do not hand-roll schema).
 - Sitemap/robots: `app/sitemap.ts`, `app/robots.ts`.
 - Full SEO reference: **`techstack.md`** § SEO.
@@ -25,7 +27,8 @@ description: TypeScript strictness, SEO, accessibility, and semantic HTML
 | Helper | Use |
 |--------|-----|
 | Organization + WebSite | Root layout (every page) |
-| `ArticleJsonLd` | Post detail (+ optional FAQPage) |
+| `ArticleJsonLd` | Post detail (+ optional FAQPage); pass `publisherLogoUrl` (site logo, not article image) |
+| `CourseJsonLd` | Leaf course detail pages (not parent catalog nodes) |
 | `EventJsonLd` | Event detail |
 | `BreadcrumbJsonLd` | Nested course/service pages |
 | WebSite `SearchAction` | Points to `/search?q={search_term_string}` |
@@ -33,8 +36,22 @@ description: TypeScript strictness, SEO, accessibility, and semantic HTML
 ## Search & index control
 
 - Unified search: `/search?q=…` — `noIndex: true` on result pages.
+- `/search` is **not** in sitemap (result pages are noindex).
 - Legacy `/posts?q=…` redirects to `/search`.
-- CMS `seo.noIndex` on documents via `seoObject`.
+- CMS `seo.noIndex` on documents — excluded from sitemap GROQ queries.
+
+## Sitemap
+
+- Static routes only (no `/search`).
+- Dynamic routes include `lastModified` from CMS `_updatedAt` / `publishedAt`.
+- Slug queries filter `coalesce(seo.noIndex, false) != true`.
+
+## Performance (SEO-adjacent)
+
+- LCP hero: `priority` + correct `sizes` on above-the-fold `next/image`.
+- Fonts: subset weights in `app/layout.tsx` (`display: "swap"`, `preload: true`).
+- Images: Sanity CDN via `next/image` (WebP/AVIF in `next.config.ts`).
+- `poweredByHeader: false` in `next.config.ts`.
 
 ## HTML & a11y
 
@@ -47,10 +64,11 @@ description: TypeScript strictness, SEO, accessibility, and semantic HTML
 
 - Meaningful `alt` on all content images.
 - No blank image placeholders in production UI — use CMS image or styled fallback block.
-- OG fallback: `public/og-default.png` when no CMS logo.
+- OG fallback: `public/og-default.png` when no CMS image.
 
 ## Avoid
 
 - Client-only metadata hacks.
 - Duplicate SEO title/description logic outside `lib/cms/page.ts` / `lib/seo/`.
 - Hardcoded site name when `getSiteSettings()` is available.
+- Using article image as Organization `publisher.logo` in JSON-LD.

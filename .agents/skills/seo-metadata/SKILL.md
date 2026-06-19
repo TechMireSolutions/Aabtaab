@@ -14,14 +14,25 @@ description: >-
 
 | Builder | Use case |
 |---------|----------|
-| `buildPageMetadata` | Base helper (`lib/seo/metadata.ts`) — events, search, generic pages |
-| `defineCmsPageMetadata` | Static CMS pages (about, contact, donate) |
+| `buildPageMetadata` | Base helper — always sets canonical, OG/Twitter image (CMS or `og-default.png`) |
+| `defineCmsPageMetadata` | Static CMS pages (about, contact, donate, listings) |
 | `buildCmsPageMetadata` | CMS pages with optional overrides |
 | `buildNestedSlugMetadata` | Course/service `[...slug]` pages |
 | `buildPostPageMetadata` | Post detail pages |
 | Root `generateMetadata` | Site-wide defaults (`app/layout.tsx`) |
 
-Homepage uses `absoluteTitle: true` in `buildPageMetadata`.
+Homepage: `absoluteTitle: true` + OG from `homepage.heroImage` or site logo.
+
+## OG image resolution
+
+```ts
+import { resolveDocOgImage, getDefaultOgImageUrl } from "@/lib/seo";
+
+resolveDocOgImage(doc); // seo.ogImage → featuredImage → heroImage → icon
+getDefaultOgImageUrl(); // https://…/og-default.png
+```
+
+`buildPageMetadata` applies the default OG automatically when `ogImage` is omitted.
 
 ## JSON-LD (`lib/seo/JsonLd.tsx`)
 
@@ -29,13 +40,17 @@ Homepage uses `absoluteTitle: true` in `buildPageMetadata`.
 |--------|-------|
 | Organization | Root layout (every page) |
 | WebSite + SearchAction | Root layout → `/search?q={search_term_string}` |
-| `ArticleJsonLd` | Post detail (+ optional FAQPage) |
+| `ArticleJsonLd` | Post detail — `publisherLogoUrl` = site logo |
+| `CourseJsonLd` | Leaf course pages only (`!hasChildren`) |
 | `EventJsonLd` | Event detail |
 | `BreadcrumbJsonLd` | Nested course/service breadcrumbs |
 
 ## Sitemap & robots
 
-- `app/sitemap.ts` — static routes (`/`, `/about`, `/posts`, `/events`, `/search`, …) + dynamic posts, nested courses/services, events
+- `app/sitemap.ts` — static indexable routes + dynamic posts/courses/services/events
+- **Exclude** `/search` from sitemap
+- Dynamic entries include `lastModified` from CMS
+- GROQ slug queries filter `seo.noIndex != true`
 - `app/robots.ts` — allow `/`; disallow `/studio/`, `/api/`
 
 ## Site search
@@ -51,28 +66,23 @@ Homepage uses `absoluteTitle: true` in `buildPageMetadata`.
 
 ## CMS SEO fields
 
-`seo.metaTitle`, `seo.metaDescription`, `seo.noIndex`, `seo.ogImage`, `seo.canonicalUrl` via `seoObject` schema.
+`seo.metaTitle`, `seo.metaDescription`, `seo.noIndex`, `seo.ogImage`, `seo.canonicalUrl`, `seo.keywords` via `seoObject` schema.
 
-## Images
+## Images & performance
 
-`ogImageUrl`, `articleHeroImageUrl` in `sanity/lib/image.ts`.  
-Fallback OG: `public/og-default.png` (regenerate via `scripts/generate-og-default.mjs`).
+- `ogImageUrl`, `articleHeroImageUrl` in `sanity/lib/image.ts`
+- LCP images: `priority` + `sizes` on hero/featured images
+- Fonts: minimal weight subset + `display: "swap"` in `app/layout.tsx`
+- Regenerate default OG: `node scripts/generate-og-default.mjs`
 
 ## Checklist for new public page
 
 1. Export `generateMetadata` (or `defineCmsPageMetadata`)
-2. One `h1`, semantic sections
-3. Add JSON-LD if applicable (Article, Event, Breadcrumb)
-4. Add to `app/sitemap.ts` if indexable
-5. Wire webhook revalidation tag if CMS-backed
-
-## TypeScript & a11y
-
-- Shared types in `types/` — reuse before duplicating.
-- Semantic tags: `main`, `nav`, `section`, `article`, `header`, `footer`.
-- Skip link + `#main-content` (site layout).
-- Meaningful `alt` on content images; no blank placeholders in production UI.
-- Avoid hardcoded site name when `getSiteSettings()` is available.
+2. Pass `ogImage` via `resolveDocOgImage` when CMS-backed
+3. One `h1`, semantic sections
+4. Add JSON-LD if applicable (Article, Course, Event, Breadcrumb)
+5. Ensure slug query excludes `seo.noIndex` if sitemap-eligible
+6. Wire webhook revalidation tag if CMS-backed
 
 ## Verify
 

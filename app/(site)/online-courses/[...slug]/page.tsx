@@ -17,6 +17,9 @@ import { buildNestedSlugMetadata } from "@/lib/cms/page";
 import { getCourseBySlug, getSiteSettings } from "@/lib/cms/queries";
 import { mapCourseChildForGrid } from "@/lib/catalog/nested-children";
 import { buildNestedBreadcrumbItems } from "@/lib/paths";
+import { resolveSiteName } from "@/lib/constants";
+import { absoluteUrl, CourseJsonLd } from "@/lib/seo";
+import { ogImageUrl } from "@/sanity/lib/image";
 
 const COURSE_BASE = {
   segment: "online-courses" as const,
@@ -60,9 +63,25 @@ export default async function CourseCatchAllPage({
 
   const enrollHref = course.enrollmentLink || "/contact";
   const enrollExternal = Boolean(course.enrollmentLink);
+  const coursePageUrl = absoluteUrl(currentPath);
+  const courseImageUrl = course.featuredImage
+    ? ogImageUrl(course.featuredImage)
+    : undefined;
 
   return (
     <div>
+      {!hasChildren && (
+        <CourseJsonLd
+          title={course.title}
+          description={course.excerpt}
+          imageUrl={courseImageUrl}
+          siteName={resolveSiteName(site)}
+          siteUrl={siteUrl}
+          url={coursePageUrl}
+          price={course.pricingTables?.[0]?.rows?.[0]?.monthlyTotal}
+          instructor={course.instructor}
+        />
+      )}
       <NestedBreadcrumbs
         base={COURSE_BASE.segment}
         baseLabel={COURSE_BASE.label}

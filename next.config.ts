@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  poweredByHeader: false,
+
   // ── Sanity packages require transpilation in Next.js App Router ─────────
   transpilePackages: ["sanity", "@sanity/ui", "@sanity/icons"],
 

@@ -14,12 +14,17 @@ export function absoluteUrl(path = "/"): string {
   return `${siteUrl}${normalized}`;
 }
 
+export function getDefaultOgImageUrl(): string {
+  return absoluteUrl("/og-default.png");
+}
+
 interface PageSeoOptions {
   title: string;
   description?: string;
   path: string;
   noIndex?: boolean;
   ogImage?: string;
+  keywords?: string[];
   /** Use for homepage to avoid "Aabtaab | Aabtaab" from the title template */
   absoluteTitle?: boolean;
 }
@@ -30,13 +35,16 @@ export function buildPageMetadata({
   path,
   noIndex,
   ogImage,
+  keywords,
   absoluteTitle,
 }: PageSeoOptions): Metadata {
   const url = absoluteUrl(path);
+  const resolvedOg = ogImage ?? getDefaultOgImageUrl();
 
   return {
     title: absoluteTitle ? { absolute: title } : title,
     description,
+    ...(keywords?.length ? { keywords } : {}),
     alternates: { canonical: url },
     robots: noIndex
       ? { index: false, follow: true, googleBot: { index: false, follow: true } }
@@ -56,15 +64,20 @@ export function buildPageMetadata({
       url,
       type: "website",
       locale: "en_US",
-      ...(ogImage && {
-        images: [{ url: ogImage, width: 1200, height: 630, alt: title }],
-      }),
+      images: [
+        {
+          url: resolvedOg,
+          width: 1200,
+          height: 630,
+          alt: title,
+        },
+      ],
     },
     twitter: {
-      card: ogImage ? "summary_large_image" : "summary",
+      card: "summary_large_image",
       title,
       description,
-      ...(ogImage && { images: [ogImage] }),
+      images: [resolvedOg],
     },
   };
 }
