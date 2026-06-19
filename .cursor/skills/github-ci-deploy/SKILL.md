@@ -40,9 +40,18 @@ CI env placeholders: `NEXT_PUBLIC_SANITY_PROJECT_ID=ci-placeholder`, `NEXT_PUBLI
 |--------|---------|
 | `SERVER_HOST` | VPS IP/hostname only (no `https://`) |
 | `SERVER_USER` | SSH user |
-| `SSH_PRIVATE_KEY` | Full **private** PEM key — `cat ~/.ssh/your_key` (not `.pub`) |
+| `SSH_PRIVATE_KEY_B64` | **Recommended** — base64-encoded private key (single line) |
+| `SSH_PRIVATE_KEY` | Alternative — full PEM multiline private key |
 
-If deploy logs show `ssh: no key found`, re-paste the entire private key including `-----BEGIN ... PRIVATE KEY-----` lines. Validate locally: `ssh-keygen -y -f ~/.ssh/your_key`.
+Generate base64 secret on Mac (paste into `SSH_PRIVATE_KEY_B64`):
+
+```bash
+base64 -i ~/.ssh/aabtaab_deploy | tr -d '\n' | pbcopy
+```
+
+Or paste full PEM from `cat ~/.ssh/aabtaab_deploy` into `SSH_PRIVATE_KEY`.
+
+If deploy logs show `ssh: no key found` or invalid PEM, re-create the secret using base64 above.
 
 ## CI vs deploy gaps
 
