@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import NavLinks from "@/components/layout/NavLinks";
+import MobileNavSidebar from "@/components/layout/MobileNavSidebar";
 import { DEFAULT_SITE_NAME } from "@/lib/constants";
 import type { NavItem } from "@/types/site-navigation";
 
@@ -42,13 +43,11 @@ function buildNavLinks(
 function SiteLogo({
   siteName,
   logoUrl,
-  compact = false,
 }: {
   siteName: string;
   logoUrl?: string | null;
-  compact?: boolean;
 }) {
-  const size = compact ? 40 : 42;
+  const size = 42;
 
   return (
     <>
@@ -68,11 +67,9 @@ function SiteLogo({
           </div>
         )}
       </div>
-      {!compact && (
-        <span className="hidden text-lg-plus font-bold tracking-heading text-slate-900 md:block">
-          {siteName}
-        </span>
-      )}
+      <span className="hidden text-lg-plus font-bold tracking-heading text-slate-900 md:block">
+        {siteName}
+      </span>
     </>
   );
 }
@@ -93,21 +90,6 @@ function SearchIcon({ className }: { className?: string }) {
   );
 }
 
-function MenuIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      className={className}
-    >
-      <path d="M4 7h16M4 12h16M4 17h16" />
-    </svg>
-  );
-}
-
 export default function Header({
   darulQuranUrl,
   siteName = DEFAULT_SITE_NAME,
@@ -120,58 +102,12 @@ export default function Header({
   return (
     <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/95 shadow-header backdrop-blur-md">
       <div className="container-page flex h-header items-center gap-2 lg:gap-8">
-        <details className="group relative lg:hidden">
-          <summary
-            className="flex h-11 w-11 list-none cursor-pointer items-center justify-center rounded-full text-gray-600 transition-colors hover:bg-gray-100 focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 [&::-webkit-details-marker]:hidden"
-            aria-label="Open navigation menu"
-          >
-            <MenuIcon className="size-5" />
-            <span className="sr-only">Menu</span>
-          </summary>
-
-          <div className="absolute left-0 top-[calc(100%+0.5rem)] z-drawer w-mobile-drawer max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-2xl">
-            <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4">
-              <Link href="/" className="group flex items-center gap-2.5">
-                <SiteLogo siteName={siteName} logoUrl={logoUrl} compact />
-                <span className="text-base font-bold tracking-heading text-slate-900">
-                  {siteName}
-                </span>
-              </Link>
-            </div>
-
-            <nav
-              aria-label="Main navigation"
-              className="max-h-[min(60vh,24rem)] overflow-y-auto px-3 py-3"
-            >
-              <NavLinks links={navLinks} variant="mobile" />
-            </nav>
-
-            <div className="border-t border-gray-100 px-4 py-4">
-              <form
-                action="/search"
-                method="get"
-                className="flex items-center gap-2"
-              >
-                <input
-                  type="search"
-                  name="q"
-                  enterKeyHint="search"
-                  inputMode="search"
-                  placeholder={searchPlaceholder}
-                  aria-label="Search"
-                  className="input-field flex-1 rounded-xl border-gray-200 focus:border-brand-400 focus:ring-brand-400/20"
-                />
-                <button
-                  type="submit"
-                  aria-label="Search"
-                  className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-700 text-white transition-colors hover:bg-brand-800 focus-visible:ring-2 focus-visible:ring-brand-800 focus-visible:ring-offset-2"
-                >
-                  <SearchIcon className="size-4" />
-                </button>
-              </form>
-            </div>
-          </div>
-        </details>
+        <MobileNavSidebar
+          siteName={siteName}
+          logoUrl={logoUrl}
+          navLinks={navLinks}
+          searchPlaceholder={searchPlaceholder}
+        />
 
         <Link
           href="/"
@@ -191,9 +127,14 @@ export default function Header({
         <form
           action="/search"
           method="get"
+          role="search"
           className="ml-auto hidden items-center overflow-hidden rounded-full border border-gray-200 bg-white lg:flex"
         >
+          <label htmlFor="header-search" className="sr-only">
+            Search
+          </label>
           <input
+            id="header-search"
             type="search"
             name="q"
             placeholder={searchPlaceholder}

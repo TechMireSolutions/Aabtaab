@@ -696,3 +696,42 @@
   content-visibility: auto;
   contain-intrinsic-size: auto 32rem;
 }
+
+@keyframes mobile-nav-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes mobile-nav-slide-in {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@utility mobile-nav-overlay {
+  z-index: var(--z-index-drawer-overlay);
+  @apply fixed inset-0 bg-slate-900/40 backdrop-blur-[2px];
+  animation: mobile-nav-fade-in 0.2s ease-out both;
+}
+
+@utility mobile-nav-panel {
+  z-index: var(--z-index-drawer);
+  width: min(300px, calc(100vw - 2rem));
+  max-width: 100%;
+  @apply fixed inset-y-0 left-0 flex flex-col border-r border-gray-100 bg-white shadow-2xl;
+  animation: mobile-nav-slide-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mobile-nav-overlay,
+  .mobile-nav-panel {
+    animation: none;
+  }
+}
