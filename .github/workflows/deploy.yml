@@ -119,7 +119,7 @@ jobs:
             echo "::error::SSH private key failed validation (passphrase-protected keys are not supported)."
             exit 1
           fi
-          echo "DEPLOY_KEY_PATH=$HOME/.ssh/deploy_key" >> "$GITHUB_ENV"
+          echo "DEPLOY_KEY_PATH=${HOME}/.ssh/deploy_key" >> "$GITHUB_ENV"
           echo "SSH key format OK"
 
       - name: Trust server host key
@@ -130,41 +130,61 @@ jobs:
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
           if [ -n "$SSH_KNOWN_HOSTS" ]; then
-            echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
+            printf '%s\n' "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
           else
             ssh-keyscan -H "$SERVER_HOST" >> ~/.ssh/known_hosts 2>/dev/null
           fi
           chmod 644 ~/.ssh/known_hosts
 
-      - name: Deploy over SSH
-        uses: appleboy/ssh-action@v1.2.5
+      - name: Verify SSH connection
         env:
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
+        run: |
+          set -euo pipefail
+          pubkey=$(ssh-keygen -y -f "$DEPLOY_KEY_PATH")
+          echo "Deploy key fingerprint:"
+          echo "$pubkey" | ssh-keygen -lf -
+          if ssh -i "$DEPLOY_KEY_PATH" \
+            -o StrictHostKeyChecking=yes \
+            -o BatchMode=yes \
+            -o ConnectTimeout=30 \
+            "${SERVER_USER}@${SERVER_HOST}" \
+            "echo 'SSH connection OK'"; then
+            echo "SSH authentication succeeded"
+          else
+            echo "::error::SSH authentication failed for ${SERVER_USER}@${SERVER_HOST}"
+            echo "Add this public key to the server's ~/.ssh/authorized_keys:"
+            echo "$pubkey"
+            exit 1
+          fi
+
+      - name: Deploy over SSH
+        env:
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+          SERVER_USER: ${{ secrets.SERVER_USER }}
           APP_DIR: ${{ env.APP_DIR }}
           DEPLOY_MODE: ${{ steps.target.outputs.mode }}
           DEPLOY_SHA: ${{ steps.target.outputs.sha }}
           DEPLOY_REF: ${{ steps.target.outputs.ref }}
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          key_path: ${{ env.DEPLOY_KEY_PATH }}
-          port: 22
-          command_timeout: 30m
-          script_stop: true
-          envs: APP_DIR,DEPLOY_MODE,DEPLOY_SHA,DEPLOY_REF
-          script: |
-            set -euo pipefail
-            cd "$APP_DIR"
+        run: |
+          set -euo pipefail
 
-            if [ "$DEPLOY_MODE" = "sha" ]; then
-              export DEPLOY_SHA
-            elif echo "$DEPLOY_REF" | grep -qE '^[0-9a-f]{7,40}$'; then
-              export DEPLOY_SHA="$DEPLOY_REF"
-            else
-              export DEPLOY_SHA="origin/${DEPLOY_REF}"
-            fi
+          if [ "$DEPLOY_MODE" = "sha" ]; then
+            target_sha="$DEPLOY_SHA"
+          elif echo "$DEPLOY_REF" | grep -qE '^[0-9a-f]{7,40}$'; then
+            target_sha="$DEPLOY_REF"
+          else
+            target_sha="origin/${DEPLOY_REF}"
+          fi
 
-            chmod +x scripts/deploy-remote.sh
-            ./scripts/deploy-remote.sh
+          echo "Running deploy-remote.sh for ${target_sha}"
+          ssh -i "$DEPLOY_KEY_PATH" \
+            -o StrictHostKeyChecking=yes \
+            -o BatchMode=yes \
+            -o ConnectTimeout=30 \
+            "${SERVER_USER}@${SERVER_HOST}" \
+            "export DEPLOY_SHA='${target_sha}' && cd '${APP_DIR}' && chmod +x scripts/deploy-remote.sh && ./scripts/deploy-remote.sh"
 
       - name: Deployment summary
         if: always()
