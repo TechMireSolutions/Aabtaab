@@ -56,5 +56,12 @@
     "edge 111",
     "firefox 111",
     "safari 16.4"
-  ]
+  ],
+  "packageManager": "npm@11.17.0",
+  "allowScripts": {
+    "@sentry/cli@2.58.6": true,
+    "esbuild@0.28.1": true,
+    "sharp@0.34.5": true,
+    "unrs-resolver@1.12.2": true
+  }
 }
