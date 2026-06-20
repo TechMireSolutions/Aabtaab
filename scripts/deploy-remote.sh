@@ -11,11 +11,38 @@ HEALTH_INTERVAL_SEC="${HEALTH_INTERVAL_SEC:-2}"
 cd "$APP_DIR"
 
 echo "==> Deploying ${DEPLOY_SHA} in ${APP_DIR}"
-echo "==> Node $(node -v) · npm $(npm -v)"
 
 git fetch origin --prune
 git reset --hard "$DEPLOY_SHA"
 git clean -fd -e '.env.local' -e '.env.production.local'
+
+ensure_node() {
+  export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+  if [ -s "$NVM_DIR/nvm.sh" ]; then
+    # shellcheck disable=SC1091
+    . "$NVM_DIR/nvm.sh"
+    if [ -f .nvmrc ]; then
+      nvm install --no-progress
+      nvm use
+    fi
+  fi
+
+  local version major minor
+  version="$(node -v | sed 's/^v//')"
+  major="${version%%.*}"
+  minor="${version#*.}"
+  minor="${minor%%.*}"
+
+  if [ "$major" -lt 22 ] || { [ "$major" -eq 22 ] && [ "$minor" -lt 12 ]; }; then
+    echo "::error::Node v${version} is too old (Sanity 6 and lockfile require >=22.12)."
+    echo "Install nvm on the VPS, then: cd ${APP_DIR} && nvm install && nvm use"
+    exit 1
+  fi
+
+  echo "==> Node $(node -v) · npm $(npm -v)"
+}
+
+ensure_node
 
 if [ -f .env.production.local ]; then
   echo "==> Loading .env.production.local"

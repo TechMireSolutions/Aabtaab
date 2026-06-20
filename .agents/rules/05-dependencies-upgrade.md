@@ -14,7 +14,7 @@ Apply when upgrading deps, touching `package.json`, CI, or Node engine constrain
 
 | Layer | Target |
 |-------|--------|
-| Runtime | Node **24.17** (`.nvmrc`; `engines` ≥20.9) |
+| Runtime | Node **24.17** (`.nvmrc`; `engines` ≥22.12) |
 | Framework | Next.js **16** (match `eslint-config-next`) |
 | UI | React **19** + React DOM **19** |
 | CMS | Sanity **6** + `next-sanity` + `@sanity/client` |

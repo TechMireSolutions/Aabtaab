@@ -17,6 +17,7 @@ Full stack and env reference: **`techstack.md`**
 | Server path | `/var/www/aabtaab_next` |
 | PM2 app | `aabtaab-next` |
 | Port | **3000** (`server.config.cjs`) |
+| Node on VPS | **≥22.12** via nvm + `.nvmrc` (24.17.0) — deploy script loads nvm automatically |
 | CI | `.github/workflows/ci.yml` |
 | Deploy | `.github/workflows/deploy.yml` (after CI on `main`, or manual) |
 | Remote script | `scripts/deploy-remote.sh` (health check + PM2 restart) |

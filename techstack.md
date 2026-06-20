@@ -29,7 +29,7 @@ Shia Islamic education and community website.
 | Item | Version | Source |
 |------|---------|--------|
 | Node (local/CI) | 24.17.0 | `.nvmrc` |
-| Node (minimum) | ≥20.9.0 | `package.json` `engines` |
+| Node (minimum) | ≥22.12.0 | `package.json` `engines` (Sanity 6) |
 | Next.js | ^16.2.9 | `package.json` |
 | React / React DOM | ^19.2.7 | `package.json` |
 | Sanity | ^6.1.0 | `package.json` |
