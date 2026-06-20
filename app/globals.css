@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@plugin "@tailwindcss/typography";
 
 @theme {
   /* Font families */
@@ -204,11 +203,6 @@
 
   * {
     min-width: 0;
-  }
-
-  :root {
-    --tw-prose-links: var(--color-brand-700);
-    --tw-prose-body: #374151;
   }
 }
 

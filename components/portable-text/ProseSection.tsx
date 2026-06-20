@@ -1,4 +1,5 @@
 import PortableTextBody from "@/components/portable-text/PortableTextBody";
+import "@/app/styles/prose.css";
 
 const PROSE_ARTICLE =
   "prose prose-slate prose-base sm:prose-lg max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-brand-700 prose-a:no-underline hover:prose-a:underline prose-strong:text-slate-900";
