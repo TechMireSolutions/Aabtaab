@@ -62,7 +62,7 @@ export default function NavLinks({ links, variant }: NavLinksProps) {
             aria-current={active ? "page" : undefined}
             className={`link-underline text-sm-plus font-medium whitespace-nowrap transition-colors duration-150 ${
               active
-                ? "text-brand-600 active"
+                ? "text-brand-700 active"
                 : "text-gray-600 hover:text-slate-900"
             }`}
           >

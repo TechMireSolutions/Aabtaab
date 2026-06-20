@@ -73,7 +73,7 @@ export default async function AboutPage() {
                     <div className="w-9 h-9 bg-brand-50 border border-brand-100 rounded-xl flex items-center justify-center mb-3">
                       <Icon
                         size={15}
-                        className="text-brand-600"
+                        className="text-brand-700"
                         strokeWidth={1.75}
                       />
                     </div>

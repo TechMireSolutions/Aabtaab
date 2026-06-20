@@ -28,7 +28,7 @@ export default function HowItWorksSection({
               key={index}
               className="card-surface flex items-start gap-5 px-6 py-5"
             >
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-600 text-sm-plus font-bold text-white">
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brand-700 text-sm-plus font-bold text-white">
                 {index + 1}
               </span>
               <div className="pt-0.5">

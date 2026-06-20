@@ -50,7 +50,7 @@ export default function WhyUsImageSection({
                   <div className="check-icon-sm">
                     <Check
                       size={13}
-                      className="text-brand-600"
+                      className="text-brand-700"
                       strokeWidth={2.5}
                     />
                   </div>

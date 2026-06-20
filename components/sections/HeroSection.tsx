@@ -54,7 +54,7 @@ function StatIcon({ label }: { label: string }) {
       fill="none"
       stroke="currentColor"
       strokeWidth="1.75"
-      className="size-3.5 text-brand-600"
+      className="size-3.5 text-brand-700"
     >
       <path d={paths[label] ?? paths.Students} />
     </svg>
@@ -130,7 +130,7 @@ export default function HeroSection({
                 key={i}
                 className={`block motion-safe:animate-fade-up ${delayClasses[i] ?? "motion-safe:animate-delay-300"} ${
                   i === titleLines.length - 1
-                    ? "text-brand-600"
+                    ? "text-brand-700"
                     : "text-slate-900"
                 }`}
               >

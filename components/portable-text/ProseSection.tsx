@@ -1,10 +1,10 @@
 import PortableTextBody from "@/components/portable-text/PortableTextBody";
 
 const PROSE_ARTICLE =
-  "prose prose-slate prose-base sm:prose-lg max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-brand-600 prose-a:no-underline hover:prose-a:underline prose-strong:text-slate-900";
+  "prose prose-slate prose-base sm:prose-lg max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-brand-700 prose-a:no-underline hover:prose-a:underline prose-strong:text-slate-900";
 
 const PROSE_PAGE =
-  "prose prose-slate prose-lg max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-brand-600 prose-a:no-underline hover:prose-a:underline";
+  "prose prose-slate prose-lg max-w-none prose-headings:font-bold prose-headings:tracking-tight prose-a:text-brand-700 prose-a:no-underline hover:prose-a:underline";
 
 interface ProseSectionProps {
   value: unknown;

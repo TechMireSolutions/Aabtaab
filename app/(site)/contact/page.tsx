@@ -92,7 +92,7 @@ export default async function ContactPage() {
                   <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-brand-50 border border-brand-100 flex items-center justify-center shrink-0">
                     <Icon
                       size={14}
-                      className="text-brand-600"
+                      className="text-brand-700"
                       strokeWidth={1.75}
                     />
                   </div>
@@ -105,7 +105,7 @@ export default async function ContactPage() {
                         href={href}
                         target={href.startsWith("http") ? "_blank" : undefined}
                         rel="noopener noreferrer"
-                        className="text-sm-plus text-slate-700 hover:text-brand-600 transition-colors break-all"
+                        className="text-sm-plus text-slate-700 hover:text-brand-700 transition-colors break-all"
                       >
                         {value}
                       </a>

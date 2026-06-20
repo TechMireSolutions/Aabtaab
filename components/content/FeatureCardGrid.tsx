@@ -34,7 +34,7 @@ export default function FeatureCardGrid({
                 <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl border border-brand-100 bg-brand-50">
                   <Check
                     size={17}
-                    className="text-brand-600"
+                    className="text-brand-700"
                     strokeWidth={2.5}
                   />
                 </div>
@@ -52,7 +52,7 @@ export default function FeatureCardGrid({
                 key={index}
                 className="card-surface flex gap-4 p-6 transition-colors duration-200 hover:border-brand-100 hover:bg-brand-50/30"
               >
-                <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-600 text-2xs font-bold text-white">
+                <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-700 text-2xs font-bold text-white">
                   {index + 1}
                 </div>
                 <div>

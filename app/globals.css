@@ -207,7 +207,7 @@
   }
 
   :root {
-    --tw-prose-links: var(--color-brand-600);
+    --tw-prose-links: var(--color-brand-700);
     --tw-prose-body: #374151;
   }
 }
@@ -376,7 +376,7 @@
 
 /* ── Typography ── */
 @utility text-eyebrow {
-  @apply text-xs-plus font-bold uppercase tracking-eyebrow text-brand-600;
+  @apply text-xs-plus font-bold uppercase tracking-eyebrow text-brand-700;
 }
 
 @utility text-eyebrow-gold {
@@ -384,7 +384,7 @@
 }
 
 @utility eyebrow-line {
-  @apply inline-block h-px w-5 bg-brand-400;
+  @apply inline-block h-px w-5 bg-brand-600;
 }
 
 @utility eyebrow-line-gold {
@@ -425,7 +425,7 @@
 
 /* ── Buttons ── */
 @utility btn-primary {
-  @apply inline-flex items-center gap-2 rounded-full bg-brand-600 px-5 py-2.5 text-sm-plus font-semibold text-white shadow-brand-sm transition-all duration-200 hover:-translate-y-px hover:bg-brand-700 hover:shadow-brand-lg focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-600;
+  @apply inline-flex items-center gap-2 rounded-full bg-brand-700 px-5 py-2.5 text-sm-plus font-semibold text-white shadow-brand-sm transition-all duration-200 hover:-translate-y-px hover:bg-brand-800 hover:shadow-brand-lg focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-700;
 }
 
 @utility btn-secondary {
@@ -535,7 +535,7 @@
 }
 
 @utility badge-trust {
-  @apply flex size-9 shrink-0 items-center justify-center rounded-xl border border-brand-100 bg-brand-50 text-base font-bold text-brand-600;
+  @apply flex size-9 shrink-0 items-center justify-center rounded-xl border border-brand-100 bg-brand-50 text-base font-bold text-brand-700;
 }
 
 @utility card-contact {
@@ -551,7 +551,7 @@
 }
 
 @utility btn-search-submit {
-  @apply flex min-h-11 min-w-11 items-center justify-center self-stretch bg-brand-500 transition-colors hover:bg-brand-600 focus-visible:ring-2 focus-visible:ring-brand-800 focus-visible:ring-offset-2;
+  @apply flex min-h-11 min-w-11 items-center justify-center self-stretch bg-brand-700 transition-colors hover:bg-brand-800 focus-visible:ring-2 focus-visible:ring-brand-800 focus-visible:ring-offset-2;
 }
 
 /* ── Backgrounds & effects ── */

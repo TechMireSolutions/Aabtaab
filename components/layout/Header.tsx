@@ -164,7 +164,7 @@ export default function Header({
                 <button
                   type="submit"
                   aria-label="Search"
-                  className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-500 text-white transition-colors hover:bg-brand-600 focus-visible:ring-2 focus-visible:ring-brand-800 focus-visible:ring-offset-2"
+                  className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-700 text-white transition-colors hover:bg-brand-800 focus-visible:ring-2 focus-visible:ring-brand-800 focus-visible:ring-offset-2"
                 >
                   <SearchIcon className="size-4" />
                 </button>

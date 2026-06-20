@@ -29,7 +29,7 @@ export default async function DonatePage() {
     <div>
       <div className="border-b border-gray-100 bg-white">
         <div className="container-narrow section-header-py text-center">
-          <p className="mb-3 text-xl-plus leading-none text-brand-600 sm:text-2xl">
+          <p className="mb-3 text-xl-plus leading-none text-brand-700 sm:text-2xl">
             {settings?.donateArabicVerse ||
               "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ"}
           </p>
@@ -63,7 +63,7 @@ export default async function DonatePage() {
                 className="card-surface card-hover-lift p-4 sm:p-5"
               >
                 <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl border border-brand-100 bg-brand-50">
-                  <span className="text-base-plus font-bold leading-none text-brand-600">
+                  <span className="text-base-plus font-bold leading-none text-brand-700">
                     {i + 1}
                   </span>
                 </div>
