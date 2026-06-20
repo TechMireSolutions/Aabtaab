@@ -17,9 +17,34 @@ Full stack and env reference: **`techstack.md`**
 | Server path | `/var/www/aabtaab_next` |
 | PM2 app | `aabtaab-next` |
 | Port | **3000** (`server.config.cjs`) |
-| CI | `.github/workflows/deploy.yml` (push to `main`) |
+| CI | `.github/workflows/ci.yml` |
+| Deploy | `.github/workflows/deploy.yml` (after CI on `main`, or manual) |
+| Remote script | `scripts/deploy-remote.sh` (health check + PM2 restart) |
+
+### GitHub secrets
+
+| Secret | Required | Purpose |
+|--------|----------|---------|
+| `SERVER_HOST` | Yes | VPS IP or hostname (no `https://`) |
+| `SERVER_USER` | Yes | SSH user (e.g. `root`) |
+| `SSH_PRIVATE_KEY_B64` | Yes* | Base64 deploy key (recommended) |
+| `SSH_KNOWN_HOSTS` | No | Pin host key; else `ssh-keyscan` at deploy time |
+
+\* Or `SSH_PRIVATE_KEY` (raw PEM).
+
+Optional: create a **production** environment in GitHub (Settings → Environments) for approval rules.
 
 ## Manual deploy
+
+On the VPS (same steps as `scripts/deploy-remote.sh`):
+
+```bash
+cd /var/www/aabtaab_next
+export DEPLOY_SHA=origin/main
+./scripts/deploy-remote.sh
+```
+
+Or step-by-step:
 
 ```bash
 cd /var/www/aabtaab_next
