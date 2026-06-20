@@ -2,6 +2,7 @@ import Link from "next/link";
 import Image from "next/image";
 import NavLinks from "@/components/layout/NavLinks";
 import MobileNavSidebarLoader from "@/components/layout/MobileNavSidebarLoader";
+import MobileSearchButton from "@/components/layout/MobileSearchButton";
 import { DEFAULT_SITE_NAME } from "@/lib/constants";
 import type { NavItem } from "@/types/site-navigation";
 
@@ -106,7 +107,6 @@ export default function Header({
           siteName={siteName}
           logoUrl={logoUrl}
           navLinks={navLinks}
-          searchPlaceholder={searchPlaceholder}
         />
 
         <Link
@@ -150,13 +150,7 @@ export default function Header({
           </button>
         </form>
 
-        <Link
-          href="/search"
-          aria-label="Search"
-          className="ml-auto flex h-11 w-11 items-center justify-center rounded-full text-gray-600 transition-colors hover:bg-gray-100 focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 lg:hidden"
-        >
-          <SearchIcon className="size-5" />
-        </Link>
+        <MobileSearchButton searchPlaceholder={searchPlaceholder} />
       </div>
     </header>
   );

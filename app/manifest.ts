@@ -1,7 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getSiteSettings } from "@/lib/cms/queries";
 import { resolveSiteName } from "@/lib/constants";
-import { getSiteUrl } from "@/lib/seo";
 
 export default async function manifest(): Promise<MetadataRoute.Manifest> {
   const settings = await getSiteSettings();
@@ -19,7 +18,7 @@ export default async function manifest(): Promise<MetadataRoute.Manifest> {
     theme_color: "#0891b2",
     lang: "en-US",
     orientation: "portrait-primary",
-    scope: getSiteUrl(),
+    scope: "/",
     icons: [
       {
         src: "/og-default.png",

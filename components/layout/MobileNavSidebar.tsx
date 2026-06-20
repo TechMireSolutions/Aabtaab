@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Menu, Search, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import NavLinks from "@/components/layout/NavLinks";
 import {
@@ -11,11 +11,6 @@ import {
   TW_MOBILE_HEADER,
   TW_MOBILE_MENU_TRIGGER,
   TW_MOBILE_NAV_SCROLL,
-  TW_MOBILE_SEARCH_INPUT,
-  TW_MOBILE_SEARCH_LABEL,
-  TW_MOBILE_SEARCH_STRIP,
-  TW_MOBILE_SEARCH_SUBMIT,
-  TW_SEARCH_FORM_MOBILE,
 } from "@/lib/tailwind";
 import type { NavItem } from "@/types/site-navigation";
 
@@ -23,7 +18,6 @@ interface MobileNavSidebarProps {
   siteName: string;
   logoUrl?: string | null;
   navLinks: NavItem[];
-  searchPlaceholder?: string;
 }
 
 const FOCUSABLE =
@@ -33,7 +27,6 @@ export default function MobileNavSidebar({
   siteName,
   logoUrl,
   navLinks,
-  searchPlaceholder = "Search the site…",
 }: MobileNavSidebarProps) {
   const [open, setOpen] = useState(false);
   const panelRef = useRef<HTMLElement>(null);
@@ -82,7 +75,7 @@ export default function MobileNavSidebar({
     if (!open || !panelRef.current) return;
 
     const panel = panelRef.current;
-    const focusTarget = panel.querySelector<HTMLElement>('input[type="search"]');
+    const focusTarget = panel.querySelector<HTMLElement>(FOCUSABLE);
     focusTarget?.focus({ preventScroll: true });
 
     const onKeyDown = (event: KeyboardEvent) => {
@@ -179,40 +172,6 @@ export default function MobileNavSidebar({
               >
                 <X className="size-4.5" aria-hidden="true" />
               </button>
-            </div>
-
-            <div className={TW_MOBILE_SEARCH_STRIP}>
-              <p className={TW_MOBILE_SEARCH_LABEL} id={`${drawerId}-search-label`}>
-                Search site
-              </p>
-              <form
-                action="/search"
-                method="get"
-                role="search"
-                aria-labelledby={`${drawerId}-search-label`}
-                className={TW_SEARCH_FORM_MOBILE}
-              >
-                <label htmlFor={`${drawerId}-search`} className="sr-only">
-                  Search
-                </label>
-                <input
-                  id={`${drawerId}-search`}
-                  type="search"
-                  name="q"
-                  enterKeyHint="search"
-                  inputMode="search"
-                  placeholder={searchPlaceholder}
-                  autoComplete="off"
-                  className={TW_MOBILE_SEARCH_INPUT}
-                />
-                <button
-                  type="submit"
-                  aria-label="Search"
-                  className={TW_MOBILE_SEARCH_SUBMIT}
-                >
-                  <Search className="size-3.5 text-white" aria-hidden="true" />
-                </button>
-              </form>
             </div>
 
             <nav aria-label="Main navigation" className={TW_MOBILE_NAV_SCROLL}>
