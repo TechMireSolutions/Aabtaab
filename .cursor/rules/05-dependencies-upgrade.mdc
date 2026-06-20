@@ -48,7 +48,7 @@ Apply when upgrading deps, touching `package.json`, CI, or Node engine constrain
 
 ## After upgrading
 
-- Update GitHub Actions pins in `.github/workflows/deploy.yml` (e.g. `appleboy/ssh-action`).
+- Update GitHub Actions pins in `.github/workflows/ci.yml` (`actions/checkout@v5`, `actions/setup-node@v5`).
 - Run `npm run migrate:sanity:dry` if Sanity schema/field APIs changed.
 - Re-run `npm run sync:agents` only if agent config files changed — not for every dep bump.
 

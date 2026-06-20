@@ -24,7 +24,7 @@ Shia Islamic education and community website.
 
 ## Runtime & versions
 
-**Last verified:** June 2026 — all direct dependencies at latest stable npm releases.
+**Last verified:** March 2026 — direct dependencies at latest stable npm releases (ESLint 10 deferred; see constraints).
 
 | Item | Version | Source |
 |------|---------|--------|
@@ -35,6 +35,7 @@ Shia Islamic education and community website.
 | Sanity | ^6.1.0 | `package.json` |
 | TypeScript | ^6.0.3 | `package.json` |
 | Tailwind CSS | ^4.3.1 | `package.json` |
+| @sentry/nextjs | ^10.59.0 | `package.json` |
 | ESLint | ^9.39.4 | `package.json` (v10 blocked — see constraints) |
 
 ---
@@ -223,7 +224,7 @@ Legacy redirect: `/articles` → `/posts` (301 in `next.config.ts`).
 
 ### Deploy workflow
 
-- **CI:** `.github/workflows/ci.yml` — lint, test, build, Playwright on PR/push to `main`
+- **CI:** `.github/workflows/ci.yml` — lint, test, build, Playwright on PR/push to `main` (`actions/checkout@v5`, `actions/setup-node@v5`)
 - **Deploy:** `.github/workflows/deploy.yml` — SSH to Hetzner on push to `main`
 
 Manual deploy:

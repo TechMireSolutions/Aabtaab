@@ -1,22 +1,9 @@
 import Link from "next/link";
 import Image from "next/image";
-import dynamic from "next/dynamic";
 import NavLinks from "@/components/layout/NavLinks";
+import MobileNavSidebarLoader from "@/components/layout/MobileNavSidebarLoader";
 import { DEFAULT_SITE_NAME } from "@/lib/constants";
-import { TW_MOBILE_MENU_TRIGGER } from "@/lib/tailwind";
 import type { NavItem } from "@/types/site-navigation";
-
-const MobileNavSidebar = dynamic(
-  () => import("@/components/layout/MobileNavSidebar"),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="lg:hidden" aria-hidden="true">
-        <span className={`${TW_MOBILE_MENU_TRIGGER} pointer-events-none opacity-0`} />
-      </div>
-    ),
-  },
-);
 
 interface HeaderProps {
   darulQuranUrl?: string;
@@ -115,7 +102,7 @@ export default function Header({
   return (
     <header className="sticky top-0 z-50 border-b border-gray-200 bg-white/95 shadow-header backdrop-blur-md">
       <div className="container-page flex h-header items-center gap-2 lg:gap-8">
-        <MobileNavSidebar
+        <MobileNavSidebarLoader
           siteName={siteName}
           logoUrl={logoUrl}
           navLinks={navLinks}
