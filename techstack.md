@@ -36,6 +36,7 @@ Shia Islamic education and community website.
 | TypeScript | ^6.0.3 | `package.json` |
 | Tailwind CSS | ^4.3.1 | `package.json` |
 | @sentry/nextjs | ^10.59.0 | `package.json` |
+| @types/node | ^26.0.0 | `package.json` |
 | ESLint | ^9.39.4 | `package.json` (v10 blocked — see constraints) |
 
 ---
