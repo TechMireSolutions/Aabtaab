@@ -184,7 +184,7 @@ jobs:
             -o BatchMode=yes \
             -o ConnectTimeout=30 \
             "${SERVER_USER}@${SERVER_HOST}" \
-            "export DEPLOY_SHA='${target_sha}' && cd '${APP_DIR}' && chmod +x scripts/deploy-remote.sh && ./scripts/deploy-remote.sh"
+            "export DEPLOY_SHA='${target_sha}' && cd '${APP_DIR}' && git fetch origin --prune && git reset --hard \"\${DEPLOY_SHA}\" && chmod +x scripts/deploy-remote.sh && ./scripts/deploy-remote.sh"
 
       - name: Deployment summary
         if: always()
