@@ -83,13 +83,6 @@ export default function HeroSection({
   const imageAlt =
     heroImageAlt ?? `${siteName} — Shia Islamic education and community`;
 
-  const delayClasses = [
-    "",
-    "motion-safe:animate-delay-150",
-    "motion-safe:animate-delay-200",
-    "motion-safe:animate-delay-300",
-  ];
-
   return (
     <section className="relative min-h-hero w-full overflow-hidden bg-white md:min-h-hero-lg">
       <div className="bg-dot-grid pointer-events-none absolute inset-0 opacity-50" />
@@ -113,14 +106,14 @@ export default function HeroSection({
 
       <div className="container-page relative z-10 flex min-h-hero flex-col justify-center py-10 md:min-h-hero-lg md:px-14 md:py-hero-pad">
         <div className="w-full max-w-hero-copy">
-          <div className="badge-enrolling motion-safe:animate-fade-up">
+          <div className="badge-enrolling">
             <span className="size-1.5 shrink-0 motion-safe:animate-pulse rounded-full bg-brand-500" />
             <span className="text-2xs font-semibold tracking-wide text-gray-600">
               Enrolling Now
             </span>
           </div>
 
-          <p className="text-eyebrow mb-4 text-gray-500 motion-safe:animate-fade-up motion-safe:animate-delay-75">
+          <p className="text-eyebrow mb-4 text-gray-500">
             {resolvedSubtitle}
           </p>
 
@@ -128,22 +121,22 @@ export default function HeroSection({
             {titleLines.map((line, i) => (
               <span
                 key={i}
-                className={`block motion-safe:animate-fade-up ${delayClasses[i] ?? "motion-safe:animate-delay-300"} ${
+                className={
                   i === titleLines.length - 1
-                    ? "text-brand-700"
-                    : "text-slate-900"
-                }`}
+                    ? "block text-brand-700"
+                    : "block text-slate-900"
+                }
               >
                 {line}
               </span>
             ))}
           </h1>
 
-          <p className="text-body-muted mb-7 max-w-hero-lead motion-safe:animate-fade-up motion-safe:animate-delay-400">
+          <p className="text-body-muted mb-7 max-w-hero-lead">
             {resolvedDescription}
           </p>
 
-          <div className="flex flex-wrap items-center gap-3 motion-safe:animate-fade-up motion-safe:animate-delay-500">
+          <div className="flex flex-wrap items-center gap-3">
             <Link href={cta1Link} className="btn-primary group">
               {cta1Label}
               <ArrowIcon className="size-3.5 transition-transform duration-150 group-hover:translate-x-0.5" />
@@ -153,7 +146,7 @@ export default function HeroSection({
             </Link>
           </div>
 
-          <div className="mt-8 flex flex-wrap items-center gap-5 border-t border-gray-100 pt-7 motion-safe:animate-fade-up motion-safe:animate-delay-600 sm:gap-6">
+          <div className="mt-8 flex flex-wrap items-center gap-5 border-t border-gray-100 pt-7 motion-safe:animate-fade-up motion-safe:animate-delay-300 sm:gap-6">
             {STATS.map(({ value, label }) => (
               <div key={label} className="flex items-center gap-2.5">
                 <div className="flex size-8 shrink-0 items-center justify-center rounded-xl border border-brand-100 bg-brand-50 sm:size-9">

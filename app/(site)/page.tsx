@@ -5,9 +5,9 @@ import { resolveSiteName } from "@/lib/constants";
 import { getHomepageHeroData } from "@/lib/cms/queries";
 import { ogImageUrl } from "@/sanity/lib/image";
 import HomeHero from "@/components/home/HomeHero";
+import HomeAbout from "@/components/home/HomeAbout";
 import HomeSections from "@/components/home/HomeSections";
 import HomeSectionsSkeleton from "@/components/home/HomeSectionsSkeleton";
-import HomeHeroSkeleton from "@/components/home/HomeHeroSkeleton";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { settings, homepage: hp } = await getHomepageHeroData();
@@ -26,7 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
   });
 }
 
-async function HomeHeroBlock() {
+export default async function HomePage() {
   const { settings, homepage: hp } = await getHomepageHeroData();
   const siteName = resolveSiteName(settings);
   const siteUrl = getSiteUrl();
@@ -46,16 +46,7 @@ async function HomeHeroBlock() {
         }}
       />
       <HomeHero settings={settings} homepage={hp} siteName={siteName} />
-    </>
-  );
-}
-
-export default function HomePage() {
-  return (
-    <>
-      <Suspense fallback={<HomeHeroSkeleton />}>
-        <HomeHeroBlock />
-      </Suspense>
+      <HomeAbout homepage={hp} />
       <Suspense fallback={<HomeSectionsSkeleton />}>
         <HomeSections />
       </Suspense>

@@ -24,7 +24,7 @@ import {
   eventSlugsQuery,
   homepageDataQuery,
   homepageHeroQuery,
-  homepageSectionsQuery,
+  homepageCarouselsQuery,
 } from "@/sanity/lib/queries";
 import type { EventDetail, EventSummary } from "@/types/event";
 import type { CmsPageSummary, PostCardSummary } from "@/types/cms-page";
@@ -115,7 +115,7 @@ export const getHomepageHeroData = cache(async () => {
   };
 });
 
-export const getHomepageSectionsData = cache(async () => {
+export const getHomepageCarouselsData = cache(async () => {
   const data = await sanityFetch<{
     featuredPosts?: HomePostSummary[] | null;
     courses?: HomeCourseSummary[] | null;
@@ -124,7 +124,7 @@ export const getHomepageSectionsData = cache(async () => {
     testimonials?: Testimonial[] | null;
     upcomingEvents?: EventSummary[] | null;
   } | null>({
-    query: homepageSectionsQuery,
+    query: homepageCarouselsQuery,
     tags: [
       CACHE_TAGS.posts,
       CACHE_TAGS.courses,
@@ -155,6 +155,9 @@ export const getHomepageSectionsData = cache(async () => {
     upcomingEvents: data.upcomingEvents ?? [],
   };
 });
+
+/** @deprecated Use getHomepageCarouselsData */
+export const getHomepageSectionsData = getHomepageCarouselsData;
 
 export const getHomepageData = cache(async () => {
   const data = await sanityFetch<{

@@ -5,6 +5,7 @@ const nextConfig: NextConfig = {
 
   experimental: {
     optimizePackageImports: ["lucide-react"],
+    optimizeCss: true,
   },
 
   // ── Sanity packages require transpilation in Next.js App Router ─────────
