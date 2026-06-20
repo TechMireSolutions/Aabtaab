@@ -1,4 +1,8 @@
 import type { NextConfig } from "next";
+import path from "node:path";
+
+const emptyPolyfillRelative = "./lib/empty-polyfill.js";
+const emptyPolyfillAbsolute = path.join(process.cwd(), "lib/empty-polyfill.js");
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
@@ -6,6 +10,23 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ["lucide-react"],
     inlineCss: true,
+  },
+
+  turbopack: {
+    resolveAlias: {
+      "../build/polyfills/polyfill-module": emptyPolyfillRelative,
+    },
+  },
+
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve ??= {};
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        "../build/polyfills/polyfill-module": emptyPolyfillAbsolute,
+      };
+    }
+    return config;
   },
 
   // ── Sanity packages require transpilation in Next.js App Router ─────────
