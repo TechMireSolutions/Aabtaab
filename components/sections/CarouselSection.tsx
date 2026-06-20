@@ -46,20 +46,24 @@ export default function CarouselSection({
   if (!items.length) return null;
 
   const resolvedTrackId = trackId ?? `carousel-${slugify(title)}`;
+  const headingId = `${resolvedTrackId}-heading`;
   const bgClass = bg === "gray" ? "bg-slate-50" : "bg-white";
 
   return (
     <section
       className={`section-y-lg section-deferred border-b border-gray-100 ${bgClass}`}
+      aria-labelledby={headingId}
     >
       <div className="container-page">
         <div className="mb-7 flex flex-col gap-3 sm:mb-10 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-eyebrow mb-2 flex items-center gap-2">
-              <span className="eyebrow-line" />
+              <span className="eyebrow-line" aria-hidden="true" />
               {eyebrow}
             </p>
-            <h2 className="heading-section">{title}</h2>
+            <h2 id={headingId} className="heading-section">
+              {title}
+            </h2>
             {subtitle && (
               <p className="text-body-muted mt-1.5 max-w-md">{subtitle}</p>
             )}
@@ -87,7 +91,11 @@ export default function CarouselSection({
         <div className="relative">
           <div
             id={resolvedTrackId}
-            className="scrollbar-hide flex snap-x snap-mandatory gap-6 overflow-x-auto pb-2 [-webkit-overflow-scrolling:touch]"
+            tabIndex={0}
+            role="region"
+            aria-roledescription="carousel"
+            aria-label={`${title} items`}
+            className="scrollbar-hide flex snap-x snap-mandatory gap-6 overflow-x-auto pb-2 [-webkit-overflow-scrolling:touch] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
           >
             {items.map((item) => (
               <div

@@ -185,7 +185,21 @@
   }
 
   :focus-visible {
-    @apply rounded outline-2 outline-offset-2 outline-brand-500;
+    @apply rounded outline-2 outline-offset-2 outline-brand-600;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
   }
 
   * {
@@ -402,20 +416,20 @@
 }
 
 @utility text-caption {
-  @apply text-2xs sm:text-xs-plus text-gray-400;
+  @apply text-2xs sm:text-xs-plus text-gray-500;
 }
 
 @utility link-brand {
-  @apply text-sm-plus font-semibold text-brand-600 transition-colors hover:text-brand-700;
+  @apply inline-flex items-center gap-1 rounded-sm text-sm-plus font-semibold text-brand-700 transition-colors hover:text-brand-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600;
 }
 
 /* ── Buttons ── */
 @utility btn-primary {
-  @apply inline-flex items-center gap-2 rounded-full bg-brand-600 px-5 py-2.5 text-sm-plus font-semibold text-white shadow-brand-sm transition-all duration-200 hover:-translate-y-px hover:bg-brand-700 hover:shadow-brand-lg;
+  @apply inline-flex items-center gap-2 rounded-full bg-brand-600 px-5 py-2.5 text-sm-plus font-semibold text-white shadow-brand-sm transition-all duration-200 hover:-translate-y-px hover:bg-brand-700 hover:shadow-brand-lg focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-600;
 }
 
 @utility btn-secondary {
-  @apply inline-flex items-center rounded-full border border-gray-300 bg-white px-5 py-2.5 text-sm-plus font-medium text-slate-700 transition-all duration-200 hover:-translate-y-px hover:border-gray-400 hover:bg-gray-50 hover:text-slate-900;
+  @apply inline-flex items-center rounded-full border border-gray-300 bg-white px-5 py-2.5 text-sm-plus font-medium text-slate-800 transition-all duration-200 hover:-translate-y-px hover:border-gray-400 hover:bg-gray-50 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2;
 }
 
 @utility btn-pill-accent {
@@ -477,7 +491,7 @@
 }
 
 @utility icon-btn-subtle {
-  @apply flex size-7 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-400 transition-all duration-200 hover:border-brand-400 hover:text-brand-500 sm:size-8;
+  @apply flex size-11 min-h-11 min-w-11 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-500 transition-all duration-200 hover:border-brand-500 hover:text-brand-700 focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 sm:size-9 sm:min-h-9 sm:min-w-9;
 }
 
 @utility chip-outline {
@@ -485,7 +499,7 @@
 }
 
 @utility chip-outline-sm {
-  @apply flex items-center gap-1 rounded-lg border border-gray-200 bg-white px-2 py-1 text-xs-plus font-medium text-gray-500 transition-all duration-200 hover:border-brand-400 hover:text-brand-600 sm:px-2.5 sm:py-1.5;
+  @apply inline-flex min-h-11 items-center gap-1 rounded-lg border border-gray-200 bg-white px-2 py-1 text-xs-plus font-medium text-gray-600 transition-all duration-200 hover:border-brand-500 hover:text-brand-700 focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 sm:min-h-0 sm:px-2.5 sm:py-1.5;
 }
 
 @utility check-icon-sm {
@@ -497,7 +511,7 @@
 }
 
 @utility input-field {
-  @apply w-full rounded-xl border border-gray-200 px-4 py-3 text-base-plus text-slate-900 placeholder:text-gray-400 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-500/30;
+  @apply w-full rounded-xl border border-gray-200 px-4 py-3 text-base-plus text-slate-900 placeholder:text-gray-500 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/30;
 }
 
 @utility badge-pill {
@@ -537,7 +551,7 @@
 }
 
 @utility btn-search-submit {
-  @apply flex items-center self-stretch bg-brand-500 transition-colors hover:bg-brand-600;
+  @apply flex min-h-11 min-w-11 items-center justify-center self-stretch bg-brand-500 transition-colors hover:bg-brand-600 focus-visible:ring-2 focus-visible:ring-brand-800 focus-visible:ring-offset-2;
 }
 
 /* ── Backgrounds & effects ── */
@@ -591,7 +605,7 @@
 
 /* ── Links ── */
 @utility link-underline {
-  @apply relative;
+  @apply relative rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-600;
 
   &::after {
     content: "";
@@ -599,7 +613,8 @@
   }
 
   &:hover::after,
-  &.active::after {
+  &.active::after,
+  &[aria-current="page"]::after {
     @apply w-full;
   }
 }
@@ -638,12 +653,17 @@
 }
 
 /* ── Accessibility ── */
-@utility skip-link {
-  @apply absolute left-4 top-[-100%] z-50 rounded-lg bg-brand-700 px-4 py-2.5 text-sm font-semibold text-white transition-[top] duration-200;
+@utility sr-only {
+  @apply absolute -m-px h-px w-px overflow-hidden whitespace-nowrap border-0 p-0;
+  clip: rect(0, 0, 0, 0);
+}
 
-  &:focus {
+@utility skip-link {
+  @apply absolute left-4 top-[-100%] z-50 rounded-lg bg-brand-800 px-4 py-2.5 text-sm font-semibold text-white transition-[top] duration-200;
+
+  &:focus-visible {
     top: calc(0.75rem + env(safe-area-inset-top));
-    @apply outline-2 outline-offset-2 outline-brand-500;
+    @apply outline-2 outline-offset-2 outline-white ring-2 ring-brand-600;
   }
 }
 
@@ -658,10 +678,16 @@
 @media (max-width: 1023px) {
   header button,
   header nav a,
+  header summary,
   footer a,
+  footer button,
   .btn-primary,
   .btn-secondary,
-  .btn-pill-accent {
+  .btn-pill-accent,
+  .link-brand,
+  .icon-btn-subtle,
+  .chip-outline,
+  .chip-outline-sm {
     min-height: var(--size-touch-min);
   }
 

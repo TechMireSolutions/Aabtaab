@@ -29,11 +29,11 @@ function buildNavLinks(
   const hasDarUlQuran = base.some((item) =>
     /dar\s*ul\s*quran/i.test(item.label),
   );
-  if (!hasDarUlQuran) {
+  if (!hasDarUlQuran && darulQuranUrl) {
     base.push({
       label: "Dar ul Quran",
-      href: darulQuranUrl || "#",
-      external: Boolean(darulQuranUrl),
+      href: darulQuranUrl,
+      external: true,
     });
   }
   return base;
@@ -122,10 +122,11 @@ export default function Header({
       <div className="container-page flex h-header items-center gap-2 lg:gap-8">
         <details className="group relative lg:hidden">
           <summary
-            className="flex h-11 w-11 list-none cursor-pointer items-center justify-center rounded-full text-gray-600 transition-colors hover:bg-gray-100 [&::-webkit-details-marker]:hidden"
-            aria-label="Open menu"
+            className="flex h-11 w-11 list-none cursor-pointer items-center justify-center rounded-full text-gray-600 transition-colors hover:bg-gray-100 focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 [&::-webkit-details-marker]:hidden"
+            aria-label="Open navigation menu"
           >
             <MenuIcon className="size-5" />
+            <span className="sr-only">Menu</span>
           </summary>
 
           <div className="absolute left-0 top-[calc(100%+0.5rem)] z-drawer w-mobile-drawer max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-2xl">
@@ -138,7 +139,10 @@ export default function Header({
               </Link>
             </div>
 
-            <nav className="max-h-[min(60vh,24rem)] overflow-y-auto px-3 py-3">
+            <nav
+              aria-label="Main navigation"
+              className="max-h-[min(60vh,24rem)] overflow-y-auto px-3 py-3"
+            >
               <NavLinks links={navLinks} variant="mobile" />
             </nav>
 
@@ -160,7 +164,7 @@ export default function Header({
                 <button
                   type="submit"
                   aria-label="Search"
-                  className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-500 text-white transition-colors hover:bg-brand-600"
+                  className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-500 text-white transition-colors hover:bg-brand-600 focus-visible:ring-2 focus-visible:ring-brand-800 focus-visible:ring-offset-2"
                 >
                   <SearchIcon className="size-4" />
                 </button>
@@ -177,7 +181,10 @@ export default function Header({
           <SiteLogo siteName={siteName} logoUrl={logoUrl} />
         </Link>
 
-        <nav className="hidden flex-1 items-center justify-center gap-7 lg:flex">
+        <nav
+          aria-label="Main navigation"
+          className="hidden flex-1 items-center justify-center gap-7 lg:flex"
+        >
           <NavLinks links={navLinks} variant="desktop" />
         </nav>
 
@@ -191,7 +198,7 @@ export default function Header({
             name="q"
             placeholder={searchPlaceholder}
             aria-label="Search"
-            className="w-search-input px-4 py-2 text-sm-plus text-slate-700 outline-none placeholder:text-gray-400"
+            className="w-search-input px-4 py-2 text-sm-plus text-slate-700 outline-none placeholder:text-gray-500 focus-visible:ring-2 focus-visible:ring-brand-600/30"
           />
           <button
             type="submit"
@@ -205,7 +212,7 @@ export default function Header({
         <Link
           href="/search"
           aria-label="Search"
-          className="ml-auto flex h-11 w-11 items-center justify-center rounded-full text-gray-600 transition-colors hover:bg-gray-100 lg:hidden"
+          className="ml-auto flex h-11 w-11 items-center justify-center rounded-full text-gray-600 transition-colors hover:bg-gray-100 focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 lg:hidden"
         >
           <SearchIcon className="size-5" />
         </Link>

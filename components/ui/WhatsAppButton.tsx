@@ -13,7 +13,7 @@ export default function WhatsAppButton({ number }: WhatsAppButtonProps) {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat on WhatsApp"
-      className="group fixed fab-safe z-50 flex size-fab items-center justify-center overflow-hidden rounded-full bg-whatsapp text-white shadow-whatsapp transition-all duration-300 hover:-translate-y-0.5 hover:bg-whatsapp-hover hover:shadow-whatsapp-hover hover:justify-start hover:gap-2 hover:pl-3.5 hover:pr-4"
+      className="group fixed fab-safe z-50 flex size-fab items-center justify-center overflow-hidden rounded-full bg-whatsapp text-white shadow-whatsapp transition-all duration-300 hover:-translate-y-0.5 hover:bg-whatsapp-hover hover:shadow-whatsapp-hover hover:justify-start hover:gap-2 hover:pl-3.5 hover:pr-4 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-whatsapp"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

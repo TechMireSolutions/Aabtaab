@@ -27,21 +27,31 @@ export default function NestedBreadcrumbs({
       <BreadcrumbJsonLd items={breadcrumbItems} />
       <div className="border-b border-gray-100 bg-white">
         <div className="container-page py-3">
-          <nav className="text-caption flex flex-wrap items-center gap-1">
+          <nav aria-label="Breadcrumb" className="text-caption flex flex-wrap items-center gap-1">
             <Link href={baseHref} className="link-brand font-medium">
               {baseLabel}
             </Link>
             {ancestry.map(({ title, slug }, index) => (
               <span key={slug} className="flex items-center gap-1">
-                <ChevronRight size={12} className="text-gray-300" />
+                <ChevronRight
+                  size={12}
+                  aria-hidden="true"
+                  className="text-gray-400"
+                />
                 <Link href={`${baseHref}/${ancestryPathSegment(ancestry, index)}`} className="link-brand">
                   {title}
                 </Link>
               </span>
             ))}
             <span className="flex items-center gap-1">
-              <ChevronRight size={12} className="text-gray-300" />
-              <span className="font-medium text-slate-700">{currentTitle}</span>
+              <ChevronRight
+                size={12}
+                aria-hidden="true"
+                className="text-gray-400"
+              />
+              <span aria-current="page" className="font-medium text-slate-700">
+                {currentTitle}
+              </span>
             </span>
           </nav>
         </div>

@@ -61,7 +61,7 @@ export default function ContentCard({
         <h3 className="mb-2 line-clamp-2 text-base-plus font-semibold leading-snug text-slate-900">
           <Link
             href={href}
-            className="transition-colors duration-150 hover:text-brand-600"
+            className="rounded-sm transition-colors duration-150 hover:text-brand-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
           >
             {title}
           </Link>
@@ -78,6 +78,7 @@ export default function ContentCard({
           <ArrowUpRight
             size={12}
             strokeWidth={2.5}
+            aria-hidden="true"
             className="transition-transform duration-200 group-hover/cta:translate-x-0.5 group-hover/cta:-translate-y-0.5"
           />
         </Link>

@@ -14,9 +14,12 @@ export default function CarouselScrollButtons({
     if (!el) return;
     const card = el.querySelector("[data-card]") as HTMLElement | null;
     const amount = card ? card.offsetWidth + 24 : 320;
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
     el.scrollBy({
       left: dir === "left" ? -amount : amount,
-      behavior: "smooth",
+      behavior: prefersReducedMotion ? "auto" : "smooth",
     });
   }
 
@@ -29,7 +32,7 @@ export default function CarouselScrollButtons({
           type="button"
           onClick={() => scrollBy("left")}
           aria-label="Previous"
-          className="flex min-h-11 min-w-11 items-center justify-center rounded-full border-2 border-gray-200 text-gray-500 transition-all duration-200 hover:border-brand-500 hover:bg-brand-50 hover:text-brand-600"
+          className="flex min-h-11 min-w-11 items-center justify-center rounded-full border-2 border-gray-200 text-gray-500 transition-all duration-200 hover:border-brand-500 hover:bg-brand-50 hover:text-brand-600 focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2"
         >
           <svg
             aria-hidden="true"
@@ -46,7 +49,7 @@ export default function CarouselScrollButtons({
           type="button"
           onClick={() => scrollBy("right")}
           aria-label="Next"
-          className="flex min-h-11 min-w-11 items-center justify-center rounded-full border-2 border-gray-200 text-gray-500 transition-all duration-200 hover:border-brand-500 hover:bg-brand-50 hover:text-brand-600"
+          className="flex min-h-11 min-w-11 items-center justify-center rounded-full border-2 border-gray-200 text-gray-500 transition-all duration-200 hover:border-brand-500 hover:bg-brand-50 hover:text-brand-600 focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2"
         >
           <svg
             aria-hidden="true"

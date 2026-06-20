@@ -31,9 +31,9 @@ export default function PageHeader({
             centered ? "justify-center" : ""
           }`}
         >
-          <span className="eyebrow-line" />
+          <span className="eyebrow-line" aria-hidden="true" />
           {eyebrow}
-          {centered && <span className="eyebrow-line" />}
+          {centered && <span className="eyebrow-line" aria-hidden="true" />}
         </p>
         <h1 className="heading-page mb-2">{title}</h1>
         {subtitle && (

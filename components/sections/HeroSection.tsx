@@ -114,13 +114,13 @@ export default function HeroSection({
       <div className="container-page relative z-10 flex min-h-hero flex-col justify-center py-10 md:min-h-hero-lg md:px-14 md:py-hero-pad">
         <div className="w-full max-w-hero-copy">
           <div className="badge-enrolling motion-safe:animate-fade-up">
-            <span className="size-1.5 shrink-0 animate-pulse rounded-full bg-brand-500" />
+            <span className="size-1.5 shrink-0 motion-safe:animate-pulse rounded-full bg-brand-500" />
             <span className="text-2xs font-semibold tracking-wide text-gray-600">
               Enrolling Now
             </span>
           </div>
 
-          <p className="text-eyebrow mb-4 text-gray-400 motion-safe:animate-fade-up motion-safe:animate-delay-75">
+          <p className="text-eyebrow mb-4 text-gray-500 motion-safe:animate-fade-up motion-safe:animate-delay-75">
             {resolvedSubtitle}
           </p>
 

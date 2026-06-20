@@ -40,8 +40,12 @@ const FALLBACK_SERVICES: FooterService[] = [
   { _id: "6", title: "Sacrifice", slug: "sacrifice" },
 ];
 
-function ColHeading({ children }: { children: React.ReactNode }) {
-  return <h3 className="heading-col">{children}</h3>;
+function ColHeading({ id, children }: { id?: string; children: React.ReactNode }) {
+  return (
+    <h3 id={id} className="heading-col">
+      {children}
+    </h3>
+  );
 }
 
 function NavLink({
@@ -55,7 +59,7 @@ function NavLink({
     <li>
       <Link
         href={href}
-        className="group flex items-center gap-0 text-sm-plus text-gray-500 hover:text-brand-600 transition-colors duration-150"
+        className="group flex min-h-11 items-center gap-0 rounded-sm text-sm-plus text-gray-500 hover:text-brand-600 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 sm:min-h-0"
       >
         <span className="inline-block w-0 overflow-hidden group-hover:w-3 transition-all duration-150 text-brand-500 text-xs-plus leading-none">
           ›
@@ -149,17 +153,19 @@ export default function Footer({
                   href={settings.darulQuranUrl}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label="Dar ul Quran (opens in new tab)"
                   className="chip-outline-sm"
                 >
-                  Dar ul Quran <ExternalLink size={9} />
+                  Dar ul Quran{" "}
+                  <ExternalLink size={9} aria-hidden="true" />
                 </a>
               )}
             </div>
           </div>
 
           {/* Col 2 — Quick Links */}
-          <div>
-            <ColHeading>Quick Links</ColHeading>
+          <nav aria-labelledby="footer-quick-links">
+            <ColHeading id="footer-quick-links">Quick Links</ColHeading>
             <ul className="space-y-1.5 sm:space-y-2.5">
               {quickLinks.map(({ label, href }) => (
                 <NavLink key={href} href={href}>
@@ -167,11 +173,11 @@ export default function Footer({
                 </NavLink>
               ))}
             </ul>
-          </div>
+          </nav>
 
           {/* Col 3 — Services */}
-          <div>
-            <ColHeading>Services</ColHeading>
+          <nav aria-labelledby="footer-services">
+            <ColHeading id="footer-services">Services</ColHeading>
             <ul className="space-y-1.5 sm:space-y-2.5">
               {services.map(({ label, href }) => (
                 <NavLink key={href} href={href}>
@@ -179,7 +185,7 @@ export default function Footer({
                 </NavLink>
               ))}
             </ul>
-          </div>
+          </nav>
 
           {/* Col 4 — Contact (full width on mobile) */}
           <div className="col-span-2 lg:col-span-1">
@@ -189,9 +195,9 @@ export default function Footer({
                 <li>
                   <a
                     href={`mailto:${settings.email}`}
-                    className="flex items-center gap-2 text-sm-plus text-gray-500 hover:text-brand-600 transition-colors duration-150"
+                    className="flex min-h-11 items-center gap-2 rounded-sm text-sm-plus text-gray-500 hover:text-brand-600 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 sm:min-h-0"
                   >
-                    <Mail size={12} className="text-brand-500 shrink-0" />
+                    <Mail size={12} className="text-brand-500 shrink-0" aria-hidden="true" />
                     <span className="truncate">{settings.email}</span>
                   </a>
                 </li>
@@ -200,9 +206,9 @@ export default function Footer({
                 <li>
                   <a
                     href={`tel:${settings.phone}`}
-                    className="flex items-center gap-2 text-sm-plus text-gray-500 hover:text-brand-600 transition-colors duration-150"
+                    className="flex min-h-11 items-center gap-2 rounded-sm text-sm-plus text-gray-500 hover:text-brand-600 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 sm:min-h-0"
                   >
-                    <Phone size={12} className="text-brand-500 shrink-0" />
+                    <Phone size={12} className="text-brand-500 shrink-0" aria-hidden="true" />
                     {settings.phone}
                   </a>
                 </li>
@@ -213,26 +219,28 @@ export default function Footer({
                     href={whatsappUrl(settings.whatsapp)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 text-sm-plus text-gray-500 hover:text-brand-600 transition-colors duration-150"
+                    className="flex min-h-11 items-center gap-2 rounded-sm text-sm-plus text-gray-500 hover:text-brand-600 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 sm:min-h-0"
                   >
                     <MessageCircle
                       size={12}
                       className="text-brand-500 shrink-0"
+                      aria-hidden="true"
                     />
                     WhatsApp: {settings.whatsapp}
+                    <span className="sr-only"> (opens in new tab)</span>
                   </a>
                 </li>
               )}
               {settings?.address && (
                 <li className="flex items-start gap-2">
-                  <MapPin size={12} className="text-brand-500 shrink-0 mt-0.5" />
+                  <MapPin size={12} className="text-brand-500 shrink-0 mt-0.5" aria-hidden="true" />
                   <p className="text-sm-plus text-gray-500 leading-relaxed whitespace-pre-line">
                     {settings.address}
                   </p>
                 </li>
               )}
               {!settings?.email && !settings?.phone && !settings?.address && (
-                <li className="text-sm-plus text-gray-400 italic">
+                <li className="text-sm-plus text-gray-500 italic">
                   Add contact info in Sanity → Site Settings
                 </li>
               )}
@@ -259,21 +267,21 @@ export default function Footer({
           <div className="flex items-center gap-1 text-gray-300">
             <Link
               href="/about"
-              className="text-caption px-2 text-gray-400 hover:text-gray-700 transition-colors"
+              className="text-caption rounded-sm px-2 text-gray-500 hover:text-gray-700 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
             >
               About
             </Link>
-            <span>·</span>
+            <span aria-hidden="true">·</span>
             <Link
               href="/contact"
-              className="text-caption px-2 text-gray-400 hover:text-gray-700 transition-colors"
+              className="text-caption rounded-sm px-2 text-gray-500 hover:text-gray-700 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
             >
               Contact
             </Link>
-            <span>·</span>
+            <span aria-hidden="true">·</span>
             <Link
               href="/donate"
-              className="text-caption px-2 text-gray-400 hover:text-gray-700 transition-colors"
+              className="text-caption rounded-sm px-2 text-gray-500 hover:text-gray-700 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
             >
               Donate
             </Link>
