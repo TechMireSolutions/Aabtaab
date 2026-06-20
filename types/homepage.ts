@@ -39,6 +39,7 @@ export interface HomepageSettings {
   heroArabicText?: string;
   heroTitle?: string;
   heroSubtitle?: string;
+  heroBadgeText?: string;
   heroCta1Label?: string;
   heroCta1Link?: string;
   heroCta2Label?: string;

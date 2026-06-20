@@ -30,6 +30,13 @@ export const homepageSettings = defineType({
       options: { hotspot: true },
     }),
     defineField({
+      name: "heroBadgeText",
+      type: "string",
+      title: "Hero Badge Text",
+      description: "Small badge above the headline (e.g. \"Enrolling Now\"). Leave empty to hide it.",
+      initialValue: "Enrolling Now",
+    }),
+    defineField({
       name: "heroCta1Label",
       type: "string",
       title: "Primary CTA Label",

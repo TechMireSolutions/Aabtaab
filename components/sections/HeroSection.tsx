@@ -9,6 +9,7 @@ interface HeroSectionProps {
   description?: string;
   heroImage?: string | null;
   heroImageAlt?: string;
+  enrollingBadge?: string;
   cta1Label?: string;
   cta1Link?: string;
   cta2Label?: string;
@@ -68,6 +69,7 @@ export default function HeroSection({
   description,
   heroImage,
   heroImageAlt,
+  enrollingBadge,
   cta1Label = "Explore Courses",
   cta1Link = "/online-courses",
   cta2Label = "Our Services",
@@ -106,12 +108,14 @@ export default function HeroSection({
 
       <div className="container-page relative z-10 flex min-h-hero flex-col justify-center py-10 md:min-h-hero-lg md:px-14 md:py-hero-pad">
         <div className="w-full max-w-hero-copy">
-          <div className="badge-enrolling">
-            <span className="size-1.5 shrink-0 motion-safe:animate-pulse rounded-full bg-brand-500" />
-            <span className="text-2xs font-semibold tracking-wide text-gray-600">
-              Enrolling Now
-            </span>
-          </div>
+          {enrollingBadge && (
+            <div className="badge-enrolling">
+              <span className="size-1.5 shrink-0 motion-safe:animate-pulse rounded-full bg-brand-500" />
+              <span className="text-2xs font-semibold tracking-wide text-gray-600">
+                {enrollingBadge}
+              </span>
+            </div>
+          )}
 
           <p className="text-eyebrow mb-4 text-gray-500">
             {resolvedSubtitle}

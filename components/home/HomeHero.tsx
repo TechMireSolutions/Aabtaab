@@ -26,6 +26,7 @@ export default function HomeHero({
       description={hp?.heroSubtitle || settings?.description || undefined}
       heroImage={heroImageUrl}
       heroImageAlt={hp?.heroTitle?.replace(/\\n/g, " ") || siteName}
+      enrollingBadge={hp?.heroBadgeText ?? "Enrolling Now"}
       cta1Label={hp?.heroCta1Label || undefined}
       cta1Link={hp?.heroCta1Link || undefined}
       cta2Label={hp?.heroCta2Label || undefined}
