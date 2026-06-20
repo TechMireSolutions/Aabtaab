@@ -24,7 +24,7 @@ Shia Islamic education and community website.
 
 ## Runtime & versions
 
-**Last verified:** March 2026 — direct dependencies at latest stable npm releases (ESLint 10 deferred; see constraints).
+**Last verified:** June 2026 — all direct dependencies at latest stable npm; lockfile refreshed via `npm update` (ESLint 10 and @types/node 26 deferred).
 
 | Item | Version | Source |
 |------|---------|--------|
