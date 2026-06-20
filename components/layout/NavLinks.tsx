@@ -2,6 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import {
+  TW_MOBILE_NAV_ROW,
+  TW_MOBILE_NAV_ROW_ACTIVE,
+} from "@/lib/tailwind";
 import type { NavItem } from "@/types/site-navigation";
 
 function isActive(pathname: string, href: string): boolean {
@@ -50,10 +54,10 @@ export default function NavLinks({ links, variant, onNavigate }: NavLinksProps) 
                 target={item.external ? "_blank" : undefined}
                 rel={item.external ? "noopener noreferrer" : undefined}
                 aria-current={active ? "page" : undefined}
-                className={`flex min-h-11 items-center gap-2 rounded-xl border-l-[3px] px-3 py-2.5 text-sm-plus font-medium transition-all duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 ${
+                className={`${TW_MOBILE_NAV_ROW} ${
                   active
-                    ? "border-brand-600 bg-brand-50 text-brand-800"
-                    : "border-transparent text-gray-700 hover:bg-gray-50 hover:text-slate-900"
+                    ? TW_MOBILE_NAV_ROW_ACTIVE
+                    : "border-s-2 border-transparent"
                 }`}
               >
                 <span className="flex-1">{item.label}</span>

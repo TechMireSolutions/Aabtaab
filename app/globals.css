@@ -294,7 +294,7 @@
 }
 
 @utility w-mobile-drawer {
-  width: 300px;
+  width: min(300px, 85vw);
 }
 
 @utility container-wide {
@@ -717,16 +717,25 @@
 
 @utility mobile-nav-overlay {
   z-index: var(--z-index-drawer-overlay);
-  @apply fixed inset-0 bg-slate-900/40 backdrop-blur-[2px];
+  @apply fixed inset-0 touch-none bg-brand-900/70 backdrop-blur-sm;
   animation: mobile-nav-fade-in 0.2s ease-out both;
 }
 
 @utility mobile-nav-panel {
   z-index: var(--z-index-drawer);
-  width: min(300px, calc(100vw - 2rem));
+  width: min(300px, 85vw);
   max-width: 100%;
-  @apply fixed inset-y-0 left-0 flex flex-col border-r border-gray-100 bg-white shadow-2xl;
+  height: 100dvh;
+  max-height: 100dvh;
+  @apply fixed inset-y-0 start-0 flex flex-col border-e border-gray-100 bg-white shadow-2xl;
   animation: mobile-nav-slide-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+body.mobile-menu-open {
+  position: fixed;
+  inset-inline: 0;
+  overflow: hidden;
+  width: 100%;
 }
 
 @media (prefers-reduced-motion: reduce) {

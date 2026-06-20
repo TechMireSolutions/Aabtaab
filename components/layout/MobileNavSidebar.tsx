@@ -3,8 +3,20 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { Menu, Search, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import NavLinks from "@/components/layout/NavLinks";
+import {
+  TW_MOBILE_CLOSE_BTN,
+  TW_MOBILE_HEADER,
+  TW_MOBILE_MENU_TRIGGER,
+  TW_MOBILE_NAV_SCROLL,
+  TW_MOBILE_SEARCH_INPUT,
+  TW_MOBILE_SEARCH_LABEL,
+  TW_MOBILE_SEARCH_STRIP,
+  TW_MOBILE_SEARCH_SUBMIT,
+  TW_SEARCH_FORM_MOBILE,
+} from "@/lib/tailwind";
 import type { NavItem } from "@/types/site-navigation";
 
 interface MobileNavSidebarProps {
@@ -14,51 +26,8 @@ interface MobileNavSidebarProps {
   searchPlaceholder?: string;
 }
 
-function SearchIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      className={className}
-    >
-      <circle cx="11" cy="11" r="7" />
-      <path d="M20 20l-3-3" />
-    </svg>
-  );
-}
-
-function MenuIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      className={className}
-    >
-      <path d="M4 7h16M4 12h16M4 17h16" />
-    </svg>
-  );
-}
-
-function CloseIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      className={className}
-    >
-      <path d="M18 6L6 18M6 6l12 12" />
-    </svg>
-  );
-}
+const FOCUSABLE =
+  'a[href], button:not([disabled]), input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 export default function MobileNavSidebar({
   siteName,
@@ -70,17 +39,16 @@ export default function MobileNavSidebar({
   const panelRef = useRef<HTMLElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const drawerId = useId();
+  const titleId = `${drawerId}-title`;
   const pathname = usePathname();
 
   const close = useCallback(() => setOpen(false), []);
-  const openDrawer = useCallback(() => setOpen(true), []);
 
   const closeAndFocusTrigger = useCallback(() => {
     setOpen(false);
     triggerRef.current?.focus({ preventScroll: true });
   }, []);
 
-  // Close drawer after client-side navigation (link clicks use onNavigate).
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect -- dismiss overlay when route changes
     setOpen(false);
@@ -88,15 +56,21 @@ export default function MobileNavSidebar({
 
   useEffect(() => {
     if (!open) return;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+
+    const scrollY = window.scrollY;
+    document.body.classList.add("mobile-menu-open");
+    document.body.style.top = `-${scrollY}px`;
+
     return () => {
-      document.body.style.overflow = previousOverflow;
+      document.body.classList.remove("mobile-menu-open");
+      document.body.style.top = "";
+      window.scrollTo(0, scrollY);
     };
   }, [open]);
 
   useEffect(() => {
     if (!open) return;
+
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") closeAndFocusTrigger();
     };
@@ -105,11 +79,35 @@ export default function MobileNavSidebar({
   }, [open, closeAndFocusTrigger]);
 
   useEffect(() => {
-    if (!open) return;
-    const focusTarget = panelRef.current?.querySelector<HTMLElement>(
-      'input[type="search"]',
-    );
+    if (!open || !panelRef.current) return;
+
+    const panel = panelRef.current;
+    const focusTarget = panel.querySelector<HTMLElement>('input[type="search"]');
     focusTarget?.focus({ preventScroll: true });
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Tab") return;
+
+      const focusables = Array.from(
+        panel.querySelectorAll<HTMLElement>(FOCUSABLE),
+      ).filter((el) => !el.hasAttribute("disabled") && el.tabIndex !== -1);
+
+      if (focusables.length === 0) return;
+
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    };
+
+    panel.addEventListener("keydown", onKeyDown);
+    return () => panel.removeEventListener("keydown", onKeyDown);
   }, [open]);
 
   return (
@@ -119,11 +117,12 @@ export default function MobileNavSidebar({
         type="button"
         aria-expanded={open}
         aria-controls={drawerId}
-        aria-label={open ? "Close navigation menu" : "Open navigation menu"}
-        onClick={() => (open ? closeAndFocusTrigger() : openDrawer())}
-        className="flex h-11 w-11 items-center justify-center rounded-full text-gray-600 transition-colors hover:bg-gray-100 focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2"
+        aria-haspopup="dialog"
+        aria-label="Open navigation menu"
+        onClick={() => setOpen(true)}
+        className={TW_MOBILE_MENU_TRIGGER}
       >
-        {open ? <CloseIcon className="size-5" /> : <MenuIcon className="size-5" />}
+        <Menu className="size-5" aria-hidden="true" />
       </button>
 
       {open && (
@@ -131,7 +130,7 @@ export default function MobileNavSidebar({
           <button
             type="button"
             aria-label="Close menu"
-            className="mobile-nav-overlay"
+            className="mobile-nav-overlay motion-reduce:transition-none"
             onClick={closeAndFocusTrigger}
           />
 
@@ -140,14 +139,14 @@ export default function MobileNavSidebar({
             id={drawerId}
             role="dialog"
             aria-modal="true"
-            aria-label="Site navigation"
-            className="mobile-nav-panel"
+            aria-labelledby={titleId}
+            className="mobile-nav-panel motion-reduce:transition-none"
           >
-            <div className="flex shrink-0 items-center justify-between border-b border-gray-100 px-4 py-3.5 pt-[max(0.875rem,env(safe-area-inset-top))]">
+            <div className={TW_MOBILE_HEADER}>
               <Link
                 href="/"
                 onClick={closeAndFocusTrigger}
-                className="group flex min-h-11 min-w-0 flex-1 items-center gap-2.5 rounded-lg pr-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
+                className="group flex min-h-11 min-w-0 flex-1 items-center gap-2.5 rounded-lg pe-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
               >
                 <div className="size-10 shrink-0 overflow-hidden rounded-full border-2 border-brand-400 transition-transform duration-200 group-hover:scale-105">
                   {logoUrl ? (
@@ -165,7 +164,10 @@ export default function MobileNavSidebar({
                     </div>
                   )}
                 </div>
-                <span className="truncate text-base font-bold tracking-heading text-slate-900">
+                <span
+                  id={titleId}
+                  className="truncate text-base font-bold tracking-heading text-slate-900"
+                >
                   {siteName}
                 </span>
               </Link>
@@ -173,53 +175,49 @@ export default function MobileNavSidebar({
                 type="button"
                 onClick={closeAndFocusTrigger}
                 aria-label="Close navigation menu"
-                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-gray-500 transition-colors hover:bg-gray-100 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2"
+                className={TW_MOBILE_CLOSE_BTN}
               >
-                <CloseIcon className="size-5" />
+                <X className="size-4.5" aria-hidden="true" />
               </button>
             </div>
 
-            <div className="shrink-0 border-b border-gray-100 bg-slate-50/80 px-4 py-3">
-              <form action="/search" method="get" role="search">
+            <div className={TW_MOBILE_SEARCH_STRIP}>
+              <p className={TW_MOBILE_SEARCH_LABEL} id={`${drawerId}-search-label`}>
+                Search site
+              </p>
+              <form
+                action="/search"
+                method="get"
+                role="search"
+                aria-labelledby={`${drawerId}-search-label`}
+                className={TW_SEARCH_FORM_MOBILE}
+              >
                 <label htmlFor={`${drawerId}-search`} className="sr-only">
                   Search
                 </label>
-                <div className="relative">
-                  <SearchIcon className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-gray-500" />
-                  <input
-                    id={`${drawerId}-search`}
-                    type="search"
-                    name="q"
-                    enterKeyHint="search"
-                    inputMode="search"
-                    placeholder={searchPlaceholder}
-                    autoComplete="off"
-                    className="input-field w-full rounded-xl border-gray-200 bg-white py-3 pl-10 pr-4 focus:border-brand-600 focus:ring-brand-600/30"
-                  />
-                </div>
+                <input
+                  id={`${drawerId}-search`}
+                  type="search"
+                  name="q"
+                  enterKeyHint="search"
+                  inputMode="search"
+                  placeholder={searchPlaceholder}
+                  autoComplete="off"
+                  className={TW_MOBILE_SEARCH_INPUT}
+                />
+                <button
+                  type="submit"
+                  aria-label="Search"
+                  className={TW_MOBILE_SEARCH_SUBMIT}
+                >
+                  <Search className="size-3.5 text-white" aria-hidden="true" />
+                </button>
               </form>
             </div>
 
-            <nav
-              aria-label="Main navigation"
-              className="flex-1 overflow-y-auto overscroll-contain px-3 py-3"
-            >
-              <NavLinks
-                links={navLinks}
-                variant="mobile"
-                onNavigate={close}
-              />
+            <nav aria-label="Main navigation" className={TW_MOBILE_NAV_SCROLL}>
+              <NavLinks links={navLinks} variant="mobile" onNavigate={close} />
             </nav>
-
-            <div className="shrink-0 border-t border-gray-100 bg-white px-4 py-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
-              <Link
-                href="/donate"
-                onClick={closeAndFocusTrigger}
-                className="btn-primary w-full justify-center"
-              >
-                Donate
-              </Link>
-            </div>
           </aside>
         </>
       )}

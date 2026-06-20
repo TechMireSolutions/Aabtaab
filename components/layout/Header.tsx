@@ -1,9 +1,22 @@
 import Link from "next/link";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import NavLinks from "@/components/layout/NavLinks";
-import MobileNavSidebar from "@/components/layout/MobileNavSidebar";
 import { DEFAULT_SITE_NAME } from "@/lib/constants";
+import { TW_MOBILE_MENU_TRIGGER } from "@/lib/tailwind";
 import type { NavItem } from "@/types/site-navigation";
+
+const MobileNavSidebar = dynamic(
+  () => import("@/components/layout/MobileNavSidebar"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="lg:hidden" aria-hidden="true">
+        <span className={`${TW_MOBILE_MENU_TRIGGER} pointer-events-none opacity-0`} />
+      </div>
+    ),
+  },
+);
 
 interface HeaderProps {
   darulQuranUrl?: string;
