@@ -31,10 +31,11 @@ elif [ -f .env.local ]; then
   set +a
 fi
 
-export NODE_ENV=production
-
 echo "==> Installing dependencies"
-npm ci --no-audit --no-fund
+# Build needs devDependencies (Tailwind, PostCSS, TypeScript). Do not set NODE_ENV=production before install.
+npm ci --no-audit --no-fund --include=dev
+
+export NODE_ENV=production
 
 echo "==> Building"
 npm run build
