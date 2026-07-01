@@ -17,7 +17,7 @@ export default function WhyUsImageSection({
   imageAlt,
   defaultHeading = "Why Use Our Platform?",
 }: WhyUsImageSectionProps) {
-  if (items.length === 0) return null;
+  if (!items || items.length === 0) return null;
 
   return (
     <section className="section-y bg-white">

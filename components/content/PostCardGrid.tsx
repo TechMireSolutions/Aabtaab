@@ -11,7 +11,7 @@ export default function PostCardGrid({
   posts,
   emptyMessage = "No articles published yet.",
 }: PostCardGridProps) {
-  if (posts.length === 0) {
+  if (!posts || posts.length === 0) {
     return <p className="empty-state">{emptyMessage}</p>;
   }
 

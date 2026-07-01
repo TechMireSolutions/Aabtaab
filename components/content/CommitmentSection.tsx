@@ -11,7 +11,7 @@ export default function CommitmentSection({
   items = [],
   defaultHeading = "Our Commitment",
 }: CommitmentSectionProps) {
-  if (items.length === 0) return null;
+  if (!items || items.length === 0) return null;
 
   return (
     <section className="bg-slate-900 section-y">

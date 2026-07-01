@@ -9,7 +9,7 @@ export default function CoursePricingSection({
   heading = "Affordable Plans",
   tables = [],
 }: CoursePricingSectionProps) {
-  if (tables.length === 0) return null;
+  if (!tables || tables.length === 0) return null;
 
   return (
     <section className="section-y bg-white">

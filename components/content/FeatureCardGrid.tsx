@@ -14,7 +14,7 @@ export default function FeatureCardGrid({
   variant = "check",
   bg = "slate",
 }: FeatureCardGridProps) {
-  if (items.length === 0) return null;
+  if (!items || items.length === 0) return null;
 
   const sectionClass = bg === "slate" ? "section-muted" : "section-y bg-white";
 

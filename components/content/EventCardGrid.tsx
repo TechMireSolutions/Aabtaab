@@ -15,7 +15,7 @@ export default function EventCardGrid({
   events,
   emptyMessage = "No events scheduled yet.",
 }: EventCardGridProps) {
-  if (events.length === 0) {
+  if (!events || events.length === 0) {
     return <p className="empty-state">{emptyMessage}</p>;
   }
 

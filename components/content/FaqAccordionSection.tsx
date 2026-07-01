@@ -43,7 +43,7 @@ export default function FaqAccordionSection({
   items = [],
   icon = "plus",
 }: FaqAccordionSectionProps) {
-  if (items.length === 0) return null;
+  if (!items || items.length === 0) return null;
 
   const headingId = `faq-heading-${slugify(heading)}`;
   const ToggleIcon = icon === "chevron" ? ChevronRight : Plus;
@@ -68,11 +68,10 @@ export default function FaqAccordionSection({
                   aria-hidden="true"
                   size={icon === "chevron" ? 15 : 16}
                   strokeWidth={2}
-                  className={`shrink-0 text-gray-500 transition-transform duration-200 ${
-                    icon === "chevron"
+                  className={`shrink-0 text-gray-500 transition-transform duration-200 ${icon === "chevron"
                       ? "group-open:rotate-90"
                       : "group-open:rotate-45"
-                  }`}
+                    }`}
                 />
               </summary>
               {item.answer !== undefined && item.answer !== null && (

@@ -11,7 +11,7 @@ export default function HowItWorksSection({
   steps = [],
   maxWidth = "md",
 }: HowItWorksSectionProps) {
-  if (steps.length === 0) return null;
+  if (!steps || steps.length === 0) return null;
 
   const containerClass =
     maxWidth === "lg" ? "container-narrow" : "container-content";
