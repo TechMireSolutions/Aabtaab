@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import ContentCard from "@/components/cards/ContentCard";
 import CarouselScrollButtons from "@/components/sections/CarouselScrollButtons";
 
@@ -74,16 +75,11 @@ export default function CarouselSection({
 
             <Link href={viewAllHref} className="link-brand group whitespace-nowrap">
               {viewAllLabel}
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                className="size-3.5 transition-transform duration-150 group-hover:translate-x-0.5"
-              >
-                <path d="M5 12h14M13 5l7 7-7 7" />
-              </svg>
+              <ArrowRight
+                size={14}
+                strokeWidth={2.5}
+                className="transition-transform duration-150 group-hover:translate-x-0.5"
+              />
             </Link>
           </div>
         </div>

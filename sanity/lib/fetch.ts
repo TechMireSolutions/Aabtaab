@@ -2,6 +2,7 @@ import { type QueryParams } from "next-sanity";
 import { draftMode } from "next/headers";
 import { unstable_cache } from "next/cache";
 import type { SiteSettings } from "@/types/sanity";
+import { isProduction } from "@/lib/env";
 import { client } from "./client";
 import { getPreviewClient } from "./previewClient";
 import { siteSettingsQuery } from "./queries";
@@ -56,7 +57,7 @@ export async function sanityFetch<T>({
 }: SanityFetchOptions<T>): Promise<T> {
   const preview = await isDraftModeEnabled();
 
-  if (preview || process.env.NODE_ENV !== "production") {
+  if (preview || !isProduction) {
     try {
       return await fetchFromSanity<T>(query, params);
     } catch (error) {

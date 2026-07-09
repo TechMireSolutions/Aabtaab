@@ -1,20 +1,8 @@
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import type { HomepageSettings } from "@/types/homepage";
 
-function ArrowIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      className={className}
-    >
-      <path d="M5 12h14M13 5l7 7-7 7" />
-    </svg>
-  );
-}
+
 
 interface HomeAboutProps {
   homepage: HomepageSettings | null;
@@ -59,7 +47,11 @@ export default function HomeAbout({ homepage: hp }: HomeAboutProps) {
             </div>
             <Link href="/about" className="btn-primary group">
               {hp?.aboutCtaLabel || "Learn About Us"}
-              <ArrowIcon className="size-3.5 transition-transform duration-150 group-hover:translate-x-0.5" />
+              <ArrowRight
+                size={14}
+                strokeWidth={2.5}
+                className="transition-transform duration-150 group-hover:translate-x-0.5"
+              />
             </Link>
           </div>
 

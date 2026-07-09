@@ -13,6 +13,7 @@ const nextConfig: NextConfig = {
   },
 
   turbopack: {
+    root: process.cwd(),
     resolveAlias: {
       "../build/polyfills/polyfill-module": emptyPolyfillRelative,
     },
@@ -98,27 +99,6 @@ const nextConfig: NextConfig = {
               "base-uri 'self'",
               "form-action 'self'",
             ].join("; "),
-          },
-        ],
-      },
-      {
-        // Immutable cache for all static assets (_next/static)
-        // These are content-hashed so they're safe to cache forever
-        source: "/_next/static/(.*)",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
-        ],
-      },
-      {
-        // Optimized images from Next.js Image component
-        source: "/_next/image(.*)",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=86400, stale-while-revalidate=604800",
           },
         ],
       },

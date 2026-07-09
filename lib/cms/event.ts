@@ -1,16 +1,13 @@
 import type { Metadata } from "next";
-import { ogImageUrl, cardImageUrl } from "@/sanity/lib/image";
+import { cardImageUrl } from "@/sanity/lib/image";
 import { buildPageMetadata } from "@/lib/seo/metadata";
+import { resolveDocOgImage } from "@/lib/seo/resolve-og-image";
 import type { EventDetail } from "@/types/event";
 import { getEventBySlug } from "./queries";
 
 export function resolveEventImageUrls(event: EventDetail) {
   const mainImageUrl = event.image ? cardImageUrl(event.image) : undefined;
-  const ogImage = event.seo?.ogImage
-    ? ogImageUrl(event.seo.ogImage)
-    : event.image
-      ? ogImageUrl(event.image)
-      : undefined;
+  const ogImage = resolveDocOgImage(event);
   return { mainImageUrl, ogImageUrl: ogImage };
 }
 

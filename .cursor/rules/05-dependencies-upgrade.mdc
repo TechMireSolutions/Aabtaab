@@ -52,9 +52,39 @@ Apply when upgrading deps, touching `package.json`, CI, or Node engine constrain
 - Run `npm run migrate:sanity:dry` if Sanity schema/field APIs changed.
 - Re-run `npm run sync:agents` only if agent config files changed — not for every dep bump.
 
+## PM2 & Hetzner Deployment
+
+* Use Node.js version defined in `.nvmrc` (currently Node **24.17.0**).
+* Run PM2 in cluster mode (`instances: "max"` or structured cluster via `ecosystem.config.cjs`).
+* Processes must remain completely stateless: do not store sessions, rate limits, or message queues in local process memory.
+* Do not expose port 3000 directly to the public internet; use Hetzner firewall rules to restrict traffic to Cloudflare origin IP addresses.
+* Run the Node application process under a restricted system user rather than `root`.
+* Perform zero-downtime reloads (`pm2 reload`) where supported.
+
+## CI/CD Workflow
+
+GitHub Actions must run and pass the following checks before any code is deployed:
+1. Dependency installation (`npm ci`).
+2. Node.js version verification.
+3. Linting (`npm run lint`).
+4. TypeScript compilation/type-checking.
+5. Unit tests (`npm run test`).
+6. Production build (`npm run build`).
+7. E2E smoke tests (`npm run test:e2e`).
+
+Protect the `main` branch. Avoid direct commits to `main` (always use pull requests). Rollback procedures must be kept current.
+
+## Dependency Policy
+
+* Review package maintenance, license, and bundle size impact before installing new dependencies.
+* Use existing dependencies before adding new ones; do not install duplicate packages (e.g. two slider or date-formatting libraries).
+* Keep packages pinned via `package-lock.json` and use `npm ci` on production servers.
+
 ## Avoid
 
 - Mixing unrelated major upgrades in one change (hard to bisect failures).
 - Upgrading studio/CMS packages without checking Sanity 6 release notes.
 - Committing `.env`, tokens, or secrets.
 - Removing `package-lock.json` — always use lockfile-driven installs (`npm ci` on server).
+- Bypassing CI/CD checks for production deployment.
+

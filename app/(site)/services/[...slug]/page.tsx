@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { heroImageUrl, ogImageUrl, urlFor } from "@/sanity/lib/image";
+import { heroImageUrl, urlFor } from "@/sanity/lib/image";
 import NestedBreadcrumbs from "@/components/content/NestedBreadcrumbs";
 import NestedChildrenGrid from "@/components/content/NestedChildrenGrid";
 import ServiceHeroSection from "@/components/content/ServiceHeroSection";
@@ -22,6 +22,7 @@ import {
   FaqPageJsonLd,
   faqItemsToSchema,
   ServiceJsonLd,
+  resolveDocOgImage,
 } from "@/lib/seo";
 
 const SERVICE_BASE = {
@@ -65,9 +66,7 @@ export default async function ServiceCatchAllPage({
   } = buildNestedCatalogPageContext(SERVICE_BASE, slug, service, site);
 
   const servicePageUrl = absoluteUrl(currentPath);
-  const serviceImageUrl = service.heroImage
-    ? ogImageUrl(service.heroImage)
-    : undefined;
+  const serviceImageUrl = resolveDocOgImage(service);
   const serviceFaqSchema = faqItemsToSchema(service.faqItems);
 
   return (

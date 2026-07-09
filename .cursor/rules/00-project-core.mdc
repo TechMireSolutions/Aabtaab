@@ -7,9 +7,21 @@ alwaysApply: true
 
 ## Stack
 
-Next.js **16** · React **19** · Sanity **6** · Tailwind **v4** · TypeScript · PM2 port **3000**
+* **Runtime:** Node.js **24.17.0** (`.nvmrc`, engine requirements ≥22.12.0)
+* **Framework:** **Next.js 16** (App Router, RSC, ISR)
+* **UI:** **React 19**
+* **Styling:** **Tailwind CSS v4** (single CSS entrypoint in `app/globals.css`)
+* **CMS:** **Sanity 6** (embedded Studio at `/studio`)
+* **Validation:** **Zod**
+* **Email:** **Resend** with **Nodemailer** fallback
+* **Rate limiting:** **Upstash Redis** (distributed)
+* **Monitoring:** **Sentry**
+* **Testing:** **Vitest** (unit) and **Playwright** (E2E)
+* **Hosting:** **Hetzner VPS** (PM2 cluster, port **3000**)
+* **Proxy / CDN:** **Cloudflare** (Full strict mode)
+* **CI/CD:** **GitHub Actions**
 
-Full reference: **`techstack.md`** (dependencies, SEO, production, env vars).
+Full reference: [techstack.md](file:///Users/syedaalin/Documents/aabtaab/techstack.md) (dependencies, SEO, production, env vars).
 
 ## Paths
 
@@ -40,6 +52,24 @@ Edit **only** `.cursor/rules/` and `.cursor/skills/`, then run `npm run sync:age
 3. **Use `@/` imports** — no deep relative paths when alias works.
 4. **Verify** — run `npm run lint`, `npm run test`, and `npm run build` after substantive changes.
 5. **No git commits/push** unless the user explicitly asks.
+6. **Pull Request Rules:** Every PR must have one clear purpose, explain impact, include tests, pass CI, avoid unrelated formatting, and explicitly mention env/Sanity schema updates.
+7. **AI Coding Assistant Rules:** Read files before proposing changes, preserve stack, do not invent variables/schemas without implementation, produce type-safe code, never write placeholders like "implement later", and make the smallest safe change.
+
+## Definition of Done
+
+A feature is complete only when it works on desktop and mobile, TypeScript/lint checks pass without unsafe suppressions, inputs are validated on the server, public endpoints are rate-limited, feedback/loading/empty states are handled, accessibility is satisfied, metadata/JSON-LD/image optimizations are implemented, unit/E2E tests cover critical paths, Sentry records exceptions without PII, and CI passes.
+
+## Prohibited Practices
+
+* **Never** use `any` to bypass typing, or disable strict TypeScript flags.
+* **Never** expose server tokens (`SANITY_API_TOKEN`) to Client Components.
+* **Never** trust client-side validation alone.
+* **Never** render raw CMS HTML or use unparameterized queries with user input.
+* **Never** store rate limits in local process memory (use Redis).
+* **Never** log secrets, passwords, or complete sensitive form payloads.
+* **Never** return internal stack traces / error details to users.
+* **Never** make entire pages Client Components unnecessarily.
+* **Never** suppress failing tests or bypass CI/CD checks for production.
 
 ## Rule index (applied by file type)
 
@@ -50,6 +80,10 @@ Edit **only** `.cursor/rules/` and `.cursor/skills/`, then run `npm run sync:age
 | `03-sanity-cms.mdc` | `sanity/`, `lib/cms/` |
 | `04-typescript-seo.mdc` | `*.ts`, `*.tsx` |
 | `05-dependencies-upgrade.mdc` | `package.json`, CI, deploy config |
-| `06-file-structure.mdc` | Always — where new files go |
+| `06-file-structure.mdc` | Always — folder layout |
 | `07-naming-policy.mdc` | `*.ts`, `*.tsx`, scripts |
 | `08-dry-policy.mdc` | Always — deduplication standards |
+| `09-security.mdc` | Security-related changes, forms, env config |
+| `10-performance.mdc` | Caching, dynamic components, layouts, CWV |
+| `11-error-handling-observability.mdc` | Telemetry, logging, Sentry, error boundaries |
+| `12-testing.mdc` | Test suites, Vitest, Playwright configs |

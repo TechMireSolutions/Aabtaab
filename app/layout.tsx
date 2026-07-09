@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import { resolveSiteName } from "@/lib/constants";
+import { env } from "@/lib/env";
 import { getSiteSettings } from "@/lib/cms/queries";
 import { urlFor } from "@/sanity/lib/image";
 import { JsonLd, WebSiteJsonLd } from "@/lib/seo";
@@ -135,9 +136,9 @@ export async function generateMetadata(): Promise<Metadata> {
     // ── Verification ─────────────────────────────────────────────────────────
     // Add your Google Search Console verification token to .env.local:
     // NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION=xxxx
-    ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION && {
+    ...(env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION && {
       verification: {
-        google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+        google: env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
       },
     }),
   };

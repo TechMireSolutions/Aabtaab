@@ -1,3 +1,4 @@
+import { env } from "@/lib/env";
 import type { ContactEmailFields } from "./email-html";
 import { buildContactNotificationHtml } from "./email-html";
 
@@ -11,13 +12,12 @@ async function sendViaResend(
   subject: string,
   html: string,
 ): Promise<boolean> {
-  const apiKey = process.env.RESEND_API_KEY;
+  const apiKey = env.RESEND_API_KEY;
   if (!apiKey) return false;
 
   const { Resend } = await import("resend");
   const resend = new Resend(apiKey);
-  const from =
-    process.env.EMAIL_FROM || "Aabtaab Contact <onboarding@resend.dev>";
+  const from = env.EMAIL_FROM || "Aabtaab Contact <onboarding@resend.dev>";
 
   await resend.emails.send({ from, to, subject, html });
   return true;
@@ -28,8 +28,8 @@ async function sendViaSmtp(
   subject: string,
   html: string,
 ): Promise<boolean> {
-  const user = process.env.EMAIL_USER;
-  const pass = process.env.EMAIL_PASS;
+  const user = env.EMAIL_USER;
+  const pass = env.EMAIL_PASS;
   if (!user || !pass) return false;
 
   const nodemailer = await import("nodemailer");
@@ -54,7 +54,7 @@ export async function sendContactNotification({
   subject,
   fields,
 }: NotifyOptions): Promise<void> {
-  const to = process.env.EMAIL_TO;
+  const to = env.EMAIL_TO;
   if (!to) return;
 
   const html = buildContactNotificationHtml(fields);

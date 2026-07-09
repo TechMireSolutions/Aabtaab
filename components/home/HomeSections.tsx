@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { getHomepageCarouselsData } from "@/lib/cms/queries";
 import { formatEventDateRange } from "@/lib/cms/event";
 import { urlFor } from "@/sanity/lib/image";
@@ -6,21 +7,9 @@ import CarouselSection, {
   type CarouselItem,
 } from "@/components/sections/CarouselSection";
 import ContentCard from "@/components/cards/ContentCard";
+import { formatPriceDuration } from "@/lib/urls";
 
-function ArrowIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      className={className}
-    >
-      <path d="M5 12h14M13 5l7 7-7 7" />
-    </svg>
-  );
-}
+
 
 export default async function HomeSections() {
   const {
@@ -38,7 +27,7 @@ export default async function HomeSections() {
       ? urlFor(c.featuredImage).width(480).height(360).url()
       : null,
     title: c.title,
-    description: [c.price, c.duration].filter(Boolean).join(" · ") || null,
+    description: formatPriceDuration(c.price, c.duration),
     href: `/online-courses/${c.slug.current}`,
     badge: c.subject,
     ctaLabel: "Enroll Now",
@@ -143,7 +132,11 @@ export default async function HomeSections() {
                 className="link-brand group inline-flex shrink-0 items-center gap-1.5 sm:ml-6"
               >
                 View all
-                <ArrowIcon className="size-3.5 transition-transform duration-150 group-hover:translate-x-0.5" />
+                <ArrowRight
+                  size={14}
+                  strokeWidth={2.5}
+                  className="transition-transform duration-150 group-hover:translate-x-0.5"
+                />
               </Link>
             </div>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -254,7 +247,11 @@ export default async function HomeSections() {
           </div>
           <Link href="/donate" className="btn-primary group">
             {hp?.donateCtaLabel || "Donate Now"}
-            <ArrowIcon className="size-3.5 transition-transform duration-150 group-hover:translate-x-0.5" />
+            <ArrowRight
+              size={14}
+              strokeWidth={2.5}
+              className="transition-transform duration-150 group-hover:translate-x-0.5"
+            />
           </Link>
         </div>
       </section>

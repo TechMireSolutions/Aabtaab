@@ -1,7 +1,7 @@
 import { ogImageUrl } from "@/sanity/lib/image";
 import type { SeoData } from "@/types/sanity";
 
-type SanityImageRef = { asset: { _ref: string } };
+type SanityImageRef = { asset?: { _ref: string } | null; alt?: string } | null;
 
 interface OgImageSource {
   seo?: SeoData;
@@ -22,5 +22,5 @@ export function resolveDocOgImage(doc?: OgImageSource | null): string | undefine
     doc.mainImage ??
     doc.image ??
     doc.icon;
-  return fallback ? ogImageUrl(fallback) : undefined;
+  return fallback && fallback.asset ? ogImageUrl(fallback) : undefined;
 }

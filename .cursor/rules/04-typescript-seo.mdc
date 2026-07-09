@@ -66,9 +66,39 @@ alwaysApply: false
 - No blank image placeholders in production UI — use CMS image or styled fallback block.
 - OG fallback: `public/og-default.png` when no CMS image.
 
+## TypeScript Strictness
+
+* Strict mode must remain enabled. Do not use `any`.
+* Use `unknown` for untrusted/external values and narrow types safely.
+* Do not suppress errors with `@ts-ignore`. Use `@ts-expect-error` only when the error is intentional, and provide an explanatory comment.
+* Define explicit types for public component props, API responses, form payloads, Sanity query results, and environment configuration.
+* Avoid unsafe type assertions (`as Type`). Never cast unvalidated external data directly to an application type.
+* Prefer discriminated unions over multiple loosely related Boolean flags. Use exhaustive checks for important unions.
+
+## SEO Metadata & URL Rules
+
+* Every indexable page must have: unique page title, unique description, canonical URL, Open Graph metadata, social image, and indexing directives.
+* For CMS-driven pages, use `generateMetadata` to derive metadata dynamically.
+* Use short, lowercase, and stable slugs. Redirect old URLs if slugs change.
+* Exclude drafts, preview routes, studio routes, and private/search results from the sitemap.
+* Validate all generated JSON-LD structured data and escape output safely.
+
+## Accessibility (a11y)
+
+* Target WCAG 2.2 Level AA compliance for public interfaces.
+* Keyboard accessibility: all interactive features must be keyboard-operable, and visible focus indicators are mandatory. Do not remove outlines without providing an accessible replacement.
+* Use native HTML controls over custom ones when possible.
+* Associate a visual label with every form field; placeholder text is not a label.
+* Contrast: maintain sufficient contrast ratio. Do not communicate meaning via color alone.
+* Respect `prefers-reduced-motion`.
+* Trap focus inside modal overlays, restore focus when closed, allow closing with Escape, and expose correct modal roles.
+* Urdu and Arabic content must support Right-to-Left (RTL) rendering without breaking English layout styling.
+
 ## Avoid
 
 - Client-only metadata hacks.
 - Duplicate SEO title/description logic outside `lib/cms/page.ts` / `lib/seo/`.
 - Hardcoded site name when `getSiteSettings()` is available.
 - Using article image as Organization `publisher.logo` in JSON-LD.
+- Silently bypassing keyboard accessibility or removing focus rings.
+

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { ExternalLink } from "lucide-react";
 import {
   TW_MOBILE_NAV_ROW,
   TW_MOBILE_NAV_ROW_ACTIVE,
@@ -21,21 +22,7 @@ interface NavLinksProps {
   onNavigate?: () => void;
 }
 
-function ExternalLinkIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      className={className}
-    >
-      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-      <path d="M15 3h6v6M10 14 21 3" />
-    </svg>
-  );
-}
+
 
 export default function NavLinks({ links, variant, onNavigate }: NavLinksProps) {
   const pathname = usePathname();
@@ -63,7 +50,7 @@ export default function NavLinks({ links, variant, onNavigate }: NavLinksProps) 
                 <span className="flex-1">{item.label}</span>
                 {item.external && (
                   <>
-                    <ExternalLinkIcon className="size-3.5 shrink-0 text-gray-400" />
+                    <ExternalLink className="size-3.5 shrink-0 text-gray-400" />
                     <span className="sr-only"> (opens in new tab)</span>
                   </>
                 )}

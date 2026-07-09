@@ -1,0 +1,43 @@
+---
+trigger: glob
+glob: {app,components,lib,sanity,scripts}/**/*.{ts,tsx,mjs,cjs}
+description: Error handling & observability rules — error boundaries, user-friendly errors, Sentry logging, and health checks
+---
+
+# Error Handling & Observability Rules
+
+## 1. Error Handling
+
+* **Never ignore caught errors silently.**
+* Catch errors only when the code can add context, recover, clean up, or return a controlled response.
+* Use React and Next.js error boundaries (`error.tsx`, `global-error.tsx`) for important page sections.
+* Provide user-friendly production error messages. Do not display stack traces, database details, environment values, or provider responses to users.
+* Return appropriate HTTP status codes from API handlers (never return `200` for failed operations).
+* Distinguish clearly between:
+  * Validation errors
+  * Authentication or authorisation errors
+  * Rate-limit errors
+  * External service failures
+  * Not-found errors (`notFound()` helper in Next.js)
+  * Unexpected server errors
+
+## 2. Telemetry and Sentry
+
+* Configure Sentry for both server and client errors where appropriate (`@sentry/nextjs` via `instrumentation.ts` and config files).
+* Log unexpected failures to Sentry, including issues with:
+  * Contact submissions
+  * Email delivery
+  * Sanity fetching
+  * Cache revalidation
+  * Rate limiting
+  * Startup configuration validation
+* Add useful operational context (route, feature, error category, deployment environment) to exceptions without logging personal data (PII).
+* Scrub sensitive headers and input values (e.g. passwords, tokens, full form submissions) before sending data to Sentry.
+
+## 3. Server Logging
+
+* Use structured server logs.
+* Include timestamps, severity levels (info, warn, error), and request context where possible.
+* Avoid logging complete request bodies, tokens, or credentials.
+* Maintain a lightweight health endpoint (e.g., `/api/health` if needed) for deployment monitoring.
+* The health endpoint must not expose secrets or internal configuration details.

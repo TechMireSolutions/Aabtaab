@@ -119,6 +119,36 @@ layout → spacing → typography → visual (bg/border/shadow) → interactive 
 | `btn-paypal` hex colors | PayPal brand requirement |
 | Semantic status colors (`red-*` cancelled badge) | Meaning, not brand |
 
+## Tailwind & CSS guidelines
+
+* Use Tailwind CSS v4 utilities and design tokens (`brand-*`, `gold-*`, container utilities).
+* Avoid inline `style` unless the value is dynamically computed and cannot be modeled via classes.
+* Do not add another CSS framework.
+* Keep spacing, typography, radii, and shadows consistent.
+* Do not overuse `@apply`.
+* Keep global CSS (`app/globals.css`) limited to: base styles, theme variables, typography defaults, and necessary third-party overrides.
+* Avoid deeply nested CSS. Do not use `!important` unless required by a documented external library constraint.
+* Support dark mode only through the project's chosen strategy.
+* Verify that hover-only interactions also work on touch and keyboard devices.
+
+## Mobile & responsiveness rules
+
+* **Design mobile-first.** Test layouts at small, medium, large, and extra-large widths.
+* Do not rely on fixed desktop widths. Avoid horizontal scrolling entirely.
+* Interactive controls should have an approximate minimum target size of **44 by 44 pixels** on mobile viewports.
+* Form inputs should use a readable font size, normally at least **16 pixels** on mobile to prevent automatic browser zoom on iOS.
+* Navigation must remain fully usable with touch, keyboard, and screen readers.
+* Do not hide essential content on mobile.
+* Tables must scroll or adapt safely on small screens. Long words, URLs, and email addresses must wrap correctly.
+
+## UX calls to action & trust
+
+* Important pages must have a clear primary action (e.g. Enrol, Contact, Donate).
+* Do not place multiple competing primary buttons in the same section.
+* Make important actions visible without excessive scrolling. Do not use deceptive urgency.
+* Maintain discoverable, accurate pages for: About, Contact, Privacy Policy, Terms and Conditions, and Frequently Asked Questions (FAQ).
+* Contact details must be accurate and consistent. Do not publish fake testimonials or reviews.
+
 ## Examples
 
 ```tsx

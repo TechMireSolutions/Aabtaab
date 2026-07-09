@@ -52,9 +52,36 @@ Keep handlers thin — business logic in `lib/`:
 | `/api/revalidate` | `lib/revalidate.ts` |
 | `/api/draft`, `/api/draft/disable` | draft mode only |
 
+## Component design constraints
+
+* Each component must have one clear responsibility. Avoid components with excessive props or unrelated behaviour.
+* Prefer composition over large conditional components.
+* Do not duplicate layout, button, card, form, or typography patterns.
+* Extract reusable patterns only after their shared behaviour is understood. Avoid premature abstractions.
+* Keep server-only code out of client bundles.
+
+## Form & UI feedback states
+
+Every asynchronous feature (especially forms) must handle:
+* Initial state
+* Loading state
+* Success state
+* Validation error state
+* Server error state
+* Empty state
+
+Rules:
+* Do not leave buttons permanently disabled after an error occurs.
+* Prevent duplicate submissions while a request is processing (disable submit button or show loading state).
+* Provide clear, user-friendly confirmations after successful form submission.
+* Preserve safe user input after validation errors.
+* Show field-level validation errors near the corresponding fields.
+
 ## Avoid
 
 - Fetching CMS data in client components.
 - New global state libraries — use server fetch + URL/searchParams.
 - Unnecessary `useEffect` for data that can load on the server.
 - Duplicating cache logic — extend `sanityFetch` or `lib/cms/queries.ts`.
+- Converting an entire page into a Client Component merely to support one interactive element.
+

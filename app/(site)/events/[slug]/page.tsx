@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, CalendarDays, MapPin, ExternalLink } from "lucide-react";
+import { CalendarDays, MapPin, ExternalLink } from "lucide-react";
+import DetailBackButton from "@/components/layout/DetailBackButton";
 import ProseSection from "@/components/portable-text/ProseSection";
 import {
   buildEventPageMetadata,
@@ -73,21 +73,7 @@ export default async function EventDetailPage({
         ]}
       />
 
-      <div className="sticky-below-header z-10 border-b border-gray-100 bg-white">
-        <div className="container-content py-3">
-          <Link
-            href="/events"
-            className="inline-flex items-center gap-1.5 text-sm-plus font-medium text-gray-500 transition-colors hover:text-slate-900 group"
-          >
-            <ArrowLeft
-              size={13}
-              strokeWidth={2}
-              className="transition-transform group-hover:-translate-x-0.5"
-            />
-            Back to Events
-          </Link>
-        </div>
-      </div>
+      <DetailBackButton href="/events" label="Back to Events" />
 
       <article className="container-content section-y">
         {event.status === "EventCancelled" && (

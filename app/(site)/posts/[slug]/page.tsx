@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import Link from "next/link";
-import { ArrowLeft, CalendarDays, User } from "lucide-react";
+import { CalendarDays, User } from "lucide-react";
+import DetailBackButton from "@/components/layout/DetailBackButton";
 import FaqAccordionSection from "@/components/content/FaqAccordionSection";
 import ProseSection from "@/components/portable-text/ProseSection";
 import { buildPostPageMetadata, resolvePostImageUrls } from "@/lib/cms/post";
@@ -63,21 +63,7 @@ export default async function PostDetailPage({
         ]}
       />
 
-      <div className="sticky-below-header z-10 border-b border-gray-100 bg-white">
-        <div className="container-content py-3">
-          <Link
-            href="/posts"
-            className="inline-flex items-center gap-1.5 text-sm-plus font-medium text-gray-500 transition-colors hover:text-slate-900 group"
-          >
-            <ArrowLeft
-              size={13}
-              strokeWidth={2}
-              className="transition-transform group-hover:-translate-x-0.5"
-            />
-            Back to Articles
-          </Link>
-        </div>
-      </div>
+      <DetailBackButton href="/posts" label="Back to Articles" />
 
       <article className="container-content section-y">
         {post.categories && post.categories.length > 0 && (

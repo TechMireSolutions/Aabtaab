@@ -1,3 +1,4 @@
+import { env } from "@/lib/env";
 import { revalidateTag } from "next/cache";
 import { type NextRequest, NextResponse } from "next/server";
 import { CACHE_TAGS } from "@/sanity/lib/fetch";
@@ -6,7 +7,7 @@ import {
   revalidateSlugCollection,
 } from "@/lib/revalidate";
 
-const SANITY_REVALIDATE_SECRET = process.env.SANITY_REVALIDATE_SECRET;
+const SANITY_REVALIDATE_SECRET = env.SANITY_REVALIDATE_SECRET;
 
 export async function POST(request: NextRequest) {
   const secret =

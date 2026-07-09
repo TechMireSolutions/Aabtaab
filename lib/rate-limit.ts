@@ -1,5 +1,6 @@
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
+import { env } from "@/lib/env";
 import { clientIpFromRequest } from "@/lib/request-ip";
 
 export { clientIpFromRequest };
@@ -11,13 +12,16 @@ let upstashLimiter: Ratelimit | null = null;
 const memoryHits = new Map<string, { count: number; resetAt: number }>();
 
 function getUpstashLimiter(): Ratelimit | null {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+  const url = env.UPSTASH_REDIS_REST_URL;
+  const token = env.UPSTASH_REDIS_REST_TOKEN;
   if (!url || !token) return null;
 
   if (!upstashLimiter) {
     upstashLimiter = new Ratelimit({
-      redis: Redis.fromEnv(),
+      redis: new Redis({
+        url,
+        token,
+      }),
       limiter: Ratelimit.slidingWindow(MAX_REQUESTS, "15 m"),
       prefix: "aabtaab:contact",
     });

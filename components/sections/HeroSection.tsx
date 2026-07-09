@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 import { DEFAULT_SITE_NAME } from "@/lib/constants";
 
 interface HeroSectionProps {
@@ -24,20 +25,7 @@ const STATS = [
   { value: "10+", label: "Scholars" },
 ];
 
-function ArrowIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2.5"
-      className={className}
-    >
-      <path d="M5 12h14M13 5l7 7-7 7" />
-    </svg>
-  );
-}
+
 
 function StatIcon({ label }: { label: string }) {
   const paths: Record<string, string> = {
@@ -143,7 +131,11 @@ export default function HeroSection({
           <div className="flex flex-wrap items-center gap-3">
             <Link href={cta1Link} className="btn-primary group">
               {cta1Label}
-              <ArrowIcon className="size-3.5 transition-transform duration-150 group-hover:translate-x-0.5" />
+              <ArrowRight
+                size={14}
+                strokeWidth={2.5}
+                className="transition-transform duration-150 group-hover:translate-x-0.5"
+              />
             </Link>
             <Link href={cta2Link} className="btn-secondary">
               {cta2Label}

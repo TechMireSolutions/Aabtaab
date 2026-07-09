@@ -59,10 +59,21 @@ Routes: `/posts` not `/articles`.
 - Fragments in `fragments.ts`: `{NAME}_FRAGMENT` — `SEO_FRAGMENT`, `PARENT_ANCESTRY_FRAGMENT`.
 - Schema files: match `_type` name — `course.ts` → `name: "course"`.
 
+## Code Quality & Documentation
+
+* **Keep functions focused:** Each function should do one thing well.
+* **Early returns:** Prefer early returns over deeply nested `if/else` conditionals.
+* Remove commented-out code and production debugging logs (such as `console.log`) before committing.
+* Do not duplicate constants across files; define configuration/limits centrally.
+* Comments should explain **why** something is done, not restate what the code does. Add documentation for unusual security, caching, or deployment work.
+* Do not create abstractions that hide simple behaviour without adding value.
+
 ## Avoid
 
 - Generic file names: `utils.ts`, `helpers.ts`, `data.ts`, `common.ts`.
-- Abbreviations except standard: `cms`, `seo`, `url`, `id`, `cta`, `og`.
+- Abbreviations except standard: `cms`, `seo`, `url`, `id`, `cta`, `og`, `env`.
 - Hungarian notation: `strName`, `objSettings`.
 - Duplicate type names — extend shared types in `types/`.
 - Renaming for style only in unrelated PRs — rename when touching the file for feature work.
+- Vague variable names like `data`, `item`, `thing`, `temp`, or `handleStuff` when a clearer descriptive name is possible.
+

@@ -60,6 +60,31 @@ Webhook: `POST /api/revalidate` → `lib/revalidate.ts` + `CACHE_TAGS`.
 
 Supported `_type` values include: `post`, `course`, `service`, `event`, `page`, `siteSettings`, `homepageSettings`, `navigation`, `testimonial`.
 
+## Schema Design
+
+Each public content type should contain appropriate fields for: Title, Slug, Status, Main content, Excerpt, Featured image, Alternative text, SEO title, Meta description, Social image, and dates.
+* Use schema validation for required fields and length constraints. Do not make every field optional.
+* Prevent duplicate or invalid slugs where possible.
+* Provide helpful field descriptions for content editors.
+
+## GROQ Queries & Data Fetching
+
+* Store reusable GROQ queries in dedicated query files (`sanity/lib/queries/`). Do not scatter long GROQ strings across page files.
+* Use query parameters for dynamic values. **Never** concatenate untrusted input into GROQ strings.
+* Project only required fields; avoid deeply expanded references when a small projection is enough.
+* Return stable shapes that can be easily typed in TypeScript.
+* Test queries against missing and incomplete documents.
+* Run independent requests concurrently with `Promise.all` instead of sequential waterfalls.
+
+## Portable Text
+
+* Use central Portable Text components (`ProseSection`, `PortableTextBody`).
+* Define rendering for headings, paragraphs, lists, images, links, and custom blocks.
+* **Do not** allow arbitrary HTML injection. Handle unknown block types safely.
+* Ensure Portable Text headings follow the page's heading hierarchy.
+* Optimise Portable Text images through the approved image pipeline.
+
 ## Images
 
 Use `sanity/lib/image.ts` helpers: `cardImageUrl`, `heroImageUrl`, `ogImageUrl`, `articleHeroImageUrl`.
+

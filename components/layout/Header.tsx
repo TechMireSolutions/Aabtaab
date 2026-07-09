@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { Search } from "lucide-react";
 import NavLinks from "@/components/layout/NavLinks";
 import MobileNavSidebarLoader from "@/components/layout/MobileNavSidebarLoader";
 import MobileSearchButton from "@/components/layout/MobileSearchButton";
@@ -75,21 +76,7 @@ function SiteLogo({
   );
 }
 
-function SearchIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      className={className}
-    >
-      <circle cx="11" cy="11" r="7" />
-      <path d="M20 20l-3-3" />
-    </svg>
-  );
-}
+
 
 export default function Header({
   darulQuranUrl,
@@ -146,7 +133,7 @@ export default function Header({
             aria-label="Search"
             className="btn-search-submit px-3 py-2"
           >
-            <SearchIcon className="size-3.5 text-white" />
+            <Search size={14} className="text-white" />
           </button>
         </form>
 

@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
+import { env } from "@/lib/env";
 
 export function getSiteUrl(): string {
-  return (process.env.NEXT_PUBLIC_SITE_URL || "https://aabtaab.com").replace(
-    /\/$/,
-    "",
-  );
+  return env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, "");
 }
 
 export function absoluteUrl(path = "/"): string {

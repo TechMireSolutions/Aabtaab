@@ -3,7 +3,7 @@
 **Source of truth:** `.cursor/rules/` and `.cursor/skills/` → run `npm run sync:agents` to mirror.  
 **Tech stack reference:** [techstack.md](techstack.md)
 
-## Rules (9)
+## Rules (13)
 
 | File | Scope |
 |------|--------|
@@ -16,8 +16,12 @@
 | `06-file-structure` | Always — folder layout |
 | `07-naming-policy` | Files, symbols, CMS fields |
 | `08-dry-policy` | Always — deduplication |
+| `09-security` | `app/`, `components/`, `lib/`, `sanity/`, scripts — security / validation |
+| `10-performance` | `app/`, `components/`, `lib/`, `sanity/` — caching, image/font, CWV |
+| `11-error-handling-observability` | Always — errors, logging, Sentry telemetry |
+| `12-testing` | `**/*.{test,spec}.{ts,tsx}` — Vitest & Playwright |
 
-## Skills (12)
+## Skills (16)
 
 | Skill | When to use |
 |-------|-------------|
@@ -33,6 +37,10 @@
 | `github-ci-deploy` | GitHub Actions CI + deploy workflows |
 | `sync-agent-config` | Mirror rules/skills; resolve doc conflicts |
 | `events-feature` | Edit `/events` routes, Event JSON-LD, event CMS |
+| `security` | Validation, rate-limiting, secure inputs |
+| `performance-optimization` | Core Web Vitals, dynamic imports, image/font layout shifts |
+| `error-handling-telemetry` | Error boundaries, Sentry setups, logging |
+| `testing-vitest-playwright` | Vitest and Playwright test suites |
 
 ## Mirror targets
 

@@ -79,6 +79,13 @@ e2e/                   # Playwright smoke tests
 | `lib/` | Pure helpers, fetch facades, URL/path logic |
 | `sanity/` | CMS schemas, GROQ, low-level client |
 | `types/` | Shared interfaces — no runtime code |
+| `components/ui/` | Generic/headless presentation components (e.g. accordion, dropdowns) |
+| `e2e/` | Shared Playwright E2E smoke tests and configs |
+
+## Placements and Co-location
+
+* Keep feature-specific components, tests, schemas, and utilities close to the feature where practical.
+* Do not place business logic directly inside large page components.
 
 ## Do not
 
@@ -87,3 +94,4 @@ e2e/                   # Playwright smoke tests
 - Add per-component CSS files — extend `app/globals.css` `@utility` instead.
 - Colocate Sanity schemas outside `sanity/schemaTypes/`.
 - Barrel-export everything — only `sanity/lib/queries/index.ts` is an approved barrel.
+

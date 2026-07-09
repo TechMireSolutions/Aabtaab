@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
-import { articleHeroImageUrl, ogImageUrl } from "@/sanity/lib/image";
+import { articleHeroImageUrl } from "@/sanity/lib/image";
 import { buildPageMetadata } from "@/lib/seo/metadata";
+import { resolveDocOgImage } from "@/lib/seo/resolve-og-image";
 import type { Post } from "@/types/sanity";
 import { getPostBySlug } from "./queries";
 
@@ -9,11 +10,7 @@ export function resolvePostImageUrls(post: Post) {
     ? articleHeroImageUrl(post.mainImage)
     : undefined;
 
-  const ogImage = post.seo?.ogImage
-    ? ogImageUrl(post.seo.ogImage)
-    : post.mainImage
-      ? ogImageUrl(post.mainImage)
-      : undefined;
+  const ogImage = resolveDocOgImage(post);
 
   return { mainImageUrl, ogImageUrl: ogImage };
 }

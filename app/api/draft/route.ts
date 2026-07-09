@@ -1,8 +1,9 @@
+import { env } from "@/lib/env";
 import { draftMode } from "next/headers";
 import { redirect } from "next/navigation";
 import { type NextRequest } from "next/server";
 
-const PREVIEW_SECRET = process.env.SANITY_PREVIEW_SECRET;
+const PREVIEW_SECRET = env.SANITY_PREVIEW_SECRET;
 
 /** Map Sanity _type (+ optional slug) to site path for preview redirect */
 function previewPath(
