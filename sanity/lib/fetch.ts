@@ -23,8 +23,7 @@ export const CACHE_TAGS = {
   page: (slug: string) => `sanity-page-${slug}`,
 } as const;
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-interface SanityFetchOptions<T> {
+interface SanityFetchOptions {
   query: string;
   params?: QueryParams;
   tags?: string[];
@@ -54,7 +53,7 @@ export async function sanityFetch<T>({
   params = {},
   tags = [],
   revalidate = 3600,
-}: SanityFetchOptions<T>): Promise<T> {
+}: SanityFetchOptions): Promise<T> {
   const preview = await isDraftModeEnabled();
 
   if (preview || !isProduction) {
