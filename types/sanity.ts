@@ -71,6 +71,7 @@ export interface SanityImage {
 export interface SlugParent {
   slug?: string;
   parent?: SlugParent | null;
+  title?: string;
 }
 
 export interface ContentAncestor {

@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
 
 @theme {
   /* Font families */
@@ -150,6 +151,11 @@
 }
 
 @layer base {
+  :root {
+    --tw-prose-links: var(--color-brand-700);
+    --tw-prose-body: #374151;
+  }
+
   html {
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;

@@ -1,6 +1,5 @@
 import { ChevronRight, Plus } from "lucide-react";
 import PortableTextBody from "@/components/portable-text/PortableTextBody";
-import "@/app/styles/prose.css";
 
 interface FaqItem {
   question?: string;
