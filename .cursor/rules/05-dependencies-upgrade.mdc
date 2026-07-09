@@ -42,6 +42,7 @@ Apply when upgrading deps, touching `package.json`, CI, or Node engine constrain
 | Package | Constraint |
 |---------|------------|
 | **ESLint** | Stay on **v9.39.4** until `eslint-config-next` plugins support v10 (v10 tested — breaks `react/display-name` rule) |
+| **TypeScript** | Stay on **v6.x** until `eslint-config-next` / `@typescript-eslint/typescript-estree` support v7 (v7 tested — breaks with `Cannot read properties of undefined (reading 'Cjs')` error) |
 | **Sanity audit fixes** | Transitive `js-yaml`/`uuid` — do not downgrade Sanity to fix |
 | **Production port** | Change only `server.config.cjs` (`PRODUCTION_PORT = 3000`) |
 | **Studio** | `sanity`, `@sanity/vision`, `next-sanity` must stay on Sanity 6 matrix |
