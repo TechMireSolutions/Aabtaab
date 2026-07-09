@@ -7,6 +7,10 @@ const emptyPolyfillAbsolute = path.join(process.cwd(), "lib/empty-polyfill.js");
 const nextConfig: NextConfig = {
   poweredByHeader: false,
 
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+
   experimental: {
     optimizePackageImports: ["lucide-react"],
     inlineCss: true,

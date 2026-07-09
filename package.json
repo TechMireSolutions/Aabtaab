@@ -7,7 +7,8 @@
   },
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "typecheck": "node node_modules/ts7/bin/tsc --noEmit",
+    "build": "npm run typecheck && next build",
     "start": "node scripts/start-production.cjs",
     "lint": "eslint .",
     "test": "vitest run",
@@ -48,8 +49,15 @@
     "eslint-config-next": "^16.2.10",
     "postcss": "^8.5.16",
     "tailwindcss": "^4.3.2",
-    "typescript": "^6.0.3",
+    "ts7": "npm:typescript@^7.0.0",
+    "typescript": "npm:@typescript/typescript6@^6.0.3",
     "vitest": "^4.1.10"
+  },
+  "overrides": {
+    "postcss": "^8.5.16",
+    "js-yaml": "^3.15.0",
+    "smol-toml": "^1.7.0",
+    "uuid": "^11.1.1"
   },
   "browserslist": [
     "chrome 111",

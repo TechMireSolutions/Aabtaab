@@ -19,7 +19,7 @@ Apply when upgrading deps, touching `package.json`, CI, or Node engine constrain
 | UI | React **19** + React DOM **19** |
 | CMS | Sanity **6** + `next-sanity` + `@sanity/client` |
 | CSS | Tailwind **4** + `@tailwindcss/postcss` |
-| Language | TypeScript **6** (strict) |
+| Language | TypeScript **7** (type-check/build) / **6** (ESLint) |
 
 ## Upgrade workflow
 
@@ -42,7 +42,7 @@ Apply when upgrading deps, touching `package.json`, CI, or Node engine constrain
 | Package | Constraint |
 |---------|------------|
 | **ESLint** | Stay on **v9.39.4** until `eslint-config-next` plugins support v10 (v10 tested — breaks `react/display-name` rule) |
-| **TypeScript** | Stay on **v6.x** until `eslint-config-next` / `@typescript-eslint/typescript-estree` support v7 (v7 tested — breaks with `Cannot read properties of undefined (reading 'Cjs')` error) |
+| **TypeScript** | Use v7.0.2 for builds/typecheck and v6.0.3 alias for ESLint (workaround for `Cannot read properties of undefined (reading 'Cjs')` error) |
 | **Sanity audit fixes** | Transitive `js-yaml`/`uuid` — do not downgrade Sanity to fix |
 | **Production port** | Change only `server.config.cjs` (`PRODUCTION_PORT = 3000`) |
 | **Studio** | `sanity`, `@sanity/vision`, `next-sanity` must stay on Sanity 6 matrix |

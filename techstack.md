@@ -33,7 +33,7 @@ Shia Islamic education and community website.
 | Next.js | ^16.2.10 | `package.json` |
 | React / React DOM | ^19.2.7 | `package.json` |
 | Sanity | ^6.4.0 | `package.json` |
-| TypeScript | ^6.0.3 | `package.json` (v7 blocked — see constraints) |
+| TypeScript | ^7.0.2 / ^6.0.3 | `package.json` (v7 side-by-side with v6 alias) |
 | Tailwind CSS | ^4.3.2 | `package.json` |
 | @sentry/nextjs | ^10.64.0 | `package.json` |
 | @types/node | ^26.1.1 | `package.json` |
@@ -478,7 +478,7 @@ See `AGENTS.md` for the full rule and skill index.
 | Item | Constraint |
 |------|------------|
 | **ESLint** | Stay on **v9.39.4** — v10 breaks `eslint-config-next` (tested Jun 2026) |
-| **TypeScript** | Stay on **v6.x** — v7 breaks `eslint-config-next` with a nested `Cannot read properties of undefined (reading 'Cjs')` error (tested Jul 2026) |
+| **TypeScript** | Use v7.0.2 for typechecking/build and v6.0.3 alias for ESLint (workaround for `Cannot read properties of undefined (reading 'Cjs')`) |
 | **Sanity audit** | Transitive `js-yaml`/`uuid` — do not `npm audit fix --force` |
 | **Next PostCSS** | Nested transitive dep — fixed when Next.js updates bundled `postcss` |
 | **Production port** | Change only `server.config.cjs` (`PRODUCTION_PORT = 3000`) |
