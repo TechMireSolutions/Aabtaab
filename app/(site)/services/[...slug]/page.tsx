@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { heroImageUrl, urlFor } from "@/sanity/lib/image";
 import NestedBreadcrumbs from "@/components/content/NestedBreadcrumbs";
 import NestedChildrenGrid from "@/components/content/NestedChildrenGrid";
@@ -12,6 +12,7 @@ import FaqAccordionSection from "@/components/content/FaqAccordionSection";
 import PortableTextPageSection from "@/components/content/PortableTextPageSection";
 import { buildNestedCatalogPageContext } from "@/lib/catalog/nested-page";
 import type { ServiceChild } from "@/types/service";
+import type { SlugParent } from "@/types/sanity";
 import { buildNestedSlugMetadata } from "@/lib/cms/page";
 import { getServiceBySlug, getSiteSettings } from "@/lib/cms/queries";
 import { mapServiceChildForGrid } from "@/lib/catalog/nested-children";
@@ -23,6 +24,7 @@ import {
   faqItemsToSchema,
   ServiceJsonLd,
   resolveDocOgImage,
+  buildNestedContentPath,
 } from "@/lib/seo";
 
 const SERVICE_BASE = {
@@ -64,6 +66,15 @@ export default async function ServiceCatchAllPage({
     siteUrl,
     whatsappHref,
   } = buildNestedCatalogPageContext(SERVICE_BASE, slug, service, site);
+
+  const canonicalPath = buildNestedContentPath(
+    SERVICE_BASE.segment,
+    service.slug.current,
+    service.parent as SlugParent | null,
+  );
+  if (currentPath !== canonicalPath) {
+    redirect(canonicalPath);
+  }
 
   const servicePageUrl = absoluteUrl(currentPath);
   const serviceImageUrl = resolveDocOgImage(service);

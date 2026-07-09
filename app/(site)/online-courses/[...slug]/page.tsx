@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import NestedBreadcrumbs from "@/components/content/NestedBreadcrumbs";
 import NestedChildrenGrid from "@/components/content/NestedChildrenGrid";
 import CourseHeroSection from "@/components/content/CourseHeroSection";
@@ -13,12 +13,13 @@ import PortableTextPageSection from "@/components/content/PortableTextPageSectio
 import SiteContactFooter from "@/components/content/SiteContactFooter";
 import { buildNestedCatalogPageContext } from "@/lib/catalog/nested-page";
 import type { CourseChild } from "@/types/course";
+import type { SlugParent } from "@/types/sanity";
 import { buildNestedSlugMetadata } from "@/lib/cms/page";
 import { getCourseBySlug, getSiteSettings } from "@/lib/cms/queries";
 import { mapCourseChildForGrid } from "@/lib/catalog/nested-children";
 import { buildNestedBreadcrumbItems } from "@/lib/paths";
 import { resolveSiteName } from "@/lib/constants";
-import { absoluteUrl, CourseJsonLd, FaqPageJsonLd, faqItemsToSchema, resolveDocOgImage } from "@/lib/seo";
+import { absoluteUrl, CourseJsonLd, FaqPageJsonLd, faqItemsToSchema, resolveDocOgImage, buildNestedContentPath } from "@/lib/seo";
 
 const COURSE_BASE = {
   segment: "online-courses" as const,
@@ -59,6 +60,15 @@ export default async function CourseCatchAllPage({
     siteUrl,
     whatsappHref,
   } = buildNestedCatalogPageContext(COURSE_BASE, slug, course, site);
+
+  const canonicalPath = buildNestedContentPath(
+    COURSE_BASE.segment,
+    course.slug.current,
+    course.parent as SlugParent | null,
+  );
+  if (currentPath !== canonicalPath) {
+    redirect(canonicalPath);
+  }
 
   const enrollHref = course.enrollmentLink || "/contact";
   const enrollExternal = Boolean(course.enrollmentLink);

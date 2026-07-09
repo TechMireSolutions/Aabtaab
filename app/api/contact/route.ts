@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import * as Sentry from "@sentry/nextjs";
 import { CONTACT_PURPOSE_LABELS } from "@/lib/constants";
 import { sendContactNotification } from "@/lib/contact/notify";
 import { parseContactBody } from "@/lib/contact/schema";
@@ -73,6 +74,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: true });
   } catch (err) {
     console.error("Contact form error:", err);
+    Sentry.captureException(err);
     return NextResponse.json(
       { error: "Failed to save submission" },
       { status: 500 },

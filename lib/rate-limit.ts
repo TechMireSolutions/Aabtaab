@@ -1,5 +1,6 @@
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
+import * as Sentry from "@sentry/nextjs";
 import { env } from "@/lib/env";
 import { clientIpFromRequest } from "@/lib/request-ip";
 
@@ -52,8 +53,14 @@ export async function checkContactRateLimit(
   const limiter = getUpstashLimiter();
 
   if (limiter) {
-    const { success } = await limiter.limit(identifier);
-    return { allowed: success };
+    try {
+      const { success } = await limiter.limit(identifier);
+      return { allowed: success };
+    } catch (error) {
+      console.error("Upstash rate limiting failed, falling back to local memory:", error);
+      Sentry.captureException(error);
+      return { allowed: checkMemoryLimit(identifier) };
+    }
   }
 
   return { allowed: checkMemoryLimit(identifier) };

@@ -21,6 +21,8 @@ export default defineConfig({
       NEXT_PUBLIC_SANITY_PROJECT_ID: "ci-placeholder",
       NEXT_PUBLIC_SANITY_DATASET: "production",
       NEXT_PUBLIC_SITE_URL: "http://localhost:3000",
+      SANITY_API_TOKEN: "mock-api-token",
+      SANITY_REVALIDATE_SECRET: "mock-revalidate-secret",
       NODE_ENV: "production",
     },
   },

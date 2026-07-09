@@ -1,6 +1,7 @@
 import { type QueryParams } from "next-sanity";
 import { draftMode } from "next/headers";
 import { unstable_cache } from "next/cache";
+import * as Sentry from "@sentry/nextjs";
 import type { SiteSettings } from "@/types/sanity";
 import { isProduction } from "@/lib/env";
 import { client } from "./client";
@@ -61,6 +62,7 @@ export async function sanityFetch<T>({
       return await fetchFromSanity<T>(query, params);
     } catch (error) {
       console.error("Sanity fetch failed:", error);
+      Sentry.captureException(error);
       return null as unknown as T;
     }
   }
@@ -71,6 +73,7 @@ export async function sanityFetch<T>({
         return await client.fetch<T>(query, params);
       } catch (error) {
         console.error("Sanity fetch failed in production:", error);
+        Sentry.captureException(error);
         return null as unknown as T;
       }
     },

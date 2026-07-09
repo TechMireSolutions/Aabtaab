@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import { resolveDocOgImage } from "@/lib/seo/resolve-og-image";
 import type { CmsPageSummary } from "@/types/cms-page";
-import type { SeoData } from "@/types/sanity";
+import type { SeoData, SlugParent } from "@/types/sanity";
 import { getCmsPage } from "./queries";
+import { buildNestedContentPath } from "../paths";
 
 interface CmsMetadataOptions {
   path: string;
@@ -51,6 +52,8 @@ interface NestedSlugDoc {
   featuredImage?: { asset: { _ref: string } };
   heroImage?: { asset: { _ref: string } };
   icon?: { asset: { _ref: string } };
+  slug?: { current: string };
+  parent?: { slug?: string; parent?: unknown; title?: string } | null;
 }
 
 export function buildNestedSlugMetadata(
@@ -59,10 +62,16 @@ export function buildNestedSlugMetadata(
   slugParts: string[],
   fallbackTitle: string,
 ): Metadata {
+  const segment = basePath.replace(/^\//, "") as "online-courses" | "services";
+  const canonicalPath =
+    doc?.slug?.current && (segment === "online-courses" || segment === "services")
+      ? buildNestedContentPath(segment, doc.slug.current, doc.parent as SlugParent | null)
+      : `${basePath}/${slugParts.join("/")}`;
+
   return buildPageMetadata({
     title: doc?.seo?.metaTitle || doc?.title || fallbackTitle,
     description: doc?.seo?.metaDescription || doc?.excerpt,
-    path: `${basePath}/${slugParts.join("/")}`,
+    path: canonicalPath,
     noIndex: doc?.seo?.noIndex,
     ogImage: resolveDocOgImage(doc),
     keywords: doc?.seo?.keywords,

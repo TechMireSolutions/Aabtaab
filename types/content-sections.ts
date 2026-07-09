@@ -28,4 +28,5 @@ export interface NestedContentDetail extends CtaBlockFields, FaqBlockFields {
   body?: unknown[];
   parent?: ContentAncestor;
   seo?: SeoData;
+  slug: { current: string };
 }
