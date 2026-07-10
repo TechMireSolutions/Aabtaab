@@ -1,5 +1,9 @@
 import { getHomepageCarouselsData } from "@/lib/cms/queries";
-import EventsCountdown from "./EventsCountdown";
+import dynamic from "next/dynamic";
+
+const EventsCountdown = dynamic(() => import("./EventsCountdown"), {
+  ssr: true,
+});
 
 export default async function UpcomingEventsCountdown() {
   const { upcomingEvents } = await getHomepageCarouselsData();

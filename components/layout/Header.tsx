@@ -4,11 +4,16 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Search } from "lucide-react";
+import dynamic from "next/dynamic";
 import NavLinks from "@/components/layout/NavLinks";
 import MobileNavSidebarLoader from "@/components/layout/MobileNavSidebarLoader";
-import SearchPalette from "@/components/layout/SearchPalette";
+
 import { DEFAULT_SITE_NAME } from "@/lib/constants";
 import type { NavItem } from "@/types/site-navigation";
+
+const SearchPalette = dynamic(() => import("@/components/layout/SearchPalette"), {
+  ssr: false,
+});
 
 interface HeaderProps {
   darulQuranUrl?: string;
@@ -40,7 +45,7 @@ function buildNavLinks(
     base.push({
       label: "Dar ul Quran",
       href: darulQuranUrl || "/dar-ul-quran",
-      external: darulQuranUrl ? true : false,
+      external: !!darulQuranUrl,
     });
   }
   return base;

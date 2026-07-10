@@ -3,11 +3,14 @@ import { ArrowRight } from "lucide-react";
 import { getHomepageCarouselsData } from "@/lib/cms/queries";
 import { formatEventDateRange } from "@/lib/cms/event";
 import { urlFor } from "@/sanity/lib/image";
-import CarouselSection, {
-  type CarouselItem,
-} from "@/components/sections/CarouselSection";
+import dynamic from "next/dynamic";
+import type { CarouselItem } from "@/components/sections/CarouselSection";
 import ContentCard from "@/components/cards/ContentCard";
 import { formatPriceDuration } from "@/lib/urls";
+
+const CarouselSection = dynamic(() => import("@/components/sections/CarouselSection"), {
+  ssr: true,
+});
 
 
 
