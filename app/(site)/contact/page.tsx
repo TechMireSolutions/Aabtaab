@@ -1,8 +1,12 @@
 import { Mail, Phone, MessageCircle, MapPin } from "lucide-react";
-import ContactForm from "./_components/ContactForm";
+import dynamic from "next/dynamic";
 import PageHeader from "@/components/layout/PageHeader";
 import ProseSection from "@/components/portable-text/ProseSection";
 import { FacebookIcon, YoutubeIcon } from "@/components/icons/SocialIcons";
+
+const ContactForm = dynamic(() => import("./_components/ContactForm"), {
+  ssr: true,
+});
 import { defineCmsPageMetadata } from "@/lib/cms/page";
 import {
   getCmsPage,
