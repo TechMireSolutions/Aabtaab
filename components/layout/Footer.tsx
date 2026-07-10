@@ -8,7 +8,7 @@ import {
   ExternalLink,
   ArrowRight,
 } from "lucide-react";
-import type { FooterService, NavItem } from "@/types/site-navigation";
+import type { FooterNav, FooterService, NavItem } from "@/types/site-navigation";
 import type { SiteSettings } from "@/types/sanity";
 import { resolveSiteName } from "@/lib/constants";
 import { FacebookIcon, YoutubeIcon } from "@/components/icons/SocialIcons";
@@ -17,6 +17,7 @@ import { whatsappUrl } from "@/lib/urls";
 interface FooterProps {
   settings?: SiteSettings;
   logoUrl?: string | null;
+  footerNav?: FooterNav;
   footerServices?: FooterService[];
 }
 
@@ -42,7 +43,7 @@ const FALLBACK_SERVICES: FooterService[] = [
 
 function ColHeading({ id, children }: { id?: string; children: React.ReactNode }) {
   return (
-    <h3 id={id} className="heading-col">
+    <h3 id={id} className="heading-col text-slate-800 dark:text-slate-200">
       {children}
     </h3>
   );
@@ -59,27 +60,39 @@ function NavLink({
     <li>
       <Link
         href={href}
-        className="group flex min-h-11 items-center gap-0 rounded-sm text-sm-plus text-gray-500 hover:text-brand-600 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 sm:min-h-0"
+        className="group relative flex min-h-11 items-center rounded-sm text-sm-plus text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 sm:min-h-0"
       >
-        <span className="inline-block w-0 overflow-hidden group-hover:w-3 transition-all duration-150 text-brand-500 text-xs-plus leading-none">
+        <span
+          aria-hidden="true"
+          className="mr-1.5 inline-block overflow-hidden w-0 group-hover:w-3 text-brand-500 dark:text-brand-400 text-xs-plus leading-none transition-all duration-200 ease-out"
+        >
           ›
         </span>
-        {children}
+        <span className="transition-transform duration-200 group-hover:translate-x-0.5">
+          {children}
+        </span>
       </Link>
     </li>
   );
 }
 
+const CONTACT_LINK_CLASS =
+  "flex min-h-11 items-center gap-2 rounded-sm text-sm-plus text-slate-500 dark:text-slate-400 hover:text-brand-600 dark:hover:text-brand-400 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 sm:min-h-0";
+
 export default function Footer({
   settings,
   logoUrl,
+  footerNav,
   footerServices,
 }: FooterProps) {
   const siteName = resolveSiteName(settings);
   const tagline =
     settings?.tagline ||
     "Spreading the light of Ahlul Bayt (A.S.) through education, authentic content, and spiritual services.";
-  const quickLinks = FALLBACK_QUICK_LINKS;
+
+  const quickLinks =
+    footerNav?.items?.length ? footerNav.items : FALLBACK_QUICK_LINKS;
+
   const services = footerServices?.length
     ? footerServices.map((s) => ({
         label: s.title,
@@ -91,7 +104,7 @@ export default function Footer({
       }));
 
   return (
-    <footer className="section-deferred bg-gray-50 border-t border-gray-200">
+    <footer className="section-deferred bg-slate-50 dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-800/80">
       {/* ── Main body ── */}
       <div className="container-page py-6 sm:py-10 lg:py-12">
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-6 sm:gap-8 lg:gap-10">
@@ -99,10 +112,9 @@ export default function Footer({
           <div className="col-span-2 lg:col-span-1">
             <Link
               href="/"
-              aria-label={siteName}
               className="inline-flex items-center gap-2.5 mb-3 group"
             >
-            {logoUrl ? (
+              {logoUrl ? (
                 <Image
                   src={logoUrl}
                   alt=""
@@ -111,16 +123,16 @@ export default function Footer({
                   className="size-10 rounded-full border-2 border-brand-400 object-cover transition-transform duration-200 group-hover:scale-105 sm:size-logo-lg"
                 />
               ) : (
-                <div className="size-10 rounded-full bg-linear-to-br from-brand-100 to-brand-50 border-2 border-brand-400 flex items-center justify-center text-xl sm:size-logo-lg sm:text-2xl select-none transition-transform duration-200 group-hover:scale-105">
+                <div className="size-10 rounded-full bg-linear-to-br from-brand-100 to-brand-50 dark:from-brand-900/40 dark:to-brand-800/20 border-2 border-brand-400 flex items-center justify-center text-xl sm:size-logo-lg sm:text-2xl select-none transition-transform duration-200 group-hover:scale-105">
                   ⛵
                 </div>
               )}
-              <span className="font-bold text-base-plus sm:text-lg-plus text-slate-900 tracking-heading">
+              <span className="font-bold text-base-plus sm:text-lg-plus text-slate-900 dark:text-slate-50 tracking-heading transition-colors duration-150 group-hover:text-brand-700 dark:group-hover:text-brand-400">
                 {siteName}
               </span>
             </Link>
 
-            <p className="text-body-muted mb-3 sm:mb-5 max-w-tagline line-clamp-2 sm:line-clamp-none">
+            <p className="text-sm-plus text-slate-500 dark:text-slate-400 leading-relaxed mb-3 sm:mb-5 max-w-tagline line-clamp-2 sm:line-clamp-none">
               {tagline}
             </p>
 
@@ -195,9 +207,9 @@ export default function Footer({
                 <li>
                   <a
                     href={`mailto:${settings.email}`}
-                    className="flex min-h-11 items-center gap-2 rounded-sm text-sm-plus text-gray-500 hover:text-brand-600 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 sm:min-h-0"
+                    className={CONTACT_LINK_CLASS}
                   >
-                    <Mail size={12} className="text-brand-500 shrink-0" aria-hidden="true" />
+                    <Mail size={12} className="text-brand-500 dark:text-brand-400 shrink-0" aria-hidden="true" />
                     <span className="truncate">{settings.email}</span>
                   </a>
                 </li>
@@ -206,9 +218,9 @@ export default function Footer({
                 <li>
                   <a
                     href={`tel:${settings.phone}`}
-                    className="flex min-h-11 items-center gap-2 rounded-sm text-sm-plus text-gray-500 hover:text-brand-600 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 sm:min-h-0"
+                    className={CONTACT_LINK_CLASS}
                   >
-                    <Phone size={12} className="text-brand-500 shrink-0" aria-hidden="true" />
+                    <Phone size={12} className="text-brand-500 dark:text-brand-400 shrink-0" aria-hidden="true" />
                     {settings.phone}
                   </a>
                 </li>
@@ -219,11 +231,11 @@ export default function Footer({
                     href={whatsappUrl(settings.whatsapp)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex min-h-11 items-center gap-2 rounded-sm text-sm-plus text-gray-500 hover:text-brand-600 transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 sm:min-h-0"
+                    className={CONTACT_LINK_CLASS}
                   >
                     <MessageCircle
                       size={12}
-                      className="text-brand-500 shrink-0"
+                      className="text-brand-500 dark:text-brand-400 shrink-0"
                       aria-hidden="true"
                     />
                     WhatsApp: {settings.whatsapp}
@@ -233,14 +245,14 @@ export default function Footer({
               )}
               {settings?.address && (
                 <li className="flex items-start gap-2">
-                  <MapPin size={12} className="text-brand-500 shrink-0 mt-0.5" aria-hidden="true" />
-                  <p className="text-sm-plus text-gray-500 leading-relaxed whitespace-pre-line">
+                  <MapPin size={12} className="text-brand-500 dark:text-brand-400 shrink-0 mt-0.5" aria-hidden="true" />
+                  <p className="text-sm-plus text-slate-500 dark:text-slate-400 leading-relaxed whitespace-pre-line">
                     {settings.address}
                   </p>
                 </li>
               )}
               {!settings?.email && !settings?.phone && !settings?.address && (
-                <li className="text-sm-plus text-gray-500 italic">
+                <li className="text-sm-plus text-slate-500 dark:text-slate-400 italic">
                   Add contact info in Sanity → Site Settings
                 </li>
               )}
@@ -251,6 +263,7 @@ export default function Footer({
               <ArrowRight
                 size={12}
                 strokeWidth={2}
+                aria-hidden="true"
                 className="group-hover:translate-x-0.5 transition-transform duration-150"
               />
             </Link>
@@ -259,33 +272,35 @@ export default function Footer({
       </div>
 
       {/* ── Bottom bar ── */}
-      <div className="border-t border-gray-200 bg-white">
+      <div className="border-t border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-950/40">
         <div className="container-page py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <p className="text-caption">
+          <p className="text-2xs sm:text-xs-plus text-slate-500 dark:text-slate-500">
             &copy; {new Date().getFullYear()} {siteName}. All rights reserved.
           </p>
-          <div className="flex items-center gap-1 text-gray-300">
-            <Link
-              href="/about"
-              className="text-caption rounded-sm px-2 text-gray-500 hover:text-gray-700 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
-            >
-              About
-            </Link>
-            <span aria-hidden="true">·</span>
-            <Link
-              href="/contact"
-              className="text-caption rounded-sm px-2 text-gray-500 hover:text-gray-700 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
-            >
-              Contact
-            </Link>
-            <span aria-hidden="true">·</span>
-            <Link
-              href="/donate"
-              className="text-caption rounded-sm px-2 text-gray-500 hover:text-gray-700 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
-            >
-              Donate
-            </Link>
-          </div>
+          <nav aria-label="Footer utility links">
+            <div className="flex items-center gap-1 text-slate-300 dark:text-slate-700">
+              <Link
+                href="/about"
+                className="text-2xs sm:text-xs-plus rounded-sm px-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
+              >
+                About
+              </Link>
+              <span aria-hidden="true">·</span>
+              <Link
+                href="/contact"
+                className="text-2xs sm:text-xs-plus rounded-sm px-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
+              >
+                Contact
+              </Link>
+              <span aria-hidden="true">·</span>
+              <Link
+                href="/donate"
+                className="text-2xs sm:text-xs-plus rounded-sm px-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
+              >
+                Donate
+              </Link>
+            </div>
+          </nav>
         </div>
       </div>
     </footer>

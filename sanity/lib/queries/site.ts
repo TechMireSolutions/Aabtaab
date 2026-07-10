@@ -13,6 +13,12 @@ export const headerNavQuery = `
   }
 `;
 
+export const footerNavQuery = `
+  *[_type == "navigation" && title == "footer"][0]{
+    items[]{ label, href, external }
+  }
+`;
+
 export const footerServicesQuery = `
   *[_type == "service" && !defined(parent)] | order(order asc) {
     _id, title, "slug": slug.current

@@ -11,7 +11,7 @@ export default async function SiteLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { settings, headerNav, footerServices } = await getSiteLayoutData();
+  const { settings, headerNav, footerNav, footerServices } = await getSiteLayoutData();
   const { isEnabled: previewMode } = await draftMode();
 
   const logoUrl = settings?.logo
@@ -41,6 +41,7 @@ export default async function SiteLayout({
       <Footer
         settings={settings ?? undefined}
         logoUrl={logoUrl}
+        footerNav={footerNav ?? undefined}
         footerServices={footerServices ?? undefined}
       />
       {settings?.whatsapp && <WhatsAppButton number={settings.whatsapp} />}

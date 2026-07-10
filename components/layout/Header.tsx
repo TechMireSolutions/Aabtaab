@@ -74,7 +74,7 @@ function SiteLogo({
           </div>
         )}
       </div>
-      <span className="hidden text-lg-plus font-bold tracking-heading text-slate-900 md:block">
+      <span className="hidden text-lg-plus font-bold tracking-heading text-slate-900 dark:text-slate-50 md:block">
         {siteName}
       </span>
     </>

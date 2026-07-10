@@ -10,6 +10,10 @@ export interface HeaderNav {
   items?: NavItem[];
 }
 
+export interface FooterNav {
+  items?: NavItem[];
+}
+
 export interface FooterService {
   _id: string;
   title: string;

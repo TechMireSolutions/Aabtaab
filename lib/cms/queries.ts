@@ -13,6 +13,7 @@ import {
   topLevelServicesQuery,
   topLevelCoursesQuery,
   headerNavQuery,
+  footerNavQuery,
   footerServicesQuery,
   allEventsQuery,
   eventBySlugQuery,
@@ -41,7 +42,7 @@ import type {
   HomepageSettings,
   Testimonial,
 } from "@/types/homepage";
-import type { FooterService, HeaderNav } from "@/types/site-navigation";
+import type { FooterNav, FooterService, HeaderNav } from "@/types/site-navigation";
 
 export const getSiteSettings = cache(fetchSiteSettingsUncached);
 
@@ -82,10 +83,15 @@ export const getServiceBySlug = cache(async (slug: string) => {
 });
 
 export const getSiteLayoutData = cache(async () => {
-  const [settings, headerNav, footerServices] = await Promise.all([
+  const [settings, headerNav, footerNav, footerServices] = await Promise.all([
     getSiteSettings(),
     sanityFetch<HeaderNav>({
       query: headerNavQuery,
+      tags: [CACHE_TAGS.siteSettings],
+      revalidate: 86400,
+    }),
+    sanityFetch<FooterNav>({
+      query: footerNavQuery,
       tags: [CACHE_TAGS.siteSettings],
       revalidate: 86400,
     }),
@@ -96,7 +102,7 @@ export const getSiteLayoutData = cache(async () => {
     }),
   ]);
 
-  return { settings, headerNav, footerServices };
+  return { settings, headerNav, footerNav, footerServices };
 });
 
 export const getHomepageHeroData = cache(async () => {
