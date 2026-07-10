@@ -60,6 +60,8 @@ Webhook: `POST /api/revalidate` → `lib/revalidate.ts` + `CACHE_TAGS`.
 
 Supported `_type` values include: `post`, `course`, `service`, `event`, `page`, `siteSettings`, `homepageSettings`, `navigation`, `testimonial`.
 
+Navigation documents: `title == "header"` → `headerNavQuery`; `title == "footer"` → `footerNavQuery` (fetched in `getSiteLayoutData()`).
+
 ## Schema Design
 
 Each public content type should contain appropriate fields for: Title, Slug, Status, Main content, Excerpt, Featured image, Alternative text, SEO title, Meta description, Social image, and dates.

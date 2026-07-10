@@ -15,7 +15,7 @@ description: >-
 | Area | Path |
 |------|------|
 | Schemas | `sanity/schemaTypes/` |
-| GROQ | `sanity/lib/queries/` (posts, events, courses, services, site, search, fragments) |
+| GROQ | `sanity/lib/queries/` (posts, events, courses, services, site, search, fragments) — `site.ts` exports `headerNavQuery` + `footerNavQuery` |
 | Fetch + cache | `sanity/lib/fetch.ts` (`sanityFetch`, `CACHE_TAGS`) |
 | Preview | `sanity/lib/previewClient.ts`, `app/api/draft/` |
 | Write | `sanity/lib/writeClient.ts` (contact submissions) |

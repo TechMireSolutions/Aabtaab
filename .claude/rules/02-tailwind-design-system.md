@@ -98,8 +98,8 @@
 
 | Utility | Use for |
 |---------|---------|
-| `icon-btn-subtle` | Footer social icon buttons |
-| `chip-outline` / `chip-outline-sm` | Footer/contact text chips |
+| `icon-btn-subtle` | Footer social icon buttons (dark-mode aware, hover scale+glow) |
+| `chip-outline` / `chip-outline-sm` | Footer/contact text chips (dark-mode aware, hover scale+glow) |
 | `check-icon-sm` | Why-us checklist icons |
 | `link-underline` | Header nav active/hover |
 | `bg-dot-grid` / `bg-hero-glow` / `hero-glow-offset` | Decorative backgrounds |

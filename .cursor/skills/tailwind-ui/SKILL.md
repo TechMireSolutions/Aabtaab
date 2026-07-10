@@ -41,8 +41,8 @@ description: >-
 | Featured image (post/event) | `media-hero` |
 | Square CMS image | `media-frame` / `media-placeholder` |
 | Pricing table wrapper | `table-shell` |
-| Footer social icon | `icon-btn-subtle` |
-| Footer/contact text link | `chip-outline` or `chip-outline-sm` |
+| Footer social icon | `icon-btn-subtle` (dark-mode aware, hover scale + brand glow) |
+| Footer/contact text link | `chip-outline` or `chip-outline-sm` (dark-mode aware, hover scale + brand glow) |
 | Dark hero badges | `badge-hero` / `badge-hero-muted` |
 | Donate/sacred accent | `text-eyebrow-gold` + `eyebrow-line-gold` |
 | Hero stagger animation | `motion-safe:animate-fade-up` + `motion-safe:animate-delay-*` |

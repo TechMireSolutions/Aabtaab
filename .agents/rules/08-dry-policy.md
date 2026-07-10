@@ -23,6 +23,7 @@ description: DRY policy — extract shared logic, avoid duplication across pages
 | Catalog page shell | `CatalogPageLayout` + `PageHeader` |
 | Content sections | `components/content/*` |
 | Contact footer block | `SiteContactFooter` |
+| Footer CMS quick links | `footerNavQuery` → `getSiteLayoutData()` → `FooterNav` in `types/site-navigation.ts`; fallback `FALLBACK_QUICK_LINKS` in `Footer.tsx` |
 | Nested child cards | `mapCourseChildForGrid`, `mapServiceChildForGrid` → `lib/catalog/` |
 | Breadcrumbs / paths | `lib/paths.ts` |
 | URL / formatting | `lib/urls.ts` |
