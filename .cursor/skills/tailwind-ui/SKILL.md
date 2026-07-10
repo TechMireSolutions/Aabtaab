@@ -46,7 +46,7 @@ description: >-
 | Dark hero badges | `badge-hero` / `badge-hero-muted` |
 | Donate/sacred accent | `text-eyebrow-gold` + `eyebrow-line-gold` |
 | Hero stagger animation | `motion-safe:animate-fade-up` + `motion-safe:animate-delay-*` |
-| WhatsApp FAB | `size-fab`, `fab-safe`, `bg-whatsapp`, `pb-fab-safe` on main |
+| WhatsApp FAB | `whatsapp-fab` (self-contained: position, size, colour, float animation, pill expand) + `pb-fab-safe` on `<main>` |
 
 ## When to extend `globals.css`
 
@@ -59,6 +59,11 @@ Add `@utility` for:
 - Layout widths tied to design (`w-search-input`, `w-mobile-drawer`)
 
 Do **not** add utilities for one-off layouts or single-page decorations.
+
+**Animation authoring rules:**
+- CSS `animation` wins over `transition` on the same property — exclude animated properties from `transition` lists and document why.
+- Use `translate: 0 0` identity base on any element with a hover/focus `translate` change (prevents stacking-context jump).
+- To animate `width`/`height` to `auto`, use `calc-size(max-content, size + Xrem)` with an `inline-size: auto` fallback; scope `interpolate-size: allow-keywords` to that element.
 
 ## Shadow & motion rules
 

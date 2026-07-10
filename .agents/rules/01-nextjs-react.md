@@ -11,6 +11,7 @@ description: Next.js 16 App Router and React 19 patterns used in this repo
 - **Server Components by default** — pages and layouts fetch data on the server.
 - **`"use client"` only** for interactivity: forms, menus, carousels, hooks, browser APIs.
 - Push client boundaries **down** the tree (e.g. `ContactForm`, `Header`, `HeroSection`).
+- **`import type { ReactNode } from "react"`** — always import `ReactNode` explicitly. Do not use `React.ReactNode` without a React import; it relies on the global JSX ambient type and fails under strict isolation.
 
 ## Data fetching (this project)
 

@@ -32,11 +32,10 @@ description: Tailwind v4 design system — tokens, @utility classes, pure utilit
 | `section-y-lg` | Carousel / article bands (`py-10 md:py-16`) |
 | `section-y-xl` | Large homepage bands (`py-14 md:py-20`) |
 | `section-y-cta` | Dark CTA bands (`py-16 sm:py-20`) |
-| `section-header-py` | Page header vertical padding |
+| `section-header-py` | Page header vertical padding (alias of `section-y`) |
 | `h-header` / `scroll-mt-header` | Header height & anchor offset |
 | `sticky-below-header` | Sticky bars under header (posts, events) |
-| `pb-fab-safe` | Main padding when WhatsApp FAB is visible |
-| `fab-safe` | Fixed FAB position with safe-area |
+| `pb-fab-safe` | Bottom padding on `<main>` when WhatsApp FAB is visible |
 | `min-h-catalog` / `min-h-hero*` | Hero & catalog min-heights |
 
 ## Typography
@@ -103,8 +102,8 @@ description: Tailwind v4 design system — tokens, @utility classes, pure utilit
 | `check-icon-sm` | Why-us checklist icons |
 | `link-underline` | Header nav active/hover |
 | `bg-dot-grid` / `bg-hero-glow` / `hero-glow-offset` | Decorative backgrounds |
-| `w-mobile-drawer` / `z-drawer` / `z-drawer-overlay` / `ease-drawer` | Mobile menu |
-| `size-fab` / `bg-whatsapp` / `shadow-whatsapp` | WhatsApp FAB |
+| `mobile-nav-overlay` / `mobile-nav-panel` | Mobile menu drawers |
+| `whatsapp-fab` | WhatsApp floating action button (owns position, size, colour, animation, expand) |
 | `animate-fade-up` + `animate-delay-*` | Staggered hero entrance (no inline delay) |
 
 ## Class order
@@ -131,6 +130,9 @@ layout → spacing → typography → visual (bg/border/shadow) → interactive 
 * Avoid deeply nested CSS. Do not use `!important` unless required by a documented external library constraint.
 * Support dark mode only through the project's chosen strategy.
 * Verify that hover-only interactions also work on touch and keyboard devices.
+* **CSS `animation` wins over `transition` on the same property.** When a `@keyframes` animation targets a property (e.g. `box-shadow`), remove that property from the element's `transition` list — otherwise the transition silently has no effect. Document this in a comment on the `transition` declaration.
+* **Individual transform properties** (`translate`, `rotate`, `scale`) must always declare an identity base (`translate: 0 0`) on elements that change them on hover/focus — prevents a stacking-context jump the first time the state applies.
+* **`calc-size()` for animating to `auto`** — use `inline-size: calc-size(max-content, size + Xrem)` with an `inline-size: auto` fallback immediately before it for Firefox/Safari. Opt in per-element with `interpolate-size: allow-keywords`.
 
 ## Mobile & responsiveness rules
 

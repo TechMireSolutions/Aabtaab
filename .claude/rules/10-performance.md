@@ -37,6 +37,7 @@ Choose rendering intentionally:
 * Compress source images before uploading to Sanity. Do not upload unnecessarily large images.
 * Require meaningful alternative text for informative CMS images. Use empty alternative text (`alt=""`) for purely decorative images.
 * Prevent layout shift by reserving image space.
+* **Retina / HiDPI (`urlFor`):** when calling `urlFor(image).width(n).height(n)`, use **2× the largest CSS display size** of that image across all breakpoints. E.g. a logo displayed at `42px` (header) and `52px` (footer) must be fetched at `.width(104).height(104)` (2 × 52).
 
 ## 4. Fonts
 

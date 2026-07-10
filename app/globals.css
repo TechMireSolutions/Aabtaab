@@ -149,6 +149,20 @@
   }
 }
 
+/* Parallax shadow: grows + diffuses as button lifts, tightens as it drops.
+   Synced duration with floatY for a convincing 3D levitation illusion. */
+@keyframes fabShadowPulse {
+  0%,
+  100% {
+    box-shadow: 0 4px 20px rgb(37 211 102 / 0.45);
+  }
+  50% {
+    box-shadow:
+      0 12px 36px rgb(37 211 102 / 0.55),
+      0 4px 12px rgb(37 211 102 / 0.25);
+  }
+}
+
 @layer base {
   :root {
     --tw-prose-links: var(--color-brand-700);
@@ -270,6 +284,7 @@
   @apply py-16 sm:py-20;
 }
 
+/* Alias of section-y — kept for callsite compatibility */
 @utility section-header-py {
   @apply py-8 sm:py-12;
 }
@@ -324,9 +339,7 @@
   height: 52px;
 }
 
-@utility w-mobile-drawer {
-  width: min(300px, 85vw);
-}
+/* w-mobile-drawer removed — no consumers; width owned by mobile-nav-panel */
 
 @utility container-wide {
   @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8;
@@ -365,6 +378,8 @@
   height: var(--size-hero-glow);
 }
 
+/* size-fab: sets an explicit width — use only for fixed-size circles.
+   Do NOT apply to expanding elements; use min-inline-size + height instead. */
 @utility size-fab {
   width: var(--size-fab);
   height: var(--size-fab);
@@ -469,21 +484,90 @@
   @apply inline-flex items-center justify-center gap-2.5 rounded-full bg-[#0070BA] px-8 py-3 text-sm-plus font-bold text-white shadow-paypal transition-all duration-200 hover:-translate-y-px hover:bg-[#005ea6];
 }
 
-@utility shadow-whatsapp {
-  box-shadow: var(--shadow-whatsapp);
-}
-
-@utility shadow-whatsapp-hover {
-  box-shadow: var(--shadow-whatsapp-hover);
-}
+/* shadow-whatsapp / shadow-whatsapp-hover removed — shadows owned by whatsapp-fab animation */
 
 @utility shadow-paypal {
   box-shadow: var(--shadow-paypal);
 }
 
-@utility fab-safe {
+/* fab-safe removed — positioning duplicated inside whatsapp-fab */
+
+/* ── WhatsApp FAB ──
+   Uses modern CSS:
+   · calc-size() for smooth pill-expand (Chrome 129+; instant-jump fallback on Firefox/Safari)
+   · Individual `translate` property to prevent stacking-context shift on hover
+   · interpolate-size: allow-keywords scoped to this element for the calc-size transition
+   · floatY animation paused on hover so the translate lift takes over cleanly
+*/
+@utility whatsapp-fab {
+  /* Positioning */
+  position: fixed;
   bottom: max(1.25rem, env(safe-area-inset-bottom));
   right: max(1.25rem, env(safe-area-inset-right));
+  z-index: 50;
+
+  /* Layout */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  height: var(--size-fab);
+  /* Collapsed width = circle */
+  inline-size: var(--size-fab);
+  min-inline-size: var(--size-fab);
+  overflow: hidden;
+  padding-inline: 0;
+  border-radius: 9999px;
+
+  /* Colors */
+  background-color: var(--color-whatsapp);
+  color: white;
+  box-shadow: var(--shadow-whatsapp);
+
+  /* Individual translate — MANDATORY identity base prevents stacking-context jump on hover */
+  translate: 0 0;
+
+  /* Enable calc-size() transitions on this element */
+  interpolate-size: allow-keywords;
+
+  /* Transitions: size + gap + padding + color + translate.
+     box-shadow intentionally excluded — owned by fabShadowPulse animation.
+     (CSS animation wins over transition when both target the same property.) */
+  transition:
+    inline-size 300ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    gap 250ms ease,
+    padding-inline 250ms ease,
+    background-color 200ms ease,
+    translate 200ms ease;
+
+  /* Keyboard focus ring */
+  &:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 3px;
+    box-shadow:
+      var(--shadow-whatsapp),
+      0 0 0 5px color-mix(in srgb, var(--color-whatsapp) 35%, transparent);
+  }
+
+  /* Continuous float bob + parallax shadow — both synced at 4s */
+  animation:
+    var(--animate-float),
+    fabShadowPulse 4s ease-in-out infinite;
+
+  /* Hover: expand to pill + pause both animations so translate lift takes over */
+  &:hover {
+    /* Fallback for browsers without calc-size() */
+    inline-size: auto;
+    /* Modern: smooth expansion to content width */
+    inline-size: calc-size(max-content, size + 2rem);
+    justify-content: flex-start;
+    gap: 0.5rem;
+    padding-inline: 0.875rem 1rem;
+    background-color: var(--color-whatsapp-hover);
+    box-shadow: var(--shadow-whatsapp-hover);
+    translate: 0 -0.125rem;
+    animation-play-state: paused;
+  }
 }
 
 /* ── Surfaces ── */
@@ -782,4 +866,7 @@ body.mobile-menu-open {
   .mobile-nav-panel {
     animation: none;
   }
+
+  /* FAB animations/transitions already covered by the global
+     animation-duration / transition-duration: 0.01ms rule above. */
 }
