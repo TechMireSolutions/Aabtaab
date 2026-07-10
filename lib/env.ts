@@ -6,6 +6,7 @@ const publicEnvSchema = z.object({
   NEXT_PUBLIC_SITE_URL: z.string().url().default("https://aabtaab.com"),
   NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION: z.string().optional(),
   NEXT_PUBLIC_SENTRY_DSN: z.string().optional(),
+  NEXT_PUBLIC_TURNSTILE_SITE_KEY: z.string().optional(),
 });
 
 const serverEnvSchema = z.object({
@@ -19,6 +20,7 @@ const serverEnvSchema = z.object({
   EMAIL_PASS: z.string().optional(),
   UPSTASH_REDIS_REST_URL: z.string().optional(),
   UPSTASH_REDIS_REST_TOKEN: z.string().optional(),
+  TURNSTILE_SECRET_KEY: z.string().optional(),
 });
 
 export const isProduction = process.env.NODE_ENV === "production";
@@ -35,6 +37,7 @@ const publicResult = publicEnvSchema.safeParse({
   NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
   NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
   NEXT_PUBLIC_SENTRY_DSN: process.env.NEXT_PUBLIC_SENTRY_DSN,
+  NEXT_PUBLIC_TURNSTILE_SITE_KEY: process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
 });
 
 if (!publicResult.success) {
@@ -60,6 +63,7 @@ if (isServer) {
     EMAIL_PASS: process.env.EMAIL_PASS,
     UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
     UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
+    TURNSTILE_SECRET_KEY: process.env.TURNSTILE_SECRET_KEY,
   });
 
   if (!serverResult.success) {
@@ -96,4 +100,6 @@ export const env = {
   EMAIL_PASS: serverData.EMAIL_PASS || (isServer ? process.env.EMAIL_PASS : undefined),
   UPSTASH_REDIS_REST_URL: serverData.UPSTASH_REDIS_REST_URL || (isServer ? process.env.UPSTASH_REDIS_REST_URL : undefined),
   UPSTASH_REDIS_REST_TOKEN: serverData.UPSTASH_REDIS_REST_TOKEN || (isServer ? process.env.UPSTASH_REDIS_REST_TOKEN : undefined),
+  NEXT_PUBLIC_TURNSTILE_SITE_KEY: publicData.NEXT_PUBLIC_TURNSTILE_SITE_KEY || process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
+  TURNSTILE_SECRET_KEY: serverData.TURNSTILE_SECRET_KEY || (isServer ? process.env.TURNSTILE_SECRET_KEY : undefined),
 } as const;

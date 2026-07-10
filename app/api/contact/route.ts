@@ -8,6 +8,7 @@ import {
   clientIpFromRequest,
 } from "@/lib/rate-limit";
 import { getSanityWriteClient } from "@/sanity/lib/writeClient";
+import { env } from "@/lib/env";
 
 export async function POST(req: Request) {
   try {
@@ -36,7 +37,40 @@ export async function POST(req: Request) {
       purpose,
       appliedFor,
       message,
+      token,
     } = parsed.data;
+
+    // Verify Cloudflare Turnstile token if secret key is configured in env
+    const turnstileSecret = env.TURNSTILE_SECRET_KEY;
+    if (turnstileSecret) {
+      if (!token) {
+        return NextResponse.json(
+          { error: "Security check failed. Please refresh the page and try again." },
+          { status: 400 },
+        );
+      }
+
+      const verifyRes = await fetch(
+        "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            secret: turnstileSecret,
+            response: token,
+            remoteip: ip,
+          }),
+        }
+      );
+
+      const verifyData = await verifyRes.json();
+      if (!verifyData.success) {
+        return NextResponse.json(
+          { error: "Security verification failed. Please try again." },
+          { status: 400 },
+        );
+      }
+    }
 
     const fullName = [firstName, lastName].filter(Boolean).join(" ");
     const purposeText =

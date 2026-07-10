@@ -81,6 +81,7 @@ Every public write endpoint must include:
 * Safe error responses.
 * Origin or request-context checks where applicable.
 * Protection against automated abuse (e.g., honeypot fields).
+* Cloudflare Turnstile verification. When `TURNSTILE_SECRET_KEY` is defined in environmental configuration, verification tokens (`token`) must be validated against `https://challenges.cloudflare.com/turnstile/v0/siteverify` on the server before processing submissions.
 
 * Use Upstash Redis rate limiting for contact forms and other abuse-sensitive routes (`lib/rate-limit.ts`).
 * Do not rely on in-memory rate limiting because PM2 runs multiple processes.

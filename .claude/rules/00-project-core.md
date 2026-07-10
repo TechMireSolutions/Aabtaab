@@ -11,11 +11,12 @@
 * **Runtime:** Node.js **24.17.0** (`.nvmrc`, engine requirements ≥22.12.0)
 * **Framework:** **Next.js 16** (App Router, RSC, ISR)
 * **UI:** **React 19**
-* **Styling:** **Tailwind CSS v4** (single CSS entrypoint in `app/globals.css`)
+* **Styling:** **Tailwind CSS v4** (single CSS entrypoint in `app/globals.css`, Arabic Amiri font registered)
 * **CMS:** **Sanity 6** (embedded Studio at `/studio`)
 * **Validation:** **Zod**
 * **Email:** **Resend** with **Nodemailer** fallback
 * **Rate limiting:** **Upstash Redis** (distributed)
+* **Spam Protection:** **Cloudflare Turnstile** (validated on backend)
 * **Monitoring:** **Sentry**
 * **Testing:** **Vitest** (unit) and **Playwright** (E2E)
 * **Hosting:** **Hetzner VPS** (PM2 cluster, port **3000**)

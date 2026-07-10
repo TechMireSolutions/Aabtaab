@@ -35,13 +35,16 @@ description: >-
 | `EMAIL_TO` | Notification recipient |
 | `EMAIL_USER` / `EMAIL_PASS` | Gmail SMTP fallback |
 | `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN` | Distributed rate limit (optional) |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Turnstile public site key (optional) |
+| `TURNSTILE_SECRET_KEY` | Turnstile server secret verification key (optional) |
 
 Submissions save to Sanity even when email env is missing.
 
 ## Security
 
-- Zod validation on all fields
+- Zod validation on all fields (including optional `token` field)
 - Honeypot field `website` (must be empty)
+- Spam protection: Cloudflare Turnstile verification (skipped dynamically if environment keys are missing)
 - Rate limit: 5 requests / 15 min / IP
 - IP from `lib/request-ip.ts` (Cloudflare-aware)
 - HTML escaped in email template

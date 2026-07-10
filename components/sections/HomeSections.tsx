@@ -217,7 +217,7 @@ export default async function HomeSections() {
         <div className="container-content relative max-w-copy text-center">
           <div className="text-eyebrow-gold mb-4 inline-flex items-center gap-2.5">
             <span className="eyebrow-line-gold w-6" />
-            <span lang="ar" dir="rtl">في سبيل الله</span>
+            <span lang="ar" dir="rtl" className="font-arabic">فِي سَبِيلِ اللَّهِ</span>
             <span className="eyebrow-line-gold w-6" />
           </div>
           <h2 className="heading-section-lg mb-3">

@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans, Playfair_Display } from "next/font/google";
+import { Plus_Jakarta_Sans, Playfair_Display, Amiri } from "next/font/google";
 import { resolveSiteName } from "@/lib/constants";
 import { env } from "@/lib/env";
 import { getSiteSettings } from "@/lib/cms/queries";
@@ -23,6 +23,13 @@ const playfair = Playfair_Display({
   variable: "--font-playfair",
   display: "swap",
   preload: true,
+});
+
+const amiri = Amiri({
+  subsets: ["arabic"],
+  weight: ["400", "700"],
+  variable: "--font-amiri",
+  display: "swap",
 });
 
 // ── Viewport (separate export — required in Next.js 15) ──────────────────────
@@ -231,7 +238,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://api.alquran.cloud" />
       </head>
       <body
-        className={`${jakarta.variable} ${playfair.variable} font-sans antialiased relative`}
+        className={`${jakarta.variable} ${playfair.variable} ${amiri.variable} font-sans antialiased relative`}
         suppressHydrationWarning
       >
         {/* Organization schema injected into every page */}

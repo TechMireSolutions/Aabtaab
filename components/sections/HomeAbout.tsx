@@ -45,7 +45,7 @@ export default function HomeAbout({ homepage: hp }: HomeAboutProps) {
 
   const hadithList = useMemo(() => {
     const initialHadith: HadithItem = {
-      arabic: hp?.aboutHadithArabic || "اطلبوا العلم من المهد إلى اللحد",
+      arabic: hp?.aboutHadithArabic || "اُطْلُبُوا الْعِلْمَ مِنَ الْمَهْدِ إِلَى اللَّحْدِ",
       translation: hp?.aboutHadithTranslation || "Seek knowledge from the cradle to the grave.",
       attribution: hp?.aboutHadithAttribution || "Prophet Muhammad (S.A.W.W.)",
     };
@@ -69,7 +69,7 @@ export default function HomeAbout({ homepage: hp }: HomeAboutProps) {
   }
 
   const activeHadith = hadithList[currentIndex] || {
-    arabic: hp?.aboutHadithArabic || "اطلبوا العلم من المهد إلى اللحد",
+    arabic: hp?.aboutHadithArabic || "اُطْلُبُوا الْعِلْمَ مِنَ الْمَهْدِ إِلَى اللَّحْدِ",
     translation: hp?.aboutHadithTranslation || "Seek knowledge from the cradle to the grave.",
     attribution: hp?.aboutHadithAttribution || "Prophet Muhammad (S.A.W.W.)",
   };
@@ -142,7 +142,7 @@ export default function HomeAbout({ homepage: hp }: HomeAboutProps) {
                 }`}
               >
                 <p
-                  className="mb-4 text-center text-xl-plus leading-loose font-serif text-gold-400 select-all"
+                  className="mb-4 text-center text-xl-plus leading-loose font-arabic text-gold-400 select-all"
                   dir="rtl"
                   lang="ar"
                 >

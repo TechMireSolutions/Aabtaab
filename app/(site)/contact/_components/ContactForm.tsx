@@ -1,6 +1,8 @@
 "use client";
 
 import { useId, useState } from "react";
+import Script from "next/script";
+import { env } from "@/lib/env";
 import type {
   ContactFormOption,
   ContactPurpose,
@@ -80,6 +82,8 @@ export default function ContactForm({
       )?.value ?? "";
 
     try {
+      const token = env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ? getValue("cf-turnstile-response") : undefined;
+
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -94,6 +98,7 @@ export default function ContactForm({
           appliedFor: appliedFor || undefined,
           message: getValue("message"),
           website: getValue("website"),
+          token,
         }),
       });
 
@@ -104,6 +109,15 @@ export default function ContactForm({
       setAppliedFor("");
     } catch {
       setStatus("error");
+    } finally {
+      if (typeof window !== "undefined") {
+        const turnstile = (
+          window as unknown as { turnstile?: { reset: () => void } }
+        ).turnstile;
+        if (turnstile) {
+          turnstile.reset();
+        }
+      }
     }
   }
 
@@ -300,6 +314,17 @@ export default function ContactForm({
           placeholder="How can we help you?"
         />
       </div>
+
+      {env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
+        <div className="flex justify-start py-1">
+          <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer />
+          <div
+            className="cf-turnstile"
+            data-sitekey={env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+            data-theme="light"
+          />
+        </div>
+      )}
 
       <button
         type="submit"

@@ -51,6 +51,7 @@ description: Tailwind v4 design system — tokens, @utility classes, pure utilit
 | `link-brand` | Inline “view all” links |
 | `max-w-copy` | Standard `max-w-2xl` prose width |
 | `max-w-hero-copy` / `max-w-hero-lead` / `max-w-tagline` | Hero & footer widths |
+| `font-arabic` | Arabic text (Amiri Google Font) |
 
 **Scale tokens:** `text-2xs`, `text-xs-plus`, `text-sm-plus`, `text-base-plus`, `text-lg-plus`, `text-hero`  
 **Tracking:** `tracking-eyebrow`, `tracking-kicker`, `tracking-heading`

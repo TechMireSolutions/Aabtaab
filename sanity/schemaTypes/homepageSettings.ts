@@ -173,7 +173,7 @@ export const homepageSettings = defineType({
       name: "aboutHadithArabic",
       type: "string",
       title: "About — Hadith (Arabic)",
-      initialValue: "اطلبوا العلم من المهد إلى اللحد",
+      initialValue: "اُطْلُبُوا الْعِلْمَ مِنَ الْمَهْدِ إِلَى اللَّحْدِ",
     }),
     defineField({
       name: "aboutHadithTranslation",

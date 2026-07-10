@@ -48,6 +48,16 @@ import { Redis } from "@upstash/redis";
 ```
 - If Redis is unavailable, fallback to an in-memory or graceful allowance while logging a warning to Sentry.
 
+### 4. Cloudflare Turnstile Verification
+- Add `token` optional string field to Zod validation schema.
+- In components, load Turnstile API script and render widget dynamically only if site key is configured. Get token via `cf-turnstile-response` form data.
+- Reset the widget state after handling success or error states using type-safe window casting:
+```typescript
+const turnstile = (window as unknown as { turnstile?: { reset: () => void } }).turnstile;
+if (turnstile) turnstile.reset();
+```
+- In the Route Handler, verify the token by posting to `https://challenges.cloudflare.com/turnstile/v0/siteverify` if secret key is present in environment variables. Reject invalid submissions.
+
 ## Verification Checklist
 - [ ] No server-side secrets or write tokens exported to the browser.
 - [ ] Zod schema handles string trimming and length bounds.

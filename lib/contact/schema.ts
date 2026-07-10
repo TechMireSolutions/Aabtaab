@@ -21,6 +21,7 @@ export const contactBodySchema = z.object({
     .min(10, "Message must be at least 10 characters")
     .max(5000),
   website: z.string().optional(),
+  token: z.string().optional(),
 });
 
 export type ContactBody = z.infer<typeof contactBodySchema>;

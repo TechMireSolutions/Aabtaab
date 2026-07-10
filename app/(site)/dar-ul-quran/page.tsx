@@ -51,12 +51,12 @@ const SHIA_TAFSIR: Record<string, { title: string; verse: string; text: string }
 };
 
 const COMMON_SURAHS = [
-  { number: 1, name: "الفاتحة", englishName: "Al-Fatiha", numberOfAyahs: 7 },
-  { number: 36, name: "يس", englishName: "Yaseen", numberOfAyahs: 83 },
-  { number: 55, name: "الرحمن", englishName: "Ar-Rahman", numberOfAyahs: 78 },
-  { number: 56, name: "الواقعة", englishName: "Al-Waqi'ah", numberOfAyahs: 96 },
-  { number: 67, name: "الملك", englishName: "Al-Mulk", numberOfAyahs: 30 },
-  { number: 112, name: "الإخلاص", englishName: "Al-Ikhlaas", numberOfAyahs: 4 },
+  { number: 1, name: "الْفَاتِحَة", englishName: "Al-Fatiha", numberOfAyahs: 7 },
+  { number: 36, name: "يٰسٓ", englishName: "Yaseen", numberOfAyahs: 83 },
+  { number: 55, name: "الرَّحْمَٰن", englishName: "Ar-Rahman", numberOfAyahs: 78 },
+  { number: 56, name: "الْوَاقِعَة", englishName: "Al-Waqi'ah", numberOfAyahs: 96 },
+  { number: 67, name: "الْمُلْك", englishName: "Al-Mulk", numberOfAyahs: 30 },
+  { number: 112, name: "الْإِخْلَاص", englishName: "Al-Ikhlaas", numberOfAyahs: 4 },
 ];
 
 export default function DarUlQuranPage() {
@@ -68,28 +68,53 @@ export default function DarUlQuranPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [, startTransition] = useTransition();
+  const [expandedTafsir, setExpandedTafsir] = useState<number | null>(null);
 
   const [prevSurah, setPrevSurah] = useState(selectedSurah);
   if (selectedSurah !== prevSurah) {
     setPrevSurah(selectedSurah);
     setLoading(true);
     setError("");
+    setExpandedTafsir(null);
+  }
+
+  const [prevAyah, setPrevAyah] = useState(selectedAyah);
+  if (selectedAyah !== prevAyah) {
+    setPrevAyah(selectedAyah);
+    setExpandedTafsir(null);
   }
 
   // Fetch Surahs list
   useEffect(() => {
     async function fetchSurahs() {
+      // 1. Try to read from localStorage first
+      try {
+        const cached = localStorage.getItem("aabtaab:surahs");
+        if (cached) {
+          setSurahs(JSON.parse(cached));
+        }
+      } catch (e) {
+        console.error("Failed to read surahs from localStorage", e);
+      }
+
+      // 2. Fetch fresh list from API
       try {
         const res = await fetch("https://api.alquran.cloud/v1/surah");
         if (res.ok) {
           const data = await res.json();
           setSurahs(data.data);
+          // Write to cache
+          try {
+            localStorage.setItem("aabtaab:surahs", JSON.stringify(data.data));
+          } catch (e) {
+            console.error("Failed to save surahs to localStorage", e);
+          }
         } else {
-          // fallback to common list if offline
-          setSurahs(COMMON_SURAHS as Surah[]);
+          // fallback to common list if offline and no cache
+          setSurahs((prev) => (prev.length > 0 ? prev : (COMMON_SURAHS as Surah[])));
         }
       } catch {
-        setSurahs(COMMON_SURAHS as Surah[]);
+        setSurahs((prev) => (prev.length > 0 ? prev : (COMMON_SURAHS as Surah[])));
       }
     }
     fetchSurahs();
@@ -98,6 +123,23 @@ export default function DarUlQuranPage() {
   // Fetch selected Surah content (Arabic & English Shakir)
   useEffect(() => {
     startTransition(async () => {
+      // 1. Try to read from localStorage first
+      try {
+        const cached = localStorage.getItem(`aabtaab:surah:${selectedSurah}`);
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (parsed && Array.isArray(parsed.arabic) && Array.isArray(parsed.english)) {
+            setArabicVerses(parsed.arabic);
+            setEnglishVerses(parsed.english);
+            setLoading(false);
+            return;
+          }
+        }
+      } catch (e) {
+        console.error("Failed to read cached surah from localStorage", e);
+      }
+
+      // 2. Fetch fresh content from API if not cached
       try {
         const [arabicRes, englishRes] = await Promise.all([
           fetch(`https://api.alquran.cloud/v1/surah/${selectedSurah}/quran-uthmani`),
@@ -107,8 +149,21 @@ export default function DarUlQuranPage() {
         if (arabicRes.ok && englishRes.ok) {
           const arabicData = await arabicRes.json();
           const englishData = await englishRes.json();
-          setArabicVerses(arabicData.data.ayahs);
-          setEnglishVerses(englishData.data.ayahs);
+          const arabicAyahs = arabicData.data.ayahs;
+          const englishAyahs = englishData.data.ayahs;
+
+          setArabicVerses(arabicAyahs);
+          setEnglishVerses(englishAyahs);
+
+          // Write to cache
+          try {
+            localStorage.setItem(
+              `aabtaab:surah:${selectedSurah}`,
+              JSON.stringify({ arabic: arabicAyahs, english: englishAyahs })
+            );
+          } catch (e) {
+            console.error("Failed to save surah content to localStorage", e);
+          }
         } else {
           setError("Failed to fetch surah content from the public Quran database.");
         }
@@ -228,7 +283,7 @@ export default function DarUlQuranPage() {
                   {/* Bismillah header (except for Surah 9) */}
                   {selectedSurah !== 9 && selectedAyah === 0 && (
                     <div className="text-center border-b border-gray-100 dark:border-slate-800 pb-6">
-                      <p className="font-serif text-3xl text-slate-900 dark:text-white leading-loose" dir="rtl" lang="ar">
+                      <p className="font-arabic text-3xl text-slate-900 dark:text-white leading-loose" dir="rtl" lang="ar">
                         بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
                       </p>
                       <p className="text-xs-plus uppercase tracking-widest text-gold-600 mt-2 font-semibold">
@@ -257,15 +312,19 @@ export default function DarUlQuranPage() {
                               </span>
                               {isShiaVerse && (
                                 <button
-                                  onClick={() => setSelectedAyah(verse.numberInSurah)}
-                                  className="badge-pill bg-gold-100/70 dark:bg-gold-950/20 border-gold-200 dark:border-gold-800/40 text-gold-600 dark:text-gold-400 cursor-pointer text-2xs uppercase tracking-wider font-bold"
+                                  onClick={() => setExpandedTafsir((prev) => (prev === verse.numberInSurah ? null : verse.numberInSurah))}
+                                  className={`badge-pill cursor-pointer text-2xs uppercase tracking-wider font-bold transition-all ${
+                                    expandedTafsir === verse.numberInSurah
+                                      ? "bg-gold-500 text-white border-gold-600"
+                                      : "bg-gold-100/70 dark:bg-gold-950/20 border-gold-200 dark:border-gold-800/40 text-gold-600 dark:text-gold-400"
+                                  }`}
                                 >
-                                  Tafsir Available
+                                  {expandedTafsir === verse.numberInSurah ? "Hide Tafsir" : "Tafsir Available"}
                                 </button>
                               )}
                             </div>
 
-                            <p className="font-serif text-2xl sm:text-3xl text-right text-slate-900 dark:text-white leading-loose mb-4 select-all" dir="rtl" lang="ar">
+                            <p className="font-arabic text-2xl sm:text-3xl text-right text-slate-900 dark:text-white leading-loose mb-4 select-all" dir="rtl" lang="ar">
                               {verse.text}
                             </p>
 
@@ -273,6 +332,25 @@ export default function DarUlQuranPage() {
                               <p className="text-sm-plus leading-relaxed text-slate-700 dark:text-slate-300 select-all border-l-2 border-brand-500/20 pl-4">
                                 {engVerse.text}
                               </p>
+                            )}
+
+                            {expandedTafsir === verse.numberInSurah && isShiaVerse && (
+                              <div className="mt-4 rounded-2xl border border-gold-500/20 bg-gold-50/30 dark:bg-gold-950/10 p-4 sm:p-5 motion-safe:animate-scale-in text-slate-900 dark:text-slate-100">
+                                <div className="flex items-start gap-2.5">
+                                  <BookMarked className="text-gold-600 dark:text-gold-400 mt-0.5 shrink-0" size={18} />
+                                  <div>
+                                    <h4 className="font-display font-bold text-sm-plus text-gold-700 dark:text-gold-400">
+                                      {SHIA_TAFSIR[`${selectedSurah}:${verse.numberInSurah}`]?.title}
+                                    </h4>
+                                    <p className="text-2xs text-gold-600/70 dark:text-gold-400/60 uppercase tracking-widest mt-0.5 font-bold">
+                                      {SHIA_TAFSIR[`${selectedSurah}:${verse.numberInSurah}`]?.verse}
+                                    </p>
+                                    <p className="text-sm-plus leading-relaxed text-slate-700 dark:text-slate-300 mt-3 border-t border-gold-500/10 pt-2.5">
+                                      {SHIA_TAFSIR[`${selectedSurah}:${verse.numberInSurah}`]?.text}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
                             )}
                           </div>
                         );
