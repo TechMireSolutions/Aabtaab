@@ -89,10 +89,13 @@ alwaysApply: false
 * Keyboard accessibility: all interactive features must be keyboard-operable, and visible focus indicators are mandatory. Do not remove outlines without providing an accessible replacement.
 * Use native HTML controls over custom ones when possible.
 * Associate a visual label with every form field; placeholder text is not a label.
+* Every interactive input element, selector, or textarea must have an associated programmatic label or `aria-label` attribute to pass Lighthouse accessibility audits.
+* For custom `radiogroup` button structures, implement standard keyboard arrow-key navigation and manage `tabIndex` (only the active/selected option should have `tabIndex={0}`, with others at `tabIndex={-1}`) to prevent keyboard tab-trapping.
 * Contrast: maintain sufficient contrast ratio. Do not communicate meaning via color alone.
 * Respect `prefers-reduced-motion`.
 * Trap focus inside modal overlays, restore focus when closed, allow closing with Escape, and expose correct modal roles.
-* Urdu and Arabic content must support Right-to-Left (RTL) rendering without breaking English layout styling.
+* Urdu and Arabic content must support Right-to-Left (RTL) rendering without breaking English layout styling. Ensure foreign language scripts (e.g., Arabic, Urdu) specify `lang` and `dir` attributes (e.g., `lang="ar" dir="rtl"`) on the closest text wrapper to enable screen readers to pronounce them using correct voice synthesis.
+* PWA manifest icons must be square (e.g. 512x512). Avoid stretching rectangular social images; use Sanity image URL builders to dynamically crop a square format from the brand logo or favicon.
 
 ## Avoid
 

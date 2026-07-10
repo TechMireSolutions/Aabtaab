@@ -13,14 +13,14 @@ description: >-
 
 ### 1. Sizing Images (`next/image`)
 - Always specify explicit `width` and `height`, or use `fill` with aspect ratios to prevent Layout Shifts (CLS).
-- Provide correct `sizes` definitions:
+- Provide correct `sizes` definitions. If an image is hidden on mobile viewports (e.g. `hidden md:block`), restrict mobile sizes explicitly to prevent download payload overhead:
 ```tsx
 <Image
   src={imageUrl}
   alt={altText}
   fill
   className="object-cover"
-  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+  sizes="(max-width: 768px) 0px, 55vw"
   priority={isAboveFold}
 />
 ```
@@ -38,9 +38,10 @@ description: >-
 
 ### 3. preventing Layout Shifts
 - Reserve layout space using placeholder utilities or fallback skeletons while assets load.
+- For hydration-dependent widgets (e.g. countdown timers), render stable skeleton boxes of the exact same dimensions when not mounted to prevent visual jumps on load.
 - Ensure fonts are preloaded with `display: swap` in the root layout.
 
 ## Verification
 - [ ] LCP images have `priority` enabled.
-- [ ] No layout shift visible during loading state.
+- [ ] No layout shift visible during loading or hydration states.
 - [ ] Bundle size analyzed for dynamic imports.

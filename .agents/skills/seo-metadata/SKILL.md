@@ -74,18 +74,18 @@ getDefaultOgImageUrl(); // https://…/og-default.png
 - LCP images: `priority` + `sizes` on hero/featured images
 - Fonts: minimal weight subset + `display: "swap"` in `app/layout.tsx`
 - Regenerate default OG: `node scripts/generate-og-default.mjs`
+- PWA manifest icons: Ensure square 512x512 format. Use Sanity URL builder to dynamically crop square images from settings logo/favicon instead of stretching rectangular images.
 
 ## Checklist for new public page
-
 1. Export `generateMetadata` (or `defineCmsPageMetadata`)
 2. Pass `ogImage` via `resolveDocOgImage` when CMS-backed
 3. One `h1`, semantic sections
 4. Add JSON-LD if applicable (Article, Course, Event, Breadcrumb)
 5. Ensure slug query excludes `seo.noIndex` if sitemap-eligible
 6. Wire webhook revalidation tag if CMS-backed
+7. Accessibility: Ensure Arabic/Urdu texts have `lang="ar" dir="rtl"` or similar, and check that all inputs/select elements have a corresponding visual label or `aria-label`.
 
 ## Verify
-
 ```bash
 npm run lint
 npm run build

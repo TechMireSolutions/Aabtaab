@@ -30,7 +30,7 @@ Choose rendering intentionally:
 
 * Use `next/image` for content images whenever possible.
 * Every image must have known dimensions or a stable aspect ratio to avoid layout shift.
-* Provide a correct `sizes` attribute for responsive images.
+* Provide a correct `sizes` attribute for responsive images. Prevent mobile payload overhead on hidden desktop images by setting sizes explicitly (e.g. `sizes="(max-width: 768px) 0px, 55vw"` on `hidden md:block` hero images).
 * Use modern optimised formats (WebP, AVIF) through the Next.js image pipeline.
 * Use `priority` only for genuine above-the-fold images (e.g. hero images). Do not mark multiple non-critical images as priority.
 * Lazy-load below-the-fold images.
@@ -69,5 +69,6 @@ Rules:
 * Avoid heavy client-side hydration.
 * Avoid long-running event handlers.
 * Use loading indicators that do not shift the surrounding layout.
+* Avoid Cumulative Layout Shift (CLS) on hydration-dependent widgets (e.g. countdown timers) by rendering layout-stable placeholder skeletons of the exact same dimensions when not mounted.
 * Do not autoplay heavy media.
 * Keep critical content available without waiting for client-side JavaScript.
