@@ -1,13 +1,19 @@
+/* ==========================================================================
+   1. IMPORTS & PLUGINS
+   ========================================================================== */
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
+
+/* ==========================================================================
+   2. TAILWIND THEME CUSTOMIZATIONS
+   ========================================================================== */
 @theme {
-  --font-sans:
-    var(--font-jakarta, system-ui), system-ui, -apple-system,
-    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  /* Typography Fonts */
+  --font-sans: var(--font-jakarta, system-ui), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-display: var(--font-playfair, Georgia, serif), Georgia, serif;
   --font-arabic: var(--font-amiri), "Amiri", "Noto Naskh Arabic", "Geeza Pro", "DecoType Naskh", serif;
 
-  /* Brand palette (cyan) */
+  /* Brand Cyan Palette */
   --color-brand-50: #ecfeff;
   --color-brand-100: #cffafe;
   --color-brand-200: #a5f3fc;
@@ -19,12 +25,12 @@
   --color-brand-800: #155e75;
   --color-brand-900: #164e63;
 
-  /* Gold accent */
+  /* Gold Accent Palette */
   --color-gold-400: #fbbf24;
   --color-gold-500: #f59e0b;
   --color-gold-600: #d97706;
 
-  /* Typography scale */
+  /* Typography Scale */
   --text-2xs: 0.625rem;
   --text-2xs--line-height: 1.2;
   --text-xs-plus: 0.65625rem;
@@ -41,13 +47,13 @@
   --text-hero--line-height: 1.08;
   --text-hero--letter-spacing: -0.025em;
 
-  /* Letter spacing */
+  /* Letter Spacing */
   --tracking-eyebrow: 0.18em;
   --tracking-kicker: 0.15em;
   --tracking-heading: -0.02em;
   --tracking-heading-tight: -0.03em;
 
-  /* Layout */
+  /* Layout Variables */
   --spacing-header: 4.25rem;
   --spacing-hero-pad-y: 5.625rem;
   --width-hero-copy: 32.5rem;
@@ -61,29 +67,27 @@
   --size-touch-min: 2.75rem;
   --opacity-hero-image: 0.18;
 
-  /* Third-party brand colors */
+  /* Third-party Brand Colors */
   --color-whatsapp: #25d366;
   --color-whatsapp-hover: #20bc5a;
 
-  /* Z-index layers */
+  /* Z-Index Layers */
   --z-index-drawer-overlay: 60;
   --z-index-drawer: 70;
 
   /* Easing */
   --ease-drawer: cubic-bezier(0.16, 1, 0.3, 1);
 
-  /* Motion */
+  /* Animation Mappings */
   --animate-fade-up: fadeInUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
   --animate-fade-left: fadeInLeft 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
   --animate-scale-in: scaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
   --animate-shimmer: shimmer 3s linear infinite;
   --animate-float: floatY 4s ease-in-out infinite;
 
-  /* Shadows */
-  --shadow-card:
-    0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.04);
-  --shadow-card-hover:
-    0 12px 32px -4px rgb(0 0 0 / 0.11), 0 4px 12px -2px rgb(0 0 0 / 0.06);
+  /* Box Shadows */
+  --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.04);
+  --shadow-card-hover: 0 12px 32px -4px rgb(0 0 0 / 0.11), 0 4px 12px -2px rgb(0 0 0 / 0.06);
   --shadow-brand-glow: 0 6px 24px rgb(8 145 178 / 0.38);
   --shadow-header: 0 2px 20px rgb(0 0 0 / 0.07);
   --shadow-brand-sm: 0 4px 16px rgb(8 145 178 / 0.3);
@@ -97,6 +101,9 @@
   --shadow-paypal: 0 4px 20px rgb(0 112 186 / 0.45);
 }
 
+/* ==========================================================================
+   3. ANIMATION KEYFRAMES
+   ========================================================================== */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -140,8 +147,7 @@
 }
 
 @keyframes floatY {
-  0%,
-  100% {
+  0%, 100% {
     transform: translateY(0);
   }
   50% {
@@ -149,11 +155,8 @@
   }
 }
 
-/* Parallax shadow: grows + diffuses as button lifts, tightens as it drops.
-   Synced duration with floatY for a convincing 3D levitation illusion. */
 @keyframes fabShadowPulse {
-  0%,
-  100% {
+  0%, 100% {
     box-shadow: 0 4px 20px rgb(37 211 102 / 0.45);
   }
   50% {
@@ -163,6 +166,27 @@
   }
 }
 
+@keyframes mobile-nav-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes mobile-nav-slide-in {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* ==========================================================================
+   4. BASE LAYERS & THEME VARIABLES
+   ========================================================================== */
 @layer base {
   :root {
     --tw-prose-links: var(--color-brand-700);
@@ -177,6 +201,7 @@
     --color-bg-muted: #f8fafc;
     --color-glass-bg: rgba(255, 255, 255, 0.45);
     --color-glass-border: rgba(255, 255, 255, 0.25);
+    --color-dot-grid: #e2e8f0;
   }
 
   @media (prefers-color-scheme: dark) {
@@ -192,6 +217,7 @@
       --color-bg-muted: #1e293b;
       --color-glass-bg: rgba(30, 41, 59, 0.45);
       --color-glass-border: rgba(255, 255, 255, 0.08);
+      --color-dot-grid: #1e293b;
     }
   }
 
@@ -207,19 +233,11 @@
     font-family: var(--font-sans);
     font-size: var(--text-base-plus);
     line-height: 1.6;
-    font-feature-settings:
-      "rlig" 1,
-      "calt" 1,
-      "cv11" 1;
+    font-feature-settings: "rlig" 1, "calt" 1, "cv11" 1;
     text-rendering: optimizeLegibility;
   }
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
+  h1, h2, h3, h4, h5, h6 {
     @apply font-bold leading-tight tracking-heading text-balance;
     text-rendering: optimizeLegibility;
   }
@@ -232,6 +250,31 @@
     @apply rounded outline-2 outline-offset-2 outline-brand-600;
   }
 
+  /* Accessibility & Mobile Touch Targets */
+  @media (max-width: 1023px) {
+    header button,
+    header nav a,
+    header summary,
+    footer a,
+    footer button,
+    .btn-primary,
+    .btn-secondary,
+    .btn-pill-accent,
+    .link-brand,
+    .icon-btn-subtle,
+    .chip-outline,
+    .chip-outline-sm {
+      min-height: var(--size-touch-min);
+    }
+
+    input,
+    select,
+    textarea {
+      font-size: 16px;
+    }
+  }
+
+  /* Motion Preferences */
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
@@ -244,6 +287,11 @@
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
     }
+    
+    .mobile-nav-overlay,
+    .mobile-nav-panel {
+      animation: none;
+    }
   }
 
   * {
@@ -251,7 +299,11 @@
   }
 }
 
-/* ── Layout ── */
+/* ==========================================================================
+   5. CUSTOM UTILITY CLASSES
+   ========================================================================== */
+
+/* ── Layout & Containers ── */
 @utility container-page {
   @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
 }
@@ -262,6 +314,14 @@
 
 @utility container-content {
   @apply mx-auto max-w-3xl px-4 sm:px-6;
+}
+
+@utility container-wide {
+  @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8;
+}
+
+@utility container-hero {
+  @apply relative mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 sm:py-28 lg:px-8;
 }
 
 @utility section-y {
@@ -284,7 +344,6 @@
   @apply py-16 sm:py-20;
 }
 
-/* Alias of section-y — kept for callsite compatibility */
 @utility section-header-py {
   @apply py-8 sm:py-12;
 }
@@ -325,30 +384,6 @@
   width: 316px;
 }
 
-@utility h-card-accent {
-  height: 3px;
-}
-
-@utility size-logo {
-  width: 42px;
-  height: 42px;
-}
-
-@utility size-logo-lg {
-  width: 52px;
-  height: 52px;
-}
-
-/* w-mobile-drawer removed — no consumers; width owned by mobile-nav-panel */
-
-@utility container-wide {
-  @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8;
-}
-
-@utility container-hero {
-  @apply relative mx-auto max-w-4xl px-4 py-20 text-center sm:px-6 sm:py-28 lg:px-8;
-}
-
 @utility max-w-hero-copy {
   max-width: var(--width-hero-copy);
 }
@@ -378,19 +413,6 @@
   height: var(--size-hero-glow);
 }
 
-/* size-fab: sets an explicit width — use only for fixed-size circles.
-   Do NOT apply to expanding elements; use min-inline-size + height instead. */
-@utility size-fab {
-  width: var(--size-fab);
-  height: var(--size-fab);
-  min-width: var(--size-fab);
-}
-
-@utility size-fab-icon {
-  width: var(--size-fab-icon);
-  height: var(--size-fab-icon);
-}
-
 @utility min-touch {
   min-width: var(--size-touch-min);
 }
@@ -414,7 +436,12 @@
   @apply translate-x-[30%] -translate-y-[30%];
 }
 
-/* ── Typography ── */
+@utility section-deferred {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 32rem;
+}
+
+/* ── Typography & Headers ── */
 @utility text-eyebrow {
   @apply text-xs-plus font-bold uppercase tracking-eyebrow text-brand-700;
 }
@@ -459,11 +486,11 @@
   @apply text-2xs sm:text-xs-plus text-[var(--color-text-muted)];
 }
 
+/* ── Interactive Links & Buttons ── */
 @utility link-brand {
-  @apply inline-flex items-center gap-1 rounded-sm text-sm-plus font-semibold text-brand-700 transition-colors hover:text-brand-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600;
+  @apply inline-flex items-center gap-1 rounded-sm text-sm-plus font-semibold text-brand-700 dark:text-brand-400 transition-colors hover:text-brand-800 dark:hover:text-brand-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600;
 }
 
-/* ── Buttons ── */
 @utility btn-primary {
   @apply inline-flex items-center gap-2 rounded-full bg-brand-700 px-5 py-2.5 text-sm-plus font-semibold text-white shadow-brand-sm transition-all duration-200 hover:-translate-y-px hover:bg-brand-800 hover:shadow-brand-lg focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-700;
 }
@@ -484,55 +511,46 @@
   @apply inline-flex items-center justify-center gap-2.5 rounded-full bg-[#0070BA] px-8 py-3 text-sm-plus font-bold text-white shadow-paypal transition-all duration-200 hover:-translate-y-px hover:bg-[#005ea6];
 }
 
-/* shadow-whatsapp / shadow-whatsapp-hover removed — shadows owned by whatsapp-fab animation */
+@utility btn-search-submit {
+  @apply flex min-h-11 min-w-11 items-center justify-center self-stretch bg-brand-700 transition-colors hover:bg-brand-800 focus-visible:ring-2 focus-visible:ring-brand-800 focus-visible:ring-offset-2;
+}
 
 @utility shadow-paypal {
   box-shadow: var(--shadow-paypal);
 }
 
-/* fab-safe removed — positioning duplicated inside whatsapp-fab */
+/* ── WhatsApp FAB ── */
+@utility size-fab {
+  width: var(--size-fab);
+  height: var(--size-fab);
+  min-width: var(--size-fab);
+}
 
-/* ── WhatsApp FAB ──
-   Uses modern CSS:
-   · calc-size() for smooth pill-expand (Chrome 129+; instant-jump fallback on Firefox/Safari)
-   · Individual `translate` property to prevent stacking-context shift on hover
-   · interpolate-size: allow-keywords scoped to this element for the calc-size transition
-   · floatY animation paused on hover so the translate lift takes over cleanly
-*/
+@utility size-fab-icon {
+  width: var(--size-fab-icon);
+  height: var(--size-fab-icon);
+}
+
 @utility whatsapp-fab {
-  /* Positioning */
   position: fixed;
   bottom: max(1.25rem, env(safe-area-inset-bottom));
   right: max(1.25rem, env(safe-area-inset-right));
   z-index: 50;
-
-  /* Layout */
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0;
   height: var(--size-fab);
-  /* Collapsed width = circle */
   inline-size: var(--size-fab);
   min-inline-size: var(--size-fab);
   overflow: hidden;
   padding-inline: 0;
   border-radius: 9999px;
-
-  /* Colors */
   background-color: var(--color-whatsapp);
   color: white;
   box-shadow: var(--shadow-whatsapp);
-
-  /* Individual translate — MANDATORY identity base prevents stacking-context jump on hover */
   translate: 0 0;
-
-  /* Enable calc-size() transitions on this element */
   interpolate-size: allow-keywords;
-
-  /* Transitions: size + gap + padding + color + translate.
-     box-shadow intentionally excluded — owned by fabShadowPulse animation.
-     (CSS animation wins over transition when both target the same property.) */
   transition:
     inline-size 300ms cubic-bezier(0.34, 1.56, 0.64, 1),
     gap 250ms ease,
@@ -540,7 +558,6 @@
     background-color 200ms ease,
     translate 200ms ease;
 
-  /* Keyboard focus ring */
   &:focus-visible {
     outline: 2px solid white;
     outline-offset: 3px;
@@ -549,16 +566,11 @@
       0 0 0 5px color-mix(in srgb, var(--color-whatsapp) 35%, transparent);
   }
 
-  /* Continuous float bob + parallax shadow — both synced at 4s */
   animation:
     var(--animate-float),
     fabShadowPulse 4s ease-in-out infinite;
 
-  /* Hover: expand to pill + pause both animations so translate lift takes over */
   &:hover {
-    /* Fallback for browsers without calc-size() */
-    inline-size: auto;
-    /* Modern: smooth expansion to content width */
     inline-size: calc-size(max-content, size + 2rem);
     justify-content: flex-start;
     gap: 0.5rem;
@@ -570,7 +582,7 @@
   }
 }
 
-/* ── Surfaces ── */
+/* ── Component Surfaces & Cards ── */
 @utility card-surface {
   @apply rounded-2xl border border-[var(--color-border-card)] bg-[var(--color-bg-card)] shadow-card transition-all duration-300;
 }
@@ -591,12 +603,25 @@
   @apply transition-all duration-200 hover:-translate-y-0.5 hover:shadow-card-hover;
 }
 
+@utility card-contact {
+  @apply flex items-start gap-3 rounded-xl border border-gray-100 dark:border-slate-800/80 bg-white dark:bg-slate-900/50 px-4 py-3.5 shadow-sm sm:gap-3.5;
+}
+
+@utility card-quote {
+  @apply relative mx-auto mb-7 max-w-lg rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-5 shadow-sm;
+}
+
+@utility h-card-accent {
+  height: 3px;
+}
+
+/* ── Tables & Media Frames ── */
 @utility table-shell {
   @apply overflow-x-auto rounded-2xl border border-gray-200 dark:border-slate-800 shadow-card;
 }
 
 @utility media-frame {
-  @apply relative aspect-square w-full max-w-sm overflow-hidden rounded-2xl border border-gray-100 shadow-card;
+  @apply relative aspect-square w-full max-w-sm overflow-hidden rounded-2xl border border-gray-100 dark:border-slate-800/80 shadow-card;
 }
 
 @utility media-placeholder {
@@ -607,36 +632,17 @@
   @apply relative aspect-video w-full overflow-hidden rounded-xl shadow-card sm:rounded-2xl;
 }
 
-@utility icon-btn-subtle {
-  @apply flex size-11 min-h-11 min-w-11 items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 transition-all duration-200 hover:scale-105 hover:border-brand-500 dark:hover:border-brand-500 hover:text-brand-700 dark:hover:text-brand-400 hover:shadow-brand-sm focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 sm:size-9 sm:min-h-9 sm:min-w-9;
-}
-
-@utility chip-outline {
-  @apply flex items-center gap-1.5 rounded-lg border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-3 py-2 text-sm-plus font-medium text-gray-500 dark:text-slate-400 transition-colors hover:text-brand-600 dark:hover:text-brand-400;
-}
-
-@utility chip-outline-sm {
-  @apply inline-flex min-h-11 items-center gap-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 px-2 py-1 text-xs-plus font-medium text-slate-600 dark:text-slate-400 transition-all duration-200 hover:scale-[1.02] hover:border-brand-500 dark:hover:border-brand-500 hover:text-brand-700 dark:hover:text-brand-400 hover:shadow-brand-sm focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 sm:min-h-0 sm:px-2.5 sm:py-1.5;
-}
-
-@utility check-icon-sm {
-  @apply mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-md border border-brand-100 dark:border-brand-900/50 bg-brand-50 dark:bg-brand-900/30;
+@utility opacity-hero-image {
+  opacity: var(--opacity-hero-image);
 }
 
 @utility hover-scale-image {
   @apply object-cover transition-transform duration-500 ease-out group-hover:scale-105;
 }
 
-@utility input-field {
-  @apply w-full rounded-xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-base-plus text-slate-900 dark:text-slate-100 placeholder:text-gray-500 dark:placeholder:text-slate-500 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/30;
-}
-
+/* ── Badges, Chips & Inputs ── */
 @utility badge-pill {
   @apply w-fit rounded-full border border-brand-100/80 dark:border-brand-900/50 bg-brand-50 dark:bg-brand-900/40 px-2.5 py-0.5 text-2xs font-bold uppercase tracking-kicker text-brand-700 dark:text-brand-400;
-}
-
-@utility empty-state {
-  @apply py-24 text-center text-base-plus text-gray-400;
 }
 
 @utility badge-enrolling {
@@ -655,25 +661,33 @@
   @apply flex size-9 shrink-0 items-center justify-center rounded-xl border border-brand-100 dark:border-brand-900/50 bg-brand-50 dark:bg-brand-900/30 text-base font-bold text-brand-700 dark:text-brand-400;
 }
 
-@utility card-contact {
-  @apply flex items-start gap-3 rounded-xl border border-gray-100 dark:border-slate-800/80 bg-white dark:bg-slate-900/50 px-4 py-3.5 shadow-sm sm:gap-3.5;
+@utility chip-outline {
+  @apply flex items-center gap-1.5 rounded-lg border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-3 py-2 text-sm-plus font-medium text-slate-600 dark:text-slate-400 transition-colors hover:text-brand-600 dark:hover:text-brand-400;
 }
 
-@utility card-quote {
-  @apply relative mx-auto mb-7 max-w-lg rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-5 shadow-sm;
+@utility chip-outline-sm {
+  @apply inline-flex min-h-11 items-center gap-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 px-2 py-1 text-xs-plus font-medium text-slate-600 dark:text-slate-400 transition-all duration-200 hover:scale-[1.02] hover:border-brand-500 dark:hover:border-brand-500 hover:text-brand-700 dark:hover:text-brand-400 hover:shadow-brand-sm focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 sm:min-h-0 sm:px-2.5 sm:py-1.5;
 }
 
-@utility opacity-hero-image {
-  opacity: var(--opacity-hero-image);
+@utility check-icon-sm {
+  @apply mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-md border border-brand-100 dark:border-brand-900/50 bg-brand-50 dark:bg-brand-900/30;
 }
 
-@utility btn-search-submit {
-  @apply flex min-h-11 min-w-11 items-center justify-center self-stretch bg-brand-700 transition-colors hover:bg-brand-800 focus-visible:ring-2 focus-visible:ring-brand-800 focus-visible:ring-offset-2;
+@utility icon-btn-subtle {
+  @apply flex size-11 min-h-11 min-w-11 items-center justify-center rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 text-slate-500 dark:text-slate-400 transition-all duration-200 hover:scale-105 hover:border-brand-500 dark:hover:border-brand-500 hover:text-brand-700 dark:hover:text-brand-400 hover:shadow-brand-sm focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 sm:size-9 sm:min-h-9 sm:min-w-9;
 }
 
-/* ── Backgrounds & effects ── */
+@utility input-field {
+  @apply w-full rounded-xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-base-plus text-slate-900 dark:text-slate-100 placeholder:text-gray-500 dark:placeholder:text-slate-500 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/30;
+}
+
+@utility empty-state {
+  @apply py-24 text-center text-base-plus text-slate-600 dark:text-slate-400;
+}
+
+/* ── Backgrounds & Special Effects ── */
 @utility bg-dot-grid {
-  background-image: radial-gradient(circle, #e2e8f0 1px, transparent 1px);
+  background-image: radial-gradient(circle, var(--color-dot-grid) 1px, transparent 1px);
   background-size: 28px 28px;
 }
 
@@ -689,11 +703,10 @@
   @apply bg-linear-to-br from-gold-600 to-gold-500 bg-clip-text text-transparent;
 }
 
-/* ── Scrollbar ── */
+/* ── Scrollbars & Text Selection ── */
 @utility scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
-
   &::-webkit-scrollbar {
     display: none;
   }
@@ -705,28 +718,24 @@
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-slate-100;
+  @apply bg-slate-100 dark:bg-slate-900;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply rounded-sm bg-slate-300;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-slate-400;
+  @apply rounded-sm bg-slate-300 dark:bg-slate-700 hover:bg-slate-400 dark:hover:bg-slate-600;
 }
 
 ::selection {
-  @apply bg-brand-100 text-brand-700;
+  @apply bg-brand-100 dark:bg-brand-900/50 text-brand-700 dark:text-brand-300;
 }
 
-/* ── Links ── */
+/* ── Navigation Links & Focus Underlines ── */
 @utility link-underline {
   @apply relative rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-600;
 
   &::after {
     content: "";
-    @apply absolute -bottom-0.5 left-0 h-0.5 w-0 rounded-sm bg-brand-600 transition-[width] duration-200 ease-out;
+    @apply absolute -bottom-0.5 left-0 h-0.5 w-0 rounded-sm bg-brand-600 dark:bg-brand-400 transition-[width] duration-200 ease-out;
   }
 
   &:hover::after,
@@ -736,40 +745,17 @@
   }
 }
 
-/* ── Animation delays ── */
-@utility animate-delay-75 {
-  animation-delay: 75ms;
-}
+/* ── Animation Delay Helpers ── */
+@utility animate-delay-75 { animation-delay: 75ms; }
+@utility animate-delay-100 { animation-delay: 100ms; }
+@utility animate-delay-150 { animation-delay: 150ms; }
+@utility animate-delay-200 { animation-delay: 200ms; }
+@utility animate-delay-300 { animation-delay: 300ms; }
+@utility animate-delay-400 { animation-delay: 400ms; }
+@utility animate-delay-500 { animation-delay: 500ms; }
+@utility animate-delay-600 { animation-delay: 600ms; }
 
-@utility animate-delay-100 {
-  animation-delay: 100ms;
-}
-
-@utility animate-delay-150 {
-  animation-delay: 150ms;
-}
-
-@utility animate-delay-200 {
-  animation-delay: 200ms;
-}
-
-@utility animate-delay-300 {
-  animation-delay: 300ms;
-}
-
-@utility animate-delay-400 {
-  animation-delay: 400ms;
-}
-
-@utility animate-delay-500 {
-  animation-delay: 500ms;
-}
-
-@utility animate-delay-600 {
-  animation-delay: 600ms;
-}
-
-/* ── Accessibility ── */
+/* ── Accessibility & Screen Readers ── */
 @utility sr-only {
   @apply absolute -m-px h-px w-px overflow-hidden whitespace-nowrap border-0 p-0;
   clip: rect(0, 0, 0, 0);
@@ -792,52 +778,7 @@
   @apply translate-y-0 opacity-100;
 }
 
-@media (max-width: 1023px) {
-  header button,
-  header nav a,
-  header summary,
-  footer a,
-  footer button,
-  .btn-primary,
-  .btn-secondary,
-  .btn-pill-accent,
-  .link-brand,
-  .icon-btn-subtle,
-  .chip-outline,
-  .chip-outline-sm {
-    min-height: var(--size-touch-min);
-  }
-
-  input,
-  select,
-  textarea {
-    font-size: 16px;
-  }
-}
-
-@utility section-deferred {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 32rem;
-}
-
-@keyframes mobile-nav-fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes mobile-nav-slide-in {
-  from {
-    transform: translateX(-100%);
-  }
-  to {
-    transform: translateX(0);
-  }
-}
-
+/* ── Mobile Navigation Drawer Layout ── */
 @utility mobile-nav-overlay {
   z-index: var(--z-index-drawer-overlay);
   @apply fixed inset-0 touch-none bg-brand-900/70 backdrop-blur-sm;
@@ -850,7 +791,7 @@
   max-width: 100%;
   height: 100dvh;
   max-height: 100dvh;
-  @apply fixed inset-y-0 start-0 flex flex-col border-e border-gray-100 bg-white shadow-2xl;
+  @apply fixed inset-y-0 start-0 flex flex-col border-e border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-2xl;
   animation: mobile-nav-slide-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
@@ -859,14 +800,4 @@ body.mobile-menu-open {
   inset-inline: 0;
   overflow: hidden;
   width: 100%;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .mobile-nav-overlay,
-  .mobile-nav-panel {
-    animation: none;
-  }
-
-  /* FAB animations/transitions already covered by the global
-     animation-duration / transition-duration: 0.01ms rule above. */
 }

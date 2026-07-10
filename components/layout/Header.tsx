@@ -156,10 +156,10 @@ export default function Header({
           <button
             type="button"
             onClick={() => setSearchOpen(true)}
-            className="ml-auto hidden items-center justify-between overflow-hidden rounded-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 text-sm-plus text-gray-400 dark:text-slate-500 lg:flex hover:border-gray-300 dark:hover:border-slate-700 w-search-input cursor-pointer"
+            className="ml-auto hidden items-center justify-between overflow-hidden rounded-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2 text-sm-plus text-slate-600 dark:text-slate-400 lg:flex hover:border-gray-300 dark:hover:border-slate-700 w-search-input cursor-pointer"
           >
             <span>Search...</span>
-            <kbd className="text-2xs rounded bg-slate-100 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 px-1.5 py-0.5">⌘K</kbd>
+            <kbd className="text-2xs rounded bg-slate-100 dark:bg-slate-800 border border-gray-200 dark:border-slate-700 px-1.5 py-0.5 text-slate-600 dark:text-slate-300">⌘K</kbd>
           </button>
 
           <button

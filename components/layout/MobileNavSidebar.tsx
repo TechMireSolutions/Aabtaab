@@ -159,7 +159,7 @@ export default function MobileNavSidebar({
                 </div>
                 <span
                   id={titleId}
-                  className="truncate text-base font-bold tracking-heading text-slate-900"
+                  className="truncate text-base font-bold tracking-heading text-slate-900 dark:text-white"
                 >
                   {siteName}
                 </span>
