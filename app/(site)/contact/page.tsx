@@ -3,10 +3,6 @@ import dynamic from "next/dynamic";
 import PageHeader from "@/components/layout/PageHeader";
 import ProseSection from "@/components/portable-text/ProseSection";
 import { FacebookIcon, YoutubeIcon } from "@/components/icons/SocialIcons";
-
-const ContactForm = dynamic(() => import("./_components/ContactForm"), {
-  ssr: true,
-});
 import { defineCmsPageMetadata } from "@/lib/cms/page";
 import {
   getCmsPage,
@@ -14,6 +10,10 @@ import {
   getSiteSettings,
 } from "@/lib/cms/queries";
 import { whatsappUrl } from "@/lib/urls";
+
+const ContactForm = dynamic(() => import("./_components/ContactForm"), {
+  ssr: true,
+});
 
 export const generateMetadata = defineCmsPageMetadata("contact", {
   path: "/contact",
