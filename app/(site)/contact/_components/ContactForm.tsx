@@ -269,8 +269,8 @@ export default function ContactForm({
               }}
               className={`min-h-11 rounded-xl border px-3 py-2.5 text-sm-plus font-medium transition-colors focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 ${
                 purpose === value
-                  ? "border-brand-600 bg-brand-50 text-brand-800"
-                  : "border-gray-200 text-slate-600 hover:border-gray-300"
+                  ? "border-brand-600 bg-brand-50 dark:bg-brand-900/40 text-brand-800 dark:text-brand-400"
+                  : "border-gray-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:border-gray-300 dark:hover:border-slate-700"
               }`}
             >
               {label}
@@ -289,7 +289,7 @@ export default function ContactForm({
             value={appliedFor}
             onChange={(e) => setAppliedFor(e.target.value)}
             required
-            className="input-field bg-white"
+            className="input-field"
           >
             <option value="">Choose one…</option>
             {options.map((option) => (

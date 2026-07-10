@@ -36,7 +36,7 @@ export default function HowItWorksSection({
                   {step.label}
                 </span>
                 {step.description && (
-                  <span className="text-sm-plus text-gray-500">
+                  <span className="text-sm-plus text-slate-600 dark:text-slate-400">
                     {" "}
                     — {step.description}
                   </span>

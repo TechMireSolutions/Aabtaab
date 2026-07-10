@@ -20,7 +20,7 @@ export default function WhyUsImageSection({
   if (!items || items.length === 0) return null;
 
   return (
-    <section className="section-y bg-white">
+    <section className="section-y bg-white dark:bg-slate-950">
       <div className="container-page">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <div className="order-2 flex justify-center lg:order-1 lg:justify-start">

@@ -23,7 +23,7 @@ export default function CarouselScrollButtons({
     });
   }
 
-  const fadeFrom = bg === "gray" ? "from-slate-50" : "from-white";
+  const fadeFrom = bg === "gray" ? "from-slate-50 dark:from-slate-900" : "from-white dark:from-slate-950";
 
   return (
     <>
@@ -32,7 +32,7 @@ export default function CarouselScrollButtons({
           type="button"
           onClick={() => scrollBy("left")}
           aria-label="Previous"
-          className="flex min-h-11 min-w-11 items-center justify-center rounded-full border-2 border-gray-200 text-gray-500 transition-all duration-200 hover:border-brand-500 hover:bg-brand-50 hover:text-brand-600 focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2"
+          className="flex min-h-11 min-w-11 items-center justify-center rounded-full border-2 border-gray-200 dark:border-slate-700 text-gray-500 dark:text-slate-400 transition-all duration-200 hover:border-brand-500 dark:hover:border-brand-500 hover:bg-brand-50 dark:hover:bg-brand-900/30 hover:text-brand-600 dark:hover:text-brand-400 focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2"
         >
           <svg
             aria-hidden="true"
@@ -49,7 +49,7 @@ export default function CarouselScrollButtons({
           type="button"
           onClick={() => scrollBy("right")}
           aria-label="Next"
-          className="flex min-h-11 min-w-11 items-center justify-center rounded-full border-2 border-gray-200 text-gray-500 transition-all duration-200 hover:border-brand-500 hover:bg-brand-50 hover:text-brand-600 focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2"
+          className="flex min-h-11 min-w-11 items-center justify-center rounded-full border-2 border-gray-200 dark:border-slate-700 text-gray-500 dark:text-slate-400 transition-all duration-200 hover:border-brand-500 dark:hover:border-brand-500 hover:bg-brand-50 dark:hover:bg-brand-900/30 hover:text-brand-600 dark:hover:text-brand-400 focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2"
         >
           <svg
             aria-hidden="true"

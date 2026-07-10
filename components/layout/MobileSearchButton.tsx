@@ -64,7 +64,7 @@ export default function MobileSearchButton({
         aria-label={open ? "Close search" : "Search"}
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
-        className="ml-auto flex h-11 w-11 items-center justify-center rounded-full text-gray-600 transition-colors hover:bg-gray-100 focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 lg:hidden"
+        className="ml-auto flex h-11 w-11 items-center justify-center rounded-full text-gray-600 dark:text-slate-400 transition-colors hover:bg-gray-100 dark:hover:bg-slate-900 focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 lg:hidden"
       >
         {open ? (
           <X className="size-5" aria-hidden="true" />
@@ -84,13 +84,13 @@ export default function MobileSearchButton({
           {/* Search bar — below the sticky header */}
           <div
             ref={panelRef}
-            className="fixed inset-x-0 z-40 border-b border-gray-200 bg-white px-4 py-3 shadow-lg lg:hidden"
+            className="fixed inset-x-0 z-40 border-b border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-4 py-3 shadow-lg lg:hidden"
             style={{ top: "var(--spacing-header)" }}
           >
             <form
               role="search"
               onSubmit={handleSubmit}
-              className="flex overflow-hidden rounded-xl border border-gray-200 bg-slate-50 focus-within:border-brand-600 focus-within:ring-2 focus-within:ring-brand-600/30"
+              className="flex overflow-hidden rounded-xl border border-gray-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 focus-within:border-brand-600 focus-within:ring-2 focus-within:ring-brand-600/30"
             >
               <label htmlFor="mobile-header-search" className="sr-only">
                 Search
@@ -104,7 +104,7 @@ export default function MobileSearchButton({
                 inputMode="search"
                 placeholder={searchPlaceholder}
                 autoComplete="off"
-                className="min-h-11 min-w-0 flex-1 border-0 bg-transparent px-3 text-sm-plus text-slate-700 outline-none placeholder:text-gray-400"
+                className="min-h-11 min-w-0 flex-1 border-0 bg-transparent px-3 text-sm-plus text-slate-700 dark:text-slate-200 outline-none placeholder:text-gray-400 dark:placeholder:text-slate-500"
               />
               <button
                 type="submit"

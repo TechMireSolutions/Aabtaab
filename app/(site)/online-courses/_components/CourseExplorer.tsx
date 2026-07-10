@@ -123,7 +123,7 @@ export default function CourseExplorer({ courses }: CourseExplorerProps) {
       {/* Courses List Grid / Empty State */}
       {filteredCourses.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900/40 py-16 px-4 text-center">
-          <p className="text-sm-plus text-gray-400 dark:text-slate-500 max-w-xs">
+          <p className="text-sm-plus text-slate-600 dark:text-slate-400 max-w-xs">
             No courses match your selected search query or filters.
           </p>
           <button

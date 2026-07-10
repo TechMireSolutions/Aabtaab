@@ -41,7 +41,7 @@ export default async function EventDetailPage({
   const dateLabel = formatEventDateRange(event.startDate, event.endDate);
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white dark:bg-slate-950">
       <EventJsonLd
         title={event.title}
         description={event.seo?.metaDescription || event.description}

@@ -12,7 +12,7 @@ export default function CoursePricingSection({
   if (!tables || tables.length === 0) return null;
 
   return (
-    <section className="section-y bg-white">
+    <section className="section-y bg-white dark:bg-slate-950">
       <div className="container-narrow">
         <div className="mb-12 text-center">
           <p className="text-eyebrow mb-2">Plans</p>
@@ -53,18 +53,18 @@ export default function CoursePricingSection({
                       {(pricingTable.rows ?? []).map((row, rowIndex) => (
                         <tr
                           key={rowIndex}
-                          className={`border-t border-gray-100 ${rowIndex % 2 === 0 ? "bg-white" : "bg-slate-50/60"}`}
+                          className={`border-t border-gray-100 dark:border-slate-800/80 ${rowIndex % 2 === 0 ? "bg-white dark:bg-slate-900/40" : "bg-slate-50/60 dark:bg-slate-900/80"}`}
                         >
-                          <td className="px-5 py-3.5 font-semibold text-slate-900">
+                          <td className="px-5 py-3.5 font-semibold text-slate-900 dark:text-white">
                             {row.plan}
                           </td>
-                          <td className="px-5 py-3.5 text-gray-600">
+                          <td className="px-5 py-3.5 text-gray-600 dark:text-slate-300">
                             {row.weeklyFrequency}
                           </td>
-                          <td className="px-5 py-3.5 text-gray-600">
+                          <td className="px-5 py-3.5 text-gray-600 dark:text-slate-300">
                             {row.monthlyClasses}
                           </td>
-                          <td className="px-5 py-3.5 text-gray-600">
+                          <td className="px-5 py-3.5 text-gray-600 dark:text-slate-300">
                             {row.feePerClass}
                           </td>
                           <td className="px-5 py-3.5 font-semibold text-brand-700">

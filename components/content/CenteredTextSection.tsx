@@ -13,7 +13,7 @@ export default function CenteredTextSection({
 }: CenteredTextSectionProps) {
   if (!heading && !body) return null;
 
-  const sectionClass = bg === "slate" ? "section-muted" : "section-y bg-white";
+  const sectionClass = bg === "slate" ? "section-muted" : "section-y bg-white dark:bg-slate-950";
   const headingClass =
     headingSize === "md"
       ? "heading-section mb-5"

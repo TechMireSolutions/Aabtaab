@@ -20,7 +20,7 @@ export default function PageHeader({
   maxWidth = "xl",
 }: PageHeaderProps) {
   return (
-    <div className="border-b border-gray-100 bg-white">
+    <div className="border-b border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-950">
       <div
         className={`${containerClass[maxWidth]} section-header-py ${
           centered ? "text-center" : ""

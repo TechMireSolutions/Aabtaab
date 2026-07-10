@@ -16,7 +16,7 @@ export default function FeatureCardGrid({
 }: FeatureCardGridProps) {
   if (!items || items.length === 0) return null;
 
-  const sectionClass = bg === "slate" ? "section-muted" : "section-y bg-white";
+  const sectionClass = bg === "slate" ? "section-muted" : "section-y bg-white dark:bg-slate-950";
 
   return (
     <section className={sectionClass}>
@@ -31,18 +31,18 @@ export default function FeatureCardGrid({
                 key={index}
                 className="card-surface p-6 transition-shadow duration-200 hover:shadow-card-hover"
               >
-                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl border border-brand-100 bg-brand-50">
+                <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl border border-brand-100 dark:border-brand-900/50 bg-brand-50 dark:bg-brand-900/40">
                   <Check
                     size={17}
-                    className="text-brand-700"
+                    className="text-brand-700 dark:text-brand-400"
                     strokeWidth={2.5}
                   />
                 </div>
-                <h3 className="mb-2 text-base-plus font-bold text-slate-900">
+                <h3 className="mb-2 text-base-plus font-bold text-slate-900 dark:text-white">
                   {item.title}
                 </h3>
                 {item.description && (
-                  <p className="text-sm-plus leading-relaxed text-gray-500">
+                  <p className="text-sm-plus leading-relaxed text-slate-600 dark:text-slate-400">
                     {item.description}
                   </p>
                 )}
@@ -50,17 +50,17 @@ export default function FeatureCardGrid({
             ) : (
               <div
                 key={index}
-                className="card-surface flex gap-4 p-6 transition-colors duration-200 hover:border-brand-100 hover:bg-brand-50/30"
+                className="card-surface flex gap-4 p-6 transition-colors duration-200 hover:border-brand-100 dark:hover:border-brand-900/50 hover:bg-brand-50/30 dark:hover:bg-brand-900/20"
               >
                 <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-brand-700 text-2xs font-bold text-white">
                   {index + 1}
                 </div>
                 <div>
-                  <h3 className="mb-1.5 text-base-plus font-bold text-slate-900">
+                  <h3 className="mb-1.5 text-base-plus font-bold text-slate-900 dark:text-white">
                     {item.title}
                   </h3>
                   {item.description && (
-                    <p className="text-sm-plus leading-relaxed text-gray-500">
+                    <p className="text-sm-plus leading-relaxed text-slate-600 dark:text-slate-400">
                       {item.description}
                     </p>
                   )}

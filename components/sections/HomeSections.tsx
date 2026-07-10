@@ -113,7 +113,7 @@ export default async function HomeSections() {
       )}
 
       {(posts?.length ?? 0) > 0 && (
-        <section className="section-deferred section-y-lg border-b border-gray-100 bg-white">
+        <section className="section-deferred section-y-lg border-b border-gray-100 dark:border-slate-900 bg-white dark:bg-slate-950">
           <div className="container-page">
             <div className="mb-7 flex flex-col gap-3 sm:mb-10 sm:flex-row sm:items-end sm:justify-between">
               <div>
@@ -164,7 +164,7 @@ export default async function HomeSections() {
       )}
 
       {(testimonials?.length ?? 0) > 0 && (
-        <section className="section-deferred section-y-lg border-b border-gray-100 bg-slate-50">
+        <section className="section-deferred section-y-lg border-b border-gray-100 dark:border-slate-900 bg-slate-50 dark:bg-slate-900/40">
           <div className="container-page">
             <div className="mb-10 text-center">
               <p className="text-eyebrow mb-3 flex items-center justify-center gap-2">
@@ -192,17 +192,17 @@ export default async function HomeSections() {
                       </span>
                     ))}
                   </div>
-                  <p className="text-body-muted mb-5 flex-1 text-gray-600">
+                  <p className="text-body-muted mb-5 flex-1 text-gray-600 dark:text-slate-300">
                     &quot;{t.quote}&quot;
                   </p>
-                  <div className="flex items-center gap-3 border-t border-gray-100 pt-4">
-                    <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-100">
-                      <span className="text-sm-plus font-bold text-brand-700">
+                  <div className="flex items-center gap-3 border-t border-gray-100 dark:border-slate-800/80 pt-4">
+                    <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-100 dark:bg-brand-900/40">
+                      <span className="text-sm-plus font-bold text-brand-700 dark:text-brand-400">
                         {t.name[0]}
                       </span>
                     </div>
                     <div>
-                      <p className="text-sm-plus font-semibold text-slate-800">
+                      <p className="text-sm-plus font-semibold text-slate-800 dark:text-white">
                         {t.name}
                       </p>
                       <p className="text-caption">{t.role}</p>
@@ -215,7 +215,7 @@ export default async function HomeSections() {
         </section>
       )}
 
-      <section className="section-deferred relative overflow-hidden border-y border-slate-200 bg-slate-50 py-10 sm:py-12">
+      <section className="section-deferred relative overflow-hidden border-y border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/40 py-10 sm:py-12">
         <div className="bg-dot-grid pointer-events-none absolute inset-0 opacity-40" />
         <div className="container-content relative max-w-copy text-center">
           <div className="text-eyebrow-gold mb-4 inline-flex items-center gap-2.5">
@@ -231,12 +231,12 @@ export default async function HomeSections() {
               "Your Sadqah and donations help us continue spreading the teachings of Ahlul Bayt (A.S.)"}
           </p>
           <div className="card-quote">
-            <div className="absolute -top-3.5 left-1/2 flex size-7 -translate-x-1/2 items-center justify-center rounded-full border border-slate-200 bg-white">
+            <div className="absolute -top-3.5 left-1/2 flex size-7 -translate-x-1/2 items-center justify-center rounded-full border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
               <span className="text-base-plus leading-none font-bold text-gold-500">
                 &ldquo;
               </span>
             </div>
-            <p className="text-body-muted italic text-slate-600">
+            <p className="text-body-muted italic text-slate-600 dark:text-slate-300">
               {hp?.donateQuote ||
                 "Sadaqah extinguishes the Lord's anger and wards off an evil death."}
             </p>

@@ -25,7 +25,7 @@ export default function NestedBreadcrumbs({
   return (
     <>
       <BreadcrumbJsonLd items={breadcrumbItems} />
-      <div className="border-b border-gray-100 bg-white">
+      <div className="border-b border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-950">
         <div className="container-page py-3">
           <nav aria-label="Breadcrumb" className="text-caption flex flex-wrap items-center gap-1">
             <Link href={baseHref} className="link-brand font-medium">

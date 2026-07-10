@@ -30,7 +30,7 @@ export default async function AboutPage() {
         subtitle={page?.subtitle || "Who we are and what drives us"}
       />
 
-      <div className="section-y bg-white">
+      <div className="section-y bg-white dark:bg-slate-950">
         <div className="container-content">
           {page?.body ? (
             <ProseSection value={page.body} variant="article" />
@@ -68,16 +68,16 @@ export default async function AboutPage() {
                 ].map(({ Icon, title, description }) => (
                   <div
                     key={title}
-                    className="bg-slate-50 rounded-xl p-4 sm:p-5 border border-gray-100"
+                    className="bg-slate-50 dark:bg-slate-900/60 rounded-xl p-4 sm:p-5 border border-gray-100 dark:border-slate-800/80"
                   >
-                    <div className="w-9 h-9 bg-brand-50 border border-brand-100 rounded-xl flex items-center justify-center mb-3">
+                    <div className="w-9 h-9 bg-brand-50 dark:bg-brand-900/30 border border-brand-100 dark:border-brand-800/65 rounded-xl flex items-center justify-center mb-3">
                       <Icon
                         size={15}
-                        className="text-brand-700"
+                        className="text-brand-700 dark:text-brand-400"
                         strokeWidth={1.75}
                       />
                     </div>
-                    <h3 className="font-semibold text-slate-900 text-sm-plus mb-1">
+                    <h3 className="font-semibold text-slate-900 dark:text-white text-sm-plus mb-1">
                       {title}
                     </h3>
                     <p className="text-body-muted">
@@ -87,13 +87,13 @@ export default async function AboutPage() {
                 ))}
               </div>
 
-              <div className="bg-slate-50 rounded-xl p-4 sm:p-6 border border-gray-100">
-                <h3 className="font-semibold text-slate-900 mb-2 text-base-plus">
+              <div className="bg-slate-50 dark:bg-slate-900/60 rounded-xl p-4 sm:p-6 border border-gray-100 dark:border-slate-800/80">
+                <h3 className="font-semibold text-slate-900 dark:text-white mb-2 text-base-plus">
                   Dar Ul Quran
                 </h3>
-                <p className="text-base-plus text-gray-600 leading-relaxed">
+                <p className="text-base-plus text-gray-600 dark:text-slate-300 leading-relaxed">
                   We are affiliated with{" "}
-                  <strong className="text-slate-800">Dar Ul Quran</strong>, our
+                  <strong className="text-slate-800 dark:text-slate-100">Dar Ul Quran</strong>, our
                   dedicated Quranic institute providing structured Quran
                   education programs for students of all ages.
                 </p>
@@ -101,7 +101,7 @@ export default async function AboutPage() {
             </div>
           )}
 
-          <div className="mt-8 sm:mt-10 pt-7 sm:pt-8 border-t border-gray-100 flex flex-wrap gap-3">
+          <div className="mt-8 sm:mt-10 pt-7 sm:pt-8 border-t border-gray-100 dark:border-slate-800 flex flex-wrap gap-3">
             <Link href="/contact" className="btn-primary group">
               Contact Us
               <ArrowRight

@@ -43,7 +43,7 @@ function StatIcon({ label }: { label: string }) {
       fill="none"
       stroke="currentColor"
       strokeWidth="1.75"
-      className="size-3.5 text-brand-700"
+      className="size-3.5 text-brand-700 dark:text-brand-400"
     >
       <path d={paths[label] ?? paths.Students} />
     </svg>
@@ -145,7 +145,7 @@ export default function HeroSection({
           <div className="mt-8 flex flex-wrap items-center gap-5 border-t border-gray-100 dark:border-slate-800 pt-7 motion-safe:animate-fade-up motion-safe:animate-delay-300 sm:gap-6">
             {STATS.map(({ value, label }) => (
               <div key={label} className="flex items-center gap-2.5">
-                <div className="flex size-8 shrink-0 items-center justify-center rounded-xl border border-brand-100 dark:border-brand-900/50 bg-brand-50 dark:bg-brand-950/40 sm:size-9">
+                <div className="flex size-8 shrink-0 items-center justify-center rounded-xl border border-brand-100 dark:border-brand-900/50 bg-brand-50 dark:bg-brand-900/40 sm:size-9">
                   <StatIcon label={label} />
                 </div>
                 <div>

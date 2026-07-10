@@ -27,7 +27,7 @@ export default async function DonatePage() {
 
   return (
     <div>
-      <div className="border-b border-gray-100 bg-white">
+      <div className="border-b border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-950">
         <div className="container-narrow section-header-py text-center">
           <p className="font-arabic mb-3 text-xl-plus leading-none text-brand-700 sm:text-2xl" lang="ar" dir="rtl">
             {settings?.donateArabicVerse ||

@@ -56,7 +56,7 @@ export default async function SearchPage({
           {!term && (
             <p className="text-body-muted">
               Use the search box in the header, or add{" "}
-              <code className="rounded bg-slate-100 px-1.5 py-0.5 text-sm">
+              <code className="rounded bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 text-sm">
                 ?q=your+query
               </code>{" "}
               to this page URL.
@@ -80,11 +80,11 @@ export default async function SearchPage({
                     <span className="badge-pill w-fit">
                       {SEARCH_TYPE_LABELS[item._type]}
                     </span>
-                    <span className="text-base-plus font-semibold text-slate-900">
+                    <span className="text-base-plus font-semibold text-slate-900 dark:text-white">
                       {item.title}
                     </span>
                     {item.summary && (
-                      <span className="text-sm-plus text-gray-500 line-clamp-2">
+                      <span className="text-sm-plus text-slate-600 dark:text-slate-400 line-clamp-2">
                         {item.summary}
                       </span>
                     )}

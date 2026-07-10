@@ -171,7 +171,7 @@
     /* Theme colors */
     --color-bg-page: #ffffff;
     --color-text-page: #0f172a;
-    --color-text-muted: #64748b;
+    --color-text-muted: #475569;
     --color-border-card: #f1f5f9;
     --color-bg-card: #ffffff;
     --color-bg-muted: #f8fafc;
@@ -186,7 +186,7 @@
 
       --color-bg-page: #0f172a;
       --color-text-page: #f8fafc;
-      --color-text-muted: #94a3b8;
+      --color-text-muted: #cbd5e1;
       --color-border-card: #1e293b;
       --color-bg-card: #1e293b;
       --color-bg-muted: #1e293b;
@@ -592,7 +592,7 @@
 }
 
 @utility table-shell {
-  @apply overflow-x-auto rounded-2xl border border-gray-200 shadow-card;
+  @apply overflow-x-auto rounded-2xl border border-gray-200 dark:border-slate-800 shadow-card;
 }
 
 @utility media-frame {
@@ -600,7 +600,7 @@
 }
 
 @utility media-placeholder {
-  @apply flex aspect-square w-full max-w-sm items-center justify-center rounded-2xl border border-gray-200 bg-slate-50;
+  @apply flex aspect-square w-full max-w-sm items-center justify-center rounded-2xl border border-gray-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900;
 }
 
 @utility media-hero {
@@ -612,7 +612,7 @@
 }
 
 @utility chip-outline {
-  @apply flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm-plus font-medium text-gray-500 transition-colors hover:text-brand-600;
+  @apply flex items-center gap-1.5 rounded-lg border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-3 py-2 text-sm-plus font-medium text-gray-500 dark:text-slate-400 transition-colors hover:text-brand-600 dark:hover:text-brand-400;
 }
 
 @utility chip-outline-sm {
@@ -620,7 +620,7 @@
 }
 
 @utility check-icon-sm {
-  @apply mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-md border border-brand-100 bg-brand-50;
+  @apply mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-md border border-brand-100 dark:border-brand-900/50 bg-brand-50 dark:bg-brand-900/30;
 }
 
 @utility hover-scale-image {
@@ -628,11 +628,11 @@
 }
 
 @utility input-field {
-  @apply w-full rounded-xl border border-gray-200 px-4 py-3 text-base-plus text-slate-900 placeholder:text-gray-500 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/30;
+  @apply w-full rounded-xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-3 text-base-plus text-slate-900 dark:text-slate-100 placeholder:text-gray-500 dark:placeholder:text-slate-500 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/30;
 }
 
 @utility badge-pill {
-  @apply w-fit rounded-full border border-brand-100/80 bg-brand-50 px-2.5 py-0.5 text-2xs font-bold uppercase tracking-kicker text-brand-700;
+  @apply w-fit rounded-full border border-brand-100/80 dark:border-brand-900/50 bg-brand-50 dark:bg-brand-900/40 px-2.5 py-0.5 text-2xs font-bold uppercase tracking-kicker text-brand-700 dark:text-brand-400;
 }
 
 @utility empty-state {
@@ -652,15 +652,15 @@
 }
 
 @utility badge-trust {
-  @apply flex size-9 shrink-0 items-center justify-center rounded-xl border border-brand-100 bg-brand-50 text-base font-bold text-brand-700;
+  @apply flex size-9 shrink-0 items-center justify-center rounded-xl border border-brand-100 dark:border-brand-900/50 bg-brand-50 dark:bg-brand-900/30 text-base font-bold text-brand-700 dark:text-brand-400;
 }
 
 @utility card-contact {
-  @apply flex items-start gap-3 rounded-xl border border-gray-100 bg-white px-4 py-3.5 shadow-sm sm:gap-3.5;
+  @apply flex items-start gap-3 rounded-xl border border-gray-100 dark:border-slate-800/80 bg-white dark:bg-slate-900/50 px-4 py-3.5 shadow-sm sm:gap-3.5;
 }
 
 @utility card-quote {
-  @apply relative mx-auto mb-7 max-w-lg rounded-xl border border-slate-200 bg-white px-6 py-5 shadow-sm;
+  @apply relative mx-auto mb-7 max-w-lg rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-5 shadow-sm;
 }
 
 @utility opacity-hero-image {
