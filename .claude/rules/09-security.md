@@ -9,7 +9,7 @@
 ## 1. General Security
 
 * HTTPS must remain enabled in production.
-* Cloudflare SSL/TLS must use **Full (strict)** mode.
+* **Strict SSL/HTTPS:** Ensure Cloudflare's "Always Use HTTPS" is enabled. No page or asset should be served over HTTP. Cloudflare SSL/TLS must use **Full (strict)** mode.
 * Never treat HTTPS alone as proof that the application is secure.
 * Never expose secrets, API keys, tokens, SMTP credentials, or Sanity write tokens to the browser.
 * Only variables intentionally safe for browsers may use the `NEXT_PUBLIC_` prefix.
@@ -84,6 +84,7 @@ Every public write endpoint must include:
 * Cloudflare Turnstile verification. When `TURNSTILE_SECRET_KEY` is defined in environmental configuration, verification tokens (`token`) must be validated against `https://challenges.cloudflare.com/turnstile/v0/siteverify` on the server before processing submissions.
 
 * Use Upstash Redis rate limiting for contact forms and other abuse-sensitive routes (`lib/rate-limit.ts`).
+* **Bot Whitelisting:** When implementing Upstash Redis rate limiting for your application routes, explicitly bypass or whitelist known search engine user agents (Googlebot, Bingbot) to prevent accidental crawl blocks.
 * Do not rely on in-memory rate limiting because PM2 runs multiple processes.
 * Production endpoints must not silently disable rate limiting when Redis is unavailable. Record the failure in Sentry and return a controlled response according to the endpoint’s risk level.
 * Do not reveal whether a particular email address, account, or private resource exists.

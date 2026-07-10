@@ -28,7 +28,7 @@ Choose rendering intentionally:
 
 ## 3. Images
 
-* Use `next/image` for content images whenever possible.
+* **Image Optimization:** Never use standard `<img>` tags. Always map Sanity images to the `next/image` component to ensure automatic WebP/AVIF conversion, lazy loading, and explicit width/height attributes (preventing Cumulative Layout Shift).
 * Every image must have known dimensions or a stable aspect ratio to avoid layout shift.
 * Provide a correct `sizes` attribute for responsive images. Prevent mobile payload overhead on hidden desktop images by setting sizes explicitly (e.g. `sizes="(max-width: 768px) 0px, 55vw"` on `hidden md:block` hero images).
 * Use modern optimised formats (WebP, AVIF) through the Next.js image pipeline.
@@ -41,7 +41,7 @@ Choose rendering intentionally:
 
 ## 4. Fonts
 
-* Use `next/font` (Plus Jakarta Sans via `next/font/google` in `app/layout.tsx`).
+* **Font Loading:** Use `next/font` for local or Google fonts to ensure CSS is inlined and zero layout shift occurs during font loading (Plus Jakarta Sans via `next/font/google` in `app/layout.tsx`).
 * Avoid loading unnecessary font families or weights.
 * Define reliable fallback fonts.
 * Ensure text remains visible while fonts load (`display: "swap"`).
@@ -73,3 +73,4 @@ Rules:
 * Avoid Cumulative Layout Shift (CLS) on hydration-dependent widgets (e.g. countdown timers) by rendering layout-stable placeholder skeletons of the exact same dimensions when not mounted.
 * Do not autoplay heavy media.
 * Keep critical content available without waiting for client-side JavaScript.
+* **Route Prefetching:** Utilize the `<Link>` component for all internal navigation to leverage Next.js's automatic background prefetching for faster perceived page loads. Do not bypass with custom routing functions unless strictly required.

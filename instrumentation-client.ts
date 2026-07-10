@@ -10,6 +10,7 @@ if (dsn) {
     replaysSessionSampleRate: 0,
     replaysOnErrorSampleRate: process.env.NODE_ENV === "production" ? 0.1 : 0,
     enabled: process.env.NODE_ENV === "production",
+    ignoreErrors: ["NEXT_NOT_FOUND"],
   });
 }
 

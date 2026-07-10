@@ -26,7 +26,7 @@ export async function generateMetadata({
       ? `Search results for “${term}” on ${siteName}`
       : "Search articles, courses, services, and events.",
     path: term ? `/search?q=${encodeURIComponent(term)}` : "/search",
-    noIndex: Boolean(term),
+    noIndex: true,
   });
 }
 

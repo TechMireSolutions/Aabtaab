@@ -23,6 +23,13 @@ description: >-
 
 Homepage: `absoluteTitle: true` + OG from `homepage.heroImage` or site logo.
 
+## Metadata API and Canonicalization
+
+- **Metadata API Usage:** Utilize the built-in Next.js Metadata API (`generateMetadata` for dynamic pages, `metadata` object for static pages) to generate `<title>`, `<meta name="description">`, and Open Graph tags.
+- **Strict Canonicalization:** Every page must output a self-referencing canonical URL in the metadata object (`alternates: { canonical: '...' }`) to prevent duplicate content issues.
+- **Trailing Slash Consistency:** Enforce strict URL structure (always trailing slash, or never) via Next.js config and Cloudflare page rules. Redirect the alternate version via a 301 redirect.
+
+
 ## OG image resolution
 
 ```ts
@@ -47,11 +54,12 @@ getDefaultOgImageUrl(); // https://…/og-default.png
 
 ## Sitemap & robots
 
-- `app/sitemap.ts` — static indexable routes + dynamic posts/courses/services/events
-- **Exclude** `/search` from sitemap
-- Dynamic entries include `lastModified` from CMS
-- GROQ slug queries filter `seo.noIndex != true`
-- `app/robots.ts` — allow `/`; disallow `/studio/`, `/api/`
+- **Dynamic Sitemaps:** Implement `app/sitemap.ts` to automatically generate `sitemap.xml`. Query Sanity directly within this file to yield all published slugs, last modified dates, and update frequencies.
+- **Robots.txt Generation:** Implement `app/robots.ts` to block internal routes (e.g., `/api/`, `/studio/`) and point directly to the production sitemap.
+- Exclude `/search` from sitemap.
+- Dynamic entries include `lastModified` from CMS.
+- GROQ slug queries filter `seo.noIndex != true`.
+
 
 ## Site search
 

@@ -57,6 +57,7 @@ npm run migrate:sanity       # apply on server before build when schema/data cha
 ## Revalidation
 
 Webhook: `POST /api/revalidate` → `lib/revalidate.ts` + `CACHE_TAGS`.
+Set up Sanity webhooks connected to a Next.js API route (`/api/revalidate`) using `revalidatePath` or `revalidateTag`. This ensures search engines see fresh content dynamically without requiring full application rebuilds on Hetzner.
 
 Supported `_type` values include: `post`, `course`, `service`, `event`, `page`, `siteSettings`, `homepageSettings`, `navigation`, `testimonial`.
 
@@ -66,6 +67,7 @@ Navigation documents: `title == "header"` → `headerNavQuery`; `title == "foote
 
 Each public content type should contain appropriate fields for: Title, Slug, Status, Main content, Excerpt, Featured image, Alternative text, SEO title, Meta description, Social image, and dates.
 * Use schema validation for required fields and length constraints. Do not make every field optional.
+* **Mandatory Alt Text:** Enforce `validation: Rule.required()` for alt text fields on all image schemas within Sanity to ensure SEO and accessibility compliance.
 * Prevent duplicate or invalid slugs where possible.
 * Provide helpful field descriptions for content editors.
 
@@ -81,7 +83,7 @@ Each public content type should contain appropriate fields for: Title, Slug, Sta
 ## Portable Text
 
 * Use central Portable Text components (`ProseSection`, `PortableTextBody`).
-* Define rendering for headings, paragraphs, lists, images, links, and custom blocks.
+* **Semantic Portable Text:** Configure the `@portabletext/react` components to output strictly semantic HTML (e.g., `<h2>`, `<h3>`, `<blockquote>`, `<p>`, `<ul>`, `<li>`) rather than heavily nested or generic `<div>` tags.
 * **Do not** allow arbitrary HTML injection. Handle unknown block types safely.
 * Ensure Portable Text headings follow the page's heading hierarchy.
 * Optimise Portable Text images through the approved image pipeline.

@@ -6,6 +6,7 @@ const emptyPolyfillAbsolute = path.join(process.cwd(), "lib/empty-polyfill.js");
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  trailingSlash: false,
 
   typescript: {
     ignoreBuildErrors: true,

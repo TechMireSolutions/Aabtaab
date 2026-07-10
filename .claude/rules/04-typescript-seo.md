@@ -14,12 +14,15 @@
 
 ## SEO & metadata
 
+- **Metadata API Usage:** Utilize the built-in Next.js Metadata API (`generateMetadata` for dynamic pages, `metadata` object for static pages) to generate `<title>`, `<meta name="description">`, and Open Graph tags.
+- **Strict Canonicalization:** Every page must output a self-referencing canonical URL in the metadata object (`alternates: { canonical: '...' }`) to prevent duplicate content issues.
 - Site metadata: `app/layout.tsx` `generateMetadata`.
 - Pages: `defineCmsPageMetadata`, `buildPageMetadata`, `buildNestedSlugMetadata`, `buildPostPageMetadata`.
 - OG images: `resolveDocOgImage()` in `lib/seo/resolve-og-image.ts` — seo override → featured/hero/icon image.
 - Default OG: `getDefaultOgImageUrl()` → `/og-default.png` (applied in `buildPageMetadata` when no CMS image).
 - JSON-LD: `lib/seo/JsonLd.tsx` — use existing helpers (do not hand-roll schema).
-- Sitemap/robots: `app/sitemap.ts`, `app/robots.ts`.
+- **Dynamic Sitemaps:** Implement `app/sitemap.ts` to automatically generate `sitemap.xml`. Query Sanity directly within this file to yield all published slugs, last modified dates, and update frequencies.
+- **Robots.txt Generation:** Implement `app/robots.ts` to block internal routes (e.g., `/api/`, `/studio/`) and point directly to the production sitemap.
 - Full SEO reference: **`techstack.md`** § SEO.
 
 ## JSON-LD helpers (use these)
@@ -79,6 +82,8 @@
 
 * Every indexable page must have: unique page title, unique description, canonical URL, Open Graph metadata, social image, and indexing directives.
 * For CMS-driven pages, use `generateMetadata` to derive metadata dynamically.
+* **Strict Canonicalization:** Output a self-referencing canonical URL in the metadata object (`alternates: { canonical: '...' }`) on all routes.
+* **Trailing Slash Consistency:** Enforce a strict URL structure (either always trailing slash, or never) via Next.js config and Cloudflare page rules. Redirect the alternate version via a 301 redirect.
 * Use short, lowercase, and stable slugs. Redirect old URLs if slugs change.
 * Exclude drafts, preview routes, studio routes, and private/search results from the sitemap.
 * Validate all generated JSON-LD structured data and escape output safely.

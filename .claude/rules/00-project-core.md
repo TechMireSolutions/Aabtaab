@@ -20,7 +20,7 @@
 * **Monitoring:** **Sentry**
 * **Testing:** **Vitest** (unit) and **Playwright** (E2E)
 * **Hosting:** **Hetzner VPS** (PM2 cluster, port **3000**)
-* **Proxy / CDN:** **Cloudflare** (Full strict mode)
+* **Proxy / CDN:** **Cloudflare** (Full strict mode, strict HTTPS/SSL, trailing slash redirection)
 * **CI/CD:** **GitHub Actions**
 
 Full reference: [techstack.md](file:///Users/syedaalin/Documents/aabtaab/techstack.md) (dependencies, SEO, production, env vars).

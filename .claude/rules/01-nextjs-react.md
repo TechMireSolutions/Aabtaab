@@ -8,8 +8,7 @@
 
 ## Server vs client
 
-- **Server Components by default** — pages and layouts fetch data on the server.
-- **`"use client"` only** for interactivity: forms, menus, carousels, hooks, browser APIs.
+- **Server Components First:** Default to React Server Components (RSC) to pre-render HTML on the server. Only use `"use client"` when interactivity or browser APIs are strictly required.
 - Push client boundaries **down** the tree (e.g. `ContactForm`, `Header`, `HeroSection`).
 - **`import type { ReactNode } from "react"`** — always import `ReactNode` explicitly. Do not use `React.ReactNode` without a React import; it relies on the global JSX ambient type and fails under strict isolation.
 
@@ -85,4 +84,5 @@ Rules:
 - Unnecessary `useEffect` for data that can load on the server.
 - Duplicating cache logic — extend `sanityFetch` or `lib/cms/queries.ts`.
 - Converting an entire page into a Client Component merely to support one interactive element.
+- Standard custom click handlers or `window.location` for simple internal navigation; utilize the `<Link>` component for all internal navigation to leverage Next.js's automatic background prefetching for faster perceived page loads.
 

@@ -46,6 +46,16 @@ Exit: `/api/draft/disable` or amber banner link.
 
 When draft mode is active, `sanityFetch` uses preview client and bypasses ISR cache.
 
+## Schema & Portable Text Standards
+
+- **Mandatory Alt Text:** Enforce `validation: Rule.required()` for alt text fields on all image schemas within Sanity to ensure proper image accessibility and search engine crawls.
+- **Semantic Portable Text:** Configure the `@portabletext/react` components to output strictly semantic HTML (e.g., `<h2>`, `<h3>`, `<blockquote>`, `<p>`, `<ul>`, `<li>`) rather than heavily nested or generic `<div>` tags.
+
+## On-Demand Revalidation (ISR)
+
+Set up Sanity webhooks connected to a Next.js API route (`/api/revalidate`) using `revalidatePath` or `revalidateTag`. This ensures search engines see fresh content without requiring full application rebuilds on Hetzner.
+
+
 ## Deploy note
 
 On server, run migrations **before** `npm run build` when CMS fields changed.

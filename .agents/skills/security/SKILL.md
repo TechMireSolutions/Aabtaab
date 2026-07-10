@@ -39,14 +39,11 @@ export const contactFormSchema = z.object({
 - If the honeypot field (`website`) is not empty, silently reject or abort the submission to block bots without exposing the failure reason.
 
 ### 3. API rate limiting
-- public API routes must be protected using `@upstash/ratelimit`:
-```typescript
-import { Ratelimit } from "@upstash/ratelimit";
-import { Redis } from "@upstash/redis";
-
-// Configured using Upstash Redis client
-```
+- public API routes must be protected using `@upstash/ratelimit`.
+- **Bot Whitelisting:** When implementing Upstash Redis rate limiting for your application routes, explicitly bypass or whitelist known search engine user agents (Googlebot, Bingbot) to prevent accidental crawl blocks.
 - If Redis is unavailable, fallback to an in-memory or graceful allowance while logging a warning to Sentry.
+- **Strict SSL/HTTPS:** Ensure Cloudflare's "Always Use HTTPS" is enabled. No page or asset should be served over HTTP.
+
 
 ### 4. Cloudflare Turnstile Verification
 - Add `token` optional string field to Zod validation schema.

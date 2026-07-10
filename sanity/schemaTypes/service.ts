@@ -51,6 +51,14 @@ export const service = defineType({
       type: "image",
       title: "Card / Cover Image",
       options: { hotspot: true },
+      fields: [
+        defineField({
+          name: "alt",
+          type: "string",
+          title: "Alt Text",
+          validation: (r) => r.required(),
+        }),
+      ],
       group: "content",
     }),
     defineField({
@@ -77,7 +85,14 @@ export const service = defineType({
         {
           type: "image",
           options: { hotspot: true },
-          fields: [defineField({ name: "alt", type: "string" })],
+          fields: [
+            defineField({
+              name: "alt",
+              type: "string",
+              title: "Alt Text",
+              validation: (r) => r.required(),
+            }),
+          ],
         },
       ],
       group: "content",
@@ -116,6 +131,14 @@ export const service = defineType({
       type: "image",
       title: "Hero — Background Image",
       options: { hotspot: true },
+      fields: [
+        defineField({
+          name: "alt",
+          type: "string",
+          title: "Alt Text",
+          validation: (r) => r.required(),
+        }),
+      ],
       group: "sections",
     }),
     defineField({
@@ -144,6 +167,14 @@ export const service = defineType({
       type: "image",
       title: '"Why Use Our Platform" — Left Side Image',
       options: { hotspot: true },
+      fields: [
+        defineField({
+          name: "alt",
+          type: "string",
+          title: "Alt Text",
+          validation: (r) => r.required(),
+        }),
+      ],
       group: "sections",
     }),
     defineField({

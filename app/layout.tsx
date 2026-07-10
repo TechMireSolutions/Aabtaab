@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans, Playfair_Display, Amiri } from "next/font/google";
 import { resolveSiteName } from "@/lib/constants";
@@ -73,6 +74,9 @@ export async function generateMetadata(): Promise<Metadata> {
     title: {
       default: siteName,
       template: `%s | ${siteName}`,
+    },
+    alternates: {
+      canonical: "/",
     },
 
     // ── Core meta ───────────────────────────────────────────────────────────
@@ -227,7 +231,7 @@ async function SiteSchemas() {
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <html lang="en" dir="ltr">

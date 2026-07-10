@@ -28,6 +28,8 @@ Pass relevant tags in each `sanityFetch` call.
 
 `POST /api/revalidate` — `app/api/revalidate/route.ts`
 
+Set up Sanity webhooks connected to this Next.js API route using `revalidatePath` or `revalidateTag`. This ensures search engines see fresh content dynamically without requiring full application rebuilds on Hetzner.
+
 **Auth:** header `x-sanity-webhook-secret` or query `?secret=` must match `SANITY_REVALIDATE_SECRET`.
 
 **Body:** `{ _type, slug?: { current } }`

@@ -7,11 +7,11 @@ export default async function manifest(): Promise<MetadataRoute.Manifest> {
   const settings = await getSiteSettings();
   const siteName = resolveSiteName(settings);
 
-  const dynamicIconUrl = settings?.logo
-    ? urlFor(settings.logo).width(512).height(512).format("png").url()
-    : settings?.favicon
-      ? urlFor(settings.favicon).width(512).height(512).format("png").url()
-      : "/og-default.png";
+  const dynamicIconUrl = settings?.favicon
+    ? urlFor(settings.favicon).width(512).height(512).fit("crop").format("png").url()
+    : settings?.logo
+      ? urlFor(settings.logo).width(512).height(512).fit("crop").format("png").url()
+      : "/icon-512.png";
 
   return {
     name: siteName,

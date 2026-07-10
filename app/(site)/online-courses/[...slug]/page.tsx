@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound, redirect } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import NestedBreadcrumbs from "@/components/content/NestedBreadcrumbs";
 import NestedChildrenGrid from "@/components/content/NestedChildrenGrid";
 import CourseHeroSection from "@/components/content/CourseHeroSection";
@@ -67,7 +67,7 @@ export default async function CourseCatchAllPage({
     course.parent as SlugParent | null,
   );
   if (currentPath !== canonicalPath) {
-    redirect(canonicalPath);
+    permanentRedirect(canonicalPath);
   }
 
   const enrollHref = course.enrollmentLink || "/contact";

@@ -28,6 +28,14 @@ export const homepageSettings = defineType({
       type: "image",
       title: "Hero Background Image",
       options: { hotspot: true },
+      fields: [
+        defineField({
+          name: "alt",
+          type: "string",
+          title: "Alt Text",
+          validation: (r) => r.required(),
+        }),
+      ],
     }),
     defineField({
       name: "heroBadgeText",

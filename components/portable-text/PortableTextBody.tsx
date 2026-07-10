@@ -1,9 +1,42 @@
 import {
   PortableText,
   type PortableTextProps,
+  type PortableTextComponents,
 } from "@portabletext/react";
 
 type PortableTextValue = PortableTextProps["value"];
+
+const semanticComponents: PortableTextComponents = {
+  block: {
+    h1: ({ children }) => <h1>{children}</h1>,
+    h2: ({ children }) => <h2>{children}</h2>,
+    h3: ({ children }) => <h3>{children}</h3>,
+    blockquote: ({ children }) => <blockquote>{children}</blockquote>,
+    normal: ({ children }) => <p>{children}</p>,
+  },
+  list: {
+    bullet: ({ children }) => <ul>{children}</ul>,
+    number: ({ children }) => <ol>{children}</ol>,
+  },
+  listItem: {
+    bullet: ({ children }) => <li>{children}</li>,
+    number: ({ children }) => <li>{children}</li>,
+  },
+  marks: {
+    link: ({ children, value }) => {
+      const href = value?.href || "";
+      const isExternal = /^https?:\/\//.test(href);
+      return (
+        <a
+          href={href}
+          {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+        >
+          {children}
+        </a>
+      );
+    },
+  },
+};
 
 interface PortableTextBodyProps extends Omit<PortableTextProps, "value"> {
   value: unknown;
@@ -15,6 +48,10 @@ export default function PortableTextBody({
   ...props
 }: PortableTextBodyProps) {
   return (
-    <PortableText value={value as PortableTextValue} {...props} />
+    <PortableText
+      value={value as PortableTextValue}
+      components={semanticComponents}
+      {...props}
+    />
   );
 }

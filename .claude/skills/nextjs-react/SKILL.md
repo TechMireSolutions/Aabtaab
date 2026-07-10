@@ -12,9 +12,10 @@ description: >-
 
 ## Defaults
 
-- **Server Components** for pages/layouts — fetch on the server.
-- **`"use client"`** only for interactivity: forms, menus, carousels, hooks.
+- **Server Components First:** Default to React Server Components (RSC) to pre-render HTML on the server. Only use `"use client"` when interactivity or browser APIs are strictly required.
 - Push client boundaries **down** (e.g. `ContactForm`, `Header`).
+- **Route Prefetching:** Utilize the `<Link>` component for all internal navigation to leverage Next.js's automatic background prefetching for faster perceived page loads.
+
 
 ## Data fetching
 

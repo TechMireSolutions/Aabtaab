@@ -48,7 +48,14 @@ export const event = defineType({
         {
           type: "image",
           options: { hotspot: true },
-          fields: [defineField({ name: "alt", type: "string" })],
+          fields: [
+            defineField({
+              name: "alt",
+              type: "string",
+              title: "Alt Text",
+              validation: (r) => r.required(),
+            }),
+          ],
         },
       ],
     }),

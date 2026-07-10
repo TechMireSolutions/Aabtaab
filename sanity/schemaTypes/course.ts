@@ -69,6 +69,14 @@ export const course = defineType({
       type: "image",
       title: "Card / Hero Image",
       options: { hotspot: true },
+      fields: [
+        defineField({
+          name: "alt",
+          type: "string",
+          title: "Alt Text",
+          validation: (r) => r.required(),
+        }),
+      ],
       group: "content",
     }),
 
@@ -108,7 +116,14 @@ export const course = defineType({
         {
           type: "image",
           options: { hotspot: true },
-          fields: [defineField({ name: "alt", type: "string" })],
+          fields: [
+            defineField({
+              name: "alt",
+              type: "string",
+              title: "Alt Text",
+              validation: (r) => r.required(),
+            }),
+          ],
         },
       ],
       group: "content",

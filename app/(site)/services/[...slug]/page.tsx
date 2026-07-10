@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound, redirect } from "next/navigation";
+import { notFound, permanentRedirect } from "next/navigation";
 import { heroImageUrl, urlFor } from "@/sanity/lib/image";
 import NestedBreadcrumbs from "@/components/content/NestedBreadcrumbs";
 import NestedChildrenGrid from "@/components/content/NestedChildrenGrid";
@@ -73,7 +73,7 @@ export default async function ServiceCatchAllPage({
     service.parent as SlugParent | null,
   );
   if (currentPath !== canonicalPath) {
-    redirect(canonicalPath);
+    permanentRedirect(canonicalPath);
   }
 
   const servicePageUrl = absoluteUrl(currentPath);

@@ -46,10 +46,7 @@ export const post = defineType({
           title: "Alt text",
           description:
             "Describe the image for screen readers and search engines.",
-          validation: (r) =>
-            r
-              .required()
-              .warning("Alt text is required for accessibility and image SEO"),
+          validation: (r) => r.required(),
         }),
       ],
     }),
@@ -96,8 +93,7 @@ export const post = defineType({
               name: "alt",
               type: "string",
               title: "Alt text",
-              validation: (r) =>
-                r.required().warning("Alt text required for every image"),
+              validation: (r) => r.required(),
             }),
           ],
         },

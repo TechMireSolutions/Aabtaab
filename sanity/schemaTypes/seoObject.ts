@@ -37,6 +37,7 @@ export const seoObject = defineType({
           name: "alt",
           type: "string",
           title: "Alt text for the OG image",
+          validation: (r) => r.required(),
         }),
       ],
     }),
