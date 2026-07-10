@@ -403,7 +403,7 @@ NEXT_PUBLIC_SITE_URL=https://aabtaab.com
 
 | Command | Description |
 |---------|-------------|
-| `npm run dev` | Development server (localhost:3000) |
+| `npm run dev` | Development server (https://aabtaab.com) |
 | `npm run build` | Production build |
 | `npm run start` | Production server via `scripts/start-production.cjs` |
 | `npm run lint` | ESLint |
@@ -494,7 +494,7 @@ Upgrade workflow: `.cursor/rules/05-dependencies-upgrade.mdc`.
 ```bash
 cp .env.example .env.local   # fill Sanity + site URL
 npm install
-npm run dev                  # http://localhost:3000
+npm run dev                  # https://aabtaab.com
 ```
 
 Pre-deploy check:

@@ -9,7 +9,7 @@ Full stack, dependencies, SEO, security, and production details: **[techstack.md
 ```bash
 cp .env.example .env.local   # fill Sanity + site URL
 npm install
-npm run dev                    # http://localhost:3000
+npm run dev                    # https://aabtaab.com
 ```
 
 ### Required environment

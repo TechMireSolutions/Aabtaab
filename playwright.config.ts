@@ -8,19 +8,19 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: "list",
   use: {
-    baseURL: "http://localhost:3000",
+    baseURL: "https://aabtaab.com",
     trace: "on-first-retry",
   },
   projects: [{ name: "chromium", use: { ...devices["Desktop Chrome"] } }],
   webServer: {
     command: "node scripts/start-production.cjs",
-    url: "http://localhost:3000",
+    url: "https://aabtaab.com",
     reuseExistingServer: !process.env.CI,
     timeout: 180_000,
     env: {
       NEXT_PUBLIC_SANITY_PROJECT_ID: "ci-placeholder",
       NEXT_PUBLIC_SANITY_DATASET: "production",
-      NEXT_PUBLIC_SITE_URL: "http://localhost:3000",
+      NEXT_PUBLIC_SITE_URL: "https://aabtaab.com",
       SANITY_API_TOKEN: "mock-api-token",
       SANITY_REVALIDATE_SECRET: "mock-revalidate-secret",
       NODE_ENV: "production",
