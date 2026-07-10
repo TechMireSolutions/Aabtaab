@@ -101,28 +101,47 @@ export default function EventsCountdown({ events }: EventsCountdownProps) {
 
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center shrink-0">
             {/* Timer boxes */}
-            {mounted && timeLeft.total > 0 && (
-              <div className="flex gap-2.5">
-                {[
-                  { value: timeLeft.days, label: "Days" },
-                  { value: timeLeft.hours, label: "Hrs" },
-                  { value: timeLeft.minutes, label: "Min" },
-                  { value: timeLeft.seconds, label: "Sec" },
-                ].map(({ value, label }) => (
-                  <div
-                    key={label}
-                    className="flex size-14 sm:size-16 flex-col items-center justify-center rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xs"
-                  >
-                    <span className="font-display text-lg sm:text-xl font-bold leading-none text-gold-400">
-                      {String(value).padStart(2, "0")}
-                    </span>
-                    <span className="text-[10px] uppercase tracking-wider text-slate-400 mt-1 font-semibold">
-                      {label}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
+            <div className="flex gap-2.5 min-h-[56px] sm:min-h-[64px]">
+              {!mounted || timeLeft.total <= 0 ? (
+                <>
+                  {[
+                    { label: "Days" },
+                    { label: "Hrs" },
+                    { label: "Min" },
+                    { label: "Sec" },
+                  ].map(({ label }) => (
+                    <div
+                      key={label}
+                      className="flex size-14 sm:size-16 flex-col items-center justify-center rounded-2xl border border-white/5 bg-white/5 animate-pulse"
+                    >
+                      <span className="font-display text-lg sm:text-xl font-bold leading-none text-gold-500/20">--</span>
+                      <span className="text-[10px] uppercase tracking-wider text-slate-500 mt-1 font-semibold">{label}</span>
+                    </div>
+                  ))}
+                </>
+              ) : (
+                <>
+                  {[
+                    { value: timeLeft.days, label: "Days" },
+                    { value: timeLeft.hours, label: "Hrs" },
+                    { value: timeLeft.minutes, label: "Min" },
+                    { value: timeLeft.seconds, label: "Sec" },
+                  ].map(({ value, label }) => (
+                    <div
+                      key={label}
+                      className="flex size-14 sm:size-16 flex-col items-center justify-center rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xs"
+                    >
+                      <span className="font-display text-lg sm:text-xl font-bold leading-none text-gold-400">
+                        {String(value).padStart(2, "0")}
+                      </span>
+                      <span className="text-[10px] uppercase tracking-wider text-slate-400 mt-1 font-semibold">
+                        {label}
+                      </span>
+                    </div>
+                  ))}
+                </>
+              )}
+            </div>
 
             <Link
               href={`/events/${nextEvent.slug.current}`}

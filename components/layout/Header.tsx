@@ -65,6 +65,7 @@ function SiteLogo({
             width={size}
             height={size}
             sizes={`${size}px`}
+            priority
             className="h-full w-full object-cover"
           />
         ) : (

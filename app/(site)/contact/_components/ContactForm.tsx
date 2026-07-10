@@ -214,6 +214,25 @@ export default function ContactForm({
         <div
           role="radiogroup"
           aria-labelledby={fieldIds.purpose}
+          onKeyDown={(e) => {
+            const purposes: ContactPurpose[] = ["general", "course", "service", "other"];
+            const idx = purposes.indexOf(purpose);
+            let nextIdx = idx;
+            if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+              e.preventDefault();
+              nextIdx = (idx + 1) % purposes.length;
+            } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+              e.preventDefault();
+              nextIdx = (idx - 1 + purposes.length) % purposes.length;
+            } else {
+              return;
+            }
+            const nextVal = purposes[nextIdx];
+            setPurpose(nextVal);
+            setAppliedFor("");
+            const btn = e.currentTarget.querySelectorAll("button")[nextIdx];
+            btn?.focus();
+          }}
           className="grid grid-cols-2 gap-2"
         >
           {(
@@ -229,6 +248,7 @@ export default function ContactForm({
               type="button"
               role="radio"
               aria-checked={purpose === value}
+              tabIndex={purpose === value ? 0 : -1}
               onClick={() => {
                 setPurpose(value);
                 setAppliedFor("");

@@ -65,6 +65,7 @@ export default function CourseExplorer({ courses }: CourseExplorerProps) {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search courses by name or topics..."
+            aria-label="Search courses by name or topics"
             className="w-full rounded-xl border border-gray-200 dark:border-slate-800 bg-transparent py-2.5 pr-4 pl-10 text-sm-plus text-slate-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20"
           />
         </div>
@@ -75,6 +76,7 @@ export default function CourseExplorer({ courses }: CourseExplorerProps) {
           <select
             value={selectedSubject}
             onChange={(e) => setSelectedSubject(e.target.value)}
+            aria-label="Filter courses by subject"
             className="w-full appearance-none rounded-xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-2.5 pr-8 pl-10 text-sm-plus text-slate-700 dark:text-slate-300 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20 cursor-pointer"
           >
             <option value="">All Subjects</option>
@@ -93,6 +95,7 @@ export default function CourseExplorer({ courses }: CourseExplorerProps) {
           <select
             value={selectedInstructor}
             onChange={(e) => setSelectedInstructor(e.target.value)}
+            aria-label="Filter courses by scholar"
             className="w-full appearance-none rounded-xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-2.5 pr-8 pl-10 text-sm-plus text-slate-700 dark:text-slate-300 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20 cursor-pointer"
           >
             <option value="">All Scholars</option>

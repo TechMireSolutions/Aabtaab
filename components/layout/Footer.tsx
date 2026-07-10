@@ -102,10 +102,10 @@ export default function Footer({
               aria-label={siteName}
               className="inline-flex items-center gap-2.5 mb-3 group"
             >
-              {logoUrl ? (
+            {logoUrl ? (
                 <Image
                   src={logoUrl}
-                  alt={siteName}
+                  alt=""
                   width={40}
                   height={40}
                   className="size-10 rounded-full border-2 border-brand-400 object-cover transition-transform duration-200 group-hover:scale-105 sm:size-logo-lg"
@@ -131,7 +131,7 @@ export default function Footer({
                   href={settings.facebook}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="Facebook"
+                  aria-label="Facebook (opens in new tab)"
                   className="icon-btn-subtle"
                 >
                   <FacebookIcon />
@@ -142,7 +142,7 @@ export default function Footer({
                   href={settings.youtube}
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="YouTube"
+                  aria-label="YouTube (opens in new tab)"
                   className="icon-btn-subtle"
                 >
                   <YoutubeIcon />

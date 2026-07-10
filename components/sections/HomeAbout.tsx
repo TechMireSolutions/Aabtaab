@@ -144,6 +144,7 @@ export default function HomeAbout({ homepage: hp }: HomeAboutProps) {
                 <p
                   className="mb-4 text-center text-xl-plus leading-loose font-serif text-gold-400 select-all"
                   dir="rtl"
+                  lang="ar"
                 >
                   {activeHadith.arabic}
                 </p>

@@ -150,6 +150,7 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
               setIsLoading(val.trim() !== "");
             }}
             placeholder="Search classes, events, articles..."
+            aria-label="Search site content"
             className="ml-3 h-11 w-full bg-transparent text-base-plus text-slate-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 outline-none"
           />
           {resolvedIsLoading && (

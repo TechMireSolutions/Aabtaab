@@ -1,10 +1,17 @@
 import type { MetadataRoute } from "next";
 import { getSiteSettings } from "@/lib/cms/queries";
 import { resolveSiteName } from "@/lib/constants";
+import { urlFor } from "@/sanity/lib/image";
 
 export default async function manifest(): Promise<MetadataRoute.Manifest> {
   const settings = await getSiteSettings();
   const siteName = resolveSiteName(settings);
+
+  const dynamicIconUrl = settings?.logo
+    ? urlFor(settings.logo).width(512).height(512).format("png").url()
+    : settings?.favicon
+      ? urlFor(settings.favicon).width(512).height(512).format("png").url()
+      : "/og-default.png";
 
   return {
     name: siteName,
@@ -21,13 +28,13 @@ export default async function manifest(): Promise<MetadataRoute.Manifest> {
     scope: "/",
     icons: [
       {
-        src: "/og-default.png",
+        src: dynamicIconUrl,
         sizes: "512x512",
         type: "image/png",
         purpose: "any",
       },
       {
-        src: "/og-default.png",
+        src: dynamicIconUrl,
         sizes: "512x512",
         type: "image/png",
         purpose: "maskable",

@@ -29,7 +29,7 @@ export default async function DonatePage() {
     <div>
       <div className="border-b border-gray-100 bg-white">
         <div className="container-narrow section-header-py text-center">
-          <p className="mb-3 text-xl-plus leading-none text-brand-700 sm:text-2xl">
+          <p className="mb-3 text-xl-plus leading-none text-brand-700 sm:text-2xl" lang="ar" dir="rtl">
             {settings?.donateArabicVerse ||
               "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ"}
           </p>

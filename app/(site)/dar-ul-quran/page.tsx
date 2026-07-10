@@ -228,7 +228,7 @@ export default function DarUlQuranPage() {
                   {/* Bismillah header (except for Surah 9) */}
                   {selectedSurah !== 9 && selectedAyah === 0 && (
                     <div className="text-center border-b border-gray-100 dark:border-slate-800 pb-6">
-                      <p className="font-serif text-3xl text-slate-900 dark:text-white leading-loose" dir="rtl">
+                      <p className="font-serif text-3xl text-slate-900 dark:text-white leading-loose" dir="rtl" lang="ar">
                         بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
                       </p>
                       <p className="text-xs-plus uppercase tracking-widest text-gold-600 mt-2 font-semibold">
@@ -265,7 +265,7 @@ export default function DarUlQuranPage() {
                               )}
                             </div>
 
-                            <p className="font-serif text-2xl sm:text-3xl text-right text-slate-900 dark:text-white leading-loose mb-4 select-all" dir="rtl">
+                            <p className="font-serif text-2xl sm:text-3xl text-right text-slate-900 dark:text-white leading-loose mb-4 select-all" dir="rtl" lang="ar">
                               {verse.text}
                             </p>
 
