@@ -1,17 +1,82 @@
+"use client";
+
+import { useState, useTransition, useMemo } from "react";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, RefreshCw } from "lucide-react";
 import type { HomepageSettings } from "@/types/homepage";
-
-
 
 interface HomeAboutProps {
   homepage: HomepageSettings | null;
 }
 
+interface HadithItem {
+  arabic: string;
+  translation: string;
+  attribution: string;
+}
+
+const STATIC_HADITHS: HadithItem[] = [
+  {
+    arabic: "إِنَّ الْقَلْبَ الْحَدَثَ كَالأَرْضِ الْخَالِيَةِ مَا أُلْقِيَ فِيهَا مِنْ شَيْءٍ قَبِلَتْهُ",
+    translation: "Indeed, the heart of a youth is like uncultivated land; whatever is sown in it, it accepts.",
+    attribution: "Imam Ali (A.S.) — Nahjul Balagha",
+  },
+  {
+    arabic: "طَلَبُ الْعِلْمِ فَرِيضَةٌ عَلَى كُلِّ مُسْلِمٍ، أَلَا إِنَّ اللَّهَ يُحِبُّ بُغَاةَ الْعِلْمِ",
+    translation: "The acquisition of knowledge is a duty upon every Muslim; indeed Allah loves the seekers of knowledge.",
+    attribution: "Imam Ja'far al-Sadiq (A.S.)",
+  },
+  {
+    arabic: "الْعِلْمُ كَنْزٌ عَظِيمٌ لَا يَفْنَى",
+    translation: "Knowledge is a grand treasure that is never exhausted.",
+    attribution: "Imam Ali (A.S.)",
+  },
+  {
+    arabic: "مَنْ عَمِلَ عَلَى غَيْرِ عِلْمٍ كَانَ مَا يُفْسِدُ أَكْثَرَ مِمَّا يُصْلِحُ",
+    translation: "If a person acts without knowledge, what they spoil is more than what they rectify.",
+    attribution: "Imam Ja'far al-Sadiq (A.S.)",
+  },
+];
+
 export default function HomeAbout({ homepage: hp }: HomeAboutProps) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [fade, setFade] = useState(true);
+  const [, startTransition] = useTransition();
+
+  const hadithList = useMemo(() => {
+    const initialHadith: HadithItem = {
+      arabic: hp?.aboutHadithArabic || "اطلبوا العلم من المهد إلى اللحد",
+      translation: hp?.aboutHadithTranslation || "Seek knowledge from the cradle to the grave.",
+      attribution: hp?.aboutHadithAttribution || "Prophet Muhammad (S.A.W.W.)",
+    };
+    return [initialHadith, ...STATIC_HADITHS];
+  }, [hp]);
+
+  const [prevListLength, setPrevListLength] = useState(hadithList.length);
+  if (hadithList.length !== prevListLength) {
+    setPrevListLength(hadithList.length);
+    setCurrentIndex(0);
+  }
+
+  function handleNextHadith() {
+    setFade(false);
+    setTimeout(() => {
+      startTransition(() => {
+        setCurrentIndex((prev) => (prev + 1) % hadithList.length);
+        setFade(true);
+      });
+    }, 250);
+  }
+
+  const activeHadith = hadithList[currentIndex] || {
+    arabic: hp?.aboutHadithArabic || "اطلبوا العلم من المهد إلى اللحد",
+    translation: hp?.aboutHadithTranslation || "Seek knowledge from the cradle to the grave.",
+    attribution: hp?.aboutHadithAttribution || "Prophet Muhammad (S.A.W.W.)",
+  };
+
   return (
-    <section className="relative section-y-xl overflow-hidden border-b border-gray-100 bg-white">
-      <div className="bg-dot-grid pointer-events-none absolute inset-0 opacity-30" />
+    <section className="relative section-y-xl overflow-hidden border-b border-gray-100 dark:border-slate-900 bg-white dark:bg-slate-950">
+      <div className="bg-dot-grid pointer-events-none absolute inset-0 opacity-30 dark:opacity-10" />
       <div className="container-page relative">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-20">
           <div>
@@ -56,25 +121,42 @@ export default function HomeAbout({ homepage: hp }: HomeAboutProps) {
           </div>
 
           <div className="relative pb-10">
-            <div className="relative overflow-hidden rounded-3xl bg-slate-900 p-8 text-white sm:p-10">
+            <div className="relative overflow-hidden rounded-3xl bg-slate-900 dark:bg-slate-900/50 p-8 text-white sm:p-10 min-h-[300px] flex flex-col justify-between shadow-xl">
               <div className="bg-hero-glow pointer-events-none absolute top-0 right-0 size-72 hero-glow-offset rounded-full opacity-60" />
-              <p
-                className="mb-3 text-center text-2xl leading-relaxed font-normal text-gold-400 sm:text-3xl"
-                dir="rtl"
+              
+              <div className="relative z-10 flex justify-end mb-2">
+                {hadithList.length > 1 && (
+                  <button
+                    onClick={handleNextHadith}
+                    aria-label="Load next Hadith"
+                    className="rounded-full border border-white/10 bg-white/5 p-2 text-slate-400 hover:text-gold-400 hover:border-gold-500/20 transition-all cursor-pointer"
+                  >
+                    <RefreshCw size={14} className="animate-hover-spin" />
+                  </button>
+                )}
+              </div>
+
+              <div
+                className={`relative z-10 flex-1 flex flex-col justify-center transition-all duration-300 ${
+                  fade ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+                }`}
               >
-                {hp?.aboutHadithArabic || "اطلبوا العلم من المهد إلى اللحد"}
-              </p>
-              <div className="eyebrow-line-gold mx-auto mb-3 w-10" aria-hidden="true" />
-              <p className="text-center text-sm-plus leading-relaxed italic text-gray-400">
-                &quot;
-                {hp?.aboutHadithTranslation ||
-                  "Seek knowledge from the cradle to the grave."}
-                &quot;
-              </p>
-              <p className="text-caption mt-2 text-center font-semibold tracking-wide text-gold-500">
-                — {hp?.aboutHadithAttribution || "Prophet Muhammad (S.A.W.W.)"}
-              </p>
-              <div className="mt-8 grid grid-cols-3 gap-4 border-t border-white/10 pt-6">
+                <p
+                  className="mb-4 text-center text-xl-plus leading-loose font-serif text-gold-400 select-all"
+                  dir="rtl"
+                >
+                  {activeHadith.arabic}
+                </p>
+                <div className="eyebrow-line-gold mx-auto mb-4 w-10" aria-hidden="true" />
+                <p className="text-center text-sm-plus leading-relaxed italic text-slate-300 select-all px-4">
+                  &quot;{activeHadith.translation}&quot;
+                </p>
+                <p className="text-caption mt-3.5 text-center font-semibold tracking-wide text-gold-500">
+                  — {activeHadith.attribution}
+                </p>
+              </div>
+
+              <div className="mt-8 grid grid-cols-3 gap-4 border-t border-white/10 pt-6 relative z-10">
                 {[
                   {
                     value: hp?.aboutStat1Value || "500+",
@@ -99,10 +181,10 @@ export default function HomeAbout({ homepage: hp }: HomeAboutProps) {
               </div>
             </div>
 
-            <div className="card-surface absolute bottom-0 left-6 flex items-center gap-3 px-4 py-3">
+            <div className="card-surface absolute bottom-0 left-6 flex items-center gap-3 px-4 py-3 shadow-md">
               <div className="badge-trust">✓</div>
               <div>
-                <p className="text-xs font-semibold text-slate-800">
+                <p className="text-xs font-semibold text-slate-800 dark:text-slate-200">
                   {hp?.aboutBadgeText || "Qualified Scholars"}
                 </p>
                 <p className="text-caption">

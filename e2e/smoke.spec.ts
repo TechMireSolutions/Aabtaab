@@ -27,4 +27,10 @@ test.describe("public site smoke", () => {
     await page.goto("/services");
     await expect(page.locator("#main-content")).toBeVisible();
   });
+
+  test("dar ul quran page loads", async ({ page }) => {
+    await page.goto("/dar-ul-quran");
+    await expect(page.locator("#main-content")).toBeVisible();
+    await expect(page.getByRole("heading", { name: /dar ul quran reader/i })).toBeVisible();
+  });
 });

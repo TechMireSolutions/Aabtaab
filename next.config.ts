@@ -45,8 +45,8 @@ const nextConfig: NextConfig = {
         hostname: "cdn.sanity.io",
       },
     ],
-    // Modern formats: WebP first, then AVIF for supported browsers
-    formats: ["image/webp", "image/avif"],
+    // Modern formats: AVIF prioritized for supported browsers, WebP fallback
+    formats: ["image/avif", "image/webp"],
   },
 
   // ── HTTP Security & Cache Headers ─────────────────────────────────────────

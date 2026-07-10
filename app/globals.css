@@ -6,7 +6,7 @@
   --font-sans:
     var(--font-jakarta, system-ui), system-ui, -apple-system,
     BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --font-display: var(--font-jakarta, system-ui), system-ui, sans-serif;
+  --font-display: var(--font-playfair, Georgia, serif), Georgia, serif;
 
   /* Brand palette (cyan) */
   --color-brand-50: #ecfeff;
@@ -154,6 +154,32 @@
   :root {
     --tw-prose-links: var(--color-brand-700);
     --tw-prose-body: #374151;
+
+    /* Theme colors */
+    --color-bg-page: #ffffff;
+    --color-text-page: #0f172a;
+    --color-text-muted: #64748b;
+    --color-border-card: #f1f5f9;
+    --color-bg-card: #ffffff;
+    --color-bg-muted: #f8fafc;
+    --color-glass-bg: rgba(255, 255, 255, 0.45);
+    --color-glass-border: rgba(255, 255, 255, 0.25);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --tw-prose-links: var(--color-brand-400);
+      --tw-prose-body: #94a3b8;
+
+      --color-bg-page: #0f172a;
+      --color-text-page: #f8fafc;
+      --color-text-muted: #94a3b8;
+      --color-border-card: #1e293b;
+      --color-bg-card: #1e293b;
+      --color-bg-muted: #1e293b;
+      --color-glass-bg: rgba(30, 41, 59, 0.45);
+      --color-glass-border: rgba(255, 255, 255, 0.08);
+    }
   }
 
   html {
@@ -164,7 +190,7 @@
   }
 
   body {
-    @apply bg-white text-slate-900 antialiased;
+    @apply bg-[var(--color-bg-page)] text-[var(--color-text-page)] antialiased;
     font-family: var(--font-sans);
     font-size: var(--text-base-plus);
     line-height: 1.6;
@@ -396,27 +422,27 @@
 }
 
 @utility heading-page {
-  @apply text-3xl sm:text-4xl font-bold text-slate-900 tracking-heading;
+  @apply font-display text-3xl sm:text-4xl font-bold text-[var(--color-text-page)] tracking-heading;
 }
 
 @utility heading-section {
-  @apply text-2xl sm:text-3xl font-bold text-slate-900 tracking-heading;
+  @apply font-display text-2xl sm:text-3xl font-bold text-[var(--color-text-page)] tracking-heading;
 }
 
 @utility heading-section-lg {
-  @apply text-2xl sm:text-4xl font-bold text-slate-900 tracking-heading;
+  @apply font-display text-2xl sm:text-4xl font-bold text-[var(--color-text-page)] tracking-heading;
 }
 
 @utility text-lead {
-  @apply text-sm-plus sm:text-base text-gray-500 leading-relaxed;
+  @apply text-sm-plus sm:text-base text-[var(--color-text-muted)] leading-relaxed;
 }
 
 @utility text-body-muted {
-  @apply text-sm-plus text-gray-500 leading-relaxed;
+  @apply text-sm-plus text-[var(--color-text-muted)] leading-relaxed;
 }
 
 @utility text-caption {
-  @apply text-2xs sm:text-xs-plus text-gray-500;
+  @apply text-2xs sm:text-xs-plus text-[var(--color-text-muted)];
 }
 
 @utility link-brand {
@@ -429,7 +455,7 @@
 }
 
 @utility btn-secondary {
-  @apply inline-flex items-center rounded-full border border-gray-300 bg-white px-5 py-2.5 text-sm-plus font-medium text-slate-800 transition-all duration-200 hover:-translate-y-px hover:border-gray-400 hover:bg-gray-50 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2;
+  @apply inline-flex items-center rounded-full border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-5 py-2.5 text-sm-plus font-medium text-slate-800 dark:text-slate-200 transition-all duration-200 hover:-translate-y-px hover:border-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2;
 }
 
 @utility btn-pill-accent {
@@ -463,11 +489,19 @@
 
 /* ── Surfaces ── */
 @utility card-surface {
-  @apply rounded-2xl border border-gray-100 bg-white shadow-card transition-all duration-300;
+  @apply rounded-2xl border border-[var(--color-border-card)] bg-[var(--color-bg-card)] shadow-card transition-all duration-300;
+}
+
+@utility card-glass {
+  background: var(--color-glass-bg);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--color-glass-border);
+  box-shadow: var(--shadow-card);
+  @apply rounded-2xl transition-all duration-300;
 }
 
 @utility card-interactive {
-  @apply card-surface hover:-translate-y-2 hover:shadow-card-hover;
+  @apply card-glass hover:-translate-y-2 hover:shadow-card-hover;
 }
 
 @utility card-hover-lift {
@@ -523,7 +557,7 @@
 }
 
 @utility badge-enrolling {
-  @apply mb-5 inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3.5 py-1.5 shadow-sm;
+  @apply mb-5 inline-flex items-center gap-2 rounded-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-3.5 py-1.5 shadow-sm;
 }
 
 @utility badge-hero {

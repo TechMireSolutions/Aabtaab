@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Plus_Jakarta_Sans, Playfair_Display } from "next/font/google";
 import { resolveSiteName } from "@/lib/constants";
 import { env } from "@/lib/env";
 import { getSiteSettings } from "@/lib/cms/queries";
@@ -15,6 +15,14 @@ const jakarta = Plus_Jakarta_Sans({
   display: "swap",
   preload: true,
   adjustFontFallback: true,
+});
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  weight: ["400", "600", "700"],
+  variable: "--font-playfair",
+  display: "swap",
+  preload: true,
 });
 
 // ── Viewport (separate export — required in Next.js 15) ──────────────────────
@@ -219,9 +227,11 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://cdn.sanity.io" crossOrigin="" />
         <link rel="dns-prefetch" href="https://cdn.sanity.io" />
+        <link rel="preconnect" href="https://api.alquran.cloud" />
+        <link rel="dns-prefetch" href="https://api.alquran.cloud" />
       </head>
       <body
-        className={`${jakarta.variable} font-sans antialiased relative`}
+        className={`${jakarta.variable} ${playfair.variable} font-sans antialiased relative`}
         suppressHydrationWarning
       >
         {/* Organization schema injected into every page */}

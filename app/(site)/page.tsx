@@ -8,6 +8,7 @@ import HomeHero from "@/components/sections/HomeHero";
 import HomeAbout from "@/components/sections/HomeAbout";
 import HomeSections from "@/components/sections/HomeSections";
 import HomeSectionsSkeleton from "@/components/sections/HomeSectionsSkeleton";
+import UpcomingEventsCountdown from "@/components/sections/UpcomingEventsCountdown";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { settings, homepage: hp } = await getHomepageHeroData();
@@ -46,6 +47,9 @@ export default async function HomePage() {
         }}
       />
       <HomeHero settings={settings} homepage={hp} siteName={siteName} />
+      <Suspense fallback={null}>
+        <UpcomingEventsCountdown />
+      </Suspense>
       <HomeAbout homepage={hp} />
       <Suspense fallback={<HomeSectionsSkeleton />}>
         <HomeSections />

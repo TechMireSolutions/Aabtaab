@@ -16,7 +16,7 @@ app/
   (site)/              # Public site — route group, shared layout
     {route}/page.tsx
     {route}/_components/   # Private to that route (underscore prefix)
-  api/{name}/route.ts  # contact, revalidate, draft, draft/disable
+  api/{name}/route.ts  # contact, revalidate, draft, draft/disable, search
   studio/              # Embedded Sanity Studio
   globals.css          # Tailwind v4 design system (single CSS source)
   layout.tsx, sitemap.ts, robots.ts, global-error.tsx

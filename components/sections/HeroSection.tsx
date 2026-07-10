@@ -74,8 +74,8 @@ export default function HeroSection({
     heroImageAlt ?? `${siteName} — Shia Islamic education and community`;
 
   return (
-    <section className="relative min-h-hero w-full overflow-hidden bg-white md:min-h-hero-lg">
-      <div className="bg-dot-grid pointer-events-none absolute inset-0 opacity-50" />
+    <section className="relative min-h-hero w-full overflow-hidden bg-white dark:bg-slate-950 md:min-h-hero-lg">
+      <div className="bg-dot-grid pointer-events-none absolute inset-0 opacity-50 dark:opacity-20" />
       <div className="pointer-events-none absolute -left-24 top-1/2 size-hero-glow -translate-y-1/2 rounded-full bg-hero-glow" />
 
       {heroImage && (
@@ -89,8 +89,8 @@ export default function HeroSection({
             fetchPriority="high"
             className="object-cover object-left-top"
           />
-          <div className="absolute inset-0 bg-linear-to-r from-white via-white/55 to-transparent" />
-          <div className="absolute inset-0 bg-linear-to-t from-white/15 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-r from-white via-white/60 to-transparent dark:from-slate-950 dark:via-slate-950/60" />
+          <div className="absolute inset-0 bg-linear-to-t from-white/15 to-transparent dark:from-slate-950/15" />
         </div>
       )}
 
@@ -99,13 +99,13 @@ export default function HeroSection({
           {enrollingBadge && (
             <div className="badge-enrolling">
               <span className="size-1.5 shrink-0 motion-safe:animate-pulse rounded-full bg-brand-500" />
-              <span className="text-2xs font-semibold tracking-wide text-gray-600">
+              <span className="text-2xs font-semibold tracking-wide text-gray-600 dark:text-slate-300">
                 {enrollingBadge}
               </span>
             </div>
           )}
 
-          <p className="text-eyebrow mb-4 text-gray-500">
+          <p className="text-eyebrow mb-4 text-gray-500 dark:text-slate-400">
             {resolvedSubtitle}
           </p>
 
@@ -116,7 +116,7 @@ export default function HeroSection({
                 className={
                   i === titleLines.length - 1
                     ? "block text-brand-700"
-                    : "block text-slate-900"
+                    : "block text-slate-900 dark:text-white"
                 }
               >
                 {line}
@@ -142,14 +142,14 @@ export default function HeroSection({
             </Link>
           </div>
 
-          <div className="mt-8 flex flex-wrap items-center gap-5 border-t border-gray-100 pt-7 motion-safe:animate-fade-up motion-safe:animate-delay-300 sm:gap-6">
+          <div className="mt-8 flex flex-wrap items-center gap-5 border-t border-gray-100 dark:border-slate-800 pt-7 motion-safe:animate-fade-up motion-safe:animate-delay-300 sm:gap-6">
             {STATS.map(({ value, label }) => (
               <div key={label} className="flex items-center gap-2.5">
-                <div className="flex size-8 shrink-0 items-center justify-center rounded-xl border border-brand-100 bg-brand-50 sm:size-9">
+                <div className="flex size-8 shrink-0 items-center justify-center rounded-xl border border-brand-100 dark:border-brand-900/50 bg-brand-50 dark:bg-brand-950/40 sm:size-9">
                   <StatIcon label={label} />
                 </div>
                 <div>
-                  <p className="text-base sm:text-lg-plus font-bold leading-none tracking-tight text-slate-900">
+                  <p className="text-base sm:text-lg-plus font-bold leading-none tracking-tight text-slate-900 dark:text-white">
                     {value}
                   </p>
                   <p className="text-caption mt-0.5">{label}</p>

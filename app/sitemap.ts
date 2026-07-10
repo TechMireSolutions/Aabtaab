@@ -24,6 +24,7 @@ const STATIC_ROUTES: MetadataRoute.Sitemap = [
   { url: absoluteUrl("/services"), changeFrequency: "weekly", priority: 0.9 },
   { url: absoluteUrl("/posts"), changeFrequency: "daily", priority: 0.9 },
   { url: absoluteUrl("/events"), changeFrequency: "weekly", priority: 0.85 },
+  { url: absoluteUrl("/dar-ul-quran"), changeFrequency: "weekly", priority: 0.8 },
   { url: absoluteUrl("/donate"), changeFrequency: "monthly", priority: 0.7 },
   { url: absoluteUrl("/contact"), changeFrequency: "monthly", priority: 0.7 },
 ];

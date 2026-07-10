@@ -17,4 +17,6 @@ export interface TopLevelCourseSummary {
   price?: string;
   duration?: string;
   childCount?: number;
+  subject?: string;
+  instructor?: string;
 }
