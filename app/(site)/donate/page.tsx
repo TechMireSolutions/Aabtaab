@@ -1,5 +1,6 @@
 import Link from "next/link";
 import ProseSection from "@/components/portable-text/ProseSection";
+import PaymentMethods from "@/components/sections/PaymentMethods";
 import { ArrowRight } from "lucide-react";
 import { defineCmsPageMetadata } from "@/lib/cms/page";
 import { getCmsPage, getSiteSettings } from "@/lib/cms/queries";
@@ -112,6 +113,23 @@ export default async function DonatePage() {
                 {settings?.donateContactLabel || "Contact Us"}
               </Link>
             </div>
+          </div>
+
+          <div className="mt-8 sm:mt-10">
+            <div className="mb-5 text-center">
+              <p className="text-eyebrow-gold mb-2 flex items-center justify-center gap-2">
+                <span className="eyebrow-line-gold" />
+                Local Payment Methods
+                <span className="eyebrow-line-gold" />
+              </p>
+              <h2 className="heading-section text-slate-900">
+                Donate via Pakistani Payment Methods
+              </h2>
+              <p className="text-body-muted mx-auto mt-2 max-w-md">
+                Use any of these local payment options for easy bank transfers and mobile payments.
+              </p>
+            </div>
+            <PaymentMethods />
           </div>
 
           <p className="text-caption mt-6 text-center">

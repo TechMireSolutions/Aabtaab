@@ -96,7 +96,10 @@ export default function Header({
 }: HeaderProps) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const navLinks = buildNavLinks(navItems, darulQuranUrl);
+  const allNavLinks = buildNavLinks(navItems, darulQuranUrl);
+  const desktopNavLinks = allNavLinks.filter(
+    (item) => !/donate/i.test(item.label),
+  );
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
@@ -135,7 +138,7 @@ export default function Header({
           <MobileNavSidebarLoader
             siteName={siteName}
             logoUrl={logoUrl}
-            navLinks={navLinks}
+            navLinks={allNavLinks}
           />
 
           <Link
@@ -150,14 +153,21 @@ export default function Header({
             aria-label="Main navigation"
             className="hidden flex-1 items-center justify-center gap-7 lg:flex"
           >
-            <NavLinks links={navLinks} variant="desktop" />
+            <NavLinks links={desktopNavLinks} variant="desktop" />
           </nav>
+
+          <Link
+            href="/donate"
+            className="ml-auto hidden items-center gap-2 rounded-full bg-brand-600 px-5 py-2 text-sm-plus font-semibold text-white shadow-md shadow-brand-600/25 animate-donate-glow transition-all duration-200 hover:bg-brand-700 hover:shadow-lg hover:shadow-brand-600/30 hover:scale-105 active:scale-95 lg:inline-flex cursor-pointer"
+          >
+            Donate
+          </Link>
 
           <button
             type="button"
             onClick={() => setSearchOpen(true)}
             aria-label="Search"
-            className="ml-auto flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 lg:flex hover:border-gray-300 dark:hover:border-slate-700 cursor-pointer"
+            className="flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 lg:flex hover:border-gray-300 dark:hover:border-slate-700 cursor-pointer"
           >
             <Search className="size-5" aria-hidden="true" />
           </button>
@@ -165,7 +175,7 @@ export default function Header({
           <button
             onClick={() => setSearchOpen(true)}
             aria-label="Search"
-            className="ml-auto flex h-11 w-11 items-center justify-center rounded-full text-gray-600 dark:text-slate-400 transition-colors hover:bg-gray-100 dark:hover:bg-slate-900 focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 lg:hidden cursor-pointer"
+            className="flex h-11 w-11 items-center justify-center rounded-full text-gray-600 dark:text-slate-400 transition-colors hover:bg-gray-100 dark:hover:bg-slate-900 focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 lg:hidden cursor-pointer"
           >
             <Search className="size-5" aria-hidden="true" />
           </button>
