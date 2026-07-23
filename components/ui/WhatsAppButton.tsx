@@ -29,7 +29,7 @@ export default function WhatsAppButton({ phoneNumber }: WhatsAppButtonProps) {
 
       {/* Revealed on hover — opacity only; container width expands via calc-size in globals.css */}
       <span
-        className="whitespace-nowrap text-sm-plus font-semibold opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+        className="max-w-0 overflow-hidden whitespace-nowrap text-sm-plus font-semibold opacity-0 transition-all duration-200 group-hover:max-w-xs group-hover:opacity-100"
         aria-hidden="true"
       >
         WhatsApp

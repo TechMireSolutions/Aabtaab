@@ -3,7 +3,7 @@ import { draftMode } from "next/headers";
 import { unstable_cache } from "next/cache";
 import * as Sentry from "@sentry/nextjs";
 import type { SiteSettings } from "@/types/sanity";
-import { isProduction } from "@/lib/env";
+import { env, isProduction } from "@/lib/env";
 import { client } from "./client";
 import { getPreviewClient } from "./previewClient";
 import { siteSettingsQuery } from "./queries";
@@ -44,6 +44,10 @@ async function fetchFromSanity<T>(
   query: string,
   params: QueryParams,
 ): Promise<T> {
+  if (!env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
+    console.warn("⚠️ NEXT_PUBLIC_SANITY_PROJECT_ID is not configured. Returning null for Sanity fetch.");
+    return null as unknown as T;
+  }
   const preview = await isDraftModeEnabled();
   const activeClient = preview ? getPreviewClient() : client;
   return activeClient.fetch<T>(query, params);
@@ -55,6 +59,11 @@ export async function sanityFetch<T>({
   tags = [],
   revalidate = 3600,
 }: SanityFetchOptions): Promise<T> {
+  if (!env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
+    console.warn("⚠️ NEXT_PUBLIC_SANITY_PROJECT_ID is missing. Sanity fetch skipped.");
+    return null as unknown as T;
+  }
+
   const preview = await isDraftModeEnabled();
 
   if (preview || !isProduction) {

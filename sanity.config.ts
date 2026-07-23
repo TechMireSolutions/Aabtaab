@@ -8,8 +8,8 @@ export default defineConfig({
   name: "aabtaab",
   title: "Aabtaab CMS",
   basePath: "/studio",
-  projectId: env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-  dataset: env.NEXT_PUBLIC_SANITY_DATASET,
+  projectId: env.NEXT_PUBLIC_SANITY_PROJECT_ID || "placeholder",
+  dataset: env.NEXT_PUBLIC_SANITY_DATASET || "production",
   plugins: [structureTool(), visionTool()],
   schema: {
     types: schemaTypes,

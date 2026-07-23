@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans, Playfair_Display, Amiri } from "next/font/google";
+import { Plus_Jakarta_Sans, Playfair_Display, Noto_Nastaliq_Urdu } from "next/font/google";
 import { resolveSiteName } from "@/lib/constants";
 import { env } from "@/lib/env";
 import { getSiteSettings } from "@/lib/cms/queries";
@@ -26,10 +26,10 @@ const playfair = Playfair_Display({
   preload: true,
 });
 
-const amiri = Amiri({
+const nastaliq = Noto_Nastaliq_Urdu({
   subsets: ["arabic"],
   weight: ["400", "700"],
-  variable: "--font-amiri",
+  variable: "--font-nastaliq",
   display: "swap",
 });
 
@@ -242,7 +242,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://api.alquran.cloud" />
       </head>
       <body
-        className={`${jakarta.variable} ${playfair.variable} ${amiri.variable} font-sans antialiased relative`}
+        className={`${jakarta.variable} ${playfair.variable} ${nastaliq.variable} font-sans antialiased relative`}
         suppressHydrationWarning
       >
         {/* Organization schema injected into every page */}

@@ -4,8 +4,8 @@ import { SANITY_API_VERSION } from "./constants";
 
 function createSanityClient(): SanityClient {
   return createClient({
-    projectId: env.NEXT_PUBLIC_SANITY_PROJECT_ID,
-    dataset: env.NEXT_PUBLIC_SANITY_DATASET,
+    projectId: env.NEXT_PUBLIC_SANITY_PROJECT_ID || "placeholder",
+    dataset: env.NEXT_PUBLIC_SANITY_DATASET || "production",
     apiVersion: SANITY_API_VERSION,
     useCdn: isProduction,
   });

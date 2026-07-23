@@ -45,7 +45,10 @@ if (!publicResult.success) {
     console.error("❌ Invalid public environment variables:", publicResult.error.format());
     throw new Error("Invalid public environment variables");
   } else if (!isBuildTime) {
-    console.error("❌ Invalid public environment variables:", publicResult.error.format());
+    const missing = Object.keys(publicResult.error.format()).filter((k) => k !== "_errors");
+    if (missing.length > 0) {
+      console.warn("⚠️ Missing or invalid public environment variables in development:", missing.join(", "));
+    }
   }
 }
 
