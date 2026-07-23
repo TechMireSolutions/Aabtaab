@@ -18,6 +18,9 @@ export default function HomeHero({
     ? urlFor(hp.heroImage).width(1200).height(700).url()
     : null;
 
+  const cta1Label = hp?.heroCta1Label || "Explore Courses";
+  const cta1Link = "/online-courses";
+
   return (
     <HeroSection
       siteName={siteName}
@@ -27,8 +30,8 @@ export default function HomeHero({
       heroImage={heroImageUrl}
       heroImageAlt={hp?.heroTitle?.replace(/\\n/g, " ") || siteName}
       enrollingBadge={hp?.heroBadgeText ?? "Enrolling Now"}
-      cta1Label={hp?.heroCta1Label || undefined}
-      cta1Link={hp?.heroCta1Link || undefined}
+      cta1Label={cta1Label}
+      cta1Link={cta1Link}
       cta2Label={hp?.heroCta2Label || undefined}
       cta2Link={hp?.heroCta2Link || undefined}
     />

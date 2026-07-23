@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Sparkles, Info } from "lucide-react";
 import PageHeader from "@/components/layout/PageHeader";
 import { searchSite } from "@/lib/cms/search";
 import { getSiteSettings } from "@/lib/cms/queries";
@@ -23,7 +23,7 @@ export async function generateMetadata({
   return buildPageMetadata({
     title: term ? `Search: ${term}` : "Search",
     description: term
-      ? `Search results for “${term}” on ${siteName}`
+      ? `Search results for "${term}" on ${siteName}`
       : "Search articles, courses, services, and events.",
     path: term ? `/search?q=${encodeURIComponent(term)}` : "/search",
     noIndex: true,
@@ -37,16 +37,20 @@ export default async function SearchPage({
 }) {
   const { q } = await searchParams;
   const term = q?.trim() ?? "";
-  const results = term ? (await searchSite(term)) ?? [] : [];
+  const response = term ? await searchSite(term) : null;
+  const { keywordMatch, suggestions, results } = response ?? { keywordMatch: null, suggestions: [], results: [] };
+  const totalCount = (keywordMatch ? 1 : 0) + suggestions.length + results.length;
 
   return (
     <div>
       <PageHeader
         eyebrow="Search"
-        title={term ? `Results for “${term}”` : "Search the site"}
+        title={term ? `Results for "${term}"` : "Search the site"}
         subtitle={
           term
-            ? `${results.length} result${results.length === 1 ? "" : "s"} found`
+            ? keywordMatch
+              ? "Direct match found"
+              : `${totalCount} result${totalCount === 1 ? "" : "s"} found`
             : "Find articles, courses, services, and events"
         }
       />
@@ -63,39 +67,125 @@ export default async function SearchPage({
             </p>
           )}
 
-          {term && results.length === 0 && (
-            <p className="empty-state">
-              No results for “{term}”. Try different keywords.
-            </p>
+          {term && totalCount === 0 && (
+            <div className="text-center py-12">
+              <div className="inline-flex items-center gap-2 rounded-full bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 px-4 py-2 mb-4">
+                <Info size={14} className="text-amber-600 dark:text-amber-400" />
+                <span className="text-sm-plus font-medium text-amber-700 dark:text-amber-300">
+                  &ldquo;{term}&rdquo; is not available yet
+                </span>
+              </div>
+              <p className="text-sm-plus text-gray-500 dark:text-slate-400 mb-6 max-w-md mx-auto">
+                We don&apos;t have content matching this keyword right now. Try searching for something else, or explore these pages:
+              </p>
+              <div className="flex flex-wrap justify-center gap-3">
+                {[
+                  { label: "Online Courses", href: "/online-courses" },
+                  { label: "Our Services", href: "/services" },
+                  { label: "Upcoming Events", href: "/events" },
+                  { label: "Articles", href: "/posts" },
+                ].map((item) => (
+                  <Link
+                    key={item.label}
+                    href={item.href}
+                    className="card-interactive px-5 py-3 text-sm-plus font-semibold text-slate-800 dark:text-slate-200"
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {keywordMatch && (
+            <div className="mb-8">
+              <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-slate-500 mb-3">
+                Direct Match
+              </h2>
+              <Link
+                href={keywordMatch.href}
+                className="flex items-center gap-4 rounded-2xl border border-brand-200 dark:border-brand-800 bg-brand-50 dark:bg-brand-950/30 p-5 transition-colors hover:bg-brand-100 dark:hover:bg-brand-950/50"
+              >
+                <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-brand-100 dark:bg-brand-900/40 border border-brand-200 dark:border-brand-800">
+                  <Sparkles size={20} className="text-brand-600 dark:text-brand-400" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="badge-pill bg-brand-100/80 border-brand-200 dark:bg-brand-900/50 dark:border-brand-800">
+                      Quick Match
+                    </span>
+                    <span className="badge-pill">
+                      {SEARCH_TYPE_LABELS[keywordMatch.category as keyof typeof SEARCH_TYPE_LABELS] || keywordMatch.category}
+                    </span>
+                  </div>
+                  <span className="text-lg font-semibold text-slate-900 dark:text-white">
+                    {keywordMatch.label}
+                  </span>
+                </div>
+                <ArrowRight size={18} className="text-brand-600 dark:text-brand-400 shrink-0" />
+              </Link>
+            </div>
+          )}
+
+          {suggestions.length > 0 && (
+            <div className="mb-8">
+              <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-slate-500 mb-3">
+                Related Suggestions
+              </h2>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {suggestions.map((sug) => (
+                  <Link
+                    key={sug.href}
+                    href={sug.href}
+                    className="card-interactive flex items-center gap-3 p-4"
+                  >
+                    <span className="badge-pill">
+                      {SEARCH_TYPE_LABELS[sug.category as keyof typeof SEARCH_TYPE_LABELS] || sug.category}
+                    </span>
+                    <span className="text-sm-plus font-semibold text-slate-800 dark:text-slate-200 line-clamp-1">
+                      {sug.label}
+                    </span>
+                    <ArrowRight size={14} className="ml-auto text-gray-400 dark:text-slate-500 shrink-0" />
+                  </Link>
+                ))}
+              </div>
+            </div>
           )}
 
           {results.length > 0 && (
-            <ul className="space-y-3">
-              {results.map((item) => (
-                <li key={item._id}>
-                  <Link
-                    href={item.href}
-                    className="card-interactive flex flex-col gap-1 p-4 sm:p-5"
-                  >
-                    <span className="badge-pill w-fit">
-                      {SEARCH_TYPE_LABELS[item._type]}
-                    </span>
-                    <span className="text-base-plus font-semibold text-slate-900 dark:text-white">
-                      {item.title}
-                    </span>
-                    {item.summary && (
-                      <span className="text-sm-plus text-slate-600 dark:text-slate-400 line-clamp-2">
-                        {item.summary}
+            <div>
+              {(keywordMatch || suggestions.length > 0) && (
+                <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-slate-500 mb-3">
+                  Search Results
+                </h2>
+              )}
+              <ul className="space-y-3">
+                {results.map((item) => (
+                  <li key={item._id}>
+                    <Link
+                      href={item.href}
+                      className="card-interactive flex flex-col gap-1 p-4 sm:p-5"
+                    >
+                      <span className="badge-pill w-fit">
+                        {SEARCH_TYPE_LABELS[item._type]}
                       </span>
-                    )}
-                    <span className="link-brand mt-1 inline-flex items-center gap-1 text-sm-plus">
-                      View
-                      <ArrowRight size={12} />
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
+                      <span className="text-base-plus font-semibold text-slate-900 dark:text-white">
+                        {item.title}
+                      </span>
+                      {item.summary && (
+                        <span className="text-sm-plus text-slate-600 dark:text-slate-400 line-clamp-2">
+                          {item.summary}
+                        </span>
+                      )}
+                      <span className="link-brand mt-1 inline-flex items-center gap-1 text-sm-plus">
+                        View
+                        <ArrowRight size={12} />
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           )}
         </div>
       </section>

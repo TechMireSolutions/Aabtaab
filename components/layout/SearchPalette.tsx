@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState, useTransition, useCallback, useMemo } from "react";
-import { Search, X, BookOpen, Calendar, FileText, Settings, ArrowRight, CornerDownLeft } from "lucide-react";
+import { Search, X, BookOpen, Calendar, FileText, Settings, ArrowRight, CornerDownLeft, Sparkles, Info } from "lucide-react";
 import { useRouter } from "next/navigation";
-import type { SiteSearchResult } from "@/types/search";
+import type { SiteSearchResult, KeywordMatch } from "@/types/search";
 import { SEARCH_TYPE_LABELS } from "@/types/search";
 
 interface SearchPaletteProps {
@@ -18,8 +18,17 @@ const TYPE_ICONS = {
   service: Settings,
 };
 
+const SUGGESTION_ICONS: Record<string, typeof BookOpen> = {
+  course: BookOpen,
+  event: Calendar,
+  article: FileText,
+  service: Settings,
+};
+
 export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
   const [query, setQuery] = useState("");
+  const [keywordMatch, setKeywordMatch] = useState<KeywordMatch | null>(null);
+  const [suggestions, setSuggestions] = useState<KeywordMatch[]>([]);
   const [results, setResults] = useState<SiteSearchResult[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [, startTransition] = useTransition();
@@ -29,7 +38,6 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
-  // Focus input when opened
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
@@ -41,11 +49,8 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
     }
   }, [isOpen]);
 
-  // Debounced search fetch
   useEffect(() => {
-    if (!query.trim()) {
-      return;
-    }
+    if (!query.trim()) return;
 
     const delayDebounceFn = setTimeout(() => {
       startTransition(async () => {
@@ -53,7 +58,9 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
           const res = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
           if (res.ok) {
             const data = await res.json();
-            setResults(data);
+            setKeywordMatch(data.keywordMatch ?? null);
+            setSuggestions(data.suggestions ?? []);
+            setResults(data.results ?? []);
           }
         } catch (err) {
           console.error("Search failed:", err);
@@ -66,27 +73,33 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
     return () => clearTimeout(delayDebounceFn);
   }, [query]);
 
-  // Compute resolved states dynamically to prevent setState in effect
-  const resolvedResults = useMemo<SiteSearchResult[]>(() => {
-    return query.trim() ? results : [];
-  }, [query, results]);
-  const resolvedIsLoading = query.trim() ? isLoading : false;
+  const resolvedHasQuery = query.trim() !== "";
+  const resolvedIsLoading = resolvedHasQuery ? isLoading : false;
 
-  // Reset selected index when results change
-  const [prevResults, setPrevResults] = useState(results);
-  if (results !== prevResults) {
-    setPrevResults(results);
+  const totalItems = useMemo(() => {
+    let count = 0;
+    if (keywordMatch) count++;
+    count += suggestions.length;
+    count += results.length;
+    return count;
+  }, [keywordMatch, suggestions, results]);
+
+  const [prevTotal, setPrevTotal] = useState(totalItems);
+  if (totalItems !== prevTotal) {
+    setPrevTotal(totalItems);
     setSelectedIndex(0);
   }
 
   const handleSelect = useCallback((href: string) => {
     onClose();
     setQuery("");
+    setKeywordMatch(null);
+    setSuggestions([]);
+    setResults([]);
     setIsLoading(false);
     router.push(href);
   }, [onClose, router]);
 
-  // Key navigation handler
   useEffect(() => {
     if (!isOpen) return;
 
@@ -96,23 +109,32 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
         onClose();
       } else if (e.key === "ArrowDown") {
         e.preventDefault();
-        setSelectedIndex((prev) => (resolvedResults.length > 0 ? (prev + 1) % resolvedResults.length : 0));
+        setSelectedIndex((prev) => (totalItems > 0 ? (prev + 1) % totalItems : 0));
       } else if (e.key === "ArrowUp") {
         e.preventDefault();
-        setSelectedIndex((prev) => (resolvedResults.length > 0 ? (prev - 1 + resolvedResults.length) % resolvedResults.length : 0));
+        setSelectedIndex((prev) => (totalItems > 0 ? (prev - 1 + totalItems) % totalItems : 0));
       } else if (e.key === "Enter") {
         e.preventDefault();
-        if (resolvedResults[selectedIndex]) {
-          handleSelect(resolvedResults[selectedIndex].href);
+        if (keywordMatch && selectedIndex === 0) {
+          handleSelect(keywordMatch.href);
+        } else {
+          const adjustedIndex = keywordMatch ? selectedIndex - 1 : selectedIndex;
+          if (adjustedIndex < suggestions.length) {
+            handleSelect(suggestions[adjustedIndex].href);
+          } else {
+            const resultIndex = adjustedIndex - suggestions.length;
+            if (results[resultIndex]) {
+              handleSelect(results[resultIndex].href);
+            }
+          }
         }
       }
     }
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, resolvedResults, selectedIndex, onClose, handleSelect]);
+  }, [isOpen, totalItems, selectedIndex, keywordMatch, suggestions, results, onClose, handleSelect]);
 
-  // Scroll active item into view
   useEffect(() => {
     const activeEl = scrollContainerRef.current?.querySelector("[data-active='true']");
     if (activeEl) {
@@ -122,6 +144,8 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
 
   if (!isOpen) return null;
 
+  let flatIndex = 0;
+
   return (
     <div
       role="dialog"
@@ -129,15 +153,12 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
       aria-label="Search site"
       className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-16 sm:p-6 sm:pt-20 md:p-20 md:pt-28"
     >
-      {/* Backdrop */}
       <div
         className="fixed inset-0 bg-slate-950/60 backdrop-blur-md transition-opacity duration-300"
         onClick={onClose}
       />
 
-      {/* Palette Box */}
       <div className="relative z-10 flex w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xl transition-all duration-300 animate-scale-in">
-        {/* Search Input Area */}
         <div className="relative flex items-center border-b border-gray-100 dark:border-slate-800 px-4 py-3.5">
           <Search className="size-5 text-gray-400 dark:text-slate-500 shrink-0" />
           <input
@@ -147,6 +168,11 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
             onChange={(e) => {
               const val = e.target.value;
               setQuery(val);
+              if (!val.trim()) {
+                setKeywordMatch(null);
+                setSuggestions([]);
+                setResults([]);
+              }
               setIsLoading(val.trim() !== "");
             }}
             placeholder="Search classes, events, articles..."
@@ -165,12 +191,11 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
           </button>
         </div>
 
-        {/* Results / Empty States */}
         <div
           ref={scrollContainerRef}
-          className="max-h-[360px] overflow-y-auto p-2 scrollbar-hide"
+          className="max-h-[420px] overflow-y-auto p-2 scrollbar-hide"
         >
-          {query.trim() === "" ? (
+          {!resolvedHasQuery ? (
             <div className="px-4 py-8 text-center text-sm-plus text-gray-500 dark:text-slate-400">
               <p className="font-semibold text-slate-800 dark:text-slate-200 mb-2">
                 Quick Navigation
@@ -192,15 +217,167 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
                 ))}
               </div>
             </div>
-          ) : resolvedResults.length === 0 && !resolvedIsLoading ? (
-            <div className="px-4 py-12 text-center text-sm-plus text-gray-400 dark:text-slate-500">
-              No results found for &ldquo;{query}&rdquo;
+          ) : totalItems === 0 && !resolvedIsLoading ? (
+            <div className="px-4 py-8 text-center">
+              <div className="inline-flex items-center gap-2 rounded-full bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 px-4 py-2 mb-4">
+                <Info size={14} className="text-amber-600 dark:text-amber-400" />
+                <span className="text-sm-plus font-medium text-amber-700 dark:text-amber-300">
+                  &ldquo;{query}&rdquo; is not available yet
+                </span>
+              </div>
+              <p className="text-xs text-gray-500 dark:text-slate-400 mb-4">
+                Try searching for something else, or explore these suggestions:
+              </p>
+              <div className="flex flex-wrap justify-center gap-2">
+                {[
+                  { label: "Online Courses", href: "/online-courses" },
+                  { label: "Our Services", href: "/services" },
+                  { label: "Upcoming Events", href: "/events" },
+                  { label: "Articles", href: "/posts" },
+                ].map((item) => (
+                  <button
+                    key={item.label}
+                    onClick={() => handleSelect(item.href)}
+                    className="chip-outline-sm dark:border-slate-800 dark:bg-slate-800/40 dark:text-slate-300 dark:hover:border-brand-500"
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </div>
             </div>
           ) : (
             <ul className="space-y-1">
-              {resolvedResults.map((item, index) => {
+              {keywordMatch && (() => {
+                const idx = flatIndex++;
+                const active = idx === selectedIndex;
+                return (
+                  <li key={`kw-${keywordMatch.href}`}>
+                    <button
+                      onClick={() => handleSelect(keywordMatch.href)}
+                      data-active={active}
+                      className={`flex w-full items-start gap-3.5 rounded-xl px-4 py-3 text-left transition-all duration-150 ${
+                        active
+                          ? "bg-brand-50 dark:bg-brand-950/30 border border-brand-100 dark:border-brand-900/50"
+                          : "border border-transparent hover:bg-slate-50 dark:hover:bg-slate-800/40"
+                      }`}
+                    >
+                      <div
+                        className={`flex size-9 shrink-0 items-center justify-center rounded-lg border transition-colors ${
+                          active
+                            ? "bg-brand-100 border-brand-200 dark:bg-brand-900/40 dark:border-brand-800"
+                            : "bg-brand-50 border-brand-200 dark:bg-brand-900/30 dark:border-brand-800"
+                        }`}
+                      >
+                        <Sparkles
+                          size={15}
+                          className="text-brand-600 dark:text-brand-400"
+                        />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <span className="badge-pill bg-brand-100/80 border-brand-200 dark:bg-brand-900/50 dark:border-brand-800">
+                            Quick Match
+                          </span>
+                          <span className="badge-pill">
+                            {SEARCH_TYPE_LABELS[keywordMatch.category as keyof typeof SEARCH_TYPE_LABELS] || keywordMatch.category}
+                          </span>
+                        </div>
+                        <p className="mt-1.5 text-sm-plus font-semibold text-slate-800 dark:text-slate-200 line-clamp-1">
+                          {keywordMatch.label}
+                        </p>
+                        <p className="mt-0.5 text-xs text-brand-600 dark:text-brand-400 line-clamp-1">
+                          Go directly to this page
+                        </p>
+                      </div>
+                      {active && (
+                        <div className="flex items-center gap-1.5 self-center text-brand-600 dark:text-brand-400 shrink-0">
+                          <span className="text-2xs font-semibold uppercase tracking-widest hidden sm:inline">
+                            Go
+                          </span>
+                          <ArrowRight size={14} />
+                        </div>
+                      )}
+                    </button>
+                  </li>
+                );
+              })()}
+
+              {suggestions.length > 0 && (
+                <li key="suggestions-header" className="px-4 pt-2 pb-1">
+                  <span className="text-2xs font-semibold uppercase tracking-widest text-gray-400 dark:text-slate-500">
+                    Related suggestions
+                  </span>
+                </li>
+              )}
+
+              {suggestions.map((sug) => {
+                const idx = flatIndex++;
+                const active = idx === selectedIndex;
+                const SugIcon = SUGGESTION_ICONS[sug.category] || FileText;
+                return (
+                  <li key={`sug-${sug.href}`}>
+                    <button
+                      onClick={() => handleSelect(sug.href)}
+                      data-active={active}
+                      className={`flex w-full items-start gap-3.5 rounded-xl px-4 py-3 text-left transition-all duration-150 ${
+                        active
+                          ? "bg-brand-50 dark:bg-brand-950/30 border border-brand-100 dark:border-brand-900/50"
+                          : "border border-transparent hover:bg-slate-50 dark:hover:bg-slate-800/40"
+                      }`}
+                    >
+                      <div
+                        className={`flex size-9 shrink-0 items-center justify-center rounded-lg border transition-colors ${
+                          active
+                            ? "bg-brand-100 border-brand-200 dark:bg-brand-900/40 dark:border-brand-800"
+                            : "bg-slate-50 border-gray-200 dark:bg-slate-800/60 dark:border-slate-800"
+                        }`}
+                      >
+                        <SugIcon
+                          size={15}
+                          className={active ? "text-brand-700 dark:text-brand-400" : "text-gray-500 dark:text-slate-400"}
+                        />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <span
+                            className={`badge-pill ${
+                              active
+                                ? "bg-brand-100/80 border-brand-200 dark:bg-brand-900/50 dark:border-brand-800"
+                                : ""
+                            }`}
+                          >
+                            {SEARCH_TYPE_LABELS[sug.category as keyof typeof SEARCH_TYPE_LABELS] || sug.category}
+                          </span>
+                        </div>
+                        <p className="mt-1.5 text-sm-plus font-semibold text-slate-800 dark:text-slate-200 line-clamp-1">
+                          {sug.label}
+                        </p>
+                      </div>
+                      {active && (
+                        <div className="flex items-center gap-1.5 self-center text-brand-600 dark:text-brand-400 shrink-0">
+                          <span className="text-2xs font-semibold uppercase tracking-widest hidden sm:inline">
+                            Go
+                          </span>
+                          <ArrowRight size={14} />
+                        </div>
+                      )}
+                    </button>
+                  </li>
+                );
+              })}
+
+              {results.length > 0 && suggestions.length > 0 && (
+                <li key="results-header" className="px-4 pt-2 pb-1">
+                  <span className="text-2xs font-semibold uppercase tracking-widest text-gray-400 dark:text-slate-500">
+                    Search results
+                  </span>
+                </li>
+              )}
+
+              {results.map((item) => {
+                const idx = flatIndex++;
+                const active = idx === selectedIndex;
                 const Icon = TYPE_ICONS[item._type] || FileText;
-                const active = index === selectedIndex;
                 return (
                   <li key={item._id}>
                     <button
@@ -261,7 +438,6 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
           )}
         </div>
 
-        {/* Footer shortcuts */}
         <div className="flex items-center justify-between border-t border-gray-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 px-4 py-3 text-2xs font-medium text-gray-400 dark:text-slate-500">
           <div className="flex gap-4">
             <span className="flex items-center gap-1">

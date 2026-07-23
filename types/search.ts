@@ -15,3 +15,15 @@ export const SEARCH_TYPE_LABELS: Record<SearchResultType, string> = {
   service: "Service",
   event: "Event",
 };
+
+export interface KeywordMatch {
+  label: string;
+  href: string;
+  category: "service" | "course" | "event" | "article";
+}
+
+export interface SearchResponse {
+  keywordMatch: KeywordMatch | null;
+  suggestions: KeywordMatch[];
+  results: SiteSearchResult[];
+}
