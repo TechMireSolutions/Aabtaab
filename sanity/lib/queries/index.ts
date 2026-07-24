@@ -5,3 +5,4 @@ export * from "./services";
 export * from "./site";
 export * from "./search";
 export * from "./homepage";
+export * from "./payment";

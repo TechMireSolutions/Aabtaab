@@ -26,29 +26,70 @@ interface Ayah {
   sajda: boolean;
 }
 
-// Built-in Shia Tafsir for key verses
-const SHIA_TAFSIR: Record<string, { title: string; verse: string; text: string }> = {
-  "5:55": {
+interface ShiaInsight {
+  key?: string; // e.g., "5:55" for verse-specific tafsir
+  type: "Tafsir" | "Hadith";
+  title: string;
+  source: string;
+  arabic?: string;
+  text: string;
+  reference: string;
+}
+
+// A collection of built-in Shia Tafsir and Hadith with authentic references.
+const SHIA_INSIGHTS: ShiaInsight[] = [
+  {
+    key: "5:55",
+    type: "Tafsir",
     title: "Ayah of Wilayah (Verse of Leadership)",
-    verse: "Surah Al-Ma'idah (5:55)",
+    source: "Surah Al-Ma'idah, Verse 55",
+    arabic:
+      "إِنَّمَا وَلِيُّكُمُ اللَّهُ وَرَسُولُهُ وَالَّذِينَ آمَنُوا الَّذِينَ يُقِيمُونَ الصَّلَاةَ وَيُؤْتُونَ الزَّكَاةَ وَهُمْ رَاكِعُونَ",
     text: "Revealed when Imam Ali (A.S.) gave his ring to a beggar as charity (Zakat) while bowing down in prayer (Ruku). Scholars of Tafsir (both Shia and Sunni, e.g., Tafsir al-Mizan, al-Tabari) record this verse as definitive proof of the Wilayah (divine authority and leadership) of Imam Ali (A.S.) succeeding the Prophet (S.A.W.W.).",
+    reference: "Tafsir al-Mizan, Tafsir al-Tabari, Asbab al-Nuzul by al-Wahidi.",
   },
-  "33:33": {
+  {
+    key: "33:33",
+    type: "Tafsir",
     title: "Ayah of Tatheer (Verse of Purification)",
-    verse: "Surah Al-Ahzab (33:33)",
+    source: "Surah Al-Ahzab, Verse 33",
+    arabic:
+      "إِنَّمَا يُرِيدُ اللَّهُ لِيُذْهِبَ عَنكُمُ الرِّجْسَ أَهْلَ الْبَيْتِ وَيُطَهِّرَكُمْ تَطْهِيرًا",
     text: "Refers specifically to the Ahlul Bayt (A.S.) — Prophet Muhammad (S.A.W.W.), Imam Ali (A.S.), Sayyida Fatima (S.A.), Imam Hasan (A.S.), and Imam Husayn (A.S.) under the Cloak (Hadith al-Kisa). The verse confirms their divine purification and absolute infallibility (Ismah) from all forms of spiritual impurity or sin.",
+    reference: "Sahih Muslim, Book 31, Hadith 5955; Jami` at-Tirmidhi, Vol. 5, Book 44, Hadith 3205.",
   },
-  "3:61": {
+  {
+    key: "3:61",
+    type: "Tafsir",
     title: "Ayah of Mubahalah (Verse of Mutual Imprecation)",
-    verse: "Surah Aal-Imran (3:61)",
+    source: "Surah Aal-Imran, Verse 61",
     text: "Revealed during the debate with the Christians of Najran. The Prophet (S.A.W.W.) brought Imam Hasan and Imam Husayn (A.S.) as his 'sons', Sayyida Fatima (S.A.) as his 'women', and Imam Ali (A.S.) as his 'self' (nafs). This highlights the elevated status of the Ahlul Bayt (A.S.) as equal to the Prophet's own soul.",
+    reference: "Sahih Muslim, Book 31, Hadith 5915; Tafsir al-Qurtubi.",
   },
-  "42:23": {
+  {
+    key: "42:23",
+    type: "Tafsir",
     title: "Ayah of Mawaddah (Verse of Love)",
-    verse: "Surah Ash-Shura (42:23)",
+    source: "Surah Ash-Shura, Verse 23",
     text: "Commanding the Muslims to offer love and devotion to the Prophet's close relatives (Ahlul Bayt) as the sole recompense for his propagation of the message of Islam. This love is a prerequisite for faith and spiritual guidance.",
+    reference: "Al-Kashshaf by al-Zamakhshari; Tafsir Ibn Kathir.",
   },
-};
+  {
+    type: "Hadith",
+    title: "Hadith of the Two Weighty Things (Thaqalayn)",
+    source: "The Prophet Muhammad (S.A.W.W.)",
+    arabic: "إِنِّي تَارِكٌ فِيكُمُ الثَّقَلَيْنِ: كِتَابَ اللَّهِ وَعِتْرَتِي أَهْلَ بَيْتِي",
+    text: "I am leaving among you two weighty things: the first of which is the Book of Allah, in which there is guidance and light, so hold fast to it. And the second is my Ahlul Bayt (my household). I remind you of Allah with regard to my Ahlul Bayt.",
+    reference: "Sahih Muslim, Book 31, Hadith 5920; Jami` at-Tirmidhi, Hadith 3788.",
+  },
+  {
+    type: "Hadith",
+    title: "The Ark of Noah",
+    source: "The Prophet Muhammad (S.A.W.W.)",
+    text: "Behold! My Ahlul Bayt are like the Ark of Noah. Whoever embarked on it was saved, and whoever turned away from it was drowned.",
+    reference: "Mustadrak al-Hakim, Vol. 2, Page 343; Al-Mu'jam al-Kabir by al-Tabarani.",
+  },
+];
 
 const COMMON_SURAHS = [
   { number: 1, name: "الْفَاتِحَة", englishName: "Al-Fatiha", numberOfAyahs: 7 },
@@ -69,6 +110,7 @@ export default function DarUlQuranContent() {
   const [error, setError] = useState("");
   const [, startTransition] = useTransition();
   const [expandedTafsir, setExpandedTafsir] = useState<number | null>(null);
+  const [activeInsight, setActiveInsight] = useState<ShiaInsight | null>(null);
 
   const [prevSurah, setPrevSurah] = useState(selectedSurah);
   if (selectedSurah !== prevSurah) {
@@ -82,6 +124,13 @@ export default function DarUlQuranContent() {
   if (selectedAyah !== prevAyah) {
     setPrevAyah(selectedAyah);
     setExpandedTafsir(null);
+    const verseKey = `${selectedSurah}:${selectedAyah}`;
+    const verseInsight = SHIA_INSIGHTS.find((i) => i.key === verseKey);
+    if (verseInsight) {
+      setActiveInsight(verseInsight);
+    } else if (activeInsight?.key) {
+      setActiveInsight(SHIA_INSIGHTS.find((i) => !i.key) || null);
+    }
   }
 
   // Fetch Surahs list
@@ -179,8 +228,18 @@ export default function DarUlQuranContent() {
     });
   }, [selectedSurah]);
 
+  // Set initial random insight
+  useEffect(() => {
+    if (!activeInsight) {
+      const nonVerseSpecific = SHIA_INSIGHTS.filter((i) => !i.key);
+      const randomIndex = Math.floor(Math.random() * nonVerseSpecific.length);
+      setActiveInsight(nonVerseSpecific[randomIndex]);
+    }
+  }, []);
+
   const activeSurahDetails = surahs.find((s) => s.number === selectedSurah);
-  const keyTafsir = selectedAyah > 0 ? SHIA_TAFSIR[`${selectedSurah}:${selectedAyah}`] : null;
+  const verseKey = `${selectedSurah}:${selectedAyah}`;
+  const keyTafsir = SHIA_INSIGHTS.find((i) => i.key === verseKey);
 
   return (
     <div>
@@ -247,19 +306,28 @@ export default function DarUlQuranContent() {
               </div>
 
               {/* Shia Tafsir Insight Widget */}
-              {keyTafsir ? (
+              {activeInsight ? (
                 <div className="rounded-3xl border border-gold-500/30 bg-gold-950/20 dark:bg-gold-950/10 p-5 shadow-sm text-slate-900 dark:text-slate-100">
                   <div className="flex items-start gap-2.5">
                     <BookMarked className="text-gold-500 mt-0.5 shrink-0" size={18} />
                     <div>
-                      <h4 className="font-display font-bold text-sm-plus text-gold-600 dark:text-gold-400">
-                        {keyTafsir.title}
+                      <p className="badge-sm-gold-ghost mb-2">{activeInsight.type}</p>
+                      <h4 className="font-display font-bold text-base-plus text-gold-600 dark:text-gold-400">
+                        {activeInsight.title}
                       </h4>
                       <p className="text-2xs text-gold-600/70 dark:text-gold-400/60 uppercase tracking-widest mt-0.5 font-bold">
-                        {keyTafsir.verse}
+                        {activeInsight.source}
                       </p>
+                      {activeInsight.arabic && (
+                        <p className="font-arabic text-lg text-right text-slate-800 dark:text-slate-200 leading-relaxed mt-3" dir="rtl" lang="ar">
+                          {activeInsight.arabic}
+                        </p>
+                      )}
                       <p className="text-sm-plus leading-relaxed text-slate-700 dark:text-slate-300 mt-3 border-t border-gold-500/10 pt-2.5">
-                        {keyTafsir.text}
+                        {activeInsight.text}
+                      </p>
+                      <p className="text-xs text-slate-400 dark:text-slate-500 mt-3 pt-2 border-t border-gold-500/10">
+                        <span className="font-semibold">Reference:</span> {activeInsight.reference}
                       </p>
                     </div>
                   </div>
@@ -267,7 +335,7 @@ export default function DarUlQuranContent() {
               ) : (
                 <div className="rounded-3xl border border-dashed border-gray-200 dark:border-slate-800 bg-white/40 dark:bg-slate-900/10 p-5 text-center text-sm-plus text-gray-400 dark:text-slate-500">
                   <HelpCircle className="mx-auto text-gray-300 dark:text-slate-700 mb-2" size={24} />
-                  Select verse 5:55, 33:33, 3:61, or 42:23 to view Shia Tafsir insights.
+                  Select a verse like 5:55, 33:33, 3:61, or 42:23 to view specific Tafsir, or explore the Quran.
                 </div>
               )}
             </div>
@@ -302,15 +370,13 @@ export default function DarUlQuranContent() {
                     {arabicVerses
                       .filter((v) => selectedAyah === 0 || v.numberInSurah === selectedAyah)
                       .map((verse, index) => {
-                        const engVerse = englishVerses.find((ev) => ev.numberInSurah === verse.numberInSurah);
-                        const isShiaVerse = SHIA_TAFSIR[`${selectedSurah}:${verse.numberInSurah}`] !== undefined;
+                        const engVerse = englishVerses.find((ev) => ev.numberInSurah === verse.numberInSurah); const isShiaVerse = SHIA_INSIGHTS.some((i) => i.key === `${selectedSurah}:${verse.numberInSurah}`);
 
                         return (
                           <div
                             key={verse.number}
-                            className={`py-6 flex flex-col ${
-                              index === 0 ? "pt-0" : ""
-                            }`}
+                            className={`py-6 flex flex-col ${index === 0 ? "pt-0" : ""
+                              }`}
                           >
                             <div className="flex items-center justify-between mb-4">
                               <span className="flex size-7 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300">
@@ -319,11 +385,10 @@ export default function DarUlQuranContent() {
                               {isShiaVerse && (
                                 <button
                                   onClick={() => setExpandedTafsir((prev) => (prev === verse.numberInSurah ? null : verse.numberInSurah))}
-                                  className={`badge-pill cursor-pointer text-2xs uppercase tracking-wider font-bold transition-all ${
-                                    expandedTafsir === verse.numberInSurah
+                                  className={`badge-pill cursor-pointer text-2xs uppercase tracking-wider font-bold transition-all ${expandedTafsir === verse.numberInSurah
                                       ? "bg-gold-500 text-white border-gold-600"
                                       : "bg-gold-100/70 dark:bg-gold-950/20 border-gold-200 dark:border-gold-800/40 text-gold-600 dark:text-gold-400"
-                                  }`}
+                                    }`}
                                 >
                                   {expandedTafsir === verse.numberInSurah ? "Hide Tafsir" : "Tafsir Available"}
                                 </button>
@@ -342,21 +407,24 @@ export default function DarUlQuranContent() {
 
                             {expandedTafsir === verse.numberInSurah && isShiaVerse && (
                               <div className="mt-4 rounded-2xl border border-gold-500/20 bg-gold-50/30 dark:bg-gold-950/10 p-4 sm:p-5 motion-safe:animate-scale-in text-slate-900 dark:text-slate-100">
-                                <div className="flex items-start gap-2.5">
-                                  <BookMarked className="text-gold-600 dark:text-gold-400 mt-0.5 shrink-0" size={18} />
-                                  <div>
-                                    <h4 className="font-display font-bold text-sm-plus text-gold-700 dark:text-gold-400">
-                                      {SHIA_TAFSIR[`${selectedSurah}:${verse.numberInSurah}`]?.title}
-                                    </h4>
-                                    <p className="text-2xs text-gold-600/70 dark:text-gold-400/60 uppercase tracking-widest mt-0.5 font-bold">
-                                      {SHIA_TAFSIR[`${selectedSurah}:${verse.numberInSurah}`]?.verse}
-                                    </p>
-                                    <p className="text-sm-plus leading-relaxed text-slate-700 dark:text-slate-300 mt-3 border-t border-gold-500/10 pt-2.5">
-                                      {SHIA_TAFSIR[`${selectedSurah}:${verse.numberInSurah}`]?.text}
-                                    </p>
-                                  </div>
-                                </div>
-                              </div>
+                                {(() => {
+                                  const insight = SHIA_INSIGHTS.find(i => i.key === `${selectedSurah}:${verse.numberInSurah}`); return insight && (
+                                    <div className="flex items-start gap-2.5">
+                                      <BookMarked className="text-gold-600 dark:text-gold-400 mt-0.5 shrink-0" size={18} />
+                                      <div>
+                                        <h4 className="font-display font-bold text-sm-plus text-gold-700 dark:text-gold-400">
+                                          {insight.title}
+                                        </h4>
+                                        <p className="text-2xs text-gold-600/70 dark:text-gold-400/60 uppercase tracking-widest mt-0.5 font-bold">
+                                          {insight.source}
+                                        </p>
+                                        <p className="text-sm-plus leading-relaxed text-slate-700 dark:text-slate-300 mt-3 border-t border-gold-500/10 pt-2.5">
+                                          {insight.text}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  );
+                                })()}</div>
                             )}
                           </div>
                         );

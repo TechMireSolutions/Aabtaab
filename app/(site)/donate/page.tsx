@@ -1,9 +1,13 @@
 import Link from "next/link";
 import ProseSection from "@/components/portable-text/ProseSection";
-import PaymentMethods from "@/components/sections/PaymentMethods";
+import DynamicPaymentMethods from "@/components/sections/DynamicPaymentMethods";
 import { ArrowRight } from "lucide-react";
 import { defineCmsPageMetadata } from "@/lib/cms/page";
-import { getCmsPage, getSiteSettings } from "@/lib/cms/queries";
+import {
+  getCmsPage,
+  getSiteSettings,
+  getPaymentMethods,
+} from "@/lib/cms/queries";
 import {
   DEFAULT_DONATE_CAUSES,
   DEFAULT_PAYPAL_DONATE_URL,
@@ -17,9 +21,10 @@ export const generateMetadata = defineCmsPageMetadata("donate", {
 });
 
 export default async function DonatePage() {
-  const [settings, page] = await Promise.all([
+  const [settings, page, paymentMethods] = await Promise.all([
     getSiteSettings(),
     getCmsPage("donate"),
+    getPaymentMethods(),
   ]);
 
   const causes = settings?.donateCauses?.length
@@ -129,7 +134,7 @@ export default async function DonatePage() {
                 Use any of these local payment options for easy bank transfers and mobile payments.
               </p>
             </div>
-            <PaymentMethods />
+            <DynamicPaymentMethods methods={paymentMethods} />
           </div>
 
           <p className="text-caption mt-6 text-center">

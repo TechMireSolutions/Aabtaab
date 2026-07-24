@@ -26,6 +26,7 @@ import {
   homepageDataQuery,
   homepageHeroQuery,
   homepageCarouselsQuery,
+  paymentMethodsQuery,
 } from "@/sanity/lib/queries";
 import type { EventDetail, EventSummary } from "@/types/event";
 import type { CmsPageSummary, PostCardSummary } from "@/types/cms-page";
@@ -40,6 +41,7 @@ import type {
   HomePostSummary,
   HomeServiceSummary,
   HomepageSettings,
+  PaymentMethod,
   Testimonial,
 } from "@/types/homepage";
 import type { FooterNav, FooterService, HeaderNav } from "@/types/site-navigation";
@@ -300,4 +302,13 @@ export const getSitemapSlugs = cache(async () => {
     services: services ?? [],
     events: events ?? [],
   };
+});
+
+export const getPaymentMethods = cache(async () => {
+  return sanityFetch<PaymentMethod[]>({
+    query: paymentMethodsQuery,
+    tags: [CACHE_TAGS.siteSettings], // Re-using a broader tag for simplicity
+    revalidate: 86400,
+    config: { next: { revalidate: 3600 } },
+  });
 });

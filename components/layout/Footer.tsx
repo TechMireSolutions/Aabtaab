@@ -1,10 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import {
+  Clock,
   Mail,
   Phone,
   MapPin,
-  MessageCircle,
+  MessageSquare,
   ExternalLink,
   ArrowRight,
 } from "lucide-react";
@@ -22,13 +23,13 @@ interface FooterProps {
 }
 
 const FALLBACK_QUICK_LINKS: NavItem[] = [
-  { label: "Home", href: "/" },
-  { label: "Online Classes", href: "/online-courses" },
-  { label: "Services", href: "/services" },
-  { label: "Events", href: "/events" },
-  { label: "Articles", href: "/posts" },
-  { label: "Donate", href: "/donate" },
   { label: "About Us", href: "/about" },
+  { label: "Our Scholars", href: "/scholars" },
+  { label: "Online Courses", href: "/online-courses" },
+  { label: "Community Events", href: "/events" },
+  { label: "Read Articles", href: "/posts" },
+  { label: "Donate", href: "/donate" },
+  { label: "FAQs", href: "/faqs" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -36,9 +37,9 @@ const FALLBACK_SERVICES: FooterService[] = [
   { _id: "1", title: "Niyabat Ziarat", slug: "niyabat-ziarat" },
   { _id: "2", title: "Zakat", slug: "zakat" },
   { _id: "3", title: "Khums", slug: "khums" },
-  { _id: "4", title: "Ijara", slug: "ijara" },
-  { _id: "5", title: "Expiation", slug: "expiation" },
-  { _id: "6", title: "Sacrifice", slug: "sacrifice" },
+  { _id: "4", title: "Istikhara", slug: "istikhara" },
+  { _id: "5", title: "Aqiqa", slug: "aqiqa" },
+  { _id: "6", title: "View All Services", slug: "" },
 ];
 
 function ColHeading({ id, children }: { id?: string; children: React.ReactNode }) {
@@ -95,17 +96,17 @@ export default function Footer({
 
   const services = footerServices?.length
     ? footerServices.map((s) => ({
-        label: s.title,
-        href: `/services/${s.slug}`,
-      }))
+      label: s.title,
+      href: `/services/${s.slug}`,
+    })).slice(0, 6)
     : FALLBACK_SERVICES.map((s) => ({
-        label: s.title,
-        href: `/services/${s.slug}`,
-      }));
+      label: s.title,
+      href: `/services/${s.slug}`,
+    }));
 
   return (
     <footer className="section-deferred bg-slate-50 dark:bg-slate-900/50 border-t border-slate-200 dark:border-slate-800/80">
-      {/* ── Main body ── */}
+      {/* Main body */}
       <div className="container-page py-6 sm:py-10 lg:py-12">
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-6 sm:gap-8 lg:gap-10">
           {/* Col 1 — Logo + Brand (full width on mobile) */}
@@ -200,16 +201,16 @@ export default function Footer({
           </nav>
 
           {/* Col 4 — Contact (full width on mobile) */}
-          <div className="col-span-2 lg:col-span-1">
+          <div className="col-span-2 md:col-span-1">
             <ColHeading>Contact Us</ColHeading>
-            <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-x-4 gap-y-2 sm:gap-y-3">
+            <ul className="grid grid-cols-1 gap-x-4 gap-y-2 sm:gap-y-3">
               {settings?.email && (
                 <li>
                   <a
                     href={`mailto:${settings.email}`}
                     className={CONTACT_LINK_CLASS}
                   >
-                    <Mail size={12} className="text-brand-500 dark:text-brand-400 shrink-0" aria-hidden="true" />
+                    <Mail size={13} className="text-brand-500 dark:text-brand-400 shrink-0" aria-hidden="true" />
                     <span className="truncate">{settings.email}</span>
                   </a>
                 </li>
@@ -220,7 +221,7 @@ export default function Footer({
                     href={`tel:${settings.phone}`}
                     className={CONTACT_LINK_CLASS}
                   >
-                    <Phone size={12} className="text-brand-500 dark:text-brand-400 shrink-0" aria-hidden="true" />
+                    <Phone size={13} className="text-brand-500 dark:text-brand-400 shrink-0" aria-hidden="true" />
                     {settings.phone}
                   </a>
                 </li>
@@ -233,22 +234,35 @@ export default function Footer({
                     rel="noopener noreferrer"
                     className={CONTACT_LINK_CLASS}
                   >
-                    <MessageCircle
-                      size={12}
+                    <MessageSquare
+                      size={13}
                       className="text-brand-500 dark:text-brand-400 shrink-0"
                       aria-hidden="true"
                     />
-                    WhatsApp: {settings.whatsapp}
+                    WhatsApp
                     <span className="sr-only"> (opens in new tab)</span>
                   </a>
                 </li>
               )}
               {settings?.address && (
-                <li className="flex items-start gap-2">
-                  <MapPin size={12} className="text-brand-500 dark:text-brand-400 shrink-0 mt-0.5" aria-hidden="true" />
-                  <p className="text-sm-plus text-slate-500 dark:text-slate-400 leading-relaxed whitespace-pre-line">
-                    {settings.address}
-                  </p>
+                <li>
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(settings.address)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={CONTACT_LINK_CLASS}
+                  >
+                    <MapPin size={13} className="text-brand-500 dark:text-brand-400 shrink-0" aria-hidden="true" />
+                    <span className="whitespace-pre-line leading-relaxed">{settings.address}</span>
+                  </a>
+                </li>
+              )}
+              {settings?.workingHours && (
+                <li className="flex items-center gap-2 text-sm-plus text-slate-500 dark:text-slate-400">
+                  <Clock size={13} className="text-brand-500 dark:text-brand-400 shrink-0" aria-hidden="true" />
+                  <span>
+                    {settings.workingHours}
+                  </span>
                 </li>
               )}
               {!settings?.email && !settings?.phone && !settings?.address && (
@@ -271,7 +285,7 @@ export default function Footer({
         </div>
       </div>
 
-      {/* ── Bottom bar ── */}
+      {/* Bottom bar */}
       <div className="border-t border-slate-200 dark:border-slate-800/80 bg-white dark:bg-slate-950/40">
         <div className="container-page py-4 flex flex-col sm:flex-row items-center justify-between gap-2">
           <p className="text-2xs sm:text-xs-plus text-slate-500 dark:text-slate-500">
@@ -280,24 +294,24 @@ export default function Footer({
           <nav aria-label="Footer utility links">
             <div className="flex items-center gap-1 text-slate-300 dark:text-slate-700">
               <Link
-                href="/about"
+                href="/privacy-policy"
                 className="text-2xs sm:text-xs-plus rounded-sm px-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
               >
-                About
+                Privacy Policy
               </Link>
               <span aria-hidden="true">·</span>
               <Link
-                href="/contact"
+                href="/terms-of-service"
                 className="text-2xs sm:text-xs-plus rounded-sm px-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
               >
-                Contact
+                Terms of Service
               </Link>
               <span aria-hidden="true">·</span>
               <Link
-                href="/donate"
+                href="/sitemap.xml"
                 className="text-2xs sm:text-xs-plus rounded-sm px-2 text-slate-500 dark:text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
               >
-                Donate
+                Sitemap
               </Link>
             </div>
           </nav>
