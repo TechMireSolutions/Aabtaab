@@ -108,7 +108,7 @@ export default function Header({
         setSearchOpen(true);
       }
     }
-    
+
     function handleScroll() {
       setScrolled(window.scrollY > 15);
     }
@@ -126,14 +126,12 @@ export default function Header({
   return (
     <>
       <header
-        className={`sticky top-0 z-50 border-b border-gray-200/80 dark:border-slate-800/80 bg-white/90 dark:bg-slate-950/90 shadow-header backdrop-blur-md transition-all duration-300 ${
-          scrolled ? "py-0.5 shadow-md bg-white/96 dark:bg-slate-950/96" : ""
-        }`}
+        className={`sticky top-0 z-50 border-b border-gray-200/80 dark:border-slate-800/80 bg-white/90 dark:bg-slate-950/90 shadow-header backdrop-blur-md transition-all duration-300 ${scrolled ? "py-0.5 shadow-md bg-white/96 dark:bg-slate-950/96" : ""
+          }`}
       >
         <div
-          className={`container-page flex items-center gap-2 lg:gap-8 transition-all duration-300 ${
-            scrolled ? "h-14" : "h-header"
-          }`}
+          className={`container-page flex items-center gap-2 lg:gap-8 transition-all duration-300 ${scrolled ? "h-14" : "h-header"
+            }`}
         >
           <MobileNavSidebarLoader
             siteName={siteName}
@@ -158,7 +156,7 @@ export default function Header({
 
           <Link
             href="/donate"
-            className="ml-auto hidden items-center gap-2 rounded-full bg-brand-600 px-5 py-2 text-sm-plus font-semibold text-white shadow-md shadow-brand-600/25 animate-donate-glow transition-all duration-200 hover:bg-brand-700 hover:shadow-lg hover:shadow-brand-600/30 hover:scale-105 active:scale-95 lg:inline-flex cursor-pointer"
+            className="ml-auto hidden items-center gap-2 rounded-full bg-brand-600 px-5 py-2 text-sm-plus font-semibold text-white shadow-md shadow-brand-600/25 animate-donate-glow transition-all duration-200 hover:bg-brand-700 hover:shadow-lg hover:shadow-brand-600/30 hover:scale-105 active:scale-95 lg:inline-flex"
           >
             Donate
           </Link>
@@ -167,15 +165,7 @@ export default function Header({
             type="button"
             onClick={() => setSearchOpen(true)}
             aria-label="Search"
-            className="flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 lg:flex hover:border-gray-300 dark:hover:border-slate-700 cursor-pointer"
-          >
-            <Search className="size-5" aria-hidden="true" />
-          </button>
-
-          <button
-            onClick={() => setSearchOpen(true)}
-            aria-label="Search"
-            className="flex h-11 w-11 items-center justify-center rounded-full text-gray-600 dark:text-slate-400 transition-colors hover:bg-gray-100 dark:hover:bg-slate-900 focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 lg:hidden cursor-pointer"
+            className="ml-auto flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white text-slate-600 transition-colors hover:border-gray-300 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 dark:hover:border-slate-700 lg:ml-0"
           >
             <Search className="size-5" aria-hidden="true" />
           </button>
