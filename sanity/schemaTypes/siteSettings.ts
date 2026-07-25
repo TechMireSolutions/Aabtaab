@@ -35,6 +35,13 @@ export const siteSettings = defineType({
     defineField({ name: "email", type: "string" }),
     defineField({ name: "phone", type: "string" }),
     defineField({ name: "address", type: "text", rows: 3 }),
+    defineField({ 
+      name: "addressLink", 
+      type: "url", 
+      title: "Custom Address Link (Google Maps)", 
+      description: "If provided, this link will be used when clicking the address in the footer."
+    }),
+    defineField({ name: "workingHours", type: "string", title: "Working Hours" }),
     defineField({ name: "city", type: "string" }),
     defineField({ name: "state", type: "string" }),
     defineField({

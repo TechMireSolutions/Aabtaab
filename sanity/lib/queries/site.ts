@@ -37,7 +37,7 @@ export const siteSettingsQuery = `
   *[_type == "siteSettings"][0]{
     siteName, description, favicon, logo, tagline,
     siteUrl, twitterHandle,
-    email, phone, address, city, state, country,
+    email, phone, address, addressLink, workingHours, city, state, country,
     facebook, youtube, whatsapp, darulQuranUrl, donateUrl,
     searchPlaceholder, contactFormSubjects, contactFormSubmitLabel,
     donateArabicVerse, donateHowToHeading, donateHowToText,

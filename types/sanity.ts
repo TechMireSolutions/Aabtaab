@@ -26,6 +26,7 @@ export interface SiteSettings {
   phone?: string;
   workingHours?: string;
   address?: string;
+  addressLink?: string;
   city?: string;
   state?: string;
   country?: string;

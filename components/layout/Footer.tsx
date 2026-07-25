@@ -212,7 +212,7 @@ export default function Footer({
               {settings?.address && (
                 <li>
                   <a
-                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(settings.address)}`}
+                    href={settings.addressLink || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(settings.address)}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className={CONTACT_LINK_CLASS}
