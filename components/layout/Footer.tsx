@@ -21,23 +21,6 @@ interface FooterProps {
   footerServices?: FooterService[];
 }
 
-const FALLBACK_QUICK_LINKS: NavItem[] = [
-  { label: "Home", href: "/" },
-  { label: "About Us", href: "/about" },
-  { label: "Online Courses", href: "/online-courses" },
-  { label: "Our Scholars", href: "/scholars" },
-  { label: "Donate", href: "/donate" },
-  { label: "FAQs", href: "/faqs" },
-  { label: "Contact", href: "/contact" },
-];
-
-const FALLBACK_SERVICES: FooterService[] = [
-  { _id: "1", title: "Niyabat Ziarat", slug: "niyabat-ziarat" },
-  { _id: "2", title: "Zakat", slug: "zakat" },
-  { _id: "3", title: "Khums", slug: "khums" },
-  { _id: "4", title: "Istikhara", slug: "istikhara" },
-  { _id: "5", title: "All Services", slug: "" },
-];
 
 function ColHeading({ id, children }: { id?: string; children: React.ReactNode }) {
   return (
@@ -82,18 +65,12 @@ export default function Footer({
     settings?.tagline ||
     "Spreading the light of Ahlul Bayt (A.S.) through education, authentic content, and spiritual services. Join us in our mission to serve the Ummah.";
 
-  const quickLinks =
-    footerNav?.items?.length ? footerNav.items : FALLBACK_QUICK_LINKS;
+  const quickLinks = footerNav?.items || [];
 
-  const services = footerServices?.length
-    ? footerServices.map((s) => ({
-      label: s.title,
-      href: `/services/${s.slug}`,
-    })).slice(0, 5)
-    : FALLBACK_SERVICES.map((s) => ({
-      label: s.title,
-      href: s.slug ? `/services/${s.slug}` : "/services",
-    }));
+  const services = (footerServices || []).map((s) => ({
+    label: s.title,
+    href: `/services/${s.slug}`,
+  })).slice(0, 5);
 
   return (
     <footer className="bg-slate-950 text-slate-300 border-t border-slate-900 relative overflow-hidden">
@@ -201,28 +178,32 @@ export default function Footer({
           </div>
 
           {/* Col 2 — Quick Links (2 cols) */}
-          <nav className="lg:col-span-2" aria-labelledby="footer-quick-links">
-            <ColHeading id="footer-quick-links">Quick Links</ColHeading>
-            <ul className="space-y-1">
-              {quickLinks.map(({ label, href }) => (
-                <NavLink key={href} href={href}>
-                  {label}
-                </NavLink>
-              ))}
-            </ul>
-          </nav>
+          {quickLinks.length > 0 && (
+            <nav className="lg:col-span-2" aria-labelledby="footer-quick-links">
+              <ColHeading id="footer-quick-links">Quick Links</ColHeading>
+              <ul className="space-y-1">
+                {quickLinks.map(({ label, href }) => (
+                  <NavLink key={href} href={href}>
+                    {label}
+                  </NavLink>
+                ))}
+              </ul>
+            </nav>
+          )}
 
           {/* Col 3 — Services (2 cols) */}
-          <nav className="lg:col-span-2" aria-labelledby="footer-services">
-            <ColHeading id="footer-services">Services</ColHeading>
-            <ul className="space-y-1">
-              {services.map(({ label, href }) => (
-                <NavLink key={href} href={href}>
-                  {label}
-                </NavLink>
-              ))}
-            </ul>
-          </nav>
+          {services.length > 0 && (
+            <nav className="lg:col-span-2" aria-labelledby="footer-services">
+              <ColHeading id="footer-services">Services</ColHeading>
+              <ul className="space-y-1">
+                {services.map(({ label, href }) => (
+                  <NavLink key={href} href={href}>
+                    {label}
+                  </NavLink>
+                ))}
+              </ul>
+            </nav>
+          )}
 
           {/* Col 4 — Contact Info (4 cols) */}
           <div className="lg:col-span-4">
