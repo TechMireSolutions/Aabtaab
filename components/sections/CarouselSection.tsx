@@ -152,7 +152,7 @@ export default function CarouselSection({
               <div
                 key={item.id}
                 data-card
-                className="w-carousel-card shrink-0 snap-start sm:w-carousel-card-md lg:w-carousel-card-lg"
+                className="w-carousel-card flex shrink-0 snap-start sm:w-carousel-card-md lg:w-carousel-card-lg"
               >
                 <ContentCard
                   image={item.image}

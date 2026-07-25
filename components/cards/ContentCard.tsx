@@ -25,7 +25,7 @@ export default function ContentCard({
 }: ContentCardProps) {
   return (
     <div
-      className={`card-interactive group relative flex flex-col overflow-hidden ${
+      className={`card-interactive group relative flex h-full w-full flex-col overflow-hidden ${
         active
           ? "border-brand-200/80 shadow-card-active"
           : ""
