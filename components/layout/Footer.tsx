@@ -290,13 +290,6 @@ export default function Footer({
               >
                 Terms &amp; Conditions
               </Link>
-              <span aria-hidden="true" className="text-slate-800">|</span>
-              <Link
-                href="/faqs"
-                className="hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-brand-400 rounded-sm"
-              >
-                FAQs
-              </Link>
             </div>
           </nav>
         </div>
