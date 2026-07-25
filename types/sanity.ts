@@ -24,6 +24,7 @@ export interface SiteSettings {
   donateUrl?: string;
   email?: string;
   phone?: string;
+  workingHours?: string;
   address?: string;
   city?: string;
   state?: string;

@@ -233,13 +233,15 @@ export default function DarUlQuranContent() {
     if (!activeInsight) {
       const nonVerseSpecific = SHIA_INSIGHTS.filter((i) => !i.key);
       const randomIndex = Math.floor(Math.random() * nonVerseSpecific.length);
-      setActiveInsight(nonVerseSpecific[randomIndex]);
+      const timer = setTimeout(() => {
+        setActiveInsight(nonVerseSpecific[randomIndex]);
+      }, 0);
+      return () => clearTimeout(timer);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const activeSurahDetails = surahs.find((s) => s.number === selectedSurah);
-  const verseKey = `${selectedSurah}:${selectedAyah}`;
-  const keyTafsir = SHIA_INSIGHTS.find((i) => i.key === verseKey);
 
   return (
     <div>

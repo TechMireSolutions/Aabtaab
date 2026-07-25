@@ -34,14 +34,13 @@ import type { ContactFormOption } from "@/types/contact";
 import type { SlugParent } from "@/types/sanity";
 import type { CourseDetail } from "@/types/course";
 import type { ServiceDetail } from "@/types/service";
-import type { Post } from "@/types/sanity";
+import type { Post, PaymentMethod } from "@/types/sanity";
 import type { TopLevelCourseSummary, TopLevelServiceSummary } from "@/types/catalog";
 import type {
   HomeCourseSummary,
   HomePostSummary,
   HomeServiceSummary,
   HomepageSettings,
-  PaymentMethod,
   Testimonial,
 } from "@/types/homepage";
 import type { FooterNav, FooterService, HeaderNav } from "@/types/site-navigation";
@@ -307,8 +306,7 @@ export const getSitemapSlugs = cache(async () => {
 export const getPaymentMethods = cache(async () => {
   return sanityFetch<PaymentMethod[]>({
     query: paymentMethodsQuery,
-    tags: [CACHE_TAGS.siteSettings], // Re-using a broader tag for simplicity
+    tags: [CACHE_TAGS.siteSettings],
     revalidate: 86400,
-    config: { next: { revalidate: 3600 } },
   });
 });
