@@ -35,6 +35,7 @@ export default async function ScholarsPage() {
             </div>
           ) : (
             <div className="flex flex-wrap justify-center gap-8 md:gap-10">
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
               {scholars.map((scholar: any) => (
                 <div
                   key={scholar._id}

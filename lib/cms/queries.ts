@@ -244,6 +244,7 @@ export const getTestimonials = cache(async () => {
 });
 
 export const getScholars = cache(async () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return sanityFetch<any[]>({
     query: `*[_type == "scholar"] | order(order asc, name asc) {
       _id, name, slug, image, qualifications, contactDetails, bio
@@ -253,6 +254,7 @@ export const getScholars = cache(async () => {
 });
 
 export const getCountries = cache(async () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return sanityFetch<any[]>({
     query: `*[_type == "country"] | order(order asc, name asc) {
       _id, name, flagIcon, flagImage

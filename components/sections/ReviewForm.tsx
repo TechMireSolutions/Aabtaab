@@ -39,12 +39,15 @@ export default function ReviewForm() {
 
       setStatus("success");
       (e.target as HTMLFormElement).reset();
-    } catch (err: any) {
+    } catch (err: unknown) {
       setStatus("error");
       if (err instanceof z.ZodError) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         setErrorMessage((err as any).errors[0].message);
+      } else if (err instanceof Error) {
+        setErrorMessage(err.message);
       } else {
-        setErrorMessage(err.message || "Something went wrong.");
+        setErrorMessage("Something went wrong.");
       }
     }
   }

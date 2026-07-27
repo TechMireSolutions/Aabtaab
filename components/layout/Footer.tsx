@@ -8,7 +8,7 @@ import {
   MessageSquare,
   ExternalLink
 } from "lucide-react";
-import type { FooterNav, FooterService, NavItem } from "@/types/site-navigation";
+import type { FooterNav, FooterService } from "@/types/site-navigation";
 import type { SiteSettings } from "@/types/sanity";
 import { resolveSiteName } from "@/lib/constants";
 import { FacebookIcon, YoutubeIcon } from "@/components/icons/SocialIcons";

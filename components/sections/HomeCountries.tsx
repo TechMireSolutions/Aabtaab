@@ -39,7 +39,7 @@ export default async function HomeCountries() {
     }
   }
 
-  const renderCountryCard = (country: any, key: string) => (
+  const renderCountryCard = (country: { name: string; flagImage?: unknown; flagIcon: string }, key: string) => (
     <div
       key={key}
       className="flex items-center gap-4 px-6 py-4 bg-white/70 dark:bg-slate-900/60 backdrop-blur-xl border border-white dark:border-slate-800 shadow-xl shadow-brand-900/5 rounded-3xl transition-transform hover:-translate-y-1"

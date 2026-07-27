@@ -38,8 +38,9 @@ export async function POST(req: Request) {
     await writeClient.create(doc);
 
     return NextResponse.json({ success: true });
-  } catch (error: any) {
+  } catch (error: unknown) {
     if (error instanceof z.ZodError) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       return NextResponse.json({ error: (error as any).errors[0].message }, { status: 400 });
     }
     console.error("Review submission error:", error);
