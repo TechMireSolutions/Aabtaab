@@ -177,24 +177,7 @@ export const homepageSettings = defineType({
       title: "About — CTA Button Label",
       initialValue: "Learn About Us",
     }),
-    defineField({
-      name: "aboutHadithArabic",
-      type: "string",
-      title: "About — Hadith (Arabic)",
-      initialValue: "اُطْلُبُوا الْعِلْمَ مِنَ الْمَهْدِ إِلَى اللَّحْدِ",
-    }),
-    defineField({
-      name: "aboutHadithTranslation",
-      type: "string",
-      title: "About — Hadith (English)",
-      initialValue: "Seek knowledge from the cradle to the grave.",
-    }),
-    defineField({
-      name: "aboutHadithAttribution",
-      type: "string",
-      title: "About — Hadith Attribution",
-      initialValue: "Prophet Muhammad (S.A.W.W.)",
-    }),
+
     defineField({
       name: "aboutStat1Value",
       type: "string",

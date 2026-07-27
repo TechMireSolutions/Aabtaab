@@ -39,10 +39,10 @@ export default async function DonatePage() {
             {settings?.donateArabicVerse ||
               "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ"}
           </p>
-          <p className="text-eyebrow-gold mb-3 flex items-center justify-center gap-2">
-            <span className="eyebrow-line-gold" />
+          <p className="text-eyebrow mb-3 flex items-center justify-center gap-2">
+            <span className="eyebrow-line" aria-hidden="true" />
             {page?.eyebrow || "Give Back"}
-            <span className="eyebrow-line-gold" />
+            <span className="eyebrow-line" aria-hidden="true" />
           </p>
           <h1 className="heading-page mb-3">
             {page?.title || "Donate"}
@@ -54,10 +54,10 @@ export default async function DonatePage() {
         </div>
       </div>
 
-      <div className="section-muted">
+      <div className="section-y bg-white dark:bg-slate-950">
         <div className="container-content">
           {page?.body && (
-            <div className="prose prose-sm mb-8 max-w-none text-gray-700 sm:mb-10">
+            <div className="prose prose-sm mb-8 max-w-none text-gray-700 dark:text-gray-300 sm:mb-10">
               <ProseSection value={page.body} variant="article" />
             </div>
           )}
@@ -73,10 +73,10 @@ export default async function DonatePage() {
                     {i + 1}
                   </span>
                 </div>
-                <h3 className="mb-1 text-sm-plus font-semibold text-slate-900">
+                <h3 className="mb-1 text-sm-plus font-semibold text-slate-900 dark:text-white">
                   {title}
                 </h3>
-                <p className="text-sm-plus leading-relaxed text-gray-500">
+                <p className="text-sm-plus leading-relaxed text-gray-500 dark:text-slate-400">
                   {description}
                 </p>
               </div>
@@ -122,10 +122,10 @@ export default async function DonatePage() {
 
           <div className="mt-8 sm:mt-10">
             <div className="mb-5 text-center">
-              <p className="text-eyebrow-gold mb-2 flex items-center justify-center gap-2">
-                <span className="eyebrow-line-gold" />
+              <p className="text-eyebrow mb-2 flex items-center justify-center gap-2">
+                <span className="eyebrow-line" aria-hidden="true" />
                 Local Payment Methods
-                <span className="eyebrow-line-gold" />
+                <span className="eyebrow-line" aria-hidden="true" />
               </p>
               <h2 className="heading-section text-slate-900">
                 Donate via Pakistani Payment Methods

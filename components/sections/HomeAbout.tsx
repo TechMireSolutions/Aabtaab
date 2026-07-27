@@ -4,53 +4,46 @@ import { useState, useTransition, useMemo } from "react";
 import Link from "next/link";
 import { ArrowRight, RefreshCw } from "lucide-react";
 import type { HomepageSettings } from "@/types/homepage";
+import type { QuoteItem } from "@/types/sanity";
 
 interface HomeAboutProps {
   homepage: HomepageSettings | null;
+  quotes?: QuoteItem[] | null;
 }
 
-interface HadithItem {
-  arabic: string;
-  translation: string;
-  attribution: string;
-}
 
-const STATIC_HADITHS: HadithItem[] = [
+const STATIC_QUOTES: QuoteItem[] = [
   {
     arabic: "إِنَّ الْقَلْبَ الْحَدَثَ كَالأَرْضِ الْخَالِيَةِ مَا أُلْقِيَ فِيهَا مِنْ شَيْءٍ قَبِلَتْهُ",
     translation: "Indeed, the heart of a youth is like uncultivated land; whatever is sown in it, it accepts.",
-    attribution: "Imam Ali (A.S.) — Nahjul Balagha",
+    attribution: "Imam Ali (A.S.)",
+    reference: "Nahjul Balagha, Letter 31",
   },
   {
     arabic: "طَلَبُ الْعِلْمِ فَرِيضَةٌ عَلَى كُلِّ مُسْلِمٍ، أَلَا إِنَّ اللَّهَ يُحِبُّ بُغَاةَ الْعِلْمِ",
     translation: "The acquisition of knowledge is a duty upon every Muslim; indeed Allah loves the seekers of knowledge.",
     attribution: "Imam Ja'far al-Sadiq (A.S.)",
+    reference: "Al-Kafi, Vol 1, Page 30",
   },
   {
-    arabic: "الْعِلْمُ كَنْزٌ عَظِيمٌ لَا يَفْنَى",
-    translation: "Knowledge is a grand treasure that is never exhausted.",
-    attribution: "Imam Ali (A.S.)",
-  },
-  {
-    arabic: "مَنْ عَمِلَ عَلَى غَيْرِ عِلْمٍ كَانَ مَا يُفْسِدُ أَكْثَرَ مِمَّا يُصْلِحُ",
-    translation: "If a person acts without knowledge, what they spoil is more than what they rectify.",
-    attribution: "Imam Ja'far al-Sadiq (A.S.)",
+    arabic: "شَهْرُ رَمَضَانَ الَّذِي أُنزِلَ فِيهِ الْقُرْآنُ هُدًى لِّلنَّاسِ",
+    translation: "The month of Ramadhan [is that] in which was revealed the Qur'an, a guidance for the people.",
+    attribution: "Quran",
+    reference: "Surah Al-Baqarah (2:185)",
   },
 ];
 
-export default function HomeAbout({ homepage: hp }: HomeAboutProps) {
+export default function HomeAbout({ homepage: hp, quotes }: HomeAboutProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [fade, setFade] = useState(true);
   const [, startTransition] = useTransition();
 
   const hadithList = useMemo(() => {
-    const initialHadith: HadithItem = {
-      arabic: hp?.aboutHadithArabic || "اُطْلُبُوا الْعِلْمَ مِنَ الْمَهْدِ إِلَى اللَّحْدِ",
-      translation: hp?.aboutHadithTranslation || "Seek knowledge from the cradle to the grave.",
-      attribution: hp?.aboutHadithAttribution || "Prophet Muhammad (S.A.W.W.)",
-    };
-    return [initialHadith, ...STATIC_HADITHS];
-  }, [hp]);
+    if (quotes && quotes.length > 0) {
+      return quotes;
+    }
+    return STATIC_QUOTES;
+  }, [quotes]);
 
   const [prevListLength, setPrevListLength] = useState(hadithList.length);
   if (hadithList.length !== prevListLength) {
@@ -68,11 +61,7 @@ export default function HomeAbout({ homepage: hp }: HomeAboutProps) {
     }, 250);
   }
 
-  const activeHadith = hadithList[currentIndex] || {
-    arabic: hp?.aboutHadithArabic || "اُطْلُبُوا الْعِلْمَ مِنَ الْمَهْدِ إِلَى اللَّحْدِ",
-    translation: hp?.aboutHadithTranslation || "Seek knowledge from the cradle to the grave.",
-    attribution: hp?.aboutHadithAttribution || "Prophet Muhammad (S.A.W.W.)",
-  };
+  const activeHadith = hadithList[currentIndex] || STATIC_QUOTES[0];
 
   return (
     <section className="relative section-y-xl overflow-hidden border-b border-gray-100 dark:border-slate-900 bg-white dark:bg-slate-950">
@@ -152,8 +141,11 @@ export default function HomeAbout({ homepage: hp }: HomeAboutProps) {
                 <p className="text-center text-sm-plus leading-relaxed italic text-slate-300 select-all px-4">
                   &quot;{activeHadith.translation}&quot;
                 </p>
-                <p className="text-caption mt-3.5 text-center font-semibold tracking-wide text-gold-500">
-                  — {activeHadith.attribution}
+                <p className="text-caption mt-3.5 text-center font-semibold tracking-wide text-gold-500 flex flex-col items-center gap-1">
+                  <span>— {activeHadith.attribution}</span>
+                  {activeHadith.reference && (
+                    <span className="text-[12px] font-normal text-slate-400">[{activeHadith.reference}]</span>
+                  )}
                 </p>
               </div>
 

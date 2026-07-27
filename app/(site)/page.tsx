@@ -35,7 +35,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const { settings, homepage: hp } = await getHomepageHeroData();
+  const { settings, homepage: hp, quotes } = await getHomepageHeroData();
   const siteName = resolveSiteName(settings);
   const siteUrl = getSiteUrl();
 
@@ -57,7 +57,7 @@ export default async function HomePage() {
       <Suspense fallback={null}>
         <UpcomingEventsCountdown />
       </Suspense>
-      <HomeAbout homepage={hp} />
+      <HomeAbout homepage={hp} quotes={quotes} />
       <Suspense fallback={<HomeSectionsSkeleton />}>
         <HomeSections />
       </Suspense>

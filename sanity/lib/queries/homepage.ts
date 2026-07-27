@@ -12,7 +12,8 @@ const SITE_SETTINGS_FRAGMENT = `*[_type == "siteSettings"][0]{
 /** Hero + metadata — small payload for fast mobile LCP */
 export const homepageHeroQuery = `{
   "homepage": *[_type == "homepageSettings"][0],
-  "settings": ${SITE_SETTINGS_FRAGMENT}
+  "settings": ${SITE_SETTINGS_FRAGMENT},
+  "quotes": *[_type == "quote"] | order(_createdAt asc)
 }`;
 
 /** Below-fold carousels — streamed after hero + about */
@@ -73,5 +74,6 @@ export const homepageDataQuery = `{
     eventType, status, image, isFree, price,
     city, state, venueName, registrationUrl
   },
-  "settings": ${SITE_SETTINGS_FRAGMENT}
+  "settings": ${SITE_SETTINGS_FRAGMENT},
+  "quotes": *[_type == "quote"] | order(_createdAt asc)
 }`;

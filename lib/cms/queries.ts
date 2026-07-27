@@ -34,7 +34,7 @@ import type { ContactFormOption } from "@/types/contact";
 import type { SlugParent } from "@/types/sanity";
 import type { CourseDetail } from "@/types/course";
 import type { ServiceDetail } from "@/types/service";
-import type { Post, PaymentMethod } from "@/types/sanity";
+import type { Post, PaymentMethod, QuoteItem } from "@/types/sanity";
 import type { TopLevelCourseSummary, TopLevelServiceSummary } from "@/types/catalog";
 import type {
   HomeCourseSummary,
@@ -110,6 +110,7 @@ export const getHomepageHeroData = cache(async () => {
   const data = await sanityFetch<{
     homepage?: HomepageSettings | null;
     settings?: Awaited<ReturnType<typeof fetchSiteSettingsUncached>> | null;
+    quotes?: QuoteItem[] | null;
   } | null>({
     query: homepageHeroQuery,
     tags: [CACHE_TAGS.homepage, CACHE_TAGS.siteSettings],
@@ -119,6 +120,7 @@ export const getHomepageHeroData = cache(async () => {
   return {
     homepage: data?.homepage ?? null,
     settings: data?.settings ?? null,
+    quotes: data?.quotes ?? [],
   };
 });
 

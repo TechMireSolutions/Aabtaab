@@ -50,9 +50,6 @@ export interface HomepageSettings {
   aboutBody2?: string;
   aboutPillars?: string[];
   aboutCtaLabel?: string;
-  aboutHadithArabic?: string;
-  aboutHadithTranslation?: string;
-  aboutHadithAttribution?: string;
   aboutStat1Value?: string;
   aboutStat1Label?: string;
   aboutStat2Value?: string;
