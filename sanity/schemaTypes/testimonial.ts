@@ -6,6 +6,20 @@ export const testimonial = defineType({
   type: "document",
   fields: [
     defineField({
+      name: "status",
+      type: "string",
+      title: "Status",
+      options: {
+        list: [
+          { title: "Pending", value: "pending" },
+          { title: "Approved", value: "approved" },
+        ],
+        layout: "radio",
+      },
+      initialValue: "pending",
+      validation: (r) => r.required(),
+    }),
+    defineField({
       name: "quote",
       type: "text",
       title: "Quote",

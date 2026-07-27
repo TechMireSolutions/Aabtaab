@@ -7,12 +7,14 @@ interface HomeHeroProps {
   settings: SiteSettings | null;
   homepage: HomepageSettings | null;
   siteName: string;
+  courseCount?: number;
 }
 
 export default function HomeHero({
   settings,
   homepage: hp,
   siteName,
+  courseCount,
 }: HomeHeroProps) {
   const heroImageUrl = hp?.heroImage
     ? urlFor(hp.heroImage).width(1200).height(700).url()
@@ -34,6 +36,7 @@ export default function HomeHero({
       cta1Link={cta1Link}
       cta2Label={hp?.heroCta2Label || undefined}
       cta2Link={hp?.heroCta2Link || undefined}
+      courseCount={courseCount}
     />
   );
 }

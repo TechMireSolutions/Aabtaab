@@ -111,6 +111,9 @@ export const getHomepageHeroData = cache(async () => {
     homepage?: HomepageSettings | null;
     settings?: Awaited<ReturnType<typeof fetchSiteSettingsUncached>> | null;
     quotes?: QuoteItem[] | null;
+    courseCount?: number;
+    scholarCount?: number;
+    countryCount?: number;
   } | null>({
     query: homepageHeroQuery,
     tags: [CACHE_TAGS.homepage, CACHE_TAGS.siteSettings],
@@ -121,6 +124,9 @@ export const getHomepageHeroData = cache(async () => {
     homepage: data?.homepage ?? null,
     settings: data?.settings ?? null,
     quotes: data?.quotes ?? [],
+    courseCount: data?.courseCount ?? 0,
+    scholarCount: data?.scholarCount ?? 0,
+    countryCount: data?.countryCount ?? 0,
   };
 });
 
@@ -227,6 +233,31 @@ export const getTopLevelServices = cache(async () => {
     query: topLevelServicesQuery,
     tags: [CACHE_TAGS.services],
     revalidate: 3600,
+  });
+});
+
+export const getTestimonials = cache(async () => {
+  return sanityFetch<Testimonial[]>({
+    query: `*[_type == "testimonial" && status == "approved"] | order(order asc)`,
+    tags: [CACHE_TAGS.testimonials],
+  });
+});
+
+export const getScholars = cache(async () => {
+  return sanityFetch<any[]>({
+    query: `*[_type == "scholar"] | order(order asc, name asc) {
+      _id, name, slug, image, qualifications, contactDetails, bio
+    }`,
+    tags: ["scholar"],
+  });
+});
+
+export const getCountries = cache(async () => {
+  return sanityFetch<any[]>({
+    query: `*[_type == "country"] | order(order asc, name asc) {
+      _id, name, flagIcon, flagImage
+    }`,
+    tags: ["country"],
   });
 });
 

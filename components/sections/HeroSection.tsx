@@ -15,15 +15,12 @@ interface HeroSectionProps {
   cta1Link?: string;
   cta2Label?: string;
   cta2Link?: string;
+  courseCount?: number;
 }
 
 const DEFAULT_LINES = ["Learn Quran, Fiqh &", "More From Shia", "Scholars."];
 
-const STATS = [
-  { value: "500+", label: "Students" },
-  { value: "20+", label: "Courses" },
-  { value: "10+", label: "Scholars" },
-];
+
 
 
 
@@ -62,12 +59,21 @@ export default function HeroSection({
   cta1Link = "/online-courses",
   cta2Label = "Our Services",
   cta2Link = "/services",
+  courseCount,
 }: HeroSectionProps) {
   const resolvedSubtitle =
     subtitle ?? `${siteName} — Faith. Knowledge. Access.`;
   const resolvedDescription =
     description ??
     `At ${siteName}, we bring accessible and affordable Shia Islamic education to everyone, no matter where you are in the world.`;
+
+  const displayCourseCount = courseCount && courseCount > 0 ? `${courseCount}+` : "20+";
+
+  const STATS = [
+    { value: "500+", label: "Students" },
+    { value: displayCourseCount, label: "Courses" },
+    { value: "10+", label: "Scholars" },
+  ];
 
   const titleLines = title ? title.split("\n") : DEFAULT_LINES;
   const imageAlt =

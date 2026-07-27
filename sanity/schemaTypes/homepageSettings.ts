@@ -133,6 +133,11 @@ export const homepageSettings = defineType({
       title: "Donate Quote Attribution",
       initialValue: "Imam Sadiq (A.S.)",
     }),
+    defineField({
+      name: "donateQuoteReference",
+      type: "string",
+      title: "Donate Quote Reference (e.g. Al-Kafi, Vol. 4, p. 2)",
+    }),
 
     // ── About Us section ──────────────────────────────────────────────────────
     defineField({

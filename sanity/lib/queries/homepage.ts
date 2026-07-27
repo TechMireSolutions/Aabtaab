@@ -13,7 +13,10 @@ const SITE_SETTINGS_FRAGMENT = `*[_type == "siteSettings"][0]{
 export const homepageHeroQuery = `{
   "homepage": *[_type == "homepageSettings"][0],
   "settings": ${SITE_SETTINGS_FRAGMENT},
-  "quotes": *[_type == "quote"] | order(_createdAt asc)
+  "quotes": *[_type == "quote"] | order(_createdAt asc),
+  "courseCount": count(*[_type == "course" && !defined(parent)]),
+  "scholarCount": count(*[_type == "scholar"]),
+  "countryCount": count(*[_type == "country"])
 }`;
 
 /** Below-fold carousels — streamed after hero + about */
@@ -36,9 +39,9 @@ export const homepageCarouselsQuery = `{
     articlesHeading, articlesSubheading,
     testimonialsEyebrow, testimonialsHeading,
     donateHeading, donateText, donateQuote, donateQuoteAttribution,
-    donateCtaLabel
+    donateQuoteReference, donateCtaLabel
   },
-  "testimonials": *[_type == "testimonial"] | order(order asc) {
+  "testimonials": *[_type == "testimonial" && status == "approved"] | order(order asc) {
     _id, quote, name, role
   },
   "upcomingEvents": *[_type == "event" && startDate >= now()] | order(startDate asc) {
@@ -66,7 +69,7 @@ export const homepageDataQuery = `{
     "children": *[_type == "service" && references(^._id)] | order(order asc) { title }
   },
   "homepage": *[_type == "homepageSettings"][0],
-  "testimonials": *[_type == "testimonial"] | order(order asc) {
+  "testimonials": *[_type == "testimonial" && status == "approved"] | order(order asc) {
     _id, quote, name, role
   },
   "upcomingEvents": *[_type == "event" && startDate >= now()] | order(startDate asc) {

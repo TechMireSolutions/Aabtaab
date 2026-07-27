@@ -9,6 +9,8 @@ import type { QuoteItem } from "@/types/sanity";
 interface HomeAboutProps {
   homepage: HomepageSettings | null;
   quotes?: QuoteItem[] | null;
+  scholarCount?: number;
+  countryCount?: number;
 }
 
 
@@ -33,7 +35,7 @@ const STATIC_QUOTES: QuoteItem[] = [
   },
 ];
 
-export default function HomeAbout({ homepage: hp, quotes }: HomeAboutProps) {
+export default function HomeAbout({ homepage: hp, quotes = [], scholarCount, countryCount }: HomeAboutProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [fade, setFade] = useState(true);
   const [, startTransition] = useTransition();
@@ -156,19 +158,19 @@ export default function HomeAbout({ homepage: hp, quotes }: HomeAboutProps) {
                     label: hp?.aboutStat1Label || "Students",
                   },
                   {
-                    value: hp?.aboutStat2Value || "10+",
+                    value: scholarCount && scholarCount > 0 ? `${scholarCount}+` : hp?.aboutStat2Value || "10+",
                     label: hp?.aboutStat2Label || "Scholars",
                   },
                   {
-                    value: hp?.aboutStat3Value || "5+",
+                    value: countryCount && countryCount > 0 ? `${countryCount}+` : hp?.aboutStat3Value || "5+",
                     label: hp?.aboutStat3Label || "Countries",
                   },
-                ].map((s) => (
-                  <div key={s.label} className="text-center">
-                    <p className="text-xl-plus leading-none font-bold text-white">
-                      {s.value}
-                    </p>
-                    <p className="text-caption mt-1">{s.label}</p>
+                ].map((stat, i) => (
+                  <div key={i} className="text-center group">
+                    <div className="text-xl-plus font-bold text-white group-hover:text-gold-400 transition-colors">
+                      {stat.value}
+                    </div>
+                    <div className="text-xs text-slate-400 mt-1 uppercase tracking-wider">{stat.label}</div>
                   </div>
                 ))}
               </div>

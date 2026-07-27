@@ -240,12 +240,19 @@ export default async function HomeSections() {
               {hp?.donateQuote ||
                 "Sadaqah extinguishes the Lord's anger and wards off an evil death."}
             </p>
-            <div className="mt-3 flex items-center justify-center gap-2">
-              <span className="eyebrow-line-gold w-5" />
-              <cite className="text-caption font-semibold tracking-wide text-gold-600 not-italic">
-                {hp?.donateQuoteAttribution || "Imam Sadiq (A.S.)"}
-              </cite>
-              <span className="eyebrow-line-gold w-5" />
+            <div className="mt-3 flex flex-col items-center justify-center gap-1">
+              <div className="flex items-center gap-2">
+                <span className="eyebrow-line-gold w-5" />
+                <cite className="text-caption font-semibold tracking-wide text-gold-600 not-italic">
+                  {hp?.donateQuoteAttribution || "Imam Sadiq (A.S.)"}
+                </cite>
+                <span className="eyebrow-line-gold w-5" />
+              </div>
+              {hp?.donateQuoteReference && (
+                <span className="text-xs text-slate-500 dark:text-slate-400 opacity-80">
+                  {hp.donateQuoteReference}
+                </span>
+              )}
             </div>
           </div>
           <Link href="/donate" className="btn-primary group">

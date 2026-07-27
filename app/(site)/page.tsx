@@ -17,6 +17,10 @@ const UpcomingEventsCountdown = dynamic(() => import("@/components/sections/Upco
   ssr: true,
 });
 
+const HomeCountries = dynamic(() => import("@/components/sections/HomeCountries"), {
+  ssr: true,
+});
+
 export async function generateMetadata(): Promise<Metadata> {
   const { settings, homepage: hp } = await getHomepageHeroData();
   const ogImage =
@@ -35,7 +39,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const { settings, homepage: hp, quotes } = await getHomepageHeroData();
+  const { settings, homepage: hp, quotes, courseCount, scholarCount, countryCount } = await getHomepageHeroData();
   const siteName = resolveSiteName(settings);
   const siteUrl = getSiteUrl();
 
@@ -53,11 +57,19 @@ export default async function HomePage() {
           inLanguage: "en-US",
         }}
       />
-      <HomeHero settings={settings} homepage={hp} siteName={siteName} />
+      <HomeHero settings={settings} homepage={hp} siteName={siteName} courseCount={courseCount} />
       <Suspense fallback={null}>
         <UpcomingEventsCountdown />
       </Suspense>
-      <HomeAbout homepage={hp} quotes={quotes} />
+      <HomeAbout 
+        homepage={hp} 
+        quotes={quotes} 
+        scholarCount={scholarCount} 
+        countryCount={countryCount} 
+      />
+      <Suspense fallback={null}>
+        <HomeCountries />
+      </Suspense>
       <Suspense fallback={<HomeSectionsSkeleton />}>
         <HomeSections />
       </Suspense>

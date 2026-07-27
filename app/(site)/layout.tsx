@@ -37,7 +37,7 @@ export default async function SiteLayout({
       />
       <main
         id="main-content"
-        className={`min-h-screen scroll-mt-header ${
+        className={`min-h-screen flex flex-col scroll-mt-header ${
           // pb-fab-safe reserves space for the FAB on mobile.
           // lg:pb-0 removes it on desktop where the FAB floats
           // above the footer without overlapping content.

@@ -12,8 +12,10 @@ import { homepageSettings } from "./homepageSettings";
 import { testimonial } from "./testimonial";
 import { contactSubmission } from "./contactSubmission";
 import { courseLevel } from "./courseLevel";
-
 import { quote } from "./quote";
+import { paymentMethod } from "./paymentMethod";
+import { scholar } from "./scholar";
+import { country } from "./country";
 
 export const schemaTypes = [
   // Object types first — document schemas can reference them
@@ -33,4 +35,7 @@ export const schemaTypes = [
   testimonial,
   contactSubmission,
   quote,
+  paymentMethod,
+  scholar,
+  country,
 ];

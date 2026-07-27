@@ -29,6 +29,7 @@ export interface HomeServiceSummary {
 }
 
 export interface Testimonial {
+  _id: string;
   name: string;
   role?: string;
   quote: string;
@@ -70,5 +71,6 @@ export interface HomepageSettings {
   donateText?: string;
   donateQuote?: string;
   donateQuoteAttribution?: string;
+  donateQuoteReference?: string;
   donateCtaLabel?: string;
 }

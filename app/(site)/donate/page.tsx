@@ -127,7 +127,7 @@ export default async function DonatePage() {
                 Local Payment Methods
                 <span className="eyebrow-line" aria-hidden="true" />
               </p>
-              <h2 className="heading-section text-slate-900">
+              <h2 className="heading-section">
                 Donate via Pakistani Payment Methods
               </h2>
               <p className="text-body-muted mx-auto mt-2 max-w-md">

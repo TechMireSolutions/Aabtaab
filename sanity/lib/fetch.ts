@@ -22,6 +22,7 @@ export const CACHE_TAGS = {
   homepage: "sanity-homepage",
   pages: "sanity-pages",
   page: (slug: string) => `sanity-page-${slug}`,
+  testimonials: "sanity-testimonials",
 } as const;
 
 interface SanityFetchOptions {
