@@ -8,7 +8,7 @@ export const metadata = buildPageMetadata({
   noIndex: true,
 });
 
-/** Handles notFound() from pages under the (site) layout (keeps header/footer). */
-export default function SiteNotFound() {
+/** Handles unmatched URLs (outside any segment that calls notFound()). */
+export default function NotFound() {
   return <NotFoundContent />;
 }
