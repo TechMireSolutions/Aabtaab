@@ -78,7 +78,16 @@ npm run typecheck
 npm run test
 npm run test:e2e   # needs .next build + Playwright Chromium
 NEXT_PUBLIC_SANITY_PROJECT_ID=... NEXT_PUBLIC_SANITY_DATASET=production npm run build
+npm audit --audit-level=high
 ```
+
+## Hardening notes
+
+- Protect `main` — PRs only; do not bypass required checks.
+- Prefer `SSH_PRIVATE_KEY_B64` + optional `SSH_KNOWN_HOSTS` pin.
+- Do not commit workflow secrets; rotate deploy keys if leaked.
+- Keep Actions major pins current (`actions/checkout`, `actions/setup-node`) when upgrading tooling (see `05-dependencies-upgrade`).
+- CI green ≠ skip `typecheck` locally — build may ignore TS errors.
 
 ## Rollback note
 

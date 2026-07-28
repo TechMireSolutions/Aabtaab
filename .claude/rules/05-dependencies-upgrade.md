@@ -88,6 +88,9 @@ Protect the `main` branch. Avoid direct commits to `main` (always use pull reque
 * Review package maintenance, license, and bundle size impact before installing new dependencies.
 * Use existing dependencies before adding new ones; do not install duplicate packages (e.g. two slider or date-formatting libraries).
 * Keep packages pinned via `package-lock.json` and use `npm ci` on production servers.
+* Prefer well-maintained packages with clear security posture; avoid abandoned libs for security-sensitive paths (auth, crypto, parsing).
+* After upgrades, skim release notes for breaking changes (Next, React, Sanity, Zod majors especially).
+* Optional Dependabot/Renovate PRs: still run the full verify group; do not auto-merge framework majors.
 
 ## Avoid
 
@@ -96,4 +99,5 @@ Protect the `main` branch. Avoid direct commits to `main` (always use pull reque
 - Committing `.env`, tokens, or secrets.
 - Removing `package-lock.json` — always use lockfile-driven installs (`npm ci` on server).
 - Bypassing CI/CD checks for production deployment.
-
+- `npm audit fix --force` when it downgrades `next`, `react`, or `sanity`.
+- Installing packages globally in CI or on the VPS for app runtime.

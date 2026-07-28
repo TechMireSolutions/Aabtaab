@@ -26,6 +26,7 @@ description: >-
 - Use `global-error.tsx` for root crashes (must include its own `<html>` / `<body>`).
 - When adding segment `error.tsx`: client component, reset button, no secrets, optional Sentry report.
 - Branded `not-found.tsx` should keep skip link / main landmark patterns.
+- Rethrow `notFound()` / `redirect()` control-flow errors — do not map them to generic 500s.
 
 ### 2. Sentry
 ```typescript
@@ -39,7 +40,8 @@ try {
   });
 }
 ```
-- Scrub PII before send. Filter crawler 404 noise when configured.
+- Scrub PII before send (no emails, phones, full form bodies). Filter crawler 404 noise when configured.
+- Prefer `catch (error: unknown)` then narrow; preserve `cause` when wrapping.
 
 ### 3. API error format
 ```typescript
@@ -48,9 +50,10 @@ return NextResponse.json(
   { status: 500 },
 );
 ```
-Use `400` validation, `429` rate limit, `404` not found — never `200` on failure.
+Use `400` validation, `429` rate limit, `404` not found — never `200` on failure. User-facing copy should be actionable.
 
 ## Verification
 - [ ] No stack traces / secrets returned to clients
 - [ ] Unexpected failures captured to Sentry without form payloads
 - [ ] UI degrades gracefully (boundaries / null CMS handling)
+- [ ] Control-flow errors (`notFound` / `redirect`) are not swallowed

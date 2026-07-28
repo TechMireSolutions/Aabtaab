@@ -3,6 +3,8 @@
 **Source of truth:** `.cursor/rules/` and `.cursor/skills/` → run `npm run sync:agents` to mirror.  
 **Tech stack reference:** [techstack.md](techstack.md)
 
+**Skill-first:** before implementing in a domain, read the matching skill in `.cursor/skills/` (and its linked rule). Skills are workflows; rules are constraints; `techstack.md` wins on factual stack.
+
 ## Rules (13)
 
 | File | Scope |
@@ -75,6 +77,8 @@ Key policies (must stay aligned with techstack):
 - Search: `/search?q=…` (not `/posts?q=…`); sitemap via `getSitemapSlugs()`
 - DRY: extract UI/CSS/fallbacks at **2+**; shells in `08-dry-policy`
 - Rate limit: Upstash Redis **optional but strongly recommended** in production; memory fallback for local / Redis errors
+- Secrets: timing-safe compares when tightening webhook/preview auth; never ship write tokens to the client
+- A11y: WCAG 2.2 AA intent; missing CMS detail docs → `notFound()` (no soft 404)
 - PM2: `pm2 delete` then `pm2 start` (not `reload` / `startOrRestart`)
 - Types: `npm run typecheck` authoritative (`ignoreBuildErrors` on build)
 - Tests: colocated `*.test.ts` + `e2e/{smoke,navigation,seo,contact}.spec.ts` (desktop + mobile)

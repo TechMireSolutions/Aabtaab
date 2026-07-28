@@ -77,6 +77,7 @@ Pages **compose** — they do not reimplement markup:
 | Same GROQ field projection | Add fragment to `fragments.ts` |
 | Same class string **2+ times** | Add `@utility` in `globals.css` (see `02-tailwind-design-system`) |
 | Same fallback copy in 2+ pages | Move to `lib/fallbacks/` |
+| Same Zod / parse shape in 2+ places | Shared schema in the domain `lib/` folder |
 
 ## When NOT to DRY (acceptable duplication)
 
@@ -85,6 +86,7 @@ Pages **compose** — they do not reimplement markup:
 - Premature generic factories (mega query builder for one query).
 - Course vs service pages that *look* similar but diverge in CMS fields — share sections, not one mega template.
 - Test fixtures or story-specific mocks.
+- Near-duplicate markup that will intentionally diverge soon — share primitives, not premature templates.
 
 ## Refactor checklist
 

@@ -45,19 +45,24 @@ Use `buildEventPageMetadata` from `lib/cms/event.ts` with:
 
 Use `ArticleDetailShell` (back link + article container) → title/meta → media → description/prose → register CTA → `EventJsonLd` / breadcrumbs.
 
+Missing event → `notFound()`. Await `params` (Promise). One LCP image with `priority` + `fetchPriority="high"` when featured media is above the fold.
+
 ## Draft preview
 
 Preview URL: `/api/draft?secret=…&type=event&slug={slug}`
 
 ## When extending
 
-- New event fields → update schema + GROQ fragment + detail page sections
+- New event fields → update schema + GROQ fragment + types + detail page sections
 - New list filters → extend `events.ts` queries + list page, tag fetches appropriately
+- Keep JSON-LD dates/location in sync with visible content
+- Wire `CACHE_TAGS` + webhook already present for `event` — extend tags if new public surfaces
 
 ## Verify
 
 ```bash
 npm run lint
+npm run typecheck
 npm run test
 npm run build
 ```

@@ -13,6 +13,9 @@
 * Provide user-friendly production error messages. Do not display stack traces, database details, environment values, or provider responses to users.
 * Return appropriate HTTP status codes from API handlers (never return `200` for failed operations).
 * Distinguish clearly between: validation, auth, rate-limit, external service, not-found (`notFound()`), unexpected server errors.
+* When wrapping errors, preserve context via `Error` `cause` where helpful for Sentry — still scrub PII before reporting.
+* **Rethrow** Next.js control-flow errors from `notFound()`, `redirect()`, and similar — do not convert them into generic 500s.
+* Prefer actionable user copy (“Please try again” / field errors) over opaque “Error”.
 
 ## 2. App Router error UI (current state)
 
@@ -26,16 +29,20 @@
 
 Do not assume segment `error.tsx` / `not-found.tsx` already exist.
 
+When adding `error.tsx`: must be a Client Component with a reset affordance; never render secrets or digests to end users beyond a safe generic reference if needed for support.
+
 ## 3. Telemetry and Sentry
 
 * Configure Sentry via `instrumentation.ts` + Sentry config when `NEXT_PUBLIC_SENTRY_DSN` is set (optional).
 * Log unexpected failures: contact, review, email, Sanity fetch, revalidate, rate-limit, env validation.
-* Add operational context (route, feature, category, environment) without PII.
+* Add operational context (route, feature, category, environment) without PII — no emails, phones, or full form bodies.
 * Scrub tokens, passwords, and full form payloads before sending to Sentry.
 * Prefer filtering crawler 404 noise in Sentry; use Search Console for crawl health.
+* Sample rates: keep production noise manageable; do not disable error capture entirely to “fix” quotas.
 
 ## 4. Server Logging
 
 * Use structured server logs with severity and request context where useful.
 * Avoid logging complete request bodies, tokens, or credentials.
 * Prefer deploy health checks via `scripts/deploy-remote.sh` / process uptime — do **not** add a public `/api/health` unless product requires it; if added, never expose secrets.
+* Prefer few high-signal logs over verbose debug in production.

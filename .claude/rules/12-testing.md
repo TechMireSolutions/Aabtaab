@@ -34,6 +34,10 @@ Place tests next to the module (`schema.test.ts` beside `schema.ts`) or under th
 * Do not test framework internals (Next.js routing, React renderer).
 * Mock network/CMS/image URL builders when they pull in Sanity clients.
 * Keep tests deterministic — unique keys for rate-limit memory tests.
+* Prefer **Arrange → Act → Assert**; one logical behaviour per `it`.
+* Isolate tests — no shared mutable module state between cases (reset mocks in `beforeEach` / `afterEach`).
+* Prefer faking time for date/expiry logic rather than real sleeps.
+* Security-critical paths (Zod schemas, rate-limit, revalidate auth helpers, email HTML escaping) must stay covered when touched.
 
 ## 2. End-to-End Testing (Playwright)
 
@@ -67,6 +71,8 @@ Place tests next to the module (`schema.test.ts` beside `schema.ts`) or under th
 * When adding `error.tsx` / `not-found.tsx`, extend smoke/seo E2E for branded copy.
 * Contact Turnstile path is skipped when keys unset — don’t fail CI on missing Turnstile.
 * Prefer covering keyboard open/close for mobile nav + search palette when touching those components.
+* Keep E2E focused on critical user journeys — do not snapshot entire pages or assert pixel-perfect layouts unless a visual tool is explicitly adopted.
+* Failures should be actionable; avoid retrying away flakes without a root-cause fix.
 
 ## 3. Regression Requirements
 
@@ -74,3 +80,4 @@ Place tests next to the module (`schema.test.ts` beside `schema.ts`) or under th
 * Do not reduce coverage or delete tests merely to make CI pass.
 * Investigate flaky tests; do not paper over with retries alone.
 * After substantive app changes, run `npm run test` and `npm run test:e2e`.
+* Prefer testing behaviour users care about over implementation details.

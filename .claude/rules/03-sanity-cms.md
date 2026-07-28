@@ -79,6 +79,21 @@ Each public content type should contain appropriate fields for: Title, Slug, Sta
 * Return stable shapes that can be easily typed in TypeScript.
 * Test queries against missing and incomplete documents.
 * Run independent requests concurrently with `Promise.all` instead of sequential waterfalls.
+* Keep public site queries on the **published** perspective; draft/preview only via `getPreviewClient()` when draft mode is on.
+* Prefer shared fragments in `fragments.ts` over copy-pasted projections.
+* Avoid unbounded `[]` expansions that can explode payload size — constrain with projections and filters.
+
+## Schema change checklist
+
+When adding or renaming CMS fields:
+
+1. Update schema + field descriptions for editors.
+2. Update GROQ fragments / queries.
+3. Update TypeScript types in `types/` (and Zod if user-facing).
+4. Migrate existing documents (`migrate:sanity:dry` then apply) when data must change.
+5. Wire `CACHE_TAGS` + webhook `case` if a new document type.
+6. Update sitemap / metadata / JSON-LD if public + indexable.
+7. Null-safe UI for missing legacy documents until migration is complete.
 
 ## Portable Text
 
@@ -87,8 +102,11 @@ Each public content type should contain appropriate fields for: Title, Slug, Sta
 * **Do not** allow arbitrary HTML injection. Handle unknown block types safely.
 * Ensure Portable Text headings follow the page's heading hierarchy.
 * Optimise Portable Text images through the approved image pipeline.
+* External links: allow `http:` / `https:` / `mailto:` / `tel:` only — reject `javascript:` and other dangerous schemes; add `rel="noopener noreferrer"` for external `https` links.
 
 ## Images
 
 Use `sanity/lib/image.ts` helpers: `cardImageUrl`, `heroImageUrl`, `ogImageUrl`, `articleHeroImageUrl`.
 
+* Prefer hotspot/crop-aware builders from the approved helpers — do not hand-roll CDN URLs.
+* Require alt text in schema (`Rule.required()`); render meaningful `alt` on the site.

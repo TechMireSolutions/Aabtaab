@@ -72,8 +72,18 @@ Key resolved policies:
 - **DRY:** extract UI/CSS/fallbacks at **2+**; use SSOT table in `08-dry-policy`
 - **Shells:** `CatalogDarkHero`, `ArticleDetailShell`, `LegalPageShell`, `SiteContactFooter`
 - **Rate limit:** Upstash Redis optional but **strongly recommended** in production; memory fallback for local / Redis errors — see `09-security` / `techstack.md`
+- **Secrets:** compare webhook/preview secrets with timing-safe equality when tightening auth; never ship write tokens to the client
+- **A11y:** WCAG 2.2 AA intent; one `h1`; `notFound()` for missing CMS detail docs (no soft 404)
 - **PM2:** `pm2 delete` then `pm2 start` (never `startOrRestart` / `reload` for this app)
 - **Types:** `npm run typecheck` is authoritative (`ignoreBuildErrors` on `next build`)
 - **Tests:** Vitest colocated + Playwright `e2e/` (desktop + mobile) — see `12-testing`
+- **Skill-first:** read the matching skill before implementing; skills must not contradict rules/techstack
+
+## After editing rules or skills
+
+1. Keep descriptions accurate (skill frontmatter `description` drives discovery).
+2. Update **`AGENTS.md`** / **`CLAUDE.md`** if you add/remove a rule or skill.
+3. Run `npm run sync:agents`.
+4. Prefer additive, actionable guidance — do not invent stack features (PPR, Server Actions, middleware) unless product adopts them.
 
 Stack **versions** live in **`techstack.md`**. Rules `00` / `05` may keep a short aligned summary — update techstack first when versions change.

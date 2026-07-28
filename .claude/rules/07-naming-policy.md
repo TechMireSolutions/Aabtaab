@@ -67,6 +67,8 @@ Routes: `/posts` not `/articles`.
 * Do not duplicate constants across files; define configuration/limits centrally.
 * Comments should explain **why** something is done, not restate what the code does. Add documentation for unusual security, caching, or deployment work.
 * Do not create abstractions that hide simple behaviour without adding value.
+* Prefer **immutable updates** and pure helpers in `lib/` — easier to unit test.
+* Test files: `{module}.test.ts` matching the module under test; `describe("moduleOrFn")` names mirror symbols.
 
 ## Avoid
 

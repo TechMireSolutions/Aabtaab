@@ -20,12 +20,16 @@ description: >-
 6. Mutations → existing **Route Handlers** (`app/api/*`), not Server Actions.
 7. LCP image: `priority` + `fetchPriority="high"` once per route.
 8. React Compiler is on — skip routine `useMemo` / `useCallback` / `memo`.
+9. Missing detail documents → `notFound()`; rethrow Next control-flow errors if catching.
+10. Stable React `key`s from ids/slugs — never list index for CMS collections.
 
 ## Defaults
 
 - Server Components first; client islands for forms, nav drawer, carousels, search palette.
 - Internal navigation: always `<Link>` (prefetch).
 - Streaming: selective `<Suspense>` with layout-stable skeletons (see homepage); don’t Suspense the whole page.
+- Prefer reading `searchParams` in pages, not layouts (avoids widening dynamic rendering).
+- Optional: `after()` from `next/server` for non-critical post-response work — never for sole authz.
 
 ## Data fetching
 
@@ -62,6 +66,8 @@ import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/fetch";
 - CMS fetch in client components; global client state libraries.
 - `useEffect` for data that can load on the server.
 - Inventing Server Actions, PPR, or View Transitions without an explicit product decision.
+- Passing server secrets into Client Components via props.
+- Soft-404 empty detail pages that return `200`.
 
 ## Verify
 

@@ -19,11 +19,14 @@ description: Next.js 16 App Router and React 19 patterns used in this repo
 - Do **not** add `useMemo` / `useCallback` / `React.memo` for routine re-render control unless profiling proves a residual hot path.
 - Keep `"use client"` islands small so compiler work stays local.
 - Do not disable the compiler for a single file without a short comment explaining why.
+- Prefer React 19 patterns already in the ecosystem (`use`, optimistic UI) **only** inside small client islands when they improve UX — do not introduce Server Actions just to unlock `useActionState`.
 
 ## Async request APIs (Next 15+)
 
 - Page/layout `params` and `searchParams` are **`Promise<…>`** — always `await` them.
 - `draftMode()`, `cookies()`, and `headers()` are async — `await` before use (see `sanity/lib/fetch.ts`).
+- Prefer reading `searchParams` in **pages**, not layouts — layouts that await `searchParams` / dynamic APIs widen dynamic rendering.
+- Do **not** catch-and-swallow control-flow errors from `notFound()`, `redirect()`, or `forbidden()` — rethrow so Next can handle them.
 
 ## Data fetching (this project)
 
@@ -51,6 +54,8 @@ import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/fetch";
 
 - Prefer existing **Route Handlers** under `app/api/` for public writes (contact, review, revalidate).
 - Do **not** introduce `"use server"` / Server Actions unless a PR explicitly adopts them and updates security + tests to match `/api/contact` patterns (Zod, rate limit, Turnstile when configured).
+- Keep handlers **thin**; business logic in `lib/`. Return correct status codes (`400` / `429` / `404` / `500`) — never `200` on failure.
+- Optional: `after()` from `next/server` for non-blocking post-response work (telemetry, non-critical side effects) — never put security-critical authz only in `after()`.
 
 ## Metadata
 
@@ -98,6 +103,11 @@ Every async feature must handle: idle, loading, success, validation error, serve
 * View Transitions — **not** used; if added later, gate with `prefers-reduced-motion`.
 * `generateStaticParams` for catalogs — optional only if build-time warming is measured useful; webhook tags remain authoritative.
 
+## Lists & keys
+
+- Stable, unique React `key`s from domain ids/slugs — never array index for reorderable or CMS lists.
+- Empty CMS documents → `notFound()` (or null-safe section) — avoid soft-404 empty shells that stay `200`.
+
 ## Avoid
 
 - Fetching CMS data in client components.
@@ -106,3 +116,5 @@ Every async feature must handle: idle, loading, success, validation error, serve
 - Duplicating cache logic — extend `sanityFetch` or `lib/cms/queries.ts`.
 - Converting an entire page into a Client Component for one interactive element.
 - Custom click handlers / `window.location` for internal navigation — use `<Link>`.
+- Passing server secrets into Client Components via props.
+- Adding root `middleware.ts` / proxy layers without a clear auth/geo/rewrite need (none today).

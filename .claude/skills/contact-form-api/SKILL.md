@@ -51,8 +51,10 @@ Submissions save to Sanity even when email env is missing.
 - Honeypot field `website` (must be empty / whitespace-only)
 - Cloudflare Turnstile when keys are configured
 - Rate limit: **5 requests / 15 min / IP**
-- HTML escaped in email template
+- HTML escaped in email template (`escapeHtml`)
 - Statuses: `429` rate limit · `400` validation · `500` server error
+- Never log full form payloads or tokens; scrub before Sentry
+- Prefer Redis rate limiting in production; memory fallback is local/dev / Redis-error only
 
 ## Tests
 
@@ -67,4 +69,5 @@ Submissions save to Sanity even when email env is missing.
 npm run test
 npm run test:e2e
 npm run lint
+npm run typecheck
 ```

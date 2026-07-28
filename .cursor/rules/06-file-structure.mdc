@@ -73,6 +73,8 @@ e2e/                   # Playwright: smoke, navigation, seo, contact
 - **Dynamic** `[slug]/page.tsx` — flat catalogs (posts, events).
 - **No** `pages/` directory — App Router only.
 - **Flat API** — one `route.ts` per endpoint under `app/api/`.
+- **Root instrumentation** — `instrumentation.ts` (+ Sentry configs) at repo root when monitoring is configured.
+- **No middleware today** — do not add `middleware.ts` / edge proxy unless a product need (auth, geo, rewrites) is explicit; prefer Route Handlers + Cloudflare for edge concerns.
 
 ## Layer boundaries
 
@@ -85,11 +87,13 @@ e2e/                   # Playwright: smoke, navigation, seo, contact
 | `types/` | Shared interfaces — no runtime code |
 | `components/ui/` | Generic/headless presentation components (e.g. accordion, dropdowns) |
 | `e2e/` | Shared Playwright E2E smoke tests and configs |
+| `deploy/` / `scripts/` | Runtime/PM2 and one-off tooling — not imported by UI |
 
 ## Placements and Co-location
 
 * Keep feature-specific components, tests, schemas, and utilities close to the feature where practical.
 * Do not place business logic directly inside large page components.
+* Colocate unit tests as `*.test.ts` next to the module under test.
 
 ## Do not
 

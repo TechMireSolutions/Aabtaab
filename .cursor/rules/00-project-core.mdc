@@ -58,14 +58,29 @@ Edit **only** `.cursor/rules/` and `.cursor/skills/`, then run `npm run sync:age
 1. **Minimize scope** — smallest correct diff; no drive-by refactors.
 2. **Match existing patterns** — read surrounding code before adding abstractions.
 3. **Use `@/` imports** — no deep relative paths when alias works.
-4. **Verify** — run `npm run lint`, `npm run test`, `npm run test:e2e` (when UI/routes change), and `npm run build` after substantive changes.
-5. **No git commits/push** unless the user explicitly asks.
-6. **Pull Request Rules:** Every PR must have one clear purpose, explain impact, include tests, pass CI, avoid unrelated formatting, and explicitly mention env/Sanity schema updates.
-7. **AI Coding Assistant Rules:** Read files before proposing changes, preserve stack, do not invent variables/schemas without implementation, produce type-safe code, never write placeholders like "implement later", and make the smallest safe change.
+4. **Skill-first** — before implementing in a domain, read the matching `.cursor/skills/*/SKILL.md` (and its linked rule). Skills are workflows; rules are constraints.
+5. **Verify** — run `npm run lint`, `npm run typecheck`, `npm run test`, `npm run test:e2e` (when UI/routes change), and `npm run build` after substantive changes. **`typecheck` is authoritative** (`ignoreBuildErrors` on build).
+6. **No git commits/push** unless the user explicitly asks.
+7. **Pull Request Rules:** Every PR must have one clear purpose, explain impact, include tests, pass CI, avoid unrelated formatting, and explicitly mention env/Sanity schema updates.
+8. **AI Coding Assistant Rules:** Read files before proposing changes, preserve stack, do not invent variables/schemas without implementation, produce type-safe code, never write placeholders like "implement later", and make the smallest safe change.
+
+## Conflict resolution
+
+When docs disagree: **`techstack.md`** → **rules** → **skills**. Do not invent newer stack versions than techstack. See skill `sync-agent-config`.
 
 ## Definition of Done
 
-A feature is complete only when it works on desktop and mobile, `npm run typecheck` and lint pass without unsafe suppressions (note: `next build` may ignore TS errors via `ignoreBuildErrors` — typecheck is authoritative), inputs are validated on the server, public endpoints are rate-limited, feedback/loading/empty states are handled, accessibility is satisfied, metadata/JSON-LD/image optimizations are implemented, unit/E2E tests cover critical paths, Sentry records exceptions without PII when configured, and CI passes.
+A feature is complete only when:
+
+* It works on **desktop and mobile** (touch + keyboard).
+* `npm run typecheck` and lint pass without unsafe suppressions.
+* Inputs are validated on the **server**; public write endpoints are **rate-limited**.
+* Idle / loading / success / error / empty states are handled.
+* **WCAG 2.2 AA** intent is met for the touched UI (labels, focus, contrast, one `h1`).
+* Metadata / canonical / JSON-LD / images are correct for new or changed public routes.
+* Unit and/or E2E tests cover critical paths changed.
+* Sentry records unexpected exceptions **without PII** when configured.
+* CI would pass; no secrets committed; no drive-by dependency major bumps.
 
 ## Prohibited Practices
 
@@ -78,6 +93,8 @@ A feature is complete only when it works on desktop and mobile, `npm run typeche
 * **Never** return internal stack traces / error details to users.
 * **Never** make entire pages Client Components unnecessarily.
 * **Never** suppress failing tests or bypass CI/CD checks for production.
+* **Never** add Server Actions, PPR / `"use cache"`, or View Transitions without an explicit product/PR decision (see `01` / `10`).
+* **Never** commit `.env*`, credentials, or private keys.
 
 ## Rule index (applied by file type)
 

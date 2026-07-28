@@ -89,14 +89,17 @@ getDefaultOgImageUrl(); // https://…/og-default.png
 ## Checklist for new public page
 1. Export `generateMetadata` (or `defineCmsPageMetadata`)
 2. Pass `ogImage` via `resolveDocOgImage` when CMS-backed
-3. One `h1`, semantic sections
-4. Add JSON-LD if applicable (Article, Course, Event, Breadcrumb)
+3. One `h1`, semantic sections; missing CMS doc → `notFound()`
+4. Add JSON-LD if applicable (Article, Course, Event, Breadcrumb) — must match visible content
 5. Ensure slug query excludes `seo.noIndex` if sitemap-eligible
 6. Wire webhook revalidation tag if CMS-backed
-7. Accessibility: Ensure Arabic/Urdu texts have `lang="ar" dir="rtl"` or similar, and check that all inputs/select elements have a corresponding visual label or `aria-label`.
+7. Accessibility: Arabic/Urdu texts have `lang` + `dir="rtl"`; inputs have labels/`aria-label`
+8. Canonical self-reference via builders; no trailing slash (`trailingSlash: false`)
 
 ## Verify
 ```bash
 npm run lint
+npm run typecheck
+npm run test:e2e   # seo suite when metadata/robots change
 npm run build
 ```

@@ -64,3 +64,6 @@ Pass `footer={<SiteContactFooter site={site} />}` on course **and** service CTA 
 3. Wire CMS fields in schema + GROQ fragment + page component
 4. Keep section null-safe (`if (!items?.length) return null`)
 5. Prefer fallbacks in `lib/fallbacks/` over hard-coded page copy
+6. One job per section: one heading + short support copy; compose rather than mega-sections
+7. Extract at **2+** uses (`08-dry-policy`); match `tailwind-ui` utilities
+8. Verify keyboard/`aria` for interactive sections (FAQ accordion, etc.)

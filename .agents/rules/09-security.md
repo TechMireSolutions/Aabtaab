@@ -59,8 +59,8 @@ Normalise data before use:
 * Restrict maximum lengths.
 * Reject unexpected fields where appropriate.
 * Validate enumerated values.
-* Validate URLs.
-* Reject malformed or oversized payloads.
+* Validate URLs — allow only expected schemes (`http:`, `https:`, `mailto:`, `tel:`); no open redirects to untrusted hosts.
+* Reject malformed or oversized payloads (enforce body size limits on write routes).
 
 ## 5. Form and API Protection
 
@@ -78,7 +78,9 @@ Every public write endpoint must include:
 * **Bot Whitelisting:** When rate-limiting crawl-facing routes, bypass or whitelist known search engine user agents (Googlebot, Bingbot) where appropriate.
 * **Cross-site POST:** Cookie-less JSON POSTs (`/api/contact`, `/api/review`) still need rate limit + honeypot + Turnstile (when configured). When adding Origin checks, allow only `NEXT_PUBLIC_SITE_URL` (and local dev hosts); reject mismatched `Origin` on state-changing routes.
 * Prefer header secret over query string for webhook auth when changing `/api/revalidate`.
+* Compare webhook / preview secrets with **`crypto.timingSafeEqual`** on equal-length buffers — do not use `===` alone for secret comparison when tightening auth.
 * Do not reveal whether a particular email address, account, or private resource exists.
+* Least privilege: Sanity write token only on the write client; preview token only for draft mode.
 
 ## 6. Sanity Security
 
@@ -113,7 +115,14 @@ Every public write endpoint must include:
 * Add useful operational context (route, feature, error category, deployment environment).
 * Do not expose internal stack traces to production users.
 
-## 9. Cloudflare Rules
+## 9. Supply chain & secrets hygiene
+
+* Keep `package-lock.json` committed; install with `npm ci` in CI and on the VPS.
+* Never commit `.env*`, private keys, or webhook secrets.
+* Rotate `SANITY_REVALIDATE_SECRET` / preview secrets if leaked; update Sanity webhook + GitHub/server env together.
+* Treat dependency upgrades that touch parsers, auth, or crypto as security-sensitive (see `05-dependencies-upgrade`).
+
+## 10. Cloudflare Rules
 
 * Keep SSL/TLS in Full (strict) mode.
 * Use Cloudflare caching for public static assets.

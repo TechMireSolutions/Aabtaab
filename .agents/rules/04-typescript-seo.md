@@ -13,6 +13,10 @@ description: TypeScript strictness, SEO, accessibility, and semantic HTML
 * Prefer `interface` for object shapes. Shared types live in `types/` by domain.
 * Define explicit types for public props, API payloads, Sanity results, and env config.
 * Avoid unsafe assertions on unvalidated external data. Prefer discriminated unions + exhaustive checks.
+* Prefer **`z.infer<typeof schema>`** (and shared Zod schemas) for API/form shapes over parallel hand-written types.
+* Prefer **`as const` + union types** over TypeScript `enum` for string unions used in this codebase.
+* Use **`satisfies`** for config objects that should keep literal inference while checking against a type.
+* Prefer `unknown` catch bindings: `catch (error: unknown)` then narrow.
 
 ## SEO & metadata
 
@@ -65,11 +69,14 @@ description: TypeScript strictness, SEO, accessibility, and semantic HTML
 - Custom radiogroups: arrow-key navigation; only selected option `tabIndex={0}`.
 - Respect `prefers-reduced-motion`. Trap focus in modals; Escape to close.
 - Arabic/Urdu wrappers: set `lang` + `dir="rtl"` on the nearest text wrapper.
+- Missing CMS documents for detail routes → **`notFound()`** (real 404), not an empty `200` page.
+- JSON-LD must reflect **visible** content (no fake reviews, prices, or dates).
 
 ## Images & content
 
 - Meaningful `alt` on content images; empty `alt=""` only when decorative.
 - OG fallback: `public/og-default.png` when no CMS image.
+- Prefer accurate Open Graph `type` (`website` vs `article`) via existing metadata builders.
 
 ## Avoid
 

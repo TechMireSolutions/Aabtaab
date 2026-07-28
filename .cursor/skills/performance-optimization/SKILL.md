@@ -49,14 +49,18 @@ description: >-
 | INP | Short handlers; carousel/search work off critical path |
 | Streaming | Selective Suspense; don’t delay header/hero |
 
-Prefer Lighthouse / field tools on staging — don’t guess from desktop-only.
+Prefer Lighthouse / field tools on staging — don’t guess from desktop-only. Measure before large optimizations.
 
 ### 5. Bundles
 - Leaf client islands; `next/dynamic` only for large non-LCP chunks.
 - React Compiler on — skip routine `useMemo` / `useCallback`.
+- Prefer CSS/`@utility` motion over JS animation libraries for simple UI.
+- Third-party scripts: lazy / after interactive; never block LCP.
+- Avoid new barrel imports that pull large client graphs (approved barrels only).
 
 ## Verification
 - [ ] LCP image has `priority` + `fetchPriority="high"`
 - [ ] No visible CLS on load/hydration
 - [ ] No new `unstable_cache` outside `sanityFetch`
 - [ ] Bundle impact reviewed for new client deps
+- [ ] `prefers-reduced-motion` respected for decorative motion

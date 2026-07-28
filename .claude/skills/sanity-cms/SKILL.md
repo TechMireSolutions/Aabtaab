@@ -67,14 +67,23 @@ Use migrated names — see rule `03-sanity-cms` for legacy → current table.
 ## Adding a new document type
 
 1. Schema in `sanity/schemaTypes/` + register in `index.ts`
-2. GROQ in `sanity/lib/queries/{domain}.ts`
+2. GROQ in `sanity/lib/queries/{domain}.ts` (+ fragments if shared)
 3. Getter in `lib/cms/queries.ts` if used by pages
-4. `CACHE_TAGS` + webhook case in `app/api/revalidate/route.ts`
-5. Sitemap entry if public + indexable
+4. Types in `types/` (and Zod if user-facing writes)
+5. `CACHE_TAGS` + webhook case in `app/api/revalidate/route.ts`
+6. Sitemap entry if public + indexable (`seo.noIndex` filter)
+7. Metadata + JSON-LD if detail page
+8. Null-safe UI until legacy documents are migrated
+
+## Schema change checklist
+
+Schema → GROQ → types → migration (`migrate:sanity:dry` then apply) → revalidate tags → UI. Use published perspective publicly; drafts only via preview client.
 
 ## Verify
 
 ```bash
 npm run lint
+npm run typecheck
+npm run test
 npm run build
 ```

@@ -52,6 +52,14 @@ description: >-
 
 Never add uncapped infinite animations on LCP content. Respect `prefers-reduced-motion`.
 
+## A11y & contrast (when styling)
+
+- Keep `brand-*` / `gold-*` text on surfaces at WCAG 2.2 AA contrast.
+- Do not remove `focus-visible` styles from interactive utilities.
+- Prefer logical properties (`ps`/`pe`) for RTL text islands.
+- Hover affordances need keyboard/touch equivalents.
+- Form inputs ≥16px on mobile (avoid iOS zoom).
+
 ## When to extend `globals.css`
 
 Add `@theme` for:

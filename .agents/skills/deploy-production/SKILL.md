@@ -60,10 +60,19 @@ pm2 start ecosystem.config.cjs --update-env && pm2 save
 ## Pre-deploy local check
 
 ```bash
-NEXT_PUBLIC_SANITY_PROJECT_ID=... NEXT_PUBLIC_SANITY_DATASET=production npm run build
 npm run lint
+npm run typecheck
 npm run test
+NEXT_PUBLIC_SANITY_PROJECT_ID=... NEXT_PUBLIC_SANITY_DATASET=production npm run build
 ```
+
+## Security / ops notes
+
+- Do not expose port 3000 publicly — Apache/Cloudflare only.
+- Prefer a restricted deploy user (not day-to-day `root`).
+- Set `UPSTASH_REDIS_*` in production when possible for contact rate limits.
+- After deploy, smoke homepage + contact + Studio; verify webhook revalidate still works.
+- Rollback: redeploy previous known-good SHA via `git reset --hard` + rebuild + PM2 delete/start (see deploy script).
 
 ## Cloudflare (optional CDN)
 

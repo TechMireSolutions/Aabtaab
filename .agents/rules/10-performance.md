@@ -70,7 +70,7 @@ Rules:
 * Reserve space for images, banners, and embeds.
 * Do not insert content above existing content after page load.
 * Avoid heavy client-side hydration.
-* Avoid long-running event handlers.
+* Avoid long-running event handlers — break up work; keep click/input handlers short for INP.
 * Use loading indicators that do not shift the surrounding layout.
 * Avoid Cumulative Layout Shift (CLS) on hydration-dependent widgets (e.g. countdown timers) by rendering layout-stable placeholder skeletons of the exact same dimensions when not mounted.
 * Do not autoplay heavy media.
@@ -78,6 +78,9 @@ Rules:
 * Prefer selective `<Suspense>` with layout-stable skeletons for slow sections — do not Suspense whole-page LCP chrome.
 * **Route Prefetching:** Use `<Link>` for internal navigation.
 * Prefer `motion-safe:` animations; never uncapped infinite motion on LCP content; respect `prefers-reduced-motion`.
+* Prefer CSS/`@utility` motion over JS animation libraries for simple UI motion.
+* Third-party scripts (analytics, widgets): load only when needed; never block LCP; respect privacy/consent if added later.
+* Measure with Lighthouse / field tools before large “optimizations” — avoid premature micro-optimizations.
 
 ## 7. Optional (not used)
 

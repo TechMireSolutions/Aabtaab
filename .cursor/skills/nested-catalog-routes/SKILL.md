@@ -16,8 +16,10 @@ description: >-
 ## Resolution pattern
 
 ```tsx
-const slug = params.slug[params.slug.length - 1]; // leaf slug for GROQ
+const { slug: slugParts } = await params; // params is a Promise (Next 15+)
+const slug = slugParts[slugParts.length - 1]; // leaf slug for GROQ
 const course = await getCourseBySlug(slug);
+if (!course) notFound();
 ```
 
 ## Branch logic
@@ -26,6 +28,7 @@ const course = await getCourseBySlug(slug);
 |-----------|--------|
 | Document has children | `NestedChildrenGrid` + breadcrumbs |
 | Leaf document | Hero + content sections + FAQ + CTA |
+| Missing document | `notFound()` — real 404, not empty 200 |
 
 ## Key helpers
 
@@ -38,7 +41,7 @@ const course = await getCourseBySlug(slug);
 
 ## GROQ
 
-`courseBySlugDeepQuery`, `serviceBySlugDeepQuery` — include parent chain + children.
+`courseBySlugDeepQuery`, `serviceBySlugDeepQuery` — include parent chain + children. Project only needed fields; use fragments.
 
 ## Components
 
@@ -51,7 +54,8 @@ const course = await getCourseBySlug(slug);
 
 ## Sitemap
 
-`app/sitemap.ts` → `getSitemapSlugs()` (`lib/cms/queries.ts`), which uses nested path queries (`allCoursePathsQuery` / `allServicePathsQuery`) internally. Do not call those GROQ helpers from the page file.
+`app/sitemap.ts` → `getSitemapSlugs()` (`lib/cms/queries.ts`), which uses nested path queries (`allCoursePathsQuery` / `allServicePathsQuery`) internally. Do not call those GROQ helpers from the page file. Respect `seo.noIndex`.
+
 ## Adding a third nested catalog
 
-Copy services pattern: schema with parent ref, deep slug query, `[...slug]` page, CACHE_TAGS, webhook case, sitemap entries.
+Copy services pattern: schema with parent ref, deep slug query, `[...slug]` page, CACHE_TAGS, webhook case, sitemap entries, metadata + breadcrumbs JSON-LD.

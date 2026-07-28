@@ -146,6 +146,14 @@ layout → spacing → typography → visual (bg/border/shadow) → interactive 
 * Navigation must remain fully usable with touch, keyboard, and screen readers.
 * Do not hide essential content on mobile.
 * Tables must scroll or adapt safely on small screens. Long words, URLs, and email addresses must wrap correctly.
+* Prefer **logical properties** (`ps`/`pe`, `ms`/`me`, `start`/`end`) when styling bilingual RTL islands (`lang` + `dir="rtl"` wrappers).
+
+## Accessibility & contrast
+
+* Text/background pairs using `brand-*` / `gold-*` / muted surfaces must remain **WCAG 2.2 AA** contrast for body and UI text.
+* Never remove `focus-visible` rings; interactive utilities must keep a visible focus state.
+* Decorative motion only — never convey meaning by animation alone.
+* Hover-only affordances must have an equivalent for touch/keyboard.
 
 ## UX calls to action & trust
 

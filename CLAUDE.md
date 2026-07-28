@@ -12,6 +12,7 @@ Edit `.cursor/rules/` and `.cursor/skills/` only, then:
 npm run sync:agents
 ```
 
+**Skill-first:** read the matching `.cursor/skills/*/SKILL.md` before implementing. **Doc priority:** `techstack.md` → rules → skills.
 | Rule | Purpose |
 |------|---------|
 | `00-project-core` | Stack, paths, universal principles |
@@ -53,4 +54,4 @@ Port **3000** · `server.config.cjs` · PM2 `ecosystem.config.cjs` / `deploy/run
 
 See `AGENTS.md` for full index. See [techstack.md](techstack.md) for deploy, env, and SEO.
 
-**Doc priority:** `techstack.md` → rules → skills. Caching only via `sanityFetch`. Rate limit Redis strongly recommended in production.
+**Doc priority:** `techstack.md` → rules → skills. Caching only via `sanityFetch`. Rate limit Redis strongly recommended in production. `npm run typecheck` is authoritative (`ignoreBuildErrors` on build). Missing CMS detail docs → `notFound()`.

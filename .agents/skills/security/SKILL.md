@@ -47,6 +47,12 @@ if (turnstile) turnstile.reset();
 ### 6. Draft / revalidate secrets
 - Prefer header `x-sanity-webhook-secret` over `?secret=` when changing webhook auth.
 - Preview entry: `/api/draft?secret=…` — never expose preview secret to the client.
+- When tightening secret checks, compare with **`crypto.timingSafeEqual`** on equal-length buffers.
+
+### 7. Links & CMS output
+- Portable Text / CMS links: allow `http:` / `https:` / `mailto:` / `tel:` only.
+- External links: `rel="noopener noreferrer"`.
+- No open redirects to untrusted hosts.
 
 ## Verification Checklist
 - [ ] No server secrets / write tokens in the browser.
@@ -54,3 +60,5 @@ if (turnstile) turnstile.reset();
 - [ ] Rate limits verified on write endpoints.
 - [ ] Turnstile verified when keys configured.
 - [ ] Form submissions record to Sanity via write client without leaking PII to logs/Sentry.
+- [ ] Oversized / unexpected payloads rejected.
+- [ ] Webhook/preview secrets not compared with plain `===` when auth is tightened.

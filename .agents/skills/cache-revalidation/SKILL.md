@@ -30,7 +30,7 @@ Pass relevant tags in each `sanityFetch` call.
 
 Set up Sanity webhooks connected to this Next.js API route using **`revalidateTag`** via `lib/revalidate.ts` (`revalidateSlugCollection`, `REVALIDATE_OPTIONS = { expire: 0 }`). Do **not** call bare `revalidateTag(tag)` or invent broad `revalidatePath` for CMS unless a path-specific UX requires it. This keeps search engines fresh without full rebuilds on Hetzner.
 
-**Auth:** header `x-sanity-webhook-secret` or query `?secret=` must match `SANITY_REVALIDATE_SECRET` (falls back to `REVALIDATE_SECRET` if unset — see `lib/env.ts` / techstack). Prefer header auth when changing webhook setup.
+**Auth:** header `x-sanity-webhook-secret` or query `?secret=` must match `SANITY_REVALIDATE_SECRET` (falls back to `REVALIDATE_SECRET` if unset — see `lib/env.ts` / techstack). Prefer header auth when changing webhook setup. When tightening comparison, use **`crypto.timingSafeEqual`** on equal-length buffers.
 
 **Body:** `{ _type, slug?: { current } }`
 
