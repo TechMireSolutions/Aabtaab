@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { getTestimonials } from "@/lib/cms/queries";
 import PageHeader from "@/components/layout/PageHeader";
-import ReviewForm from "@/components/sections/ReviewForm";
+import ReviewForm from "./_components/ReviewForm";
 import { Quote, MessageSquareHeart, Sparkles } from "lucide-react";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 

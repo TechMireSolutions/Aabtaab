@@ -57,4 +57,4 @@ Port **3000** · `server.config.cjs` · PM2 `ecosystem.config.cjs` / `deploy/run
 
 See `AGENTS.md` for full index. See [techstack.md](techstack.md) for deploy, env, and SEO.
 
-**Doc priority:** `techstack.md` → rules → skills. Caching only via `sanityFetch`. Rate limit Redis strongly recommended in production. `npm run typecheck` is authoritative (`ignoreBuildErrors` on build). Missing CMS detail docs → `notFound()`. Mobile-first UI: rules `13` / `14`.
+**Doc priority:** `techstack.md` → rules → skills. Caching only via `sanityFetch`. Rate limit Redis strongly recommended in production. `npm run typecheck` is authoritative (`ignoreBuildErrors` on build). Missing CMS detail docs → `notFound()`. Mobile-first UI: rules `13` / `14`. Footer chrome SSOT: `lib/fallbacks/footer-nav.ts` + `footer-*` utilities; external links via `EXTERNAL_LINK_PROPS` / `OpensInNewTab`.

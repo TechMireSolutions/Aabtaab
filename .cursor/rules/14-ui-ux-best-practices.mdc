@@ -49,6 +49,8 @@ Every async or interactive feature must handle: **idle · loading · success · 
 * Use `<Link>` for internal routes; breadcrumbs on nested catalogs (`NestedBreadcrumbs`).
 * Skip link → `#main-content` must remain present and first-focusable in the site chrome.
 * Icon-only controls need `aria-label`; decorative icons `aria-hidden`.
+* Footer columns that are lists of destinations should be labeled `<nav>` (`aria-labelledby` / `aria-label`).
+* Links that open a new tab: use `EXTERNAL_LINK_PROPS` + `OpensInNewTab` (or an equivalent `aria-label` that includes “opens in new tab”).
 
 ## Motion & delight
 
@@ -61,8 +63,8 @@ Every async or interactive feature must handle: **idle · loading · success · 
 
 * Prefer design-system surfaces (`card-surface`, `card-interactive`) only when they aid scanning or interaction — avoid card-wrapping everything.
 * Maintain consistent spacing via `section-y*` utilities rather than one-off padding.
-* Dark/light: use existing dark-aware utilities (`icon-btn-subtle`, `chip-outline`) — do not invent a second theme system.
-
+* Light surfaces: dark-mode-aware utilities (`icon-btn-subtle`, `chip-outline`).
+* Forced-dark site footer (`bg-slate-950`): use `footer-*` utilities — do not reuse light-surface chip/icon classes there.
 ## Inclusive UX
 
 * WCAG 2.2 AA contrast for text and essential UI chrome.

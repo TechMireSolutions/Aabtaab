@@ -1,7 +1,7 @@
 import { urlFor } from "@/sanity/lib/image";
 import HeroSection from "@/components/sections/HeroSection";
 import type { HomepageSettings } from "@/types/homepage";
-import type { SiteSettings } from "@/types/sanity";
+import type { SiteSettings } from "@/types/site-settings";
 import { sanitizePublicCopy } from "@/lib/fallbacks/cms-copy";
 
 interface HomeHeroProps {

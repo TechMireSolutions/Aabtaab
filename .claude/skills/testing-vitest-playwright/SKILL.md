@@ -22,7 +22,7 @@ description: >-
 
 - Colocate: `lib/contact/schema.test.ts` beside `schema.ts`.
 - Include: `**/*.test.ts` via `vitest.config.ts` (`@/` alias).
-- Current high-value modules: contact schema/email, paths, urls, constants, request-ip, rate-limit, revalidate, SEO helpers, catalog mappers.
+- Current high-value modules: contact schema/email, paths, urls (`whatsappUrl` / `mapsUrl`), constants, request-ip, rate-limit, revalidate, SEO helpers, catalog mappers, `lib/fallbacks/footer-nav.ts`.
 
 ```typescript
 import { describe, it, expect } from "vitest";
@@ -40,13 +40,15 @@ describe("parseContactBody", () => {
 | File | Purpose |
 |------|---------|
 | `e2e/smoke.spec.ts` | Page load smoke |
-| `e2e/navigation.spec.ts` | Nav + footer legal |
+| `e2e/navigation.spec.ts` | Nav + footer legal links |
 | `e2e/seo.spec.ts` | Metadata, robots, 404 |
 | `e2e/contact.spec.ts` | Form validation UX |
 
 Projects: **Desktop Chrome** + **Pixel 7** (`playwright.config.ts`).
 
 Web server: `node scripts/run-next.mjs start --port 3000` (needs an existing `.next` build).
+
+**Footer / chrome notes:** Prefer role selectors for Privacy/Terms in `footer`. Do not assert CMS-specific footer quick-link labels (`FALLBACK_QUICK_LINKS` / Sanity). Scope contact fields to `#main-content form` so footer `mailto:` links do not collide.
 
 ### Selector tips
 

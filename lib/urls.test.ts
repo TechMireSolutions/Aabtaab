@@ -1,10 +1,5 @@
 import { describe, expect, it } from "vitest";
-import {
-  formatPriceDuration,
-  mapsUrl,
-  nestedListCtaLabel,
-  whatsappUrl,
-} from "@/lib/urls";
+import { mapsUrl, whatsappUrl, safeContactHref } from "@/lib/urls";
 
 describe("whatsappUrl", () => {
   it("builds wa.me URL with digits only and encoded message", () => {
@@ -38,31 +33,26 @@ describe("mapsUrl", () => {
   });
 });
 
-describe("formatPriceDuration", () => {
-  it("joins price and duration", () => {
-    expect(formatPriceDuration("$50", "8 weeks")).toBe("$50 · 8 weeks");
+describe("safeContactHref", () => {
+  it("wraps bare emails as mailto", () => {
+    expect(safeContactHref("scholar@example.com")).toBe(
+      "mailto:scholar@example.com",
+    );
   });
 
-  it("returns single part when one missing", () => {
-    expect(formatPriceDuration("$50")).toBe("$50");
-    expect(formatPriceDuration(undefined, "8 weeks")).toBe("8 weeks");
+  it("allows http(s), mailto, and tel", () => {
+    expect(safeContactHref("https://example.com")).toBe("https://example.com");
+    expect(safeContactHref("mailto:a@b.com")).toBe("mailto:a@b.com");
+    expect(safeContactHref("tel:+1234567890")).toBe("tel:+1234567890");
   });
 
-  it("returns null when both empty", () => {
-    expect(formatPriceDuration()).toBeNull();
-    expect(formatPriceDuration("", "")).toBeNull();
-  });
-});
-
-describe("nestedListCtaLabel", () => {
-  const labels = { parent: "View Services", leaf: "Learn More" };
-
-  it("uses parent label when children exist", () => {
-    expect(nestedListCtaLabel(3, labels)).toBe("View Services");
+  it("rejects dangerous schemes and protocol-relative URLs", () => {
+    expect(safeContactHref("javascript:alert(1)")).toBeNull();
+    expect(safeContactHref("//evil.example")).toBeNull();
   });
 
-  it("uses leaf label when no children", () => {
-    expect(nestedListCtaLabel(0, labels)).toBe("Learn More");
-    expect(nestedListCtaLabel(undefined, labels)).toBe("Learn More");
+  it("returns null for empty values", () => {
+    expect(safeContactHref("")).toBeNull();
+    expect(safeContactHref(null)).toBeNull();
   });
 });

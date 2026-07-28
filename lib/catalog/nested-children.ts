@@ -1,5 +1,5 @@
 import { cardImageUrl } from "@/sanity/lib/image";
-import { formatPriceDuration, nestedListCtaLabel } from "@/lib/urls";
+import { formatPriceDuration, nestedListCtaLabel } from "@/lib/catalog/formatters";
 import { normalizePublicTitle } from "@/lib/catalog/subjects";
 import type { CourseChild } from "@/types/course";
 import type { ServiceChild } from "@/types/service";

@@ -82,7 +82,7 @@ npm run lint && npm run typecheck && npm run test && npm run build && npm audit 
 
 ## File structure
 
-Domain-first layout: `app/(site)/`, `components/{content,layout,sections}/`, `lib/{cms,catalog,contact,seo,fallbacks}/`, `sanity/`, `types/`, `e2e/`, `deploy/`, `scripts/`. Full placement rules: `.cursor/rules/06-file-structure.mdc`.
+Domain-first layout: `app/(site)/` (with `error.tsx`, `not-found.tsx`, `loading.tsx`), `components/{content,layout,sections}/`, `lib/{cms,catalog,contact,seo,fallbacks,security}/`, `sanity/`, `types/` (domain files), `e2e/`, `deploy/`, `scripts/`. Full placement rules: `.cursor/rules/06-file-structure.mdc`.
 
 ## CMS
 

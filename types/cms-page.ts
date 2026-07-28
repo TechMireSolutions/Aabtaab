@@ -1,4 +1,4 @@
-import type { SeoData } from "./sanity";
+import type { SeoData } from "./seo";
 
 /** Shared shape for CMS `page` documents used on listing/detail routes */
 export interface CmsPageSummary {

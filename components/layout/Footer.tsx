@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import type { FooterNav, FooterService } from "@/types/site-navigation";
-import type { SiteSettings } from "@/types/sanity";
+import type { SiteSettings } from "@/types/site-settings";
 import { resolveSiteName } from "@/lib/constants";
 import {
   FOOTER_CTA,

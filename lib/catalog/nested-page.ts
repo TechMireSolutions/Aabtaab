@@ -2,7 +2,7 @@ import { getContentAncestry } from "@/lib/paths";
 import { getSiteUrl } from "@/lib/seo";
 import { whatsappUrl } from "@/lib/urls";
 import type { ContentAncestor } from "@/types/sanity";
-import type { SiteSettings } from "@/types/sanity";
+import type { SiteSettings } from "@/types/site-settings";
 
 export interface NestedCatalogBase {
   segment: "online-courses" | "services";

@@ -41,11 +41,12 @@ description: >-
 | Featured image (post/event) | `media-hero` |
 | Square CMS image | `media-frame` / `media-placeholder` |
 | Pricing table wrapper | `table-shell` |
-| Footer social icon | `footer-social-btn` (always-dark footer) or `icon-btn-subtle` on light surfaces |
-| Footer/contact text link | `footer-contact-link` / `footer-nav-link` / `footer-legal-link`; contact page chips: `chip-outline` |
+| Site footer shell / CTA band | `footer-shell`, `footer-cta-band` |
+| Footer social / pill / links | `footer-social-btn`, `footer-pill-link`, `footer-nav-link`, `footer-contact-link`, `footer-contact-static`, `footer-legal-link`, `footer-heading` |
+| Light-surface social chips | `icon-btn-subtle` / `chip-outline` (contact page — not the forced-dark footer) |
+| Logo mark | `SiteBrandLogo` + `size-logo` / `LOGO_DISPLAY_PX` |
 | Dark hero badges | `badge-hero` / `badge-hero-muted` |
 | Soft notice chip | `badge-notice` |
-| Logo sizing | `size-logo` / `size-logo-lg` |
 | Donate/sacred accent | `text-eyebrow-gold` + `eyebrow-line-gold` |
 | Hero stagger animation | `motion-safe:animate-fade-up` + `motion-safe:animate-delay-*` |
 | WhatsApp FAB | `whatsapp-fab` (self-contained) + `pb-fab-safe` on `<main>` |

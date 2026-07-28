@@ -17,7 +17,7 @@ import type { SlugParent } from "@/types/sanity";
 import { buildNestedSlugMetadata } from "@/lib/cms/page";
 import { getServiceBySlug, getSiteSettings } from "@/lib/cms/queries";
 import { mapServiceChildForGrid } from "@/lib/catalog/nested-children";
-import { buildNestedBreadcrumbItems } from "@/lib/paths";
+import { buildNestedBreadcrumbItems, buildNestedContentPath } from "@/lib/paths";
 import { resolveSiteName } from "@/lib/constants";
 import {
   absoluteUrl,
@@ -25,7 +25,6 @@ import {
   faqItemsToSchema,
   ServiceJsonLd,
   resolveDocOgImage,
-  buildNestedContentPath,
 } from "@/lib/seo";
 
 const SERVICE_BASE = {

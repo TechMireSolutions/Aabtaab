@@ -91,7 +91,8 @@ Every public write endpoint must include:
 * Render Portable Text through approved components.
 * Whitelist supported block, mark, image, and link types.
 * Validate external links before rendering them.
-* Add `rel="noopener noreferrer"` to external links.
+* Prefer **`EXTERNAL_LINK_PROPS`** from `lib/urls.ts` and **`OpensInNewTab`** for new-tab announcements — do not hand-roll `target`/`rel` inconsistently.
+* Maps destinations: `mapsUrl()`; WhatsApp: `whatsappUrl()`.
 * Keep preview and draft-mode access protected.
 
 ## 7. Email Security

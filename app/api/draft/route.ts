@@ -2,7 +2,7 @@ import { env } from "@/lib/env";
 import { draftMode } from "next/headers";
 import { redirect } from "next/navigation";
 import { type NextRequest } from "next/server";
-import { previewPath } from "@/lib/paths/preview-path";
+import { previewPath } from "@/lib/paths";
 import { secretsEqual } from "@/lib/security/secrets";
 
 const PREVIEW_SECRET = env.SANITY_PREVIEW_SECRET;

@@ -2,7 +2,7 @@ import { cache } from "react";
 import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/fetch";
 import { siteSearchQuery } from "@/sanity/lib/queries";
 import type { SiteSearchResult, SearchResponse } from "@/types/search";
-import { matchKeyword, getSuggestions } from "@/lib/search/keywords";
+import { matchKeyword, getSuggestions } from "@/lib/cms/keywords";
 
 export const searchSite = cache(async (term: string): Promise<SearchResponse> => {
   const trimmed = term.trim();

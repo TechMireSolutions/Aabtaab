@@ -22,8 +22,8 @@ description: >-
 | `FeatureCardGrid` | Check/numbered feature cards |
 | `CoursePricingSection` | Pricing tables |
 | `CenteredTextSection` | Centered heading + body |
-| `CtaBandSection` | Dark CTA band (primary + WhatsApp); optional `footer` |
-| `SiteContactFooter` | Email/phone under CTA (courses **and** services) |
+| `CtaBandSection` | Dark CTA band (primary + WhatsApp); optional `footer`; external CTAs use `EXTERNAL_LINK_PROPS` + `OpensInNewTab` |
+| `SiteContactFooter` | Email/phone under CTA (courses **and** services) — built from `buildFooterContactItems` |
 | `FaqAccordionSection` | FAQ accordion (`chevron` or `plus` icon) |
 | `PortableTextPageSection` | CMS portable text body |
 | `NestedChildrenGrid` | Parent catalog child cards |
@@ -34,6 +34,8 @@ description: >-
 
 | Component | Typical use |
 |-----------|-------------|
+| `Header` / `Footer` | Site chrome — data from `getSiteLayoutData()`; footer copy/links from `lib/fallbacks/footer-nav.ts` |
+| `SiteBrandLogo` | Shared header/footer brand mark (`variant="header" \| "footer"`) |
 | `PageHeader` | Catalog/CMS page headers (`above` slot for donate verse, etc.) |
 | `ArticleDetailShell` | Posts + events detail chrome (back + article) |
 | `LegalPageShell` / `LegalSection` | Privacy + terms |
@@ -55,7 +57,15 @@ description: >-
 ## CTA pattern
 
 Primary → `/contact` or external URL. Secondary → WhatsApp via `whatsappUrl(settings.whatsapp)`.  
+External primary/secondary links: spread `EXTERNAL_LINK_PROPS` and render `OpensInNewTab`.  
 Pass `footer={<SiteContactFooter site={site} />}` on course **and** service CTA bands.
+
+## Site footer (do not reimplement)
+
+- **Presentation:** `components/layout/Footer.tsx` — compose only.
+- **SSOT data/copy:** `lib/fallbacks/footer-nav.ts` (`FALLBACK_QUICK_LINKS`, `FOOTER_CTA`, `FOOTER_LEGAL_LINKS`, `buildFooterServiceNavLinks`, `buildFooterContactItems`, `buildFooterSocialLinks`, `resolveFooterTagline`, …).
+- **Layout fetch:** `getSiteLayoutData()` applies `resolveFooterNavForLayout`.
+- **Styles:** `footer-*` utilities in `app/globals.css` (forced-dark chrome).
 
 ## Adding a new section
 

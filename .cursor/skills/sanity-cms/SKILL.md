@@ -15,11 +15,12 @@ description: >-
 | Area | Path |
 |------|------|
 | Schemas | `sanity/schemaTypes/` |
-| GROQ | `sanity/lib/queries/` (posts, events, courses, services, site, search, fragments) — `site.ts` exports `headerNavQuery` + `footerNavQuery` |
+| GROQ | `sanity/lib/queries/` (posts, events, courses, services, site, search, fragments) — `site.ts` exports `headerNavQuery` + `footerNavQuery` + `footerServicesQuery` |
 | Fetch + cache | `sanity/lib/fetch.ts` (`sanityFetch`, `CACHE_TAGS`) |
 | Preview | `sanity/lib/previewClient.ts`, `app/api/draft/` |
 | Write | `sanity/lib/writeClient.ts` (contact submissions) |
-| App facade | `lib/cms/queries.ts`, `lib/cms/page.ts`, `lib/cms/search.ts` |
+| App facade | `lib/cms/queries.ts` (`getSiteLayoutData` applies footer/header fallbacks + empty-catalog filter), `lib/cms/page.ts`, `lib/cms/search.ts` |
+| Footer / nav fallbacks | `lib/fallbacks/footer-nav.ts`, `lib/fallbacks/nav.ts` |
 | Migrations | `scripts/migrate-sanity-fields.mjs` |
 
 ## Document types

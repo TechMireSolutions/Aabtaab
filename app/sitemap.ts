@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
-import { absoluteUrl, buildNestedContentPath } from "@/lib/seo";
+import { absoluteUrl } from "@/lib/seo";
+import { buildNestedContentPath } from "@/lib/paths";
 import { getSitemapSlugs } from "@/lib/cms/queries";
 
 interface SitemapSlug {

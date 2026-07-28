@@ -3,7 +3,7 @@ import CatalogPageLayout from "@/components/layout/CatalogPageLayout";
 import { defineCmsPageMetadata } from "@/lib/cms/page";
 import { getCmsPage, getTopLevelServices } from "@/lib/cms/queries";
 import { cardImageUrl } from "@/sanity/lib/image";
-import { nestedListCtaLabel } from "@/lib/urls";
+import { nestedListCtaLabel } from "@/lib/catalog/formatters";
 
 export const generateMetadata = defineCmsPageMetadata("services", {
   path: "/services",

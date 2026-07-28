@@ -61,7 +61,7 @@ Set up Sanity webhooks connected to a Next.js API route (`/api/revalidate`) usin
 
 Supported `_type` values include: `post`, `course`, `service`, `event`, `page`, `siteSettings`, `homepageSettings`, `navigation`, `testimonial`.
 
-Navigation documents: `title == "header"` → `headerNavQuery`; `title == "footer"` → `footerNavQuery` (fetched in `getSiteLayoutData()`).
+Navigation documents: `title == "header"` → `headerNavQuery`; `title == "footer"` → `footerNavQuery` (fetched in `getSiteLayoutData()`, which applies `resolveFooterNavForLayout` / empty-catalog filtering and `FALLBACK_QUICK_LINKS`). Top-level services for the footer column: `footerServicesQuery`.
 
 ## Schema Design
 

@@ -2,7 +2,7 @@ import { type QueryParams } from "next-sanity";
 import { draftMode } from "next/headers";
 import { unstable_cache } from "next/cache";
 import * as Sentry from "@sentry/nextjs";
-import type { SiteSettings } from "@/types/sanity";
+import type { SiteSettings } from "@/types/site-settings";
 import { env, isProduction } from "@/lib/env";
 import { client } from "./client";
 import { getPreviewClient } from "./previewClient";
@@ -23,6 +23,8 @@ export const CACHE_TAGS = {
   pages: "sanity-pages",
   page: (slug: string) => `sanity-page-${slug}`,
   testimonials: "sanity-testimonials",
+  scholars: "sanity-scholars",
+  countries: "sanity-countries",
 } as const;
 
 interface SanityFetchOptions {

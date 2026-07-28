@@ -51,7 +51,9 @@ if (turnstile) turnstile.reset();
 
 ### 7. Links & CMS output
 - Portable Text / CMS links: allow `http:` / `https:` / `mailto:` / `tel:` only.
-- External links: `rel="noopener noreferrer"`.
+- External links: use **`EXTERNAL_LINK_PROPS`** from `lib/urls.ts` (`target="_blank"` + `rel="noopener noreferrer"`) — do not re-copy those attrs.
+- Announce new tabs with **`OpensInNewTab`** (`components/ui/OpensInNewTab.tsx`) or an equivalent `aria-label`.
+- Maps links: `mapsUrl(address, addressLink)` from `lib/urls.ts`.
 - No open redirects to untrusted hosts.
 
 ## Verification Checklist

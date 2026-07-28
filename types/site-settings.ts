@@ -1,0 +1,31 @@
+export interface SiteSettings {
+  siteName?: string;
+  description?: string;
+  favicon?: { asset: { _ref: string } };
+  logo?: { asset: { _ref: string }; alt?: string };
+  tagline?: string;
+  siteUrl?: string;
+  twitterHandle?: string;
+  facebook?: string;
+  youtube?: string;
+  whatsapp?: string;
+  darulQuranUrl?: string;
+  donateUrl?: string;
+  email?: string;
+  phone?: string;
+  workingHours?: string;
+  address?: string;
+  addressLink?: string;
+  city?: string;
+  state?: string;
+  country?: string;
+  searchPlaceholder?: string;
+  contactFormSubmitLabel?: string;
+  donateArabicVerse?: string;
+  donatePayOnlineLabel?: string;
+  donateContactLabel?: string;
+  donateClosingMessage?: string;
+  donateHowToHeading?: string;
+  donateHowToText?: string;
+  donateCauses?: { title: string; description: string }[];
+}

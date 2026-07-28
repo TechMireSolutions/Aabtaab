@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { articleHeroImageUrl } from "@/sanity/lib/image";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import { resolveDocOgImage } from "@/lib/seo/resolve-og-image";
-import type { Post } from "@/types/sanity";
+import type { Post } from "@/types/post";
 import { getPostBySlug } from "./queries";
 
 export function resolvePostImageUrls(post: Post) {

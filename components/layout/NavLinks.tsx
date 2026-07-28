@@ -6,7 +6,7 @@ import { ExternalLink } from "lucide-react";
 import {
   TW_MOBILE_NAV_ROW,
   TW_MOBILE_NAV_ROW_ACTIVE,
-} from "@/lib/tailwind";
+} from "@/components/layout/mobile-nav-classes";
 import type { NavItem } from "@/types/site-navigation";
 import OpensInNewTab from "@/components/ui/OpensInNewTab";
 import { EXTERNAL_LINK_PROPS } from "@/lib/urls";

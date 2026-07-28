@@ -9,13 +9,6 @@ export interface SiteSearchResult {
   summary?: string;
 }
 
-export const SEARCH_TYPE_LABELS: Record<SearchResultType, string> = {
-  post: "Article",
-  course: "Course",
-  service: "Service",
-  event: "Event",
-};
-
 export interface KeywordMatch {
   label: string;
   href: string;

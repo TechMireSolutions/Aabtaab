@@ -6,7 +6,7 @@ import { urlFor } from "@/sanity/lib/image";
 import dynamic from "next/dynamic";
 import type { CarouselItem } from "@/components/sections/CarouselSection";
 import ContentCard from "@/components/cards/ContentCard";
-import { formatPriceDuration } from "@/lib/urls";
+import { formatPriceDuration } from "@/lib/catalog/formatters";
 import {
   formatSubjectLabel,
   normalizePublicTitle,

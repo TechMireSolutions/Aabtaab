@@ -7,7 +7,7 @@ import {
   Phone,
 } from "lucide-react";
 import type { FooterNav, FooterService, NavItem } from "@/types/site-navigation";
-import type { SiteSettings } from "@/types/sanity";
+import type { SiteSettings } from "@/types/site-settings";
 import { mapsUrl, whatsappUrl } from "@/lib/urls";
 
 /** Paths to hide from footer/header when the related catalog is empty */

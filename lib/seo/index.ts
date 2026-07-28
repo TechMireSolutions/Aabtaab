@@ -16,4 +16,3 @@ export {
   WebSiteJsonLd,
 } from "./JsonLd";
 export { faqItemsToSchema, portableTextToPlainText } from "./portable-text-plain";
-export { buildNestedContentPath, getContentAncestry, ancestryPathSegment, buildNestedBreadcrumbItems } from "@/lib/paths";

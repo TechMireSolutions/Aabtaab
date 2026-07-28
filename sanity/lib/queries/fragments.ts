@@ -9,6 +9,18 @@ export const SEO_FRAGMENT = `
   }
 `;
 
+/** Shared site settings projection (hero + settings fetches) */
+export const SITE_SETTINGS_FRAGMENT = `
+  siteName, description, favicon, logo, tagline,
+  siteUrl, twitterHandle,
+  email, phone, address, addressLink, workingHours, city, state, country,
+  facebook, youtube, whatsapp, darulQuranUrl, donateUrl,
+  searchPlaceholder, contactFormSubjects, contactFormSubmitLabel,
+  donateArabicVerse, donateHowToHeading, donateHowToText,
+  donateClosingMessage, donatePayOnlineLabel, donateContactLabel,
+  donateCauses[]{ title, description }
+`;
+
 /** Three-level parent chain used by course and service deep queries */
 export const PARENT_ANCESTRY_FRAGMENT = `
   "parent": parent->{

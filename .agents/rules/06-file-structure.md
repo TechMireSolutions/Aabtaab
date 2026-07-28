@@ -15,26 +15,29 @@ Full layout reference: **`techstack.md`** § File structure.
 ```
 app/
   (site)/              # Public site — route group, shared layout
+    layout.tsx, error.tsx, not-found.tsx, loading.tsx
     {route}/page.tsx
     {route}/_components/   # Private to that route (underscore prefix)
   api/{name}/route.ts  # contact, review, revalidate, draft, draft/disable, search
   studio/              # Embedded Sanity Studio
   globals.css          # Tailwind v4 design system (single CSS source)
-  layout.tsx, sitemap.ts, robots.ts, global-error.tsx
-  # Prefer adding (site)/error.tsx + not-found.tsx when improving resilience (not present yet)
+  layout.tsx, sitemap.ts, robots.ts, global-error.tsx, not-found.tsx
 
 components/
   content/             # Reusable CMS-driven sections (2+ pages)
-  layout/              # Site chrome + shells (Header, PageHeader, ArticleDetailShell, LegalPageShell)
-  sections/            # Homepage-only blocks
+  layout/              # Site chrome (Header, Footer, SiteBrandLogo, PageHeader, shells)
+                       # + mobile-nav-classes.ts for drawer class strings
+  sections/            # Homepage-only blocks (do not put non-home widgets here)
   cards/, portable-text/, icons/, ui/, studio/
+    # ui/ includes OpensInNewTab and other shared chrome primitives
 
 lib/
-  cms/                 # Cached queries + metadata builders + search
-  catalog/             # Nested catalog helpers
+  cms/                 # Cached queries, search facade, keywords, search-labels
+  catalog/             # Nested catalog helpers + formatters (price/CTA labels)
   contact/             # Zod schema, email HTML, notify
-  seo/                 # Metadata + JSON-LD
-  fallbacks/           # Defaults when CMS empty (nav, about, …)
+  seo/                 # Metadata + JSON-LD (approved barrel: index.ts)
+  fallbacks/           # Defaults when CMS empty (nav, footer-nav, about, dar-ul-quran, …)
+  security/            # Timing-safe secret compares
   constants.ts, paths.ts, urls.ts, revalidate.ts, env.ts
   rate-limit.ts, request-ip.ts
 
@@ -42,7 +45,9 @@ sanity/
   schemaTypes/         # One schema file per document type
   lib/                 # client, fetch, previewClient, writeClient, queries/, image
 
-types/                 # Shared TS by domain — not per component file
+types/                 # Shared TS by domain — no runtime code
+                       # (post, seo, site-settings, payment, quote, country, …;
+                       #  sanity.ts = SanityImage / ancestry only)
 
 deploy/                # PM2 runtime bridge (`runtime.cjs`)
 scripts/               # Migrations, run-next, agent sync, OG generator
@@ -60,8 +65,15 @@ e2e/                   # Playwright: smoke, navigation, seo, contact
 | CMS fetch helper | `lib/cms/queries.ts` or `sanity/lib/queries/{domain}.ts` |
 | GROQ for new domain | `sanity/lib/queries/{domain}.ts` + export in `index.ts` |
 | Shared type | `types/{domain}.ts` |
-| Shared layout shell (2+ pages) | `components/layout/` (e.g. `ArticleDetailShell`) |
-| Default/fallback copy | `lib/fallbacks/{feature}.ts` |
+| Shared layout shell (2+ pages) | `components/layout/` (e.g. `ArticleDetailShell`, `Footer`, `SiteBrandLogo`) |
+| Default/fallback copy | `lib/fallbacks/{feature}.ts` (footer: `footer-nav.ts`) |
+| Shared URL / external-link helpers | `lib/urls.ts` (`whatsappUrl`, `mapsUrl`, `EXTERNAL_LINK_PROPS`, `safeContactHref`) |
+| Catalog price / CTA label helpers | `lib/catalog/formatters.ts` |
+| Nested paths / draft preview paths | `lib/paths.ts` (`buildNestedContentPath`, `previewPath`, …) |
+| Search keyword synonyms / labels | `lib/cms/keywords.ts`, `lib/cms/search-labels.ts` |
+| Mobile nav class strings | `components/layout/mobile-nav-classes.ts` |
+| Route loading UI | `app/(site)/loading.tsx` (or route-level `loading.tsx`) |
+| Generic UI primitive (2+ places) | `components/ui/` (e.g. `OpensInNewTab`) |
 | Unit test | Colocated `*.test.ts` next to the module |
 | E2E flow | `e2e/{feature}.spec.ts` |
 | One-off script | `scripts/{kebab-name}.mjs` |

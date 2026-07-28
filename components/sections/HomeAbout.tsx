@@ -4,7 +4,7 @@ import { useState, useTransition, useMemo } from "react";
 import Link from "next/link";
 import { ArrowRight, RefreshCw } from "lucide-react";
 import type { HomepageSettings } from "@/types/homepage";
-import type { QuoteItem } from "@/types/sanity";
+import type { QuoteItem } from "@/types/quote";
 
 interface HomeAboutProps {
   homepage: HomepageSettings | null;

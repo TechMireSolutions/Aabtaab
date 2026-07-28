@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useTransition, useCallback, useMemo } from
 import { Search, X, BookOpen, Calendar, FileText, Settings, ArrowRight, CornerDownLeft, Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { SiteSearchResult, KeywordMatch } from "@/types/search";
-import { SEARCH_TYPE_LABELS } from "@/types/search";
+import { SEARCH_TYPE_LABELS } from "@/lib/cms/search-labels";
 import SearchEmptyState, { QuickNavChips } from "@/components/layout/SearchEmptyState";
 
 interface SearchPaletteProps {

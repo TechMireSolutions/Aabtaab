@@ -1,5 +1,5 @@
 import { Mail, Phone } from "lucide-react";
-import type { SiteSettings } from "@/types/sanity";
+import type { SiteSettings } from "@/types/site-settings";
 import { buildFooterContactItems } from "@/lib/fallbacks/footer-nav";
 
 interface SiteContactFooterProps {

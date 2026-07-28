@@ -1,4 +1,4 @@
-import type { SeoData } from "@/types/sanity";
+import type { SeoData } from "@/types/seo";
 
 export interface EventSummary {
   _id: string;

@@ -1,4 +1,4 @@
-import { SEO_FRAGMENT } from "./fragments";
+import { SEO_FRAGMENT, SITE_SETTINGS_FRAGMENT } from "./fragments";
 
 export const pageBySlugQuery = `
   *[_type == "page" && slug.current == $slug][0] {
@@ -25,24 +25,35 @@ export const footerServicesQuery = `
   }
 `;
 
-export const homepageSettingsQuery = `*[_type == "homepageSettings"][0]`;
-
 export const testimonialsQuery = `
   *[_type == "testimonial" && status == "approved"] | order(order asc) {
     _id, quote, name, role
   }
 `;
 
+export const scholarsQuery = `
+  *[_type == "scholar"] | order(order asc, name asc) {
+    _id, name, slug, image, qualifications, contactDetails, bio
+  }
+`;
+
+export const countriesQuery = `
+  *[_type == "country"] | order(order asc, name asc) {
+    _id, name, flagIcon, flagImage
+  }
+`;
+
+export const catalogCountsQuery = `{
+  "scholars": count(*[_type == "scholar"]),
+  "events": count(*[_type == "event"]),
+  "posts": count(*[_type == "post"]),
+  "courses": count(*[_type == "course"]),
+  "services": count(*[_type == "service"])
+}`;
+
 export const siteSettingsQuery = `
   *[_type == "siteSettings"][0]{
-    siteName, description, favicon, logo, tagline,
-    siteUrl, twitterHandle,
-    email, phone, address, addressLink, workingHours, city, state, country,
-    facebook, youtube, whatsapp, darulQuranUrl, donateUrl,
-    searchPlaceholder, contactFormSubjects, contactFormSubmitLabel,
-    donateArabicVerse, donateHowToHeading, donateHowToText,
-    donateClosingMessage, donatePayOnlineLabel, donateContactLabel,
-    donateCauses[]{ title, description }
+    ${SITE_SETTINGS_FRAGMENT}
   }
 `;
 

@@ -1,5 +1,5 @@
 import { ogImageUrl } from "@/sanity/lib/image";
-import type { SeoData } from "@/types/sanity";
+import type { SeoData } from "@/types/seo";
 
 type SanityImageRef = { asset?: { _ref: string } | null; alt?: string } | null;
 

@@ -49,9 +49,10 @@ description: >-
 | Desktop-first grid crushed on phone | Base `grid-cols-1`; `md:grid-cols-2` / `lg:grid-cols-3` |
 | Hover-only reveal | Always-visible control or tap toggle |
 | iOS input zoom | Ensure `input-field` / ≥16px font |
-| FAB covers footer CTA | `pb-fab-safe` on `<main>` |
+| FAB covers footer CTA | `pb-fab-safe` on `<main>`; footer Stay-connected band also uses `pb-fab-safe` under the CTA on small screens |
 | Competing primary buttons | One `btn-primary`; rest secondary/ghost |
 | Soft empty page | Real empty state + links (`SearchEmptyState` / `empty-state`) |
+| Dense footer link rows | `footer-nav-link` / `footer-contact-link` (`min-h-11` on mobile) |
 
 ## Related skills
 

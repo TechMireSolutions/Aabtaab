@@ -16,12 +16,13 @@ description: >-
 2. **Await** `params` / `searchParams` / `draftMode()` / `cookies()` / `headers()`.
 3. Fetch via `lib/cms/queries.ts` or `sanityFetch` — never new `unstable_cache` outside `sanity/lib/fetch.ts`.
 4. Parallel independent fetches with `Promise.all`.
-5. Compose shells from `08-dry-policy` / skill `content-sections`.
+5. Compose shells from `08-dry-policy` / skill `content-sections` (including site `Header`/`Footer` + `SiteBrandLogo`).
 6. Mutations → existing **Route Handlers** (`app/api/*`), not Server Actions.
-7. LCP image: `priority` + `fetchPriority="high"` once per route.
+7. LCP image: `priority` + `fetchPriority="high"` once per route (header logo may use `SiteBrandLogo` `priority`).
 8. React Compiler is on — skip routine `useMemo` / `useCallback` / `memo`.
 9. Missing detail documents → `notFound()`; rethrow Next control-flow errors if catching.
 10. Stable React `key`s from ids/slugs — never list index for CMS collections.
+11. External links → `EXTERNAL_LINK_PROPS` + `OpensInNewTab`; site layout data → `getSiteLayoutData()`.
 
 ## Defaults
 

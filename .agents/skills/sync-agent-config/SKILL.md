@@ -70,7 +70,9 @@ Key resolved policies:
 - **CMS fields:** use migrated names (`faqItems`, `seo`, `ctaPrimaryLabel`) — see `03-sanity-cms`
 - **Routes:** `/posts` not `/articles`; search at `/search`
 - **DRY:** extract UI/CSS/fallbacks at **2+**; use SSOT table in `08-dry-policy`
-- **Shells:** `CatalogDarkHero`, `ArticleDetailShell`, `LegalPageShell`, `SiteContactFooter`
+- **Shells:** `CatalogDarkHero`, `ArticleDetailShell`, `LegalPageShell`, `SiteContactFooter`, `SiteBrandLogo`
+- **Footer SSOT:** `lib/fallbacks/footer-nav.ts` + `footer-*` utilities; do not hardcode footer copy/links in `Footer.tsx`
+- **External links:** `EXTERNAL_LINK_PROPS` + `OpensInNewTab` / `mapsUrl` / `whatsappUrl` in `lib/urls.ts`
 - **Rate limit:** Upstash Redis optional but **strongly recommended** in production; memory fallback for local / Redis errors — see `09-security` / `techstack.md`
 - **Secrets:** compare webhook/preview secrets with timing-safe equality when tightening auth; never ship write tokens to the client
 - **A11y:** WCAG 2.2 AA intent; one `h1`; `notFound()` for missing CMS detail docs (no soft 404)

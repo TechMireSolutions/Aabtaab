@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Check, Copy } from "lucide-react";
-import type { PaymentMethod } from "@/types/sanity";
+import type { PaymentMethod } from "@/types/payment";
 import { urlFor } from "@/sanity/lib/image";
 
 interface DynamicPaymentMethodsProps {

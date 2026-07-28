@@ -11,7 +11,7 @@ import {
   TW_MOBILE_HEADER,
   TW_MOBILE_MENU_TRIGGER,
   TW_MOBILE_NAV_SCROLL,
-} from "@/lib/tailwind";
+} from "@/components/layout/mobile-nav-classes";
 import type { NavItem } from "@/types/site-navigation";
 
 interface MobileNavSidebarProps {

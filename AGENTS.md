@@ -78,11 +78,11 @@ Key policies (must stay aligned with techstack):
 - Styling: Tailwind v4 + `brand-*` / `gold-*` via `app/globals.css`
 - CMS fields: migrated names only (`faqItems`, `seo`, `ctaPrimaryLabel`)
 - Search: `/search?q=…` (not `/posts?q=…`); sitemap via `getSitemapSlugs()`
-- DRY: extract UI/CSS/fallbacks at **2+**; shells in `08-dry-policy`
+- DRY: extract UI/CSS/fallbacks at **2+**; shells + footer SSOT in `08-dry-policy` (`lib/fallbacks/footer-nav.ts`, `SiteBrandLogo`, `EXTERNAL_LINK_PROPS`)
 - Rate limit: Upstash Redis **optional but strongly recommended** in production; memory fallback for local / Redis errors
 - Secrets: timing-safe compares when tightening webhook/preview auth; never ship write tokens to the client
-- A11y: WCAG 2.2 AA intent; missing CMS detail docs → `notFound()` (no soft 404)
-- Mobile/UI: mobile-first (`13`); UI/UX patterns (`14`); skill `mobile-responsive-ux`
+- A11y: WCAG 2.2 AA intent; missing CMS detail docs → `notFound()`; new-tab links via `OpensInNewTab` / labeled `aria-label`
+- Mobile/UI: mobile-first (`13`); UI/UX patterns (`14`); skill `mobile-responsive-ux`; forced-dark footer uses `footer-*` utilities
 - PM2: `pm2 delete` then `pm2 start` (not `reload` / `startOrRestart`)
 - Types: `npm run typecheck` authoritative (`ignoreBuildErrors` on build)
 - Tests: colocated `*.test.ts` + `e2e/{smoke,navigation,seo,contact}.spec.ts` (desktop + mobile)

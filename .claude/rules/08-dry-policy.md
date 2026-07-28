@@ -33,12 +33,14 @@ Never invent a new helper when the SSOT table already names one.
 | Nav / search empty links | `lib/fallbacks/nav.ts` + `SearchEmptyState` |
 | About fallback pillars | `lib/fallbacks/about.ts` |
 | Env validation | `lib/env.ts` |
-| Footer CMS / chrome data | **SSOT** `lib/fallbacks/footer-nav.ts` — quick links, tagline, CTA, legal, `buildFooterServiceNavLinks`, contact/social builders, `formatFooterCopyright`; layout via `getSiteLayoutData()` |
+| Footer CMS / chrome data | **SSOT** `lib/fallbacks/footer-nav.ts` — `FALLBACK_QUICK_LINKS`, `resolveFooterTagline`, `resolveFooterNavForLayout` / `resolveFooterQuickLinks`, `FOOTER_CTA`, `FOOTER_LEGAL_LINKS`, `FOOTER_ALL_SERVICES_LINK`, `buildFooterServiceNavLinks`, `buildFooterContactItems`, `buildFooterSocialLinks`, `formatFooterCopyright`; layout via `getSiteLayoutData()`; presentation `components/layout/Footer.tsx` + `footer-*` utilities |
 | Site brand mark | `SiteBrandLogo` (`header`/`footer`) + `LOGO_DISPLAY_PX` / `LOGO_IMAGE_PX` |
 | External new-tab links | `EXTERNAL_LINK_PROPS` + `mapsUrl` → `lib/urls.ts`; `OpensInNewTab` → `components/ui/OpensInNewTab.tsx` |
 | Nested child cards | `mapCourseChildForGrid`, `mapServiceChildForGrid` → `lib/catalog/` |
-| Breadcrumbs / paths | `lib/paths.ts` |
-| URL / formatting | `lib/urls.ts` |
+| Catalog price / CTA labels | `formatPriceDuration`, `nestedListCtaLabel` → `lib/catalog/formatters.ts` |
+| Breadcrumbs / paths / draft preview | `lib/paths.ts` |
+| URL / external links / contact hrefs | `lib/urls.ts` (`whatsappUrl`, `mapsUrl`, `EXTERNAL_LINK_PROPS`, `safeContactHref`) |
+| Site search facade | `searchSite` → `lib/cms/search.ts`; keywords → `lib/cms/keywords.ts`; labels → `lib/cms/search-labels.ts` |
 | Contact form logic | `lib/contact/` (schema, notify, email-html) |
 | Rate limiting / IP | `lib/rate-limit.ts`, `lib/request-ip.ts` |
 | Default copy | `lib/fallbacks/` |
@@ -66,7 +68,7 @@ Pages **compose** — they do not reimplement markup:
 ## Before adding new code, search for
 
 1. Existing component in `components/content/` or `components/layout/`
-2. Existing helper in `lib/cms/`, `lib/paths.ts`, `lib/urls.ts`, `lib/contact/`
+2. Existing helper in `lib/cms/`, `lib/catalog/`, `lib/paths.ts`, `lib/urls.ts`, `lib/contact/`
 3. Existing type in `types/` — extend `NestedContentDetail`, `CmsPageSummary`, etc.
 4. Existing GROQ fragment in `fragments.ts`
 

@@ -77,9 +77,26 @@ export async function POST(request: NextRequest) {
         revalidated.push(CACHE_TAGS.homepage);
         break;
       case "navigation":
-      case "testimonial":
         revalidateTag(CACHE_TAGS.siteSettings, REVALIDATE_OPTIONS);
         revalidated.push(CACHE_TAGS.siteSettings);
+        break;
+      case "testimonial":
+        revalidateTag(CACHE_TAGS.testimonials, REVALIDATE_OPTIONS);
+        revalidated.push(CACHE_TAGS.testimonials);
+        revalidateTag(CACHE_TAGS.homepage, REVALIDATE_OPTIONS);
+        revalidated.push(CACHE_TAGS.homepage);
+        break;
+      case "scholar":
+        revalidateTag(CACHE_TAGS.scholars, REVALIDATE_OPTIONS);
+        revalidated.push(CACHE_TAGS.scholars);
+        revalidateTag(CACHE_TAGS.homepage, REVALIDATE_OPTIONS);
+        revalidated.push(CACHE_TAGS.homepage);
+        break;
+      case "country":
+        revalidateTag(CACHE_TAGS.countries, REVALIDATE_OPTIONS);
+        revalidated.push(CACHE_TAGS.countries);
+        revalidateTag(CACHE_TAGS.homepage, REVALIDATE_OPTIONS);
+        revalidated.push(CACHE_TAGS.homepage);
         break;
       case "page":
         revalidateTag(CACHE_TAGS.pages, REVALIDATE_OPTIONS);
@@ -88,6 +105,13 @@ export async function POST(request: NextRequest) {
           revalidateTag(CACHE_TAGS.page(slug.current), REVALIDATE_OPTIONS);
           revalidated.push(CACHE_TAGS.page(slug.current));
         }
+        break;
+      case "paymentMethod":
+      case "quote":
+        revalidateTag(CACHE_TAGS.siteSettings, REVALIDATE_OPTIONS);
+        revalidated.push(CACHE_TAGS.siteSettings);
+        revalidateTag(CACHE_TAGS.homepage, REVALIDATE_OPTIONS);
+        revalidated.push(CACHE_TAGS.homepage);
         break;
     }
 

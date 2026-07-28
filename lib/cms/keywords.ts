@@ -1,12 +1,8 @@
-export interface KeywordEntry {
-  label: string;
-  href: string;
-  category: "service" | "course" | "event" | "article";
-}
+import type { KeywordMatch } from "@/types/search";
 
 export interface KeywordGroup {
   keywords: string[];
-  entry: KeywordEntry;
+  entry: KeywordMatch;
 }
 
 export const KEYWORD_GROUPS: KeywordGroup[] = [
@@ -251,7 +247,7 @@ export const KEYWORD_GROUPS: KeywordGroup[] = [
   },
 ];
 
-const KEYWORD_MAP = new Map<string, KeywordEntry>();
+const KEYWORD_MAP = new Map<string, KeywordMatch>();
 
 for (const group of KEYWORD_GROUPS) {
   for (const keyword of group.keywords) {
@@ -259,7 +255,7 @@ for (const group of KEYWORD_GROUPS) {
   }
 }
 
-export function matchKeyword(input: string): KeywordEntry | null {
+export function matchKeyword(input: string): KeywordMatch | null {
   const lower = input.trim().toLowerCase();
   if (!lower) return null;
 
@@ -273,12 +269,12 @@ export function matchKeyword(input: string): KeywordEntry | null {
   return null;
 }
 
-export function getSuggestions(input: string): KeywordEntry[] {
+export function getSuggestions(input: string): KeywordMatch[] {
   const lower = input.trim().toLowerCase();
   if (!lower) return [];
 
   const seen = new Set<string>();
-  const suggestions: KeywordEntry[] = [];
+  const suggestions: KeywordMatch[] = [];
 
   for (const group of KEYWORD_GROUPS) {
     const matched = group.keywords.some(
@@ -294,7 +290,7 @@ export function getSuggestions(input: string): KeywordEntry[] {
   }
 
   if (suggestions.length === 0) {
-    const categoryMap = new Map<string, KeywordEntry>();
+    const categoryMap = new Map<string, KeywordMatch>();
     for (const group of KEYWORD_GROUPS) {
       if (!categoryMap.has(group.entry.category)) {
         categoryMap.set(group.entry.category, group.entry);

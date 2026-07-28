@@ -5,7 +5,7 @@ import { Search, RotateCcw, BookOpen, User } from "lucide-react";
 import ContentCard from "@/components/cards/ContentCard";
 import type { TopLevelCourseSummary } from "@/types/catalog";
 import { cardImageUrl } from "@/sanity/lib/image";
-import { formatPriceDuration, nestedListCtaLabel } from "@/lib/urls";
+import { formatPriceDuration, nestedListCtaLabel } from "@/lib/catalog/formatters";
 import {
   formatSubjectLabel,
   normalizePublicTitle,

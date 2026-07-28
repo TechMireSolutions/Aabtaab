@@ -23,10 +23,13 @@ import {
   allCoursePathsQuery,
   allServicePathsQuery,
   eventSlugsQuery,
-  homepageDataQuery,
   homepageHeroQuery,
   homepageCarouselsQuery,
   paymentMethodsQuery,
+  testimonialsQuery,
+  scholarsQuery,
+  countriesQuery,
+  catalogCountsQuery,
 } from "@/sanity/lib/queries";
 import type { EventDetail, EventSummary } from "@/types/event";
 import type { CmsPageSummary, PostCardSummary } from "@/types/cms-page";
@@ -34,7 +37,9 @@ import type { ContactFormOption } from "@/types/contact";
 import type { SlugParent } from "@/types/sanity";
 import type { CourseDetail } from "@/types/course";
 import type { ServiceDetail } from "@/types/service";
-import type { Post, PaymentMethod, QuoteItem } from "@/types/sanity";
+import type { Post } from "@/types/post";
+import type { PaymentMethod } from "@/types/payment";
+import type { QuoteItem } from "@/types/quote";
 import type { TopLevelCourseSummary, TopLevelServiceSummary } from "@/types/catalog";
 import type {
   HomeCourseSummary,
@@ -44,6 +49,7 @@ import type {
   Testimonial,
 } from "@/types/homepage";
 import type { Scholar } from "@/types/scholar";
+import type { Country } from "@/types/country";
 import type { FooterNav, FooterService, HeaderNav } from "@/types/site-navigation";
 import { filterNavForEmptyCatalogs, resolveFooterNavForLayout } from "@/lib/fallbacks/footer-nav";
 import { FALLBACK_NAV } from "@/lib/fallbacks/nav";
@@ -112,13 +118,7 @@ export const getSiteLayoutData = cache(async () => {
         courses?: number;
         services?: number;
       } | null>({
-        query: `{
-          "scholars": count(*[_type == "scholar"]),
-          "events": count(*[_type == "event"]),
-          "posts": count(*[_type == "post"]),
-          "courses": count(*[_type == "course"]),
-          "services": count(*[_type == "service"])
-        }`,
+        query: catalogCountsQuery,
         tags: [
           CACHE_TAGS.siteSettings,
           CACHE_TAGS.posts,
@@ -217,55 +217,6 @@ export const getHomepageCarouselsData = cache(async () => {
   };
 });
 
-/** @deprecated Use getHomepageCarouselsData */
-export const getHomepageSectionsData = getHomepageCarouselsData;
-
-export const getHomepageData = cache(async () => {
-  const data = await sanityFetch<{
-    featuredPosts?: HomePostSummary[] | null;
-    courses?: HomeCourseSummary[] | null;
-    services?: HomeServiceSummary[] | null;
-    homepage?: HomepageSettings | null;
-    testimonials?: Testimonial[] | null;
-    upcomingEvents?: EventSummary[] | null;
-    settings?: Awaited<ReturnType<typeof fetchSiteSettingsUncached>> | null;
-  } | null>({
-    query: homepageDataQuery,
-    tags: [
-      CACHE_TAGS.posts,
-      CACHE_TAGS.courses,
-      CACHE_TAGS.services,
-      CACHE_TAGS.homepage,
-      CACHE_TAGS.events,
-      CACHE_TAGS.siteSettings,
-      CACHE_TAGS.all,
-    ],
-    revalidate: 3600,
-  });
-
-  if (!data) {
-    return {
-      posts: [] as HomePostSummary[],
-      services: [] as HomeServiceSummary[],
-      courses: [] as HomeCourseSummary[],
-      homepage: null as HomepageSettings | null,
-      testimonials: [] as Testimonial[],
-      upcomingEvents: [] as EventSummary[],
-      settings: null,
-    };
-  }
-
-  return {
-    posts: data.featuredPosts ?? [],
-    services: data.services ?? [],
-    courses: data.courses ?? [],
-    homepage: data.homepage ?? null,
-    testimonials: data.testimonials ?? [],
-    upcomingEvents: data.upcomingEvents ?? [],
-    settings: data.settings ?? null,
-  };
-});
-
 export const getTopLevelCourses = cache(async () => {
   return sanityFetch<TopLevelCourseSummary[]>({
     query: topLevelCoursesQuery,
@@ -284,27 +235,22 @@ export const getTopLevelServices = cache(async () => {
 
 export const getTestimonials = cache(async () => {
   return sanityFetch<Testimonial[]>({
-    query: `*[_type == "testimonial" && status == "approved"] | order(order asc)`,
+    query: testimonialsQuery,
     tags: [CACHE_TAGS.testimonials],
   });
 });
 
 export const getScholars = cache(async () => {
   return sanityFetch<Scholar[]>({
-    query: `*[_type == "scholar"] | order(order asc, name asc) {
-      _id, name, slug, image, qualifications, contactDetails, bio
-    }`,
-    tags: ["scholar"],
+    query: scholarsQuery,
+    tags: [CACHE_TAGS.scholars],
   });
 });
 
 export const getCountries = cache(async () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return sanityFetch<any[]>({
-    query: `*[_type == "country"] | order(order asc, name asc) {
-      _id, name, flagIcon, flagImage
-    }`,
-    tags: ["country"],
+  return sanityFetch<Country[]>({
+    query: countriesQuery,
+    tags: [CACHE_TAGS.countries],
   });
 });
 

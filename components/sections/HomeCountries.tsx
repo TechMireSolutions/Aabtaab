@@ -2,6 +2,7 @@ import { getCountries } from "@/lib/cms/queries";
 import { Globe2 } from "lucide-react";
 import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
+import type { Country } from "@/types/country";
 
 function getFlagEmoji(flagStr: string) {
   if (!flagStr) return "";
@@ -25,9 +26,9 @@ function getCountryCode(flagStr: string) {
 }
 
 export default async function HomeCountries() {
-  const countries = await getCountries();
+  const countries: Country[] = (await getCountries()) ?? [];
 
-  if (!countries || countries.length === 0) return null;
+  if (countries.length === 0) return null;
 
   const isSmallList = countries.length < 5;
   
@@ -39,7 +40,7 @@ export default async function HomeCountries() {
     }
   }
 
-  const renderCountryCard = (country: { name: string; flagImage?: unknown; flagIcon: string }, key: string) => (
+  const renderCountryCard = (country: Country, key: string) => (
     <div
       key={key}
       className="flex items-center gap-4 px-6 py-4 bg-white/70 dark:bg-slate-900/60 backdrop-blur-xl border border-white dark:border-slate-800 shadow-xl shadow-brand-900/5 rounded-3xl transition-transform hover:-translate-y-1"
@@ -55,8 +56,8 @@ export default async function HomeCountries() {
         </div>
       ) : (
         <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-linear-to-br from-brand-400 to-brand-600 shadow-inner text-white text-lg font-bold overflow-hidden">
-          <span title={getCountryCode(country.flagIcon)}>
-            {getFlagEmoji(country.flagIcon)}
+          <span title={getCountryCode(country.flagIcon ?? country.name)}>
+            {getFlagEmoji(country.flagIcon ?? country.name)}
           </span>
         </div>
       )}

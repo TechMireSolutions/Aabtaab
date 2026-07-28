@@ -1,6 +1,6 @@
 import Link from "next/link";
 import ProseSection from "@/components/portable-text/ProseSection";
-import DynamicPaymentMethods from "@/components/sections/DynamicPaymentMethods";
+import DynamicPaymentMethods from "./_components/DynamicPaymentMethods";
 import PageHeader from "@/components/layout/PageHeader";
 import { ArrowRight } from "lucide-react";
 import { defineCmsPageMetadata } from "@/lib/cms/page";

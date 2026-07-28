@@ -34,9 +34,10 @@ Full reference: [techstack.md](file:///Users/syedaalin/Documents/aabtaab/techsta
 | CMS schemas | `sanity/schemaTypes/` |
 | CMS queries | `sanity/lib/queries/`, `lib/cms/queries.ts` |
 | API routes | `app/api/` (contact, review, revalidate, draft, draft/disable, search) |
-| Shared UI | `components/content/`, `components/layout/` |
-| Design system | `app/globals.css` |
-| Fallbacks | `lib/fallbacks/` |
+| Shared UI | `components/content/`, `components/layout/` (`Header`, `Footer`, `SiteBrandLogo`, shells) |
+| Design system | `app/globals.css` (`footer-*` for forced-dark footer chrome) |
+| Fallbacks | `lib/fallbacks/` (`footer-nav.ts`, `nav.ts`, …) |
+| URL / external links | `lib/urls.ts` (`EXTERNAL_LINK_PROPS`, `mapsUrl`, `whatsappUrl`) |
 | Unit tests | colocated `*.test.ts` (today under `lib/`) |
 | E2E tests | `e2e/*.spec.ts` |
 | npm Next launcher | `scripts/run-next.mjs` (dev/start/CI) |

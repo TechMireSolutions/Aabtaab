@@ -17,9 +17,9 @@ import type { SlugParent } from "@/types/sanity";
 import { buildNestedSlugMetadata } from "@/lib/cms/page";
 import { getCourseBySlug, getSiteSettings } from "@/lib/cms/queries";
 import { mapCourseChildForGrid } from "@/lib/catalog/nested-children";
-import { buildNestedBreadcrumbItems } from "@/lib/paths";
 import { resolveSiteName } from "@/lib/constants";
-import { absoluteUrl, CourseJsonLd, FaqPageJsonLd, faqItemsToSchema, resolveDocOgImage, buildNestedContentPath } from "@/lib/seo";
+import { absoluteUrl, CourseJsonLd, FaqPageJsonLd, faqItemsToSchema, resolveDocOgImage } from "@/lib/seo";
+import { buildNestedBreadcrumbItems, buildNestedContentPath } from "@/lib/paths";
 
 const COURSE_BASE = {
   segment: "online-courses" as const,

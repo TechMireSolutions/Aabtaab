@@ -1,4 +1,5 @@
-import type { ContentAncestor, SeoData } from "./sanity";
+import type { ContentAncestor } from "./sanity";
+import type { SeoData } from "./seo";
 
 export interface LabeledDescription {
   title?: string;
