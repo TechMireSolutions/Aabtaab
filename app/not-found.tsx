@@ -8,7 +8,7 @@ export const metadata = buildPageMetadata({
   noIndex: true,
 });
 
-/** Handles unmatched URLs (outside any segment that calls notFound()). */
-export default function NotFound() {
+/** Global unmatched routes (e.g. /this-page-does-not-exist). */
+export default function RootNotFound() {
   return <NotFoundContent />;
 }

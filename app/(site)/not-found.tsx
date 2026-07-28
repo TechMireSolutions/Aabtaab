@@ -8,7 +8,7 @@ export const metadata = buildPageMetadata({
   noIndex: true,
 });
 
-/** Handles notFound() from pages under the (site) layout (keeps header/footer). */
+/** Segment not-found for `notFound()` inside (site) pages — keeps site chrome. */
 export default function SiteNotFound() {
   return <NotFoundContent />;
 }

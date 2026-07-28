@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-/** Shared branded 404 body — used by root and (site) not-found boundaries. */
+/** Shared branded 404 body — used by root and (site) not-found routes. */
 export default function NotFoundContent() {
   return (
     <div className="section-y flex flex-1 items-center justify-center bg-slate-50 dark:bg-slate-950">
