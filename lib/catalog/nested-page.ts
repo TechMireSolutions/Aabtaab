@@ -15,17 +15,17 @@ export interface NestedCatalogBase {
   eyebrow: string;
 }
 
-interface NestedCatalogItem {
+interface NestedCatalogItem<TChild = unknown> {
   title: string;
   slug: { current: string };
-  children?: unknown[] | null;
+  children?: TChild[] | null;
   parent?: ContentAncestor;
 }
 
-export interface NestedCatalogPageContext {
+export interface NestedCatalogPageContext<TChild = unknown> {
   currentSlug: string;
   currentPath: string;
-  childItems: unknown[];
+  childItems: TChild[];
   hasChildren: boolean;
   ancestry: ContentAncestor[];
   siteUrl: string;
@@ -72,12 +72,12 @@ export function ensureCanonicalNestedPath(
   }
 }
 
-export function buildNestedCatalogPageContext(
+export function buildNestedCatalogPageContext<TChild>(
   base: NestedCatalogBase,
   slug: string[],
-  item: NestedCatalogItem,
+  item: NestedCatalogItem<TChild>,
   site: SiteSettings | null | undefined,
-): NestedCatalogPageContext {
+): NestedCatalogPageContext<TChild> {
   const currentSlug = resolveCurrentSlug(slug);
   const childItems = Array.isArray(item.children) ? item.children : [];
   const currentPath = `/${base.segment}/${slug.join("/")}`;

@@ -14,6 +14,7 @@ import {
   buildNestedCatalogPageContext,
   ensureCanonicalNestedPath,
   nestedStaticParamsFromEntries,
+  resolveCurrentSlug,
 } from "@/lib/catalog/nested-page";
 import type { ServiceChild } from "@/types/service";
 import { buildNestedSlugMetadata } from "@/lib/cms/page";
@@ -47,7 +48,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string[] }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const service = await getServiceBySlug(slug[slug.length - 1]);
+  const service = await getServiceBySlug(resolveCurrentSlug(slug));
   return buildNestedSlugMetadata(service, "/services", slug, "Service");
 }
 
@@ -59,12 +60,12 @@ export default async function ServiceCatchAllPage({
   const { slug } = await params;
 
   const [service, site] = await Promise.all([
-    getServiceBySlug(slug[slug.length - 1]),
+    getServiceBySlug(resolveCurrentSlug(slug)),
     getSiteSettings(),
   ]);
   if (!service) notFound();
 
-  const context = buildNestedCatalogPageContext(
+  const context = buildNestedCatalogPageContext<ServiceChild>(
     SERVICE_BASE,
     slug,
     service,
@@ -82,7 +83,7 @@ export default async function ServiceCatchAllPage({
       title={service.title}
       excerpt={service.excerpt}
       context={context}
-      childCards={(context.childItems as ServiceChild[]).map((child) =>
+      childCards={context.childItems.map((child) =>
         mapServiceChildForGrid(child, SERVICE_CHILD_LABELS),
       )}
       jsonLd={

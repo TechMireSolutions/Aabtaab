@@ -1,9 +1,7 @@
-import ContentCard from "@/components/cards/ContentCard";
 import CatalogPageLayout from "@/components/layout/CatalogPageLayout";
+import ServicesGrid from "./_components/ServicesGrid";
 import { defineCmsPageMetadata } from "@/lib/cms/page";
 import { getCmsPage, getTopLevelServices } from "@/lib/cms/queries";
-import { cardImageUrl } from "@/sanity/lib/image";
-import { nestedListCtaLabel } from "@/lib/catalog/formatters";
 
 export const generateMetadata = defineCmsPageMetadata("services", {
   path: "/services",
@@ -30,21 +28,7 @@ export default async function ServicesPage() {
       isEmpty={serviceList.length === 0}
       emptyMessage="Services coming soon."
     >
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-        {serviceList.map((service) => (
-          <ContentCard
-            key={service._id}
-            href={`/services/${service.slug.current}`}
-            image={service.icon ? cardImageUrl(service.icon) : null}
-            title={service.title}
-            description={service.excerpt || service.price || null}
-            ctaLabel={nestedListCtaLabel(service.childCount, {
-              parent: "View Services",
-              leaf: "Book Now",
-            })}
-          />
-        ))}
-      </div>
+      <ServicesGrid services={serviceList} />
     </CatalogPageLayout>
   );
 }

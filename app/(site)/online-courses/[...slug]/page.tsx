@@ -14,6 +14,7 @@ import {
   buildNestedCatalogPageContext,
   ensureCanonicalNestedPath,
   nestedStaticParamsFromEntries,
+  resolveCurrentSlug,
 } from "@/lib/catalog/nested-page";
 import type { CourseChild } from "@/types/course";
 import { buildNestedSlugMetadata } from "@/lib/cms/page";
@@ -41,7 +42,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string[] }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const course = await getCourseBySlug(slug[slug.length - 1]);
+  const course = await getCourseBySlug(resolveCurrentSlug(slug));
   return buildNestedSlugMetadata(course, "/online-courses", slug, "Course");
 }
 
@@ -53,12 +54,17 @@ export default async function CourseCatchAllPage({
   const { slug } = await params;
 
   const [course, site] = await Promise.all([
-    getCourseBySlug(slug[slug.length - 1]),
+    getCourseBySlug(resolveCurrentSlug(slug)),
     getSiteSettings(),
   ]);
   if (!course) notFound();
 
-  const context = buildNestedCatalogPageContext(COURSE_BASE, slug, course, site);
+  const context = buildNestedCatalogPageContext<CourseChild>(
+    COURSE_BASE,
+    slug,
+    course,
+    site,
+  );
   ensureCanonicalNestedPath(COURSE_BASE, course, context.currentPath);
 
   const enrollHref = course.enrollmentLink || "/contact";
@@ -73,7 +79,7 @@ export default async function CourseCatchAllPage({
       title={course.title}
       excerpt={course.excerpt}
       context={context}
-      childCards={(context.childItems as CourseChild[]).map((child) =>
+      childCards={context.childItems.map((child) =>
         mapCourseChildForGrid(child, COURSE_CHILD_LABELS),
       )}
       jsonLd={

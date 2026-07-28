@@ -16,18 +16,36 @@ description: >-
 ## Resolution pattern
 
 ```tsx
-const { slug: slugParts } = await params; // params is a Promise (Next 15+)
-const slug = slugParts[slugParts.length - 1]; // leaf slug for GROQ
-const course = await getCourseBySlug(slug);
+const { slug } = await params; // params is a Promise (Next 15+)
+const leaf = resolveCurrentSlug(slug); // from lib/catalog/nested-page
+const course = await getCourseBySlug(leaf);
 if (!course) notFound();
+
+const context = buildNestedCatalogPageContext<CourseChild>(COURSE_BASE, slug, course, site);
+ensureCanonicalNestedPath(COURSE_BASE, course, context.currentPath);
+
+return (
+  <NestedCatalogPageShell
+    base={COURSE_BASE}
+    title={course.title}
+    excerpt={course.excerpt}
+    context={context}
+    childCards={context.childItems.map((child) =>
+      mapCourseChildForGrid(child, COURSE_CHILD_LABELS),
+    )}
+    jsonLd={…}
+  >
+    {/* leaf sections only */}
+  </NestedCatalogPageShell>
+);
 ```
 
 ## Branch logic
 
 | Condition | Render |
 |-----------|--------|
-| Document has children | `NestedChildrenGrid` + breadcrumbs |
-| Leaf document | Hero + content sections + FAQ + CTA |
+| Document has children | `NestedChildrenGrid` + breadcrumbs (via shell) |
+| Leaf document | Hero + content sections + FAQ + CTA (shell `children`) |
 | Missing document | `notFound()` — real 404, not empty 200 |
 
 ## Key helpers
@@ -35,7 +53,7 @@ if (!course) notFound();
 | File | Purpose |
 |------|---------|
 | `lib/paths.ts` | `getContentAncestry`, `buildNestedBreadcrumbItems`, `buildNestedContentPath` |
-| `lib/catalog/nested-page.ts` | `buildNestedCatalogPageContext`, `nestedStaticParamsFromEntries`, `ensureCanonicalNestedPath` |
+| `lib/catalog/nested-page.ts` | `resolveCurrentSlug`, `buildNestedCatalogPageContext`, `nestedStaticParamsFromEntries`, `ensureCanonicalNestedPath` |
 | `lib/catalog/nested-children.ts` | `mapCourseChildForGrid`, `mapServiceChildForGrid` |
 | `components/layout/NestedCatalogPageShell.tsx` | Shared breadcrumbs + children vs leaf chrome |
 | `lib/cms/page.ts` | `buildNestedSlugMetadata` |
@@ -51,7 +69,7 @@ if (!course) notFound();
 
 ## Tests
 
-- Unit: `lib/paths.test.ts`, `lib/catalog/nested-children.test.ts`, `lib/urls.test.ts`
+- Unit: `lib/paths.test.ts`, `lib/catalog/nested-children.test.ts`, `lib/catalog/nested-page.test.ts`, `lib/urls.test.ts`
 - E2E smoke: `/online-courses`, `/services` load in `e2e/smoke.spec.ts`
 
 ## Sitemap

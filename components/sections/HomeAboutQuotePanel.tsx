@@ -2,12 +2,12 @@
 
 import { useState, useTransition } from "react";
 import { RefreshCw } from "lucide-react";
-import { FALLBACK_QUOTES } from "@/lib/fallbacks/quotes";
 import type { HomepageSettings } from "@/types/homepage";
 import type { QuoteItem } from "@/types/quote";
 
 interface HomeAboutQuotePanelProps {
   homepage: HomepageSettings | null;
+  /** Resolved quote list (caller applies FALLBACK_QUOTES when CMS is empty). */
   quotes: QuoteItem[];
   scholarCount?: number;
   countryCount?: number;
@@ -19,7 +19,7 @@ export default function HomeAboutQuotePanel({
   scholarCount,
   countryCount,
 }: HomeAboutQuotePanelProps) {
-  const hadithList = quotes.length > 0 ? quotes : FALLBACK_QUOTES;
+  const hadithList = quotes;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [fade, setFade] = useState(true);
   const [, startTransition] = useTransition();
@@ -29,6 +29,8 @@ export default function HomeAboutQuotePanel({
     setPrevListLength(hadithList.length);
     setCurrentIndex(0);
   }
+
+  if (hadithList.length === 0) return null;
 
   function handleNextHadith() {
     setFade(false);
@@ -40,7 +42,7 @@ export default function HomeAboutQuotePanel({
     }, 250);
   }
 
-  const activeHadith = hadithList[currentIndex] || FALLBACK_QUOTES[0];
+  const activeHadith = hadithList[currentIndex] ?? hadithList[0];
 
   return (
     <div className="relative pb-10">

@@ -51,7 +51,7 @@ export default function NestedCatalogPageShell({
           items={childCards}
         />
       ) : (
-        <div>{children}</div>
+        children
       )}
     </div>
   );

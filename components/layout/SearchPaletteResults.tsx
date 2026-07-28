@@ -9,7 +9,10 @@ import {
   Sparkles,
 } from "lucide-react";
 import type { SiteSearchResult, KeywordMatch } from "@/types/search";
-import { searchTypeLabel } from "@/lib/cms/search-labels";
+import {
+  SearchResultBody,
+  SearchTypeBadge,
+} from "@/components/ui/SearchResultMeta";
 
 const TYPE_ICONS = {
   course: BookOpen,
@@ -41,6 +44,12 @@ function iconWrapClass(active: boolean, emphasized = false) {
     return "flex size-9 shrink-0 items-center justify-center rounded-lg border transition-colors bg-brand-50 border-brand-200 dark:bg-brand-900/30 dark:border-brand-800";
   }
   return "flex size-9 shrink-0 items-center justify-center rounded-lg border transition-colors bg-slate-50 border-gray-200 dark:bg-slate-800/60 dark:border-slate-800";
+}
+
+function activeBadgeClass(active: boolean) {
+  return active
+    ? "bg-brand-100/80 border-brand-200 dark:bg-brand-900/50 dark:border-brand-800"
+    : "";
 }
 
 function GoHint() {
@@ -95,9 +104,7 @@ export default function SearchPaletteResults({
                     <span className="badge-pill bg-brand-100/80 border-brand-200 dark:bg-brand-900/50 dark:border-brand-800">
                       Quick Match
                     </span>
-                    <span className="badge-pill">
-                      {searchTypeLabel(keywordMatch.category)}
-                    </span>
+                    <SearchTypeBadge type={keywordMatch.category} />
                   </div>
                   <p className="mt-1.5 text-sm-plus font-semibold text-slate-800 dark:text-slate-200 line-clamp-1">
                     {keywordMatch.label}
@@ -143,15 +150,10 @@ export default function SearchPaletteResults({
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
-                  <span
-                    className={`badge-pill ${
-                      active
-                        ? "bg-brand-100/80 border-brand-200 dark:bg-brand-900/50 dark:border-brand-800"
-                        : ""
-                    }`}
-                  >
-                    {searchTypeLabel(sug.category)}
-                  </span>
+                  <SearchTypeBadge
+                    type={sug.category}
+                    className={activeBadgeClass(active)}
+                  />
                 </div>
                 <p className="mt-1.5 text-sm-plus font-semibold text-slate-800 dark:text-slate-200 line-clamp-1">
                   {sug.label}
@@ -194,24 +196,16 @@ export default function SearchPaletteResults({
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-2">
-                  <span
-                    className={`badge-pill ${
-                      active
-                        ? "bg-brand-100/80 border-brand-200 dark:bg-brand-900/50 dark:border-brand-800"
-                        : ""
-                    }`}
-                  >
-                    {searchTypeLabel(item._type)}
-                  </span>
+                  <SearchTypeBadge
+                    type={item._type}
+                    className={activeBadgeClass(active)}
+                  />
                 </div>
-                <p className="mt-1.5 text-sm-plus font-semibold text-slate-800 dark:text-slate-200 line-clamp-1">
-                  {item.title}
-                </p>
-                {item.summary && (
-                  <p className="mt-0.5 text-xs text-gray-500 dark:text-slate-400 line-clamp-1">
-                    {item.summary}
-                  </p>
-                )}
+                <SearchResultBody
+                  title={item.title}
+                  summary={item.summary}
+                  titleClassName="mt-1.5 text-sm-plus font-semibold text-slate-800 dark:text-slate-200 line-clamp-1"
+                />
               </div>
               {active && <GoHint />}
             </button>

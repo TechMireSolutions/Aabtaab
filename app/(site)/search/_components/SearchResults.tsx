@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 import SearchEmptyState from "@/components/layout/SearchEmptyState";
-import { searchTypeLabel } from "@/lib/cms/search-labels";
+import {
+  SearchResultBody,
+  SearchTypeBadge,
+} from "@/components/ui/SearchResultMeta";
 import type { SearchResponse } from "@/types/search";
 
 interface SearchResultsProps {
@@ -52,9 +55,7 @@ export default function SearchResults({
                 <span className="badge-pill bg-brand-100/80 border-brand-200 dark:bg-brand-900/50 dark:border-brand-800">
                   Quick Match
                 </span>
-                <span className="badge-pill">
-                  {searchTypeLabel(keywordMatch.category)}
-                </span>
+                <SearchTypeBadge type={keywordMatch.category} />
               </div>
               <span className="text-lg font-semibold text-slate-900 dark:text-white">
                 {keywordMatch.label}
@@ -77,9 +78,7 @@ export default function SearchResults({
                 href={sug.href}
                 className="card-interactive flex items-center gap-3 p-4"
               >
-                <span className="badge-pill">
-                  {searchTypeLabel(sug.category)}
-                </span>
+                <SearchTypeBadge type={sug.category} />
                 <span className="text-sm-plus font-semibold text-slate-800 dark:text-slate-200 line-clamp-1">
                   {sug.label}
                 </span>
@@ -107,17 +106,13 @@ export default function SearchResults({
                   href={item.href}
                   className="card-interactive flex flex-col gap-1 p-4 sm:p-5"
                 >
-                  <span className="badge-pill w-fit">
-                    {searchTypeLabel(item._type)}
-                  </span>
-                  <span className="text-base-plus font-semibold text-slate-900 dark:text-white">
-                    {item.title}
-                  </span>
-                  {item.summary && (
-                    <span className="text-sm-plus text-slate-600 dark:text-slate-400 line-clamp-2">
-                      {item.summary}
-                    </span>
-                  )}
+                  <SearchTypeBadge type={item._type} className="w-fit" />
+                  <SearchResultBody
+                    title={item.title}
+                    summary={item.summary}
+                    titleClassName="text-base-plus font-semibold text-slate-900 dark:text-white"
+                    summaryClassName="text-sm-plus text-slate-600 dark:text-slate-400 line-clamp-2"
+                  />
                   <span className="link-brand mt-1 inline-flex items-center gap-1 text-sm-plus">
                     View
                     <ArrowRight size={12} />
