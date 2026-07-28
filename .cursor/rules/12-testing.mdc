@@ -58,10 +58,15 @@ Place tests next to the module (`schema.test.ts` beside `schema.ts`) or under th
 
 **Rules:**
 * Prefer accessible selectors (role, label, text). Use `data-testid` only when needed.
+* Landmarks: one `#main-content`, labeled navs, skip link (covered in smoke).
+* Icon-only controls need `aria-label`; decorative icons `aria-hidden`.
 * Do not assert CMS-specific nav labels that change in Studio — assert stable patterns (link count, Services/Courses).
 * Canonical `href` is baked at **build** time from `NEXT_PUBLIC_SITE_URL` — assert absolute URL shape, not a hard-coded port.
 * Avoid depending on live Sanity content for assertions.
-* Free port **3000** before local E2E if a stale server is running; install browsers with `npx playwright install chromium` when missing.
+* Free port **3000** before local E2E if a stale server is running; install browsers with `npx playwright install chromium` (add `--with-deps` on Linux/CI).
+* When adding `error.tsx` / `not-found.tsx`, extend smoke/seo E2E for branded copy.
+* Contact Turnstile path is skipped when keys unset — don’t fail CI on missing Turnstile.
+* Prefer covering keyboard open/close for mobile nav + search palette when touching those components.
 
 ## 3. Regression Requirements
 

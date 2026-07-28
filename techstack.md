@@ -45,20 +45,19 @@
 
 ## npm Scripts & Quality Pipeline
 
-```json
-{
-  "scripts": {
-    "dev": "node scripts/run-next.mjs dev --port 3000",
-    "build": "next build",
-    "start": "node scripts/run-next.mjs start --port 3000",
-    "lint": "eslint .",
-    "test": "vitest run",
-    "postinstall": "node scripts/stub-next-polyfills.mjs"
-  }
-}
-```
+| Script | Purpose |
+|--------|---------|
+| `npm run dev` | `scripts/run-next.mjs dev --port 3000` |
+| `npm run build` | Production build (`typescript.ignoreBuildErrors` — still run `typecheck`) |
+| `npm run start` | `scripts/run-next.mjs start --port 3000` |
+| `npm run lint` | ESLint flat config |
+| `npm run typecheck` | `tsc --noEmit` (authoritative types) |
+| `npm run test` | Vitest unit tests |
+| `npm run test:e2e` | Playwright (Desktop Chrome + Pixel 7) |
+| `npm run sync:agents` | Mirror `.cursor` → `.agents` + `.claude` |
+| `npm run migrate:sanity` / `:dry` | CMS field migrations |
 
-Additional project scripts (kept): `typecheck`, `test:watch`, `test:e2e`, `migrate:sanity`, `migrate:sanity:dry`, `sync:agents`.
+Also: `test:watch`, `postinstall` (polyfill stub).
 
 ### CI Preflight Check
 
@@ -179,6 +178,7 @@ scripts/run-next.mjs Dev/prod Next launcher (port 3000)
 | **eslint-plugin-react** | Peer range still ends at ESLint 9 — install with `legacy-peer-deps=true` in `.npmrc`; pin `settings.react.version` |
 | **npm audit** | Transitive `sharp`/`adm-zip`/`minimatch`+`brace-expansion` pinned via `overrides` until upstream resolves |
 | **PM2** | Deploy deletes `aabtaab-next` before `pm2 start` so stale `args` are not retained |
+| **Next build TS** | `typescript.ignoreBuildErrors: true` — CI `typecheck` is authoritative |
 | **Node on VPS** | Deploy loads nvm from `.nvmrc` (24.18.0) |
 | **Production port** | Change only `server.config.cjs` (`PRODUCTION_PORT = 3000`) |
 | **Lockfile** | Always `npm ci` on server |

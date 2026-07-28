@@ -11,10 +11,11 @@ description: >-
 
 ## Key Workflows
 
-### 1. Sizing Images (`next/image`)
-- **Image Optimization:** Never use standard `<img>` tags. Always map Sanity images to the `next/image` component to ensure automatic WebP/AVIF conversion, lazy loading, and explicit width/height attributes (preventing Cumulative Layout Shift).
-- Always specify explicit `width` and `height`, or use `fill` with aspect ratios to prevent Layout Shifts (CLS).
-- Provide correct `sizes` definitions. If an image is hidden on mobile viewports (e.g. `hidden md:block`), restrict mobile sizes explicitly to prevent download payload overhead:
+### 1. Images (`next/image`)
+- Never use raw `<img>` for CMS/media — use `next/image` + Sanity helpers.
+- Explicit dimensions or `fill` + stable aspect ratio (CLS).
+- Correct `sizes`; hidden-on-mobile images: `sizes="(max-width: 768px) 0px, …"`.
+- LCP hero: `priority` + `fetchPriority="high"` — **one** primary LCP image per route.
 
 ```tsx
 <Image
@@ -22,30 +23,40 @@ description: >-
   alt={altText}
   fill
   className="object-cover"
-  sizes="(max-width: 768px) 0px, 55vw"
-  priority={isAboveFold}
+  sizes="100vw"
+  priority
+  fetchPriority="high"
 />
 ```
 
-### 2. централизованный GROQ Fetching & Cache
-- Centralise queries in `sanity/lib/queries/` and wrap fetches in React `cache()` and `sanityFetch`.
-- Minimize transfer size by writing selective projections:
-```groq
-*[_type == "post"] {
-  title,
-  slug,
-  mainImage
-}
-```
+### 2. Centralized GROQ fetching & cache
+- Queries in `sanity/lib/queries/`; app reads via `lib/cms/queries.ts` + `sanityFetch`.
+- Selective projections only — never fetch whole documents for a card.
+- Do not add `unstable_cache` outside `sanity/lib/fetch.ts`.
+- PPR / `"use cache"` are **not** used — do not enable without an explicit migration plan.
 
-### 3. preventing Layout Shifts
-- Reserve layout space using placeholder utilities or fallback skeletons while assets load.
-- For hydration-dependent widgets (e.g. countdown timers), render stable skeleton boxes of the exact same dimensions when not mounted to prevent visual jumps on load.
-- **Font Loading:** Use `next/font` for local or Google fonts to ensure CSS is inlined and zero layout shift occurs during font loading. Ensure fonts are preloaded with `display: swap` in the root layout.
-- **Route Prefetching:** Utilize the `<Link>` component for all internal navigation to leverage Next.js's automatic background prefetching for faster perceived page loads.
+### 3. Preventing layout shifts
+- Reserve space with aspect utilities (`media-hero`, skeletons matching final size).
+- Hydration widgets: same-dimension placeholders before mount.
+- Fonts: `next/font` + `display: "swap"` in root layout only.
+- Internal nav: `<Link>` prefetch.
 
+### 4. CWV check (practical)
+| Metric | Check |
+|--------|--------|
+| LCP | One prioritized hero; no client-only hero text |
+| CLS | Reserved media; no late banners above content |
+| INP | Short handlers; carousel/search work off critical path |
+| Streaming | Selective Suspense; don’t delay header/hero |
+
+Prefer Lighthouse / field tools on staging — don’t guess from desktop-only.
+
+### 5. Bundles
+- Leaf client islands; `next/dynamic` only for large non-LCP chunks.
+- React Compiler on — skip routine `useMemo` / `useCallback`.
 
 ## Verification
-- [ ] LCP images have `priority` enabled.
-- [ ] No layout shift visible during loading or hydration states.
-- [ ] Bundle size analyzed for dynamic imports.
+- [ ] LCP image has `priority` + `fetchPriority="high"`
+- [ ] No visible CLS on load/hydration
+- [ ] No new `unstable_cache` outside `sanityFetch`
+- [ ] Bundle impact reviewed for new client deps

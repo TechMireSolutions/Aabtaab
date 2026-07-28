@@ -65,7 +65,7 @@ Edit **only** `.cursor/rules/` and `.cursor/skills/`, then run `npm run sync:age
 
 ## Definition of Done
 
-A feature is complete only when it works on desktop and mobile, TypeScript/lint checks pass without unsafe suppressions, inputs are validated on the server, public endpoints are rate-limited, feedback/loading/empty states are handled, accessibility is satisfied, metadata/JSON-LD/image optimizations are implemented, unit/E2E tests cover critical paths, Sentry records exceptions without PII, and CI passes.
+A feature is complete only when it works on desktop and mobile, `npm run typecheck` and lint pass without unsafe suppressions (note: `next build` may ignore TS errors via `ignoreBuildErrors` — typecheck is authoritative), inputs are validated on the server, public endpoints are rate-limited, feedback/loading/empty states are handled, accessibility is satisfied, metadata/JSON-LD/image optimizations are implemented, unit/E2E tests cover critical paths, Sentry records exceptions without PII when configured, and CI passes.
 
 ## Prohibited Practices
 

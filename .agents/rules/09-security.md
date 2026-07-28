@@ -28,40 +28,30 @@ description: Security rules — HTTPS, environment variables, input validation, 
 
 ## 3. Security Headers
 
-Configure security headers at the application and Cloudflare levels. Required production headers include:
+Configure headers in **`next.config.ts` `headers()`** (and avoid conflicting Cloudflare duplicates).
 
-* `Strict-Transport-Security` (HSTS)
-* `Content-Security-Policy` (CSP)
-* `X-Content-Type-Options: nosniff`
-* `Referrer-Policy`
-* `Permissions-Policy`
-* Frame protection through CSP `frame-ancestors` or `X-Frame-Options`
-* Appropriate cross-origin policies where compatible
+Current production set includes HSTS, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, frame protections, and **CSP as `Content-Security-Policy-Report-Only`** (not enforcing yet).
 
 Rules:
-* Test the Content Security Policy before enforcing it.
+* Treat CSP as **Report-Only** until explicitly flipped to enforce — do not document it as enforcing CSP.
+* Before enforce: allow Turnstile (`https://challenges.cloudflare.com`), Sentry ingest, Sanity CDN/Studio needs; shrink `'unsafe-eval'` / `'unsafe-inline'` where possible.
 * Do not use unrestricted `*` sources without justification.
-* Avoid `unsafe-eval`.
-* Minimise the use of `unsafe-inline`.
-* Only allow third-party domains that the application actually needs.
-* Do not add duplicate or contradictory headers between Next.js and Cloudflare.
+* Do **not** enable COOP/COEP / cross-origin isolation unless a feature requires it — they break Turnstile/Studio embeds.
 * Enable HSTS only for production HTTPS domains.
+* Change Next.js **or** Cloudflare header sets one at a time; verify Studio + contact form after changes.
 
 ## 4. Input Validation
 
 All external input is untrusted. Validate the following with Zod on the server:
 
-* Contact forms
-* URL parameters
-* Query parameters
-* Route Handler request bodies
-* Server Action inputs
-* Webhook payloads
-* Sanity webhook data
-* Environment variables
+* Contact / review form bodies (Route Handlers)
+* URL parameters and query parameters
+* Webhook payloads (Sanity revalidate)
+* Environment variables (`lib/env.ts`)
 * Third-party API responses where practical
+* Server Action inputs **only if** Server Actions are explicitly adopted later
 
-*Client-side validation is for user experience only. Server-side validation is mandatory.*
+*Client-side validation is for UX only. Server-side validation is mandatory.*
 
 Normalise data before use:
 * Trim text.
@@ -86,6 +76,8 @@ Every public write endpoint must include:
 * Prefer **Upstash Redis** for abuse-sensitive routes (`lib/rate-limit.ts`). Set `UPSTASH_REDIS_*` in production when possible (**strongly recommended**; optional per `techstack.md`).
 * In-memory fallback is for local/dev when Redis is unset, and as a careful fallback when Redis errors (log to Sentry).
 * **Bot Whitelisting:** When rate-limiting crawl-facing routes, bypass or whitelist known search engine user agents (Googlebot, Bingbot) where appropriate.
+* **Cross-site POST:** Cookie-less JSON POSTs (`/api/contact`, `/api/review`) still need rate limit + honeypot + Turnstile (when configured). When adding Origin checks, allow only `NEXT_PUBLIC_SITE_URL` (and local dev hosts); reject mismatched `Origin` on state-changing routes.
+* Prefer header secret over query string for webhook auth when changing `/api/revalidate`.
 * Do not reveal whether a particular email address, account, or private resource exists.
 
 ## 6. Sanity Security

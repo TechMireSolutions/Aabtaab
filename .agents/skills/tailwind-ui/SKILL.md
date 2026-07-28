@@ -48,7 +48,9 @@ description: >-
 | Logo sizing | `size-logo` / `size-logo-lg` |
 | Donate/sacred accent | `text-eyebrow-gold` + `eyebrow-line-gold` |
 | Hero stagger animation | `motion-safe:animate-fade-up` + `motion-safe:animate-delay-*` |
-| WhatsApp FAB | `whatsapp-fab` (self-contained: position, size, colour, float animation, pill expand) + `pb-fab-safe` on `<main>` |
+| WhatsApp FAB | `whatsapp-fab` (self-contained) + `pb-fab-safe` on `<main>` |
+
+Never add uncapped infinite animations on LCP content. Respect `prefers-reduced-motion`.
 
 ## When to extend `globals.css`
 

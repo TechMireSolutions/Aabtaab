@@ -49,6 +49,7 @@ Apply when upgrading deps, touching `package.json`, CI, or Node engine constrain
 | **sharp** | Override **0.35.0** until Next pins a patched libvips bundle |
 | **minimatch / brace-expansion** | Override `minimatch` **^10.2.5** + `brace-expansion` **^5.0.8** (do not override brace-expansion alone — breaks older minimatch) |
 | **PM2 deploy** | Always `pm2 delete` then `pm2 start` — `startOrRestart` can keep stale `args` |
+| **Next build TS** | `typescript.ignoreBuildErrors: true` — CI `typecheck` is authoritative; green build ≠ type-safe |
 | **Production port** | Change only `server.config.cjs` (`PRODUCTION_PORT = 3000`) |
 | **Studio** | `sanity`, `@sanity/vision`, `next-sanity` must stay on Sanity 6 matrix |
 
@@ -57,6 +58,7 @@ Apply when upgrading deps, touching `package.json`, CI, or Node engine constrain
 - Update GitHub Actions pins in `.github/workflows/ci.yml` (`actions/checkout@v5`, `actions/setup-node@v5`).
 - Run `npm run migrate:sanity:dry` if Sanity schema/field APIs changed.
 - Re-run `npm run sync:agents` only if agent config files changed — not for every dep bump.
+- After Next/React security advisories (esp. RSC/framework CVEs): bump patch within the current minor promptly; re-run lint, typecheck, test, e2e, and build even if the app has no Server Actions.
 
 ## PM2 & Hetzner Deployment
 

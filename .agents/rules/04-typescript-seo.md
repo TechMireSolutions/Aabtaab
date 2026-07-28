@@ -57,9 +57,11 @@ description: TypeScript strictness, SEO, accessibility, and semantic HTML
 
 - One **`h1` per page**; logical heading hierarchy.
 - Semantic tags: `main`, `nav`, `section`, `article`, `header`, `footer`.
-- Skip link + `#main-content` (site layout).
-- Target WCAG 2.2 Level AA. Keyboard-operable UI with visible focus.
+- Skip link + `#main-content` (site layout); labeled `nav`s (main/footer).
+- Target WCAG 2.2 Level AA. Keyboard-operable UI with visible `focus-visible` — do not remove focus rings.
 - Associate labels with every form field; placeholder is not a label.
+- Icon-only buttons need `aria-label`; decorative icons `aria-hidden`.
+- Live regions (`aria-live` / `role="alert"`) for form success/error when status isn’t otherwise announced.
 - Custom radiogroups: arrow-key navigation; only selected option `tabIndex={0}`.
 - Respect `prefers-reduced-motion`. Trap focus in modals; Escape to close.
 - Arabic/Urdu wrappers: set `lang` + `dir="rtl"` on the nearest text wrapper.

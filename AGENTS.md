@@ -68,10 +68,13 @@ When docs disagree, priority order:
 
 Key policies (must stay aligned with techstack):
 - Caching: `sanityFetch` in `sanity/lib/fetch.ts` only — no extra `unstable_cache`
+- Mutations: Route Handlers (`app/api/*`); React Compiler on — skip routine memoization
+- CSP: Report-Only until intentionally enforced
 - Styling: Tailwind v4 + `brand-*` / `gold-*` via `app/globals.css`
 - CMS fields: migrated names only (`faqItems`, `seo`, `ctaPrimaryLabel`)
 - Search: `/search?q=…` (not `/posts?q=…`); sitemap via `getSitemapSlugs()`
 - DRY: extract UI/CSS/fallbacks at **2+**; shells in `08-dry-policy`
 - Rate limit: Upstash Redis **optional but strongly recommended** in production; memory fallback for local / Redis errors
 - PM2: `pm2 delete` then `pm2 start` (not `reload` / `startOrRestart`)
+- Types: `npm run typecheck` authoritative (`ignoreBuildErrors` on build)
 - Tests: colocated `*.test.ts` + `e2e/{smoke,navigation,seo,contact}.spec.ts` (desktop + mobile)

@@ -20,6 +20,7 @@ app/
   studio/              # Embedded Sanity Studio
   globals.css          # Tailwind v4 design system (single CSS source)
   layout.tsx, sitemap.ts, robots.ts, global-error.tsx
+  # Prefer adding (site)/error.tsx + not-found.tsx when improving resilience (not present yet)
 
 components/
   content/             # Reusable CMS-driven sections (2+ pages)

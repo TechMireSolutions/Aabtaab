@@ -107,6 +107,8 @@
 | `whatsapp-fab` | WhatsApp floating action button (owns position, size, colour, animation, expand) |
 | `animate-fade-up` + `animate-delay-*` | Staggered hero entrance (no inline delay) |
 
+Prefer `motion-safe:animate-*` for decorative motion. Never add uncapped infinite animations on LCP content. Respect `prefers-reduced-motion`.
+
 ## Class order
 
 layout → spacing → typography → visual (bg/border/shadow) → interactive (hover/focus)

@@ -10,7 +10,7 @@ description: >-
 
 ## Flow
 
-`ContactForm` (client) → `POST /api/contact` → rate limit → Zod + honeypot → Sanity `contactSubmission` → Resend or Nodemailer SMTP email.
+`ContactForm` (client) → `POST /api/contact` (Route Handler — not Server Actions) → rate limit → Zod + honeypot → Sanity `contactSubmission` → Resend or Nodemailer SMTP email.
 
 ## Key files
 

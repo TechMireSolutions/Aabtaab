@@ -8,20 +8,30 @@ alwaysApply: false
 
 ## Server vs client
 
-- **Server Components First:** Default to React Server Components (RSC) to pre-render HTML on the server. Only use `"use client"` when interactivity or browser APIs are strictly required.
+- **Server Components First:** Default to React Server Components (RSC). Only use `"use client"` when interactivity or browser APIs are strictly required.
 - Push client boundaries **down** the tree (e.g. `ContactForm`, `Header`, `HeroSection`).
-- **`import type { ReactNode } from "react"`** — always import `ReactNode` explicitly. Do not use `React.ReactNode` without a React import; it relies on the global JSX ambient type and fails under strict isolation.
+- **`import type { ReactNode } from "react"`** — always import `ReactNode` explicitly. Do not use `React.ReactNode` without a React import.
+- Prefer `import "server-only"` on modules that must never enter the client bundle (`writeClient`, revalidate helpers, server env consumers) when tightening boundaries.
+
+## React Compiler (enabled)
+
+- `reactCompiler: true` in `next.config.ts`.
+- Do **not** add `useMemo` / `useCallback` / `React.memo` for routine re-render control unless profiling proves a residual hot path.
+- Keep `"use client"` islands small so compiler work stays local.
+- Do not disable the compiler for a single file without a short comment explaining why.
+
+## Async request APIs (Next 15+)
+
+- Page/layout `params` and `searchParams` are **`Promise<…>`** — always `await` them.
+- `draftMode()`, `cookies()`, and `headers()` are async — `await` before use (see `sanity/lib/fetch.ts`).
 
 ## Data fetching (this project)
 
-Use **`sanityFetch`** and **`lib/cms/queries.ts`** — do **not** add new `unstable_cache` calls outside `sanity/lib/fetch.ts` (that file owns production caching).
+Use **`sanityFetch`** and **`lib/cms/queries.ts`** — do **not** add new `unstable_cache` calls outside `sanity/lib/fetch.ts`.
 
 ```tsx
-// CMS pages
 import { getCmsPage, getSiteSettings } from "@/lib/cms/queries";
 import { defineCmsPageMetadata } from "@/lib/cms/page";
-
-// Direct Sanity fetch
 import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/fetch";
 ```
 
@@ -31,17 +41,28 @@ import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/fetch";
 - Tags/revalidation: `CACHE_TAGS`, `lib/revalidate.ts`, `app/api/revalidate/route.ts`.
 - Parallel fetches: `Promise.all([...])`.
 
+## Streaming & Suspense
+
+- Prefer RSC + selective `<Suspense>` with **layout-stable** fallbacks for slow independent sections (homepage pattern).
+- Do not wrap the whole page in one Suspense that delays LCP chrome (header/hero).
+- Route-level `loading.tsx` is **optional** and unused today — add only with a clear skeleton; do not invent globally.
+
+## Mutations (this repo)
+
+- Prefer existing **Route Handlers** under `app/api/` for public writes (contact, review, revalidate).
+- Do **not** introduce `"use server"` / Server Actions unless a PR explicitly adopts them and updates security + tests to match `/api/contact` patterns (Zod, rate limit, Turnstile when configured).
+
 ## Metadata
 
 - Static CMS pages: `defineCmsPageMetadata("slug", { path, fallbackTitle, fallbackDescription })`.
-- Dynamic slugs: `buildNestedSlugMetadata`, `buildPostPageMetadata`, `buildEventPageMetadata`, `buildPageMetadata` (search, generic).
+- Dynamic: `buildNestedSlugMetadata`, `buildPostPageMetadata`, `buildEventPageMetadata`, `buildPageMetadata`.
 - Search results: `noIndex: true` via `buildPageMetadata`.
 - Compose page chrome via shared shells (`PageHeader`, `ArticleDetailShell`, `LegalPageShell`) — see `08-dry-policy`.
 
 ## Images
 
 - Always `next/image` for Sanity URLs via `sanity/lib/image.ts` helpers.
-- Set accurate `sizes` for layout (card grids, hero, article).
+- Set accurate `sizes`. Above-fold LCP: `priority` + `fetchPriority="high"` (at most one primary LCP image per route).
 
 ## API routes
 
@@ -57,28 +78,25 @@ Keep handlers thin — business logic in `lib/`:
 
 ## Component design constraints
 
-* Each component must have one clear responsibility. Avoid components with excessive props or unrelated behaviour.
-* Prefer composition over large conditional components.
-* Prefer existing design-system utilities and shared shells over copying layout/button/card/form patterns — extract at **2+** uses (see `08-dry-policy`).
-* Extract reusable patterns only after shared behaviour is clear. Avoid premature abstractions.
-* Keep server-only code out of client bundles.
+* One clear responsibility per component; prefer composition.
+* Prefer design-system utilities and shared shells — extract at **2+** uses (`08-dry-policy`).
+* Heavy client UI (mobile nav, search palette, carousels): leaf Client Components; `next/dynamic` only for large non-LCP chunks.
+* Do not dynamic-import above-fold hero CTAs.
 
 ## Form & UI feedback states
 
-Every asynchronous feature (especially forms) must handle:
-* Initial state
-* Loading state
-* Success state
-* Validation error state
-* Server error state
-* Empty state
+Every async feature must handle: idle, loading, success, validation error, server error, empty.
 
-Rules:
-* Do not leave buttons permanently disabled after an error occurs.
-* Prevent duplicate submissions while a request is processing (disable submit button or show loading state).
-* Provide clear, user-friendly confirmations after successful form submission.
-* Preserve safe user input after validation errors.
-* Show field-level validation errors near the corresponding fields.
+* Do not leave buttons permanently disabled after an error.
+* Prevent duplicate submissions while loading.
+* Clear success confirmations; preserve safe input after validation errors.
+* Field-level errors near the corresponding fields; use `aria-live` / `role="alert"` where status isn’t otherwise announced.
+
+## Optional (not used in this repo)
+
+* Partial Prerendering / `cacheComponents` / `"use cache"` — **not** enabled; do not adopt in drive-by PRs.
+* View Transitions — **not** used; if added later, gate with `prefers-reduced-motion`.
+* `generateStaticParams` for catalogs — optional only if build-time warming is measured useful; webhook tags remain authoritative.
 
 ## Avoid
 
@@ -86,6 +104,5 @@ Rules:
 - New global state libraries — use server fetch + URL/searchParams.
 - Unnecessary `useEffect` for data that can load on the server.
 - Duplicating cache logic — extend `sanityFetch` or `lib/cms/queries.ts`.
-- Converting an entire page into a Client Component merely to support one interactive element.
-- Standard custom click handlers or `window.location` for simple internal navigation; utilize the `<Link>` component for all internal navigation to leverage Next.js's automatic background prefetching for faster perceived page loads.
-
+- Converting an entire page into a Client Component for one interactive element.
+- Custom click handlers / `window.location` for internal navigation — use `<Link>`.

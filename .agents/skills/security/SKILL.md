@@ -11,34 +11,46 @@ description: >-
 
 ## Implementation Steps
 
-### 1. Environment Variables Validation
-- Define environment schemas in **`lib/env.ts`** using Zod (public + server schemas).
-- Never reference `process.env` directly outside `lib/env.ts` or core load modules.
+### 1. Environment variables
+- Define schemas in **`lib/env.ts`** (public + server Zod schemas).
+- Never reference `process.env` outside `lib/env.ts` / core load modules.
+- Never put `SANITY_API_TOKEN`, `SANITY_PREVIEW_SECRET`, `SANITY_REVALIDATE_SECRET`, SMTP, or Redis tokens in client bundles.
 
 ### 2. Public form validation & protection
-- Use `lib/contact/schema.ts` (`parseContactBody`) — purposes: `general` | `course` | `service` | `other`.
-- If the honeypot field (`website`) is non-empty after trim, reject as `"Invalid submission"`.
-- Prefer skill `contact-form-api` for the full flow.
+- Contact: `lib/contact/schema.ts` (`parseContactBody`) — purposes `general` | `course` | `service` | `other`.
+- Honeypot `website` non-empty after trim → reject as `"Invalid submission"`.
+- Prefer skill `contact-form-api` for the full contact flow.
+- Mutations use **Route Handlers** (`app/api/*`), not Server Actions (unless explicitly adopted).
 
 ### 3. API rate limiting
-- Protect public write routes via `checkContactRateLimit` in `lib/rate-limit.ts`.
-- Prefer **Upstash Redis** in production (`UPSTASH_REDIS_*` — strongly recommended, optional per techstack). Memory fallback is for local/dev and Redis errors (Sentry).
-- **Bot Whitelisting:** bypass known crawlers on crawl-facing rate-limited routes when appropriate.
-- **Strict SSL/HTTPS:** Cloudflare “Always Use HTTPS” + **Full (strict)** SSL.
+- `checkContactRateLimit` in `lib/rate-limit.ts` on public writes.
+- Prefer Upstash Redis in production (`UPSTASH_REDIS_*` — strongly recommended, optional per techstack).
+- Memory fallback: local/dev + Redis errors (Sentry).
+- Optional Origin allowlist for state-changing POSTs: `NEXT_PUBLIC_SITE_URL` + local hosts.
 
-
-### 4. Cloudflare Turnstile Verification
-- Add `token` optional string field to Zod validation schema.
-- In components, load Turnstile API script and render widget dynamically only if site key is configured. Get token via `cf-turnstile-response` form data.
-- Reset the widget state after handling success or error states using type-safe window casting:
+### 4. Cloudflare Turnstile
+- Optional when keys are set. Load widget only if `NEXT_PUBLIC_TURNSTILE_SITE_KEY` exists.
+- Verify server-side against `https://challenges.cloudflare.com/turnstile/v0/siteverify` when `TURNSTILE_SECRET_KEY` is set.
+- Reset widget after success/error:
 ```typescript
 const turnstile = (window as unknown as { turnstile?: { reset: () => void } }).turnstile;
 if (turnstile) turnstile.reset();
 ```
-- In the Route Handler, verify the token by posting to `https://challenges.cloudflare.com/turnstile/v0/siteverify` if secret key is present in environment variables. Reject invalid submissions.
+- When tightening CSP (currently Report-Only), allow `https://challenges.cloudflare.com`.
+
+### 5. Security headers
+- Edit `next.config.ts` `headers()` only; verify after deploy.
+- CSP is **`Content-Security-Policy-Report-Only`** today — do not claim enforce until flipped.
+- Before enforce: Turnstile, Sentry, Sanity CDN/Studio; shrink unsafe-inline/eval where possible.
+- Avoid COOP/COEP unless isolation is required.
+
+### 6. Draft / revalidate secrets
+- Prefer header `x-sanity-webhook-secret` over `?secret=` when changing webhook auth.
+- Preview entry: `/api/draft?secret=…` — never expose preview secret to the client.
 
 ## Verification Checklist
-- [ ] No server-side secrets or write tokens exported to the browser.
-- [ ] Zod schema handles string trimming and length bounds.
-- [ ] Rate limits verified on the endpoint.
-- [ ] Form submission records correctly to Sanity via write client.
+- [ ] No server secrets / write tokens in the browser.
+- [ ] Zod trim + length bounds on public bodies.
+- [ ] Rate limits verified on write endpoints.
+- [ ] Turnstile verified when keys configured.
+- [ ] Form submissions record to Sanity via write client without leaking PII to logs/Sentry.

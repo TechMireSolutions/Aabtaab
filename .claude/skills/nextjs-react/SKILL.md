@@ -10,16 +10,24 @@ description: >-
 
 **Rule:** `.cursor/rules/01-nextjs-react.mdc`
 
+## Checklist (do in order)
+
+1. Prefer **RSC**; push `"use client"` to the smallest leaf.
+2. **Await** `params` / `searchParams` / `draftMode()` / `cookies()` / `headers()`.
+3. Fetch via `lib/cms/queries.ts` or `sanityFetch` — never new `unstable_cache` outside `sanity/lib/fetch.ts`.
+4. Parallel independent fetches with `Promise.all`.
+5. Compose shells from `08-dry-policy` / skill `content-sections`.
+6. Mutations → existing **Route Handlers** (`app/api/*`), not Server Actions.
+7. LCP image: `priority` + `fetchPriority="high"` once per route.
+8. React Compiler is on — skip routine `useMemo` / `useCallback` / `memo`.
+
 ## Defaults
 
-- **Server Components First:** Default to React Server Components (RSC) to pre-render HTML on the server. Only use `"use client"` when interactivity or browser APIs are strictly required.
-- Push client boundaries **down** (e.g. `ContactForm`, `Header`).
-- **Route Prefetching:** Utilize the `<Link>` component for all internal navigation to leverage Next.js's automatic background prefetching for faster perceived page loads.
-
+- Server Components first; client islands for forms, nav drawer, carousels, search palette.
+- Internal navigation: always `<Link>` (prefetch).
+- Streaming: selective `<Suspense>` with layout-stable skeletons (see homepage); don’t Suspense the whole page.
 
 ## Data fetching
-
-Use existing helpers — do **not** add `unstable_cache` outside `sanity/lib/fetch.ts`.
 
 ```tsx
 import { getCmsPage, getSiteSettings } from "@/lib/cms/queries";
@@ -27,30 +35,20 @@ import { defineCmsPageMetadata } from "@/lib/cms/page";
 import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/fetch";
 ```
 
-- Cached reads: `lib/cms/queries.ts` (`React.cache()` around `sanityFetch`).
-- Production ISR: `sanityFetch` → `unstable_cache` in `sanity/lib/fetch.ts`.
-- Draft preview: bypasses cache; uses `getPreviewClient()` when draft mode on.
-- Parallel fetches: `Promise.all([...])`.
-- Revalidation: `CACHE_TAGS`, `lib/revalidate.ts`, `app/api/revalidate/route.ts`.
+- Draft preview: `sanityFetch` bypasses cache → `getPreviewClient()` (rule `03-sanity-cms`).
+- Revalidation: `CACHE_TAGS` + `lib/revalidate.ts` + `/api/revalidate`.
 
 ## Metadata
 
 | Page type | Helper |
 |-----------|--------|
-| Static CMS slug | `defineCmsPageMetadata("about", { path, fallbackTitle, fallbackDescription })` |
+| Static CMS slug | `defineCmsPageMetadata(...)` |
 | Nested course/service | `buildNestedSlugMetadata` |
 | Blog post | `buildPostPageMetadata` |
 | Event | `buildEventPageMetadata` |
 | Search / generic | `buildPageMetadata` |
 
-## Images
-
-- Always `next/image` for Sanity URLs via `sanity/lib/image.ts` helpers.
-- Set accurate `sizes` for cards, hero, article layouts.
-
 ## Page composition
-
-Compose shared shells — do not reimplement chrome:
 
 | Need | Use |
 |------|-----|
@@ -59,18 +57,18 @@ Compose shared shells — do not reimplement chrome:
 | Post/event detail | `ArticleDetailShell` |
 | Privacy/terms | `LegalPageShell` |
 
-See skill `content-sections` and rule `08-dry-policy`.
-
 ## Avoid
 
-- CMS fetch in client components.
-- Global state libraries — use server fetch + URL/searchParams.
+- CMS fetch in client components; global client state libraries.
 - `useEffect` for data that can load on the server.
+- Inventing Server Actions, PPR, or View Transitions without an explicit product decision.
 
 ## Verify
 
 ```bash
 npm run lint
+npm run typecheck
 npm run test
-npm run build   # needs Sanity env vars
+npm run test:e2e   # when routes/UI change
+npm run build      # needs Sanity env; build alone is not type-safe (ignoreBuildErrors)
 ```

@@ -32,8 +32,9 @@ Choose rendering intentionally:
 * Every image must have known dimensions or a stable aspect ratio to avoid layout shift.
 * Provide a correct `sizes` attribute for responsive images. Prevent mobile payload overhead on hidden desktop images by setting sizes explicitly (e.g. `sizes="(max-width: 768px) 0px, 55vw"` on `hidden md:block` hero images).
 * Use modern optimised formats (WebP, AVIF) through the Next.js image pipeline.
-* Use `priority` only for genuine above-the-fold images (e.g. hero images). Do not mark multiple non-critical images as priority.
+* Use `priority` **and** `fetchPriority="high"` only for the genuine above-the-fold LCP image (e.g. heroes in `CatalogDarkHero` / homepage). At most **one** primary LCP image per route.
 * Lazy-load below-the-fold images.
+* Prefer accurate hero `sizes` (often `100vw` for full-bleed).
 * Compress source images before uploading to Sanity. Do not upload unnecessarily large images.
 * Require meaningful alternative text for informative CMS images. Use empty alternative text (`alt=""`) for purely decorative images.
 * Prevent layout shift by reserving image space.
@@ -51,11 +52,12 @@ Choose rendering intentionally:
 
 * Keep browser JavaScript to a minimum.
 * Do not import server-only libraries into Client Components.
-* Dynamically import (`next/dynamic` or `React.lazy`) large client-only features that are not immediately required on initial page load.
+* Dynamically import (`next/dynamic`) large client-only features that are not needed for LCP (e.g. heavy drawers/carousels). Do **not** dynamic-import above-fold hero CTAs.
 * Avoid large utility libraries for simple operations.
 * Import only required icons from `lucide-react`. Do not import complete icon packages.
 * Remove unused dependencies and dead code.
 * Investigate unexpected increases in client bundle size.
+* React Compiler is enabled — avoid routine manual memoization (see `01-nextjs-react`).
 
 ## 6. Core Web Vitals (CWV)
 
@@ -73,4 +75,11 @@ Rules:
 * Avoid Cumulative Layout Shift (CLS) on hydration-dependent widgets (e.g. countdown timers) by rendering layout-stable placeholder skeletons of the exact same dimensions when not mounted.
 * Do not autoplay heavy media.
 * Keep critical content available without waiting for client-side JavaScript.
-* **Route Prefetching:** Utilize the `<Link>` component for all internal navigation to leverage Next.js's automatic background prefetching for faster perceived page loads. Do not bypass with custom routing functions unless strictly required.
+* Prefer selective `<Suspense>` with layout-stable skeletons for slow sections — do not Suspense whole-page LCP chrome.
+* **Route Prefetching:** Use `<Link>` for internal navigation.
+* Prefer `motion-safe:` animations; never uncapped infinite motion on LCP content; respect `prefers-reduced-motion`.
+
+## 7. Optional (not used)
+
+* Partial Prerendering / `cacheComponents` / `"use cache"` are **not** enabled. Caching SSOT remains `sanityFetch` → `unstable_cache` + tags. Do not enable in drive-by PRs.
+* View Transitions are **not** used. If added later, gate with `prefers-reduced-motion` and keep scoped.

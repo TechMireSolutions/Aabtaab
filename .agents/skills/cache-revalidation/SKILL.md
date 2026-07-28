@@ -28,9 +28,9 @@ Pass relevant tags in each `sanityFetch` call.
 
 `POST /api/revalidate` — `app/api/revalidate/route.ts`
 
-Set up Sanity webhooks connected to this Next.js API route using `revalidatePath` or `revalidateTag`. This ensures search engines see fresh content dynamically without requiring full application rebuilds on Hetzner.
+Set up Sanity webhooks connected to this Next.js API route using **`revalidateTag`** via `lib/revalidate.ts` (`revalidateSlugCollection`, `REVALIDATE_OPTIONS = { expire: 0 }`). Do **not** call bare `revalidateTag(tag)` or invent broad `revalidatePath` for CMS unless a path-specific UX requires it. This keeps search engines fresh without full rebuilds on Hetzner.
 
-**Auth:** header `x-sanity-webhook-secret` or query `?secret=` must match `SANITY_REVALIDATE_SECRET` (falls back to `REVALIDATE_SECRET` if unset — see `lib/env.ts` / techstack).
+**Auth:** header `x-sanity-webhook-secret` or query `?secret=` must match `SANITY_REVALIDATE_SECRET` (falls back to `REVALIDATE_SECRET` if unset — see `lib/env.ts` / techstack). Prefer header auth when changing webhook setup.
 
 **Body:** `{ _type, slug?: { current } }`
 
@@ -49,7 +49,11 @@ Always revalidates `sanity-all` first.
 
 ## Helper
 
-`lib/revalidate.ts` — `revalidateSlugCollection()`, `REVALIDATE_OPTIONS`
+`lib/revalidate.ts` — `revalidateSlugCollection()`, `REVALIDATE_OPTIONS` (`{ expire: 0 }` for Next 16 tag invalidation).
+
+## Optional (not used)
+
+Partial Prerendering / `"use cache"` are **not** enabled. Caching SSOT remains `sanityFetch` → `unstable_cache` + tags. Do not enable in drive-by PRs.
 
 ## Sanity webhook setup
 

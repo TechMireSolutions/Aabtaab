@@ -63,6 +63,9 @@ When rules and skills disagree, follow this order:
 
 Key resolved policies:
 - **Caching:** only `sanity/lib/fetch.ts` uses `unstable_cache`; pages use `sanityFetch` + `lib/cms/queries.ts`
+- **Mutations:** Route Handlers under `app/api/` — do not invent Server Actions without an explicit PR
+- **React Compiler:** enabled — avoid routine `useMemo` / `useCallback` / `memo`
+- **CSP:** `Content-Security-Policy-Report-Only` in `next.config.ts` until enforce is intentional
 - **Styling:** `02-tailwind-design-system` — `brand-*` / `gold-*` tokens, `@utility` in `globals.css`
 - **CMS fields:** use migrated names (`faqItems`, `seo`, `ctaPrimaryLabel`) — see `03-sanity-cms`
 - **Routes:** `/posts` not `/articles`; search at `/search`
@@ -70,6 +73,7 @@ Key resolved policies:
 - **Shells:** `CatalogDarkHero`, `ArticleDetailShell`, `LegalPageShell`, `SiteContactFooter`
 - **Rate limit:** Upstash Redis optional but **strongly recommended** in production; memory fallback for local / Redis errors — see `09-security` / `techstack.md`
 - **PM2:** `pm2 delete` then `pm2 start` (never `startOrRestart` / `reload` for this app)
+- **Types:** `npm run typecheck` is authoritative (`ignoreBuildErrors` on `next build`)
 - **Tests:** Vitest colocated + Playwright `e2e/` (desktop + mobile) — see `12-testing`
 
 Stack **versions** live in **`techstack.md`**. Rules `00` / `05` may keep a short aligned summary — update techstack first when versions change.
