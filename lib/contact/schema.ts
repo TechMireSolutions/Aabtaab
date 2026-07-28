@@ -4,6 +4,7 @@ export const contactPurposeSchema = z.enum([
   "general",
   "course",
   "service",
+  "other",
 ]);
 
 export const contactBodySchema = z.object({

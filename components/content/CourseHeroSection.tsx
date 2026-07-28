@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import CatalogDarkHero from "@/components/content/CatalogDarkHero";
 import { heroImageUrl } from "@/sanity/lib/image";
 
 interface CourseHeroSectionProps {
@@ -30,64 +30,54 @@ export default function CourseHeroSection({
 }: CourseHeroSectionProps) {
   const subtitle = heroSubtitle || excerpt;
   const ctaClassName = "btn-pill-accent group";
+  const imageSrc = image ? heroImageUrl(image, 1400, 700) : null;
 
   return (
-    <section className="relative overflow-hidden bg-slate-900">
-      {image && (
-        <Image
-          src={heroImageUrl(image, 1400, 700)}
-          alt={image.alt || title}
-          fill
-          sizes="100vw"
-          className="object-cover opacity-hero-image"
-          priority
-          fetchPriority="high"
-        />
-      )}
-      <div className="pointer-events-none absolute inset-0 bg-linear-to-b from-slate-900/60 via-transparent to-slate-900/80" />
-
-      <div className="container-hero">
-        <div className="mb-6 flex flex-wrap justify-center gap-2">
-          {subject && <span className="badge-hero">{subject}</span>}
-          {duration && <span className="badge-hero-muted">{duration}</span>}
-          {instructor && <span className="badge-hero-muted">{instructor}</span>}
-        </div>
-
-        <h1 className="text-hero mb-5 text-white">{title}</h1>
-
-        {subtitle && (
-          <p className="mx-auto mb-10 max-w-copy text-base-plus leading-relaxed text-slate-300 sm:text-lg-plus">
-            {subtitle}
-          </p>
-        )}
-
-        <div className="flex flex-wrap justify-center gap-3">
-          {enrollExternal ? (
-            <a
-              href={enrollHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={ctaClassName}
-            >
-              {heroCtaLabel}
-              <ArrowRight
-                size={14}
-                strokeWidth={2.5}
-                className="transition-transform group-hover:translate-x-0.5"
-              />
-            </a>
-          ) : (
-            <Link href={enrollHref} className={ctaClassName}>
-              {heroCtaLabel}
-              <ArrowRight
-                size={14}
-                strokeWidth={2.5}
-                className="transition-transform group-hover:translate-x-0.5"
-              />
-            </Link>
-          )}
-        </div>
+    <CatalogDarkHero
+      title={title}
+      imageSrc={imageSrc}
+      imageAlt={image?.alt || title}
+    >
+      <div className="mb-6 flex flex-wrap justify-center gap-2">
+        {subject && <span className="badge-hero">{subject}</span>}
+        {duration && <span className="badge-hero-muted">{duration}</span>}
+        {instructor && <span className="badge-hero-muted">{instructor}</span>}
       </div>
-    </section>
+
+      <h1 className="text-hero mb-5 text-white">{title}</h1>
+
+      {subtitle && (
+        <p className="mx-auto mb-10 max-w-copy text-base-plus leading-relaxed text-slate-300 sm:text-lg-plus">
+          {subtitle}
+        </p>
+      )}
+
+      <div className="flex flex-wrap justify-center gap-3">
+        {enrollExternal ? (
+          <a
+            href={enrollHref}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={ctaClassName}
+          >
+            {heroCtaLabel}
+            <ArrowRight
+              size={14}
+              strokeWidth={2.5}
+              className="transition-transform group-hover:translate-x-0.5"
+            />
+          </a>
+        ) : (
+          <Link href={enrollHref} className={ctaClassName}>
+            {heroCtaLabel}
+            <ArrowRight
+              size={14}
+              strokeWidth={2.5}
+              className="transition-transform group-hover:translate-x-0.5"
+            />
+          </Link>
+        )}
+      </div>
+    </CatalogDarkHero>
   );
 }

@@ -176,7 +176,7 @@ export default function HomeAbout({ homepage: hp, quotes = [], scholarCount, cou
               </div>
             </div>
 
-            <div className="card-surface absolute bottom-0 left-6 flex items-center gap-3 px-4 py-3 shadow-md">
+            <div className="card-surface absolute bottom-0 left-6 flex items-center gap-3 px-4 py-3">
               <div className="badge-trust">✓</div>
               <div>
                 <p className="text-xs font-semibold text-slate-800 dark:text-slate-200">

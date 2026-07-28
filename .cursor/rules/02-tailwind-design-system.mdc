@@ -13,7 +13,7 @@ alwaysApply: false
 1. **Pure Tailwind utilities** in components — no CSS modules, no styled-components.
 2. **`brand-*` for brand UI** — not raw `cyan-*`. **`gold-*`** for donate/sacred accent UI — not `amber-*`.
 3. **No arbitrary values** (`text-[13px]`, `w-[180px]`, `top-[68px]`, `shadow-[…]`, `scale-[1.06]`) when a token or `@utility` exists.
-4. **No inline `style={}`** for colors, typography, shadows, or animation delays — use `animate-delay-*` utilities.
+4. **No inline `style={}`** for static colors, typography, shadows, or animation delays — use tokens / `animate-delay-*`. **Exception:** truly dynamic runtime values that cannot be expressed as classes.
 5. **Extend `globals.css` first** for patterns used **2+ times** — add `@theme` or `@utility`, not copy-paste classes.
 6. **Use shadow tokens** — `shadow-card`, `shadow-card-hover`, `shadow-brand-*` — not raw `shadow-sm` / `shadow-md` / `shadow-lg` on site UI.
 7. **Use container utilities** — never `max-w-7xl mx-auto px-4 sm:px-6` inline.
@@ -79,7 +79,9 @@ alwaysApply: false
 | `badge-enrolling` | Hero “Enrolling now” chip |
 | `badge-hero` / `badge-hero-muted` | Course/service hero meta |
 | `badge-trust` | Trust checkmark badge |
+| `badge-notice` | Soft notice / highlight chip (`gold-*`) |
 | `empty-state` | Empty search/catalog states |
+| `size-logo` / `size-logo-lg` | Header/footer logos |
 
 ## Media & imagery
 
@@ -90,7 +92,6 @@ alwaysApply: false
 | `media-placeholder` | Missing image placeholder |
 | `hover-scale-image` | Card image hover zoom |
 | `opacity-hero-image` | Dark hero background images |
-| `size-logo` / `size-logo-lg` | Header/footer logos |
 | `w-carousel-card*` | Carousel card widths |
 
 ## Chrome & misc
@@ -122,7 +123,7 @@ layout → spacing → typography → visual (bg/border/shadow) → interactive 
 ## Tailwind & CSS guidelines
 
 * Use Tailwind CSS v4 utilities and design tokens (`brand-*`, `gold-*`, container utilities).
-* Avoid inline `style` unless the value is dynamically computed and cannot be modeled via classes.
+* Avoid inline `style` for static design tokens. Allow only when the value is dynamically computed and cannot be modeled via classes.
 * Do not add another CSS framework.
 * Keep spacing, typography, radii, and shadows consistent.
 * Do not overuse `@apply`.
@@ -149,7 +150,7 @@ layout → spacing → typography → visual (bg/border/shadow) → interactive 
 * Important pages must have a clear primary action (e.g. Enrol, Contact, Donate).
 * Do not place multiple competing primary buttons in the same section.
 * Make important actions visible without excessive scrolling. Do not use deceptive urgency.
-* Maintain discoverable, accurate pages for: About, Contact, Privacy Policy, Terms and Conditions, and Frequently Asked Questions (FAQ).
+* Maintain discoverable, accurate pages for: About, Contact, Privacy Policy, and Terms of Service (`/privacy-policy`, `/terms-of-service`). FAQ content lives in CMS-driven `FaqAccordionSection` blocks — not a standalone `/faq` route unless added later.
 * Contact details must be accurate and consistent. Do not publish fake testimonials or reviews.
 
 ## Examples

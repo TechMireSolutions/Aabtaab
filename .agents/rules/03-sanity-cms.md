@@ -65,7 +65,7 @@ Navigation documents: `title == "header"` → `headerNavQuery`; `title == "foote
 
 ## Schema Design
 
-Each public content type should contain appropriate fields for: Title, Slug, Status, Main content, Excerpt, Featured image, Alternative text, SEO title, Meta description, Social image, and dates.
+Each public content type should contain appropriate fields for: Title, Slug, Status, Main content, Excerpt, Featured image, Alternative text, dates, and an **`seo` object** (`metaTitle`, `metaDescription`, `ogImage`, `noIndex` as applicable — not flat legacy `seoTitle` / `seoDescription` fields).
 * Use schema validation for required fields and length constraints. Do not make every field optional.
 * **Mandatory Alt Text:** Enforce `validation: Rule.required()` for alt text fields on all image schemas within Sanity to ensure SEO and accessibility compliance.
 * Prevent duplicate or invalid slugs where possible.

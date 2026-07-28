@@ -13,31 +13,50 @@ description: >-
 
 | Action | Command |
 |--------|---------|
-| Run Unit Tests | `npm run test` |
-| Watch Unit Tests | `npm run test:watch` |
-| Run E2E Tests | `npm run test:e2e` |
+| Unit | `npm run test` |
+| Unit watch | `npm run test:watch` |
+| E2E | `npm run test:e2e` |
+| Browsers (first time / after Playwright bump) | `npx playwright install chromium` (add `--with-deps` on Linux/CI) |
 
-## Writing Tests
+## Unit tests (Vitest)
 
-### 1. Unit Tests (Vitest)
-- Place tests in matching names (e.g. `schema.test.ts` for `schema.ts`).
-- Focus on testing business functions, mappings, and schemas:
+- Colocate: `lib/contact/schema.test.ts` beside `schema.ts`.
+- Include: `**/*.test.ts` via `vitest.config.ts` (`@/` alias).
+- Current high-value modules: contact schema/email, paths, urls, constants, request-ip, rate-limit, revalidate, SEO helpers, catalog mappers.
+
 ```typescript
 import { describe, it, expect } from "vitest";
-import { contactFormSchema } from "./schema";
+import { parseContactBody } from "@/lib/contact/schema";
 
-describe("contactFormSchema", () => {
-  it("validates correct fields", () => {
+describe("parseContactBody", () => {
+  it("accepts valid payload", () => {
     // assert
   });
 });
 ```
 
-### 2. E2E Tests (Playwright)
-- Write tests in `e2e/`. Focus on workflows like form inputs, buttons, and navigation.
-- Desktop and mobile viewports are configured in `playwright.config.ts`.
+## E2E tests (Playwright)
+
+| File | Purpose |
+|------|---------|
+| `e2e/smoke.spec.ts` | Page load smoke |
+| `e2e/navigation.spec.ts` | Nav + footer legal |
+| `e2e/seo.spec.ts` | Metadata, robots, 404 |
+| `e2e/contact.spec.ts` | Form validation UX |
+
+Projects: **Desktop Chrome** + **Pixel 7** (`playwright.config.ts`).
+
+Web server: `node scripts/run-next.mjs start --port 3000` (needs an existing `.next` build).
+
+### Selector tips
+
+- Scope contact fields to `#main-content form` (footer/other email inputs can collide).
+- On mobile, open the menu via `Open navigation menu` before asserting main nav links.
+- Prefer roles/labels over brittle CSS.
 
 ## Checklist
-- [ ] No flake/failing tests left unaddressed.
-- [ ] Mocks used only where necessary (e.g. network requests).
-- [ ] CI/CD pipeline compiles and runs all test suites successfully.
+
+- [ ] Normal + boundary + invalid cases for unit logic
+- [ ] No flake left unaddressed
+- [ ] Mocks only where needed (Sanity image URLs, `next/cache`, Sentry, Upstash)
+- [ ] CI runs unit + E2E (`npm run test`, `npm run test:e2e`)

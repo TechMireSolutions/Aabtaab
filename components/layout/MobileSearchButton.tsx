@@ -84,7 +84,7 @@ export default function MobileSearchButton({
           {/* Search bar — below the sticky header */}
           <div
             ref={panelRef}
-            className="fixed inset-x-0 z-40 border-b border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-950 px-4 py-3 shadow-lg lg:hidden"
+            className="fixed inset-x-0 z-40 border-b border-gray-200 bg-white px-4 py-3 shadow-card dark:border-slate-800 dark:bg-slate-950 lg:hidden"
             style={{ top: "var(--spacing-header)" }}
           >
             <form

@@ -58,7 +58,7 @@ export default async function HomePage() {
         }}
       />
       <HomeHero settings={settings} homepage={hp} siteName={siteName} courseCount={courseCount} />
-      <Suspense fallback={null}>
+      <Suspense fallback={<HomeSectionsSkeleton />}>
         <UpcomingEventsCountdown />
       </Suspense>
       <HomeAbout 
@@ -67,7 +67,7 @@ export default async function HomePage() {
         scholarCount={scholarCount} 
         countryCount={countryCount} 
       />
-      <Suspense fallback={null}>
+      <Suspense fallback={<HomeSectionsSkeleton />}>
         <HomeCountries />
       </Suspense>
       <Suspense fallback={<HomeSectionsSkeleton />}>

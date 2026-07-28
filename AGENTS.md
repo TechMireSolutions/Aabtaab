@@ -15,11 +15,11 @@
 | `05-dependencies-upgrade` | `package.json`, CI, deploy config |
 | `06-file-structure` | Always — folder layout |
 | `07-naming-policy` | Files, symbols, CMS fields |
-| `08-dry-policy` | Always — deduplication |
-| `09-security` | `app/`, `components/`, `lib/`, `sanity/`, scripts — security / validation |
-| `10-performance` | `app/`, `components/`, `lib/`, `sanity/` — caching, image/font, CWV |
-| `11-error-handling-observability` | Always — errors, logging, Sentry telemetry |
-| `12-testing` | `**/*.{test,spec}.{ts,tsx}` — Vitest & Playwright |
+| `08-dry-policy` | Always — deduplication / SSOT table |
+| `09-security` | Security, forms, env (`lib/env.ts`) |
+| `10-performance` | Caching, images, fonts, CWV |
+| `11-error-handling-observability` | Errors, logging, Sentry |
+| `12-testing` | Vitest + Playwright (unit + E2E) |
 
 ## Skills (16)
 
@@ -28,7 +28,7 @@
 | `nextjs-react` | App Router pages, RSC fetch, metadata, images, API routes |
 | `tailwind-ui` | Styling, `globals.css`, className refactors |
 | `sanity-cms` | Schemas, GROQ, migrations, draft preview |
-| `content-sections` | Course/service detail section composition |
+| `content-sections` | Course/service sections, shells, CTA + contact footer |
 | `nested-catalog-routes` | `[...slug]` catalog pages, breadcrumbs |
 | `seo-metadata` | Metadata, JSON-LD, sitemap, search, robots, a11y |
 | `contact-form-api` | Contact form + `/api/contact` |
@@ -40,7 +40,7 @@
 | `security` | Validation, rate-limiting, secure inputs |
 | `performance-optimization` | Core Web Vitals, dynamic imports, image/font layout shifts |
 | `error-handling-telemetry` | Error boundaries, Sentry setups, logging |
-| `testing-vitest-playwright` | Vitest and Playwright test suites |
+| `testing-vitest-playwright` | Vitest and Playwright suites |
 
 ## Mirror targets
 
@@ -53,10 +53,10 @@
 ## Commands
 
 ```bash
-npm run dev | build | lint | test | sync:agents
+npm run dev | build | lint | typecheck | test | test:e2e | sync:agents
 ```
 
-Production: port **3000**, path `/var/www/aabtaab_next`, PM2 `aabtaab-next`. See [techstack.md](techstack.md).
+Production: port **3000**, path `/var/www/aabtaab_next`, PM2 `aabtaab-next` via `deploy/runtime.cjs` → `next start`. See [techstack.md](techstack.md).
 
 ## Conflict resolution
 
@@ -66,8 +66,12 @@ When docs disagree, priority order:
 2. **Rules** (`.cursor/rules/`) — standards and constraints
 3. **Skills** (`.cursor/skills/`) — task workflows (must match rules)
 
-Key policies:
+Key policies (must stay aligned with techstack):
 - Caching: `sanityFetch` in `sanity/lib/fetch.ts` only — no extra `unstable_cache`
-- Styling: Tailwind v4 + `brand-*` via `app/globals.css`
+- Styling: Tailwind v4 + `brand-*` / `gold-*` via `app/globals.css`
 - CMS fields: migrated names only (`faqItems`, `seo`, `ctaPrimaryLabel`)
-- Search: `/search?q=…` (not `/posts?q=…`)
+- Search: `/search?q=…` (not `/posts?q=…`); sitemap via `getSitemapSlugs()`
+- DRY: extract UI/CSS/fallbacks at **2+**; shells in `08-dry-policy`
+- Rate limit: Upstash Redis **optional but strongly recommended** in production; memory fallback for local / Redis errors
+- PM2: `pm2 delete` then `pm2 start` (not `reload` / `startOrRestart`)
+- Tests: colocated `*.test.ts` + `e2e/{smoke,navigation,seo,contact}.spec.ts` (desktop + mobile)

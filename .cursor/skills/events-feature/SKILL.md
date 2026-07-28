@@ -35,15 +35,15 @@ Use existing getters — do not duplicate GROQ in page files.
 
 ## Metadata
 
-Use `buildPageMetadata` from `lib/seo/metadata.ts` (or helpers in `lib/cms/event.ts` if present) with:
+Use `buildEventPageMetadata` from `lib/cms/event.ts` with:
 
 - Title, description from event document
 - Path `/events/{slug}`
-- OG image from event featured image when available
+- OG image from event image when available
 
 ## Detail page stack
 
-Typical: hero/info → portable text or description → `EventJsonLd` → optional CTA
+Use `ArticleDetailShell` (back link + article container) → title/meta → media → description/prose → register CTA → `EventJsonLd` / breadcrumbs.
 
 ## Draft preview
 

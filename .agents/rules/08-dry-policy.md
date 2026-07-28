@@ -8,7 +8,11 @@ description: DRY policy — extract shared logic, avoid duplication across pages
 
 **Don't Repeat Yourself** — but **don't over-abstract**. DRY applies to *knowledge*, not character count.
 
-**Rule of Three:** duplicate once is fine; duplicate twice — watch; duplicate **3+ times** — extract.
+**Extract thresholds (this repo):**
+* **UI / CSS / fallbacks:** same pattern in **2+** places → extract (component, `@utility`, or `lib/fallbacks/`).
+* **One-off logic:** duplicating once is fine; watch at twice; extract by **3+** only if no shared SSOT exists yet.
+
+Never invent a new helper when the SSOT table already names one.
 
 ## Single source of truth (this repo)
 
@@ -20,9 +24,15 @@ description: DRY policy — extract shared logic, avoid duplication across pages
 | Sitemap slugs | `getSitemapSlugs` → `lib/cms/queries.ts` |
 | Site search | `searchSite` → `lib/cms/search.ts` |
 | Production caching | `sanityFetch` → `sanity/lib/fetch.ts` (only place for `unstable_cache`) |
-| Catalog page shell | `CatalogPageLayout` + `PageHeader` |
+| Catalog page shell | `CatalogPageLayout` + `PageHeader` (supports `above` slot) |
+| Catalog dark hero | `CatalogDarkHero` → `CourseHeroSection` / `ServiceHeroSection` |
+| Article detail chrome | `ArticleDetailShell` (posts, events) |
+| Legal pages | `LegalPageShell` + `LegalSection` (privacy, terms) |
 | Content sections | `components/content/*` |
-| Contact footer block | `SiteContactFooter` |
+| Contact footer block | `SiteContactFooter` (course + service CTA bands) |
+| Nav / search empty links | `lib/fallbacks/nav.ts` + `SearchEmptyState` |
+| About fallback pillars | `lib/fallbacks/about.ts` |
+| Env validation | `lib/env.ts` |
 | Footer CMS quick links | `footerNavQuery` → `getSiteLayoutData()` → `FooterNav` in `types/site-navigation.ts`; fallback `FALLBACK_QUICK_LINKS` in `Footer.tsx` |
 | Nested child cards | `mapCourseChildForGrid`, `mapServiceChildForGrid` → `lib/catalog/` |
 | Breadcrumbs / paths | `lib/paths.ts` |
@@ -83,7 +93,7 @@ When deduplicating existing code:
 1. Extract to the closest domain folder (table above).
 2. Update **all** call sites in one pass.
 3. Delete dead duplicates and unused types/imports.
-4. Run `npm run lint` + `npm run test` + `npm run build`.
+4. Run `npm run lint` + `npm run test` + `npm run test:e2e` (when UI/routes change) + `npm run build`.
 
 ## Anti-patterns
 

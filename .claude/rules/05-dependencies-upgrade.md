@@ -15,11 +15,12 @@ Apply when upgrading deps, touching `package.json`, CI, or Node engine constrain
 | Layer | Target |
 |-------|--------|
 | Runtime | Node **24.18** (`.nvmrc`; `engines` ≥22.12) |
-| Framework | Next.js **16.2.12** (match `eslint-config-next`) |
+| Framework | Next.js **16.2.12** |
 | UI | React **19.2.8** + React Compiler **1.0** |
 | CMS | Sanity **6.7** + `next-sanity` **13.2** + `@sanity/client` **7.25** |
 | CSS | Tailwind **4.3.3** + `@tailwindcss/postcss` |
 | Language | TypeScript **7.0.2** (`experimental.useTypeScriptCli`) |
+| Lint | ESLint **10.8** + custom flat config (`@next/eslint-plugin-next`) |
 
 ## Upgrade workflow
 
@@ -34,7 +35,7 @@ Apply when upgrading deps, touching `package.json`, CI, or Node engine constrain
 
 - App dependencies: **`^`** semver range (not exact pins unless required).
 - Pin **only** when a known incompatibility exists — add a one-line comment in `package.json` or here.
-- Keep **`eslint-config-next`** version aligned with **`next`**.
+- Do **not** reintroduce `eslint-config-next` until it supports TypeScript 7 (see Known constraints).
 - Upgrade **peer-dependent** packages together (e.g. `@types/react` with `react`).
 
 ## Known constraints (this repo)
@@ -61,10 +62,11 @@ Apply when upgrading deps, touching `package.json`, CI, or Node engine constrain
 
 * Use Node.js version defined in `.nvmrc` (currently Node **24.18.0**).
 * PM2 runs in **fork** mode (`instances: 1` via `ecosystem.config.cjs`).
-* Processes must remain completely stateless: do not store sessions, rate limits, or message queues in local process memory.
+* Entry: `deploy/runtime.cjs` → `next start` on port **3000** (`server.config.cjs`).
+* On deploy: always **`pm2 delete aabtaab-next`** then **`pm2 start ecosystem.config.cjs --update-env`** — do **not** use `startOrRestart` or `pm2 reload` (stale `args` risk).
+* Keep app processes free of durable local state (sessions, queues). Rate limits: prefer Redis in production; memory fallback is local/dev only (see `09-security`).
 * Do not expose port 3000 directly to the public internet; use Hetzner firewall rules to restrict traffic to Cloudflare origin IP addresses.
 * Run the Node application process under a restricted system user rather than `root`.
-* Perform zero-downtime reloads (`pm2 reload`) where supported.
 
 ## CI/CD Workflow
 
@@ -75,7 +77,7 @@ GitHub Actions must run and pass the following checks before any code is deploye
 4. TypeScript compilation/type-checking.
 5. Unit tests (`npm run test`).
 6. Production build (`npm run build`).
-7. E2E smoke tests (`npm run test:e2e`).
+7. E2E tests (`npx playwright install --with-deps chromium` then `npm run test:e2e`).
 
 Protect the `main` branch. Avoid direct commits to `main` (always use pull requests). Rollback procedures must be kept current.
 

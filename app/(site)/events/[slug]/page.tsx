@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { CalendarDays, MapPin, ExternalLink } from "lucide-react";
-import DetailBackButton from "@/components/layout/DetailBackButton";
+import ArticleDetailShell from "@/components/layout/ArticleDetailShell";
 import ProseSection from "@/components/portable-text/ProseSection";
 import {
   buildEventPageMetadata,
@@ -41,7 +41,7 @@ export default async function EventDetailPage({
   const dateLabel = formatEventDateRange(event.startDate, event.endDate);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-950">
+    <>
       <EventJsonLd
         title={event.title}
         description={event.seo?.metaDescription || event.description}
@@ -73,9 +73,7 @@ export default async function EventDetailPage({
         ]}
       />
 
-      <DetailBackButton href="/events" label="Back to Events" />
-
-      <article className="container-content section-y">
+      <ArticleDetailShell backHref="/events" backLabel="Back to Events">
         {event.status === "EventCancelled" && (
           <span className="badge-pill mb-4 border-red-200 bg-red-50 text-red-700">
             Cancelled
@@ -136,7 +134,7 @@ export default async function EventDetailPage({
             </a>
           </div>
         )}
-      </article>
-    </div>
+      </ArticleDetailShell>
+    </>
   );
 }

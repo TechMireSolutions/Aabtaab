@@ -4,7 +4,12 @@ import ProseSection from "@/components/portable-text/ProseSection";
 import { defineCmsPageMetadata } from "@/lib/cms/page";
 import { resolveSiteName } from "@/lib/constants";
 import { getCmsPage, getSiteSettings } from "@/lib/cms/queries";
-import { ArrowRight, BookOpen, Heart, Star } from "lucide-react";
+import {
+  ABOUT_PILLAR_ICONS,
+  ABOUT_PILLARS,
+  aboutIntro,
+} from "@/lib/fallbacks/about";
+import { ArrowRight } from "lucide-react";
 
 export const generateMetadata = defineCmsPageMetadata("about", {
   path: "/about",
@@ -20,6 +25,7 @@ export default async function AboutPage() {
   ]);
 
   const siteName = resolveSiteName(settings);
+  const intro = aboutIntro(siteName);
 
   return (
     <div>
@@ -37,77 +43,51 @@ export default async function AboutPage() {
           ) : (
             <div className="space-y-6 sm:space-y-8">
               <p className="text-base-plus leading-relaxed text-gray-600">
-                <strong className="text-slate-900">{siteName}</strong> is a
-                dedicated platform for the promotion of Islamic knowledge rooted
-                in the teachings of the Holy Quran and the Ahlul Bayt (A.S.).
-                Our name — meaning <em>&ldquo;luminous&rdquo;</em> — reflects
-                our mission to spread light through education and authentic
-                Islamic content.
+                <strong className="text-slate-900">{intro.siteName}</strong>
+                {intro.leadAfterName}
+                <em>&ldquo;{intro.luminous}&rdquo;</em>
+                {intro.leadAfterLuminous}
               </p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {[
-                  {
-                    Icon: BookOpen,
-                    title: "Education",
-                    description:
-                      "Online Quran, Fiqh, Ethics & History courses from qualified scholars",
-                  },
-                  {
-                    Icon: Heart,
-                    title: "Services",
-                    description:
-                      "Authentic religious services — Niyabat Ziarat, Zakat, Khums & more",
-                  },
-                  {
-                    Icon: Star,
-                    title: "Community",
-                    description:
-                      "Majalis, programs and reliable Islamic content for the Ummah",
-                  },
-                ].map(({ Icon, title, description }) => (
-                  <div
-                    key={title}
-                    className="bg-slate-50 dark:bg-slate-900/60 rounded-xl p-4 sm:p-5 border border-gray-100 dark:border-slate-800/80"
-                  >
-                    <div className="w-9 h-9 bg-brand-50 dark:bg-brand-900/30 border border-brand-100 dark:border-brand-800/65 rounded-xl flex items-center justify-center mb-3">
-                      <Icon
-                        size={15}
-                        className="text-brand-700 dark:text-brand-400"
-                        strokeWidth={1.75}
-                      />
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+                {ABOUT_PILLARS.map((pillar) => {
+                  const Icon = ABOUT_PILLAR_ICONS[pillar.icon];
+                  return (
+                    <div key={pillar.title} className="card-surface p-4 sm:p-5">
+                      <div className="mb-3 flex size-9 items-center justify-center rounded-xl border border-brand-100 bg-brand-50 dark:border-brand-800/65 dark:bg-brand-900/30">
+                        <Icon
+                          size={15}
+                          className="text-brand-700 dark:text-brand-400"
+                          strokeWidth={1.75}
+                        />
+                      </div>
+                      <h3 className="mb-1 text-sm-plus font-semibold text-slate-900 dark:text-white">
+                        {pillar.title}
+                      </h3>
+                      <p className="text-body-muted">{pillar.description}</p>
                     </div>
-                    <h3 className="font-semibold text-slate-900 dark:text-white text-sm-plus mb-1">
-                      {title}
-                    </h3>
-                    <p className="text-body-muted">
-                      {description}
-                    </p>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
-              <div className="bg-slate-50 dark:bg-slate-900/60 rounded-xl p-4 sm:p-6 border border-gray-100 dark:border-slate-800/80">
-                <h3 className="font-semibold text-slate-900 dark:text-white mb-2 text-base-plus">
+              <div className="card-surface p-4 sm:p-6">
+                <h3 className="mb-2 text-base-plus font-semibold text-slate-900 dark:text-white">
                   Dar Ul Quran
                 </h3>
-                <p className="text-base-plus text-gray-600 dark:text-slate-300 leading-relaxed">
-                  We are affiliated with{" "}
-                  <strong className="text-slate-800 dark:text-slate-100">Dar Ul Quran</strong>, our
-                  dedicated Quranic institute providing structured Quran
-                  education programs for students of all ages.
+                <p className="text-base-plus leading-relaxed text-gray-600 dark:text-slate-300">
+                  {intro.darUlQuranBefore}
                 </p>
               </div>
             </div>
           )}
 
-          <div className="mt-8 sm:mt-10 pt-7 sm:pt-8 border-t border-gray-100 dark:border-slate-800 flex flex-wrap gap-3">
+          <div className="mt-8 flex flex-wrap gap-3 border-t border-gray-100 pt-7 sm:mt-10 sm:pt-8 dark:border-slate-800">
             <Link href="/contact" className="btn-primary group">
               Contact Us
               <ArrowRight
                 size={13}
                 strokeWidth={2.5}
-                className="group-hover:translate-x-0.5 transition-transform duration-150"
+                className="transition-transform duration-150 group-hover:translate-x-0.5"
               />
             </Link>
             <Link href="/online-courses" className="btn-secondary">

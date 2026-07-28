@@ -1,50 +1,71 @@
 ---
 description: Testing rules — Vitest unit tests, Playwright E2E tests, and regression testing standards
-globs: "**/*.{test,spec}.{ts,tsx}"
+globs: "{**/*.{test,spec}.{ts,tsx},e2e/**,vitest.config.ts,playwright.config.ts}"
 alwaysApply: false
 ---
 
 # Testing Rules
 
-## 1. Unit Testing with Vitest
+## Commands
 
-Write unit tests for pure-logic utilities, data validators, and formatting helpers. Specifically:
-* Zod schemas (e.g. contact form schema, environment schemas)
-* Data transformation utilities
-* URL and slug utilities
-* Metadata and JSON-LD generation
-* GROQ query result mapping
-* Rate-limit helpers
-* Email payload construction
-* Security-sensitive utility functions
+| Suite | Command |
+|-------|---------|
+| Unit | `npm run test` (Vitest) |
+| Unit watch | `npm run test:watch` |
+| E2E | `npm run test:e2e` (Playwright) |
 
-Rules:
-* Tests must cover normal, boundary, and invalid inputs.
-* Do not write tests for framework internals (e.g., Next.js routing, React rendering engines).
-* Configured via `vitest.config.ts`. Run unit tests with `npm run test`.
+Config: `vitest.config.ts`, `playwright.config.ts`.
 
-## 2. End-to-End Testing with Playwright
+## 1. Unit Testing (Vitest)
 
-Maintain Playwright coverage for critical user flows:
-* Homepage loads successfully.
-* Main navigation and mobile navigation work.
-* Course and service detail pages render correctly.
-* Contact form validation works, and successful contact submission completes in a controlled environment.
-* Invalid contact submissions are rejected.
-* Rate-limit responses are handled gracefully.
-* Critical metadata and SEO elements exist.
-* Missing pages return a correct `404` status/layout.
-* Studio and preview routes are not publicly indexable.
-* Primary CTA links work.
+Place tests next to the module (`schema.test.ts` beside `schema.ts`) or under the same domain folder.
 
-Rules:
-* Test both desktop and mobile viewport configurations.
-* Avoid tests that depend on unstable or frequently changing production content.
-* Use stable test identifiers (`data-testid`) only when accessible selectors (e.g., text, labels, roles) are insufficient.
-* Run E2E tests using `npm run test:e2e` (configured via `playwright.config.ts`).
+**Prefer covering:**
+* Zod schemas (`lib/contact/schema.ts`, env-related validation)
+* Pure helpers (`lib/paths.ts`, `lib/urls.ts`, `lib/constants.ts`, `lib/request-ip.ts`)
+* Email HTML builders (`lib/contact/email-html.ts`)
+* SEO plain-text / metadata helpers (`lib/seo/portable-text-plain.ts`, `lib/seo/metadata.ts`)
+* Catalog mappers (`lib/catalog/nested-children.ts`)
+* Rate-limit memory path (`lib/rate-limit.ts` — mock Upstash/Sentry)
+* Revalidation helpers (`lib/revalidate.ts` — mock `next/cache`)
+
+**Rules:**
+* Cover normal, boundary, and invalid inputs.
+* Do not test framework internals (Next.js routing, React renderer).
+* Mock network/CMS/image URL builders when they pull in Sanity clients.
+* Keep tests deterministic — unique keys for rate-limit memory tests.
+
+## 2. End-to-End Testing (Playwright)
+
+**Projects:** `chromium` (Desktop Chrome) + `mobile-chrome` (Pixel 7) in `playwright.config.ts`.
+
+**Suites in `e2e/`:**
+
+| File | Focus |
+|------|-------|
+| `smoke.spec.ts` | Public pages load (`#main-content`) |
+| `navigation.spec.ts` | Main/mobile nav, brand home, footer legal |
+| `seo.spec.ts` | Title/canonical shape, `robots.txt`, 404 |
+| `contact.spec.ts` | Native required/invalid email, purpose radios |
+
+**Must remain covered:**
+* Homepage + skip link
+* Main navigation (open mobile menu when desktop nav is hidden)
+* Contact form client validation (scope selectors to `#main-content form`)
+* `robots.txt` disallows `/studio/`, `/api/`, `/search`
+* Unknown routes return **404**
+* Catalog listing pages (courses, services, events)
+
+**Rules:**
+* Prefer accessible selectors (role, label, text). Use `data-testid` only when needed.
+* Do not assert CMS-specific nav labels that change in Studio — assert stable patterns (link count, Services/Courses).
+* Canonical `href` is baked at **build** time from `NEXT_PUBLIC_SITE_URL` — assert absolute URL shape, not a hard-coded port.
+* Avoid depending on live Sanity content for assertions.
+* Free port **3000** before local E2E if a stale server is running; install browsers with `npx playwright install chromium` when missing.
 
 ## 3. Regression Requirements
 
 * Every bug fix should include a regression test when practical.
-* Do not reduce test coverage or remove tests merely to make CI pass.
-* Flaky tests must be investigated and corrected, not repeatedly retried without resolution.
+* Do not reduce coverage or delete tests merely to make CI pass.
+* Investigate flaky tests; do not paper over with retries alone.
+* After substantive app changes, run `npm run test` and `npm run test:e2e`.

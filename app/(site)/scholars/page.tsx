@@ -29,9 +29,13 @@ export default async function ScholarsPage() {
         
         <div className="container-narrow relative z-10">
           {scholars.length === 0 ? (
-            <div className="flex flex-col items-center justify-center p-12 text-center bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/50 dark:border-slate-800/50">
-              <p className="text-slate-500 font-medium">No scholars found yet.</p>
-              <p className="text-slate-400 text-sm mt-1">Check back later as we update our faculty profiles.</p>
+            <div className="empty-state card-surface">
+              <p className="font-medium text-slate-700 dark:text-slate-300">
+                No scholars listed yet.
+              </p>
+              <p className="text-sm-plus mt-1 text-slate-500 dark:text-slate-400">
+                Check back soon as we publish faculty profiles.
+              </p>
             </div>
           ) : (
             <div className="flex flex-wrap justify-center gap-8 md:gap-10">
@@ -39,43 +43,37 @@ export default async function ScholarsPage() {
               {scholars.map((scholar: any) => (
                 <div
                   key={scholar._id}
-                  className="group relative flex w-full max-w-[24rem] flex-col rounded-3xl bg-white dark:bg-slate-900 shadow-sm border border-slate-200/50 dark:border-slate-800/50 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-brand-900/10 dark:hover:shadow-brand-900/30"
+                  className="group card-surface card-hover-lift relative flex w-full max-w-[24rem] flex-col overflow-hidden"
                 >
                   {/* Image Container */}
-                  <div className="relative h-[20rem] w-full overflow-hidden rounded-t-3xl bg-slate-100 dark:bg-slate-800 shrink-0">
+                  <div className="relative h-[20rem] w-full overflow-hidden bg-slate-100 dark:bg-slate-800 shrink-0">
                     {scholar.image ? (
                       <Image
                         src={urlFor(scholar.image).width(600).height(800).url()}
                         alt={scholar.name}
                         fill
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                        className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                        className="hover-scale-image object-top"
                       />
                     ) : (
-                      <div className="absolute inset-0 flex items-center justify-center bg-slate-100 dark:bg-slate-800">
-                        <div className="h-24 w-24 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center">
-                          <span className="text-4xl font-bold text-slate-400 dark:text-slate-500">
-                            {scholar.name.charAt(0).toUpperCase()}
-                          </span>
-                        </div>
+                      <div className="absolute inset-0 flex items-center justify-center media-placeholder">
+                        <span className="text-4xl font-bold text-slate-400 dark:text-slate-500">
+                          {scholar.name.charAt(0).toUpperCase()}
+                        </span>
                       </div>
                     )}
                   </div>
 
                   {/* Text Content Block */}
                   <div className="flex flex-1 flex-col p-6 sm:p-8">
-                    <h3 className="mb-4 text-2xl font-bold text-slate-900 dark:text-white">
+                    <h3 className="mb-4 heading-section text-xl sm:text-2xl">
                       {scholar.name}
                     </h3>
 
-                    {/* Beautiful Pill Badges for Qualifications */}
                     {scholar.qualifications && scholar.qualifications.length > 0 && (
                       <div className="mb-6 flex flex-wrap gap-2">
                         {scholar.qualifications.map((qual: string, idx: number) => (
-                          <span
-                            key={idx}
-                            className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-brand-50 text-brand-700 dark:bg-brand-500/10 dark:text-brand-400 border border-brand-200/50 dark:border-brand-500/20"
-                          >
+                          <span key={idx} className="badge-pill">
                             {qual}
                           </span>
                         ))}
@@ -92,13 +90,13 @@ export default async function ScholarsPage() {
                       {scholar.contactDetails ? (
                         <Link 
                           href={scholar.contactDetails.includes("@") ? `mailto:${scholar.contactDetails}` : scholar.contactDetails}
-                          className="flex items-center justify-center gap-3 w-full py-3 px-4 rounded-xl text-sm font-semibold text-white bg-brand-600 transition-all hover:bg-brand-700 shadow-md shadow-brand-900/10 hover:shadow-lg hover:-translate-y-0.5 group/btn"
+                          className="btn-primary w-full justify-center"
                         >
-                          <Mail className="h-4 w-4 transition-transform group-hover/btn:-translate-y-0.5 group-hover/btn:rotate-6" />
+                          <Mail className="h-4 w-4" aria-hidden="true" />
                           Get in Touch
                         </Link>
                       ) : (
-                        <div className="h-[44px]"></div>
+                        <div className="h-11" aria-hidden="true" />
                       )}
                     </div>
                   </div>

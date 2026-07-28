@@ -1,6 +1,7 @@
 import Link from "next/link";
 import ProseSection from "@/components/portable-text/ProseSection";
 import DynamicPaymentMethods from "@/components/sections/DynamicPaymentMethods";
+import PageHeader from "@/components/layout/PageHeader";
 import { ArrowRight } from "lucide-react";
 import { defineCmsPageMetadata } from "@/lib/cms/page";
 import {
@@ -33,26 +34,25 @@ export default async function DonatePage() {
 
   return (
     <div>
-      <div className="border-b border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-950">
-        <div className="container-narrow section-header-py text-center">
-          <p className="font-arabic mb-3 text-xl-plus leading-none text-brand-700 sm:text-2xl" lang="ar" dir="rtl">
-            {settings?.donateArabicVerse ||
-              "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ"}
+      <PageHeader
+        centered
+        maxWidth="lg"
+        above={
+          <p
+            className="font-arabic mb-3 text-xl-plus leading-none text-brand-700 sm:text-2xl"
+            lang="ar"
+            dir="rtl"
+          >
+            {settings?.donateArabicVerse || "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ"}
           </p>
-          <p className="text-eyebrow mb-3 flex items-center justify-center gap-2">
-            <span className="eyebrow-line" aria-hidden="true" />
-            {page?.eyebrow || "Give Back"}
-            <span className="eyebrow-line" aria-hidden="true" />
-          </p>
-          <h1 className="heading-page mb-3">
-            {page?.title || "Donate"}
-          </h1>
-          <p className="text-lead mx-auto">
-            {page?.subtitle ||
-              "Your generosity keeps the light of Ahlul Bayt (A.S.) alive. Every donation — big or small — makes a difference."}
-          </p>
-        </div>
-      </div>
+        }
+        eyebrow={page?.eyebrow || "Give Back"}
+        title={page?.title || "Donate"}
+        subtitle={
+          page?.subtitle ||
+          "Your generosity keeps the light of Ahlul Bayt (A.S.) alive. Every donation — big or small — makes a difference."
+        }
+      />
 
       <div className="section-y bg-white dark:bg-slate-950">
         <div className="container-content">

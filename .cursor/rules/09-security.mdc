@@ -20,7 +20,7 @@ alwaysApply: false
 ## 2. Environment Variables
 
 * Validate required environment variables during application startup.
-* Use a central environment configuration module (e.g. `lib/env/` or direct verification on load).
+* Use a central environment configuration module (`lib/env.ts`).
 * Use Zod to validate environment variables.
 * Fail clearly when a required production variable is missing.
 * Never access `process.env` throughout unrelated components and utilities.
@@ -80,13 +80,12 @@ Every public write endpoint must include:
 * Request size limits.
 * Safe error responses.
 * Origin or request-context checks where applicable.
-* Protection against automated abuse (e.g., honeypot fields).
-* Cloudflare Turnstile verification. When `TURNSTILE_SECRET_KEY` is defined in environmental configuration, verification tokens (`token`) must be validated against `https://challenges.cloudflare.com/turnstile/v0/siteverify` on the server before processing submissions.
+* Protection against automated abuse (e.g., honeypot fields where forms are public).
+* Cloudflare Turnstile **when keys are configured** — verify `token` via `https://challenges.cloudflare.com/turnstile/v0/siteverify` on endpoints that collect it (contact). Routes without Turnstile widgets (e.g. `/api/review`) still require Zod + rate limiting.
 
-* Use Upstash Redis rate limiting for contact forms and other abuse-sensitive routes (`lib/rate-limit.ts`).
-* **Bot Whitelisting:** When implementing Upstash Redis rate limiting for your application routes, explicitly bypass or whitelist known search engine user agents (Googlebot, Bingbot) to prevent accidental crawl blocks.
-* Do not rely on in-memory rate limiting because PM2 runs multiple processes.
-* Production endpoints must not silently disable rate limiting when Redis is unavailable. Record the failure in Sentry and return a controlled response according to the endpoint’s risk level.
+* Prefer **Upstash Redis** for abuse-sensitive routes (`lib/rate-limit.ts`). Set `UPSTASH_REDIS_*` in production when possible (**strongly recommended**; optional per `techstack.md`).
+* In-memory fallback is for local/dev when Redis is unset, and as a careful fallback when Redis errors (log to Sentry).
+* **Bot Whitelisting:** When rate-limiting crawl-facing routes, bypass or whitelist known search engine user agents (Googlebot, Bingbot) where appropriate.
 * Do not reveal whether a particular email address, account, or private resource exists.
 
 ## 6. Sanity Security

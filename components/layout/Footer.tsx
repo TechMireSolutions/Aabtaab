@@ -77,31 +77,27 @@ export default function Footer({
       {/* Decorative top gradient border */}
       <div className="absolute top-0 inset-x-0 h-px bg-linear-to-r from-transparent via-brand-500/50 to-transparent" />
       
-      {/* Newsletter Section */}
+      {/* Stay connected — honest CTA (no fake subscribe form) */}
       <div className="border-b border-slate-900">
         <div className="container-page py-10 sm:py-12">
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 bg-slate-900/50 p-6 sm:p-10 rounded-2xl border border-slate-800/50 relative overflow-hidden">
             <div className="absolute top-0 right-0 -mr-20 -mt-20 size-64 bg-brand-500/10 rounded-full blur-3xl pointer-events-none" />
             <div className="relative z-10 max-w-xl">
-              <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">Subscribe to our Newsletter</h3>
+              <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">
+                Stay connected
+              </h3>
               <p className="text-sm sm:text-base text-slate-400 leading-relaxed">
-                Stay connected with Aabtaab. Receive updates on new courses, spiritual events, and insightful articles directly in your inbox.
+                Get updates on new courses, events, and articles — reach out and we&apos;ll keep you in the loop.
               </p>
             </div>
-            <form action="#" className="relative z-10 flex w-full lg:max-w-md gap-2">
-              <input 
-                type="email" 
-                placeholder="Enter your email address" 
-                className="w-full bg-slate-950 border border-slate-800 rounded-lg px-4 py-3 sm:py-3.5 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-brand-500 focus:ring-1 focus:ring-brand-500 transition-all"
-                required
-              />
-              <button 
-                type="button" 
-                className="bg-brand-600 hover:bg-brand-500 text-white px-5 sm:px-6 py-3 sm:py-3.5 rounded-lg text-sm font-semibold transition-colors flex items-center justify-center shrink-0 gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-500"
+            <div className="relative z-10 flex w-full lg:max-w-md gap-2">
+              <Link
+                href="/contact"
+                className="btn-primary w-full justify-center lg:w-auto"
               >
-                Subscribe
-              </button>
-            </form>
+                Contact us
+              </Link>
+            </div>
           </div>
         </div>
       </div>

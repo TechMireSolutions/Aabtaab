@@ -10,6 +10,7 @@ import HowItWorksSection from "@/components/content/HowItWorksSection";
 import CtaBandSection from "@/components/content/CtaBandSection";
 import FaqAccordionSection from "@/components/content/FaqAccordionSection";
 import PortableTextPageSection from "@/components/content/PortableTextPageSection";
+import SiteContactFooter from "@/components/content/SiteContactFooter";
 import { buildNestedCatalogPageContext } from "@/lib/catalog/nested-page";
 import type { ServiceChild } from "@/types/service";
 import type { SlugParent } from "@/types/sanity";
@@ -163,6 +164,7 @@ export default async function ServiceCatchAllPage({
             primaryHref="/contact"
             secondaryLabel={service.ctaSecondaryLabel || "WhatsApp Us"}
             secondaryHref={whatsappHref}
+            footer={<SiteContactFooter site={site} />}
           />
 
           <PortableTextPageSection body={service.body} />

@@ -42,12 +42,16 @@ const course = await getCourseBySlug(slug);
 
 ## Components
 
-`NestedBreadcrumbs`, `NestedChildrenGrid`, domain hero sections, shared content sections.
+`NestedBreadcrumbs`, `NestedChildrenGrid`, `CatalogDarkHero` via `CourseHeroSection` / `ServiceHeroSection`, shared content sections, `CtaBandSection` + `SiteContactFooter`.
+
+## Tests
+
+- Unit: `lib/paths.test.ts`, `lib/catalog/nested-children.test.ts`, `lib/urls.test.ts`
+- E2E smoke: `/online-courses`, `/services` load in `e2e/smoke.spec.ts`
 
 ## Sitemap
 
-`app/sitemap.ts` uses `allCoursePathsQuery` / `allServicePathsQuery` + `buildNestedContentPath`.
-
+`app/sitemap.ts` → `getSitemapSlugs()` (`lib/cms/queries.ts`), which uses nested path queries (`allCoursePathsQuery` / `allServicePathsQuery`) internally. Do not call those GROQ helpers from the page file.
 ## Adding a third nested catalog
 
 Copy services pattern: schema with parent ref, deep slug query, `[...slug]` page, CACHE_TAGS, webhook case, sitemap entries.

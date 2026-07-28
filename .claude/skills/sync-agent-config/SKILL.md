@@ -23,7 +23,7 @@ npm run sync:agents
 
 Update **`AGENTS.md`** and **`CLAUDE.md`** when adding/removing rules or skills.
 
-Stack reference lives in **`techstack.md`** — not duplicated in rules.
+Stack reference lives in **`techstack.md`**. Rules may include a short version summary aligned with techstack — when versions change, update **techstack first**, then `00` / `05`.
 
 ## Mirror targets
 
@@ -63,6 +63,13 @@ When rules and skills disagree, follow this order:
 
 Key resolved policies:
 - **Caching:** only `sanity/lib/fetch.ts` uses `unstable_cache`; pages use `sanityFetch` + `lib/cms/queries.ts`
-- **Styling:** `02-tailwind-design-system` — `brand-*` tokens, `@utility` in `globals.css`
+- **Styling:** `02-tailwind-design-system` — `brand-*` / `gold-*` tokens, `@utility` in `globals.css`
 - **CMS fields:** use migrated names (`faqItems`, `seo`, `ctaPrimaryLabel`) — see `03-sanity-cms`
 - **Routes:** `/posts` not `/articles`; search at `/search`
+- **DRY:** extract UI/CSS/fallbacks at **2+**; use SSOT table in `08-dry-policy`
+- **Shells:** `CatalogDarkHero`, `ArticleDetailShell`, `LegalPageShell`, `SiteContactFooter`
+- **Rate limit:** Upstash Redis optional but **strongly recommended** in production; memory fallback for local / Redis errors — see `09-security` / `techstack.md`
+- **PM2:** `pm2 delete` then `pm2 start` (never `startOrRestart` / `reload` for this app)
+- **Tests:** Vitest colocated + Playwright `e2e/` (desktop + mobile) — see `12-testing`
+
+Stack **versions** live in **`techstack.md`**. Rules `00` / `05` may keep a short aligned summary — update techstack first when versions change.

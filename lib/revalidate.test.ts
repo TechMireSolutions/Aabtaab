@@ -35,4 +35,15 @@ describe("revalidateSlugCollection", () => {
     expect(revalidateTag).toHaveBeenCalledTimes(1);
     expect(revalidated).toEqual([CACHE_TAGS.events]);
   });
+
+  it("passes expire:0 options to revalidateTag", () => {
+    revalidateSlugCollection([], CACHE_TAGS.posts, CACHE_TAGS.post, "slug");
+
+    expect(revalidateTag).toHaveBeenCalledWith(CACHE_TAGS.posts, {
+      expire: 0,
+    });
+    expect(revalidateTag).toHaveBeenCalledWith(CACHE_TAGS.post("slug"), {
+      expire: 0,
+    });
+  });
 });

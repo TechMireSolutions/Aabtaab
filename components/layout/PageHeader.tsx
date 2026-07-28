@@ -1,7 +1,11 @@
+import type { ReactNode } from "react";
+
 interface PageHeaderProps {
   eyebrow: string;
   title: string;
   subtitle?: string;
+  /** Optional content above the eyebrow (e.g. Arabic verse on donate) */
+  above?: ReactNode;
   centered?: boolean;
   maxWidth?: "md" | "lg" | "xl";
 }
@@ -16,6 +20,7 @@ export default function PageHeader({
   eyebrow,
   title,
   subtitle,
+  above,
   centered = false,
   maxWidth = "xl",
 }: PageHeaderProps) {
@@ -26,6 +31,7 @@ export default function PageHeader({
           centered ? "text-center" : ""
         }`}
       >
+        {above}
         <p
           className={`text-eyebrow mb-3 flex items-center gap-2 ${
             centered ? "justify-center" : ""

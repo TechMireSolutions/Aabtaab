@@ -28,7 +28,7 @@ Full stack and env reference: **`techstack.md`**
 | Secret | Required | Purpose |
 |--------|----------|---------|
 | `SERVER_HOST` | Yes | VPS IP or hostname (no `https://`) |
-| `SERVER_USER` | Yes | SSH user (e.g. `root`) |
+| `SERVER_USER` | Yes | SSH user (prefer restricted deploy user; avoid day-to-day `root`) |
 | `SSH_PRIVATE_KEY_B64` | Yes* | Base64 deploy key (recommended) |
 | `SSH_KNOWN_HOSTS` | No | Pin host key; else `ssh-keyscan` at deploy time |
 
@@ -70,7 +70,7 @@ npm run test
 | Step | Action |
 |------|--------|
 | DNS | A/AAAA → Hetzner IP, **proxied** (orange cloud) |
-| SSL | Cloudflare **Full (strict)**; origin on port 3000 or nginx → 3000 |
+| SSL | Cloudflare **Full (strict)**; origin behind Apache → `127.0.0.1:3000` |
 | IPs | App reads `cf-connecting-ip` for contact rate limits (`lib/request-ip.ts`) |
 | Cache | Static assets cached via Next.js headers; HTML ISR via Sanity webhooks |
 

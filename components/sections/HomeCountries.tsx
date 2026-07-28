@@ -80,7 +80,7 @@ export default async function HomeCountries() {
         <div className="inline-flex items-center justify-center h-16 w-16 rounded-3xl bg-brand-100 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 mb-6 shadow-sm">
           <Globe2 className="h-8 w-8" />
         </div>
-        <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mb-6 tracking-tight">
+        <h2 className="heading-section-lg mb-6">
           Serving Students Worldwide
         </h2>
         <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">

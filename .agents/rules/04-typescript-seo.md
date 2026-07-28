@@ -8,40 +8,44 @@ description: TypeScript strictness, SEO, accessibility, and semantic HTML
 
 ## TypeScript
 
-- `strict` mode — avoid `any`; prefer `interface` for object shapes.
-- Types live in `types/` by domain (`sanity.ts`, `course.ts`, `content-sections.ts`, `search.ts`).
-- Colocate only when truly local; reuse shared types before duplicating.
+* Strict mode must remain enabled. Do not use `any`; use `unknown` and narrow safely.
+* Do not suppress errors with `@ts-ignore`. Use `@ts-expect-error` only when intentional, with a comment.
+* Prefer `interface` for object shapes. Shared types live in `types/` by domain.
+* Define explicit types for public props, API payloads, Sanity results, and env config.
+* Avoid unsafe assertions on unvalidated external data. Prefer discriminated unions + exhaustive checks.
 
 ## SEO & metadata
 
-- **Metadata API Usage:** Utilize the built-in Next.js Metadata API (`generateMetadata` for dynamic pages, `metadata` object for static pages) to generate `<title>`, `<meta name="description">`, and Open Graph tags.
-- **Strict Canonicalization:** Every page must output a self-referencing canonical URL in the metadata object (`alternates: { canonical: '...' }`) to prevent duplicate content issues.
-- Site metadata: `app/layout.tsx` `generateMetadata`.
-- Pages: `defineCmsPageMetadata`, `buildPageMetadata`, `buildNestedSlugMetadata`, `buildPostPageMetadata`.
-- OG images: `resolveDocOgImage()` in `lib/seo/resolve-og-image.ts` — seo override → featured/hero/icon image.
-- Default OG: `getDefaultOgImageUrl()` → `/og-default.png` (applied in `buildPageMetadata` when no CMS image).
-- JSON-LD: `lib/seo/JsonLd.tsx` — use existing helpers (do not hand-roll schema).
-- **Dynamic Sitemaps:** Implement `app/sitemap.ts` to automatically generate `sitemap.xml`. Query Sanity directly within this file to yield all published slugs, last modified dates, and update frequencies.
-- **Robots.txt Generation:** Implement `app/robots.ts` to block internal routes (e.g., `/api/`, `/studio/`) and point directly to the production sitemap.
-- Full SEO reference: **`techstack.md`** § SEO.
+- Use Next.js Metadata API (`generateMetadata` / `metadata`) for title, description, OG, and robots.
+- Every indexable page needs a self-referencing **canonical** (`alternates.canonical` via `buildPageMetadata` helpers).
+- **Trailing slash:** `trailingSlash: false` in `next.config.ts` — never add trailing slashes to new paths.
+- Site defaults: `app/layout.tsx` `generateMetadata`.
+- Page helpers: `defineCmsPageMetadata`, `buildPageMetadata`, `buildNestedSlugMetadata`, `buildPostPageMetadata`, `buildEventPageMetadata`.
+- OG images: `resolveDocOgImage()` — seo override → featured/hero/icon; default `getDefaultOgImageUrl()` → `/og-default.png`.
+- JSON-LD: use helpers in `lib/seo/JsonLd.tsx` (import via `@/lib/seo`) — do not hand-roll schema.
+- **Sitemap:** `app/sitemap.ts` must call **`getSitemapSlugs()`** from `lib/cms/queries.ts` — do not re-query Sanity inside the sitemap file.
+- **Robots:** `app/robots.ts` disallows `/studio/`, `/api/`, `/search` and points at the sitemap.
+- Full reference: **`techstack.md`** § SEO & indexing.
 
 ## JSON-LD helpers (use these)
 
 | Helper | Use |
 |--------|-----|
 | Organization + WebSite | Root layout (every page) |
-| `ArticleJsonLd` | Post detail (+ optional FAQPage); pass `publisherLogoUrl` (site logo, not article image) |
-| `CourseJsonLd` | Leaf course detail pages (not parent catalog nodes) |
+| `ArticleJsonLd` | Post detail (+ optional FAQPage); `publisherLogoUrl` = site logo |
+| `CourseJsonLd` | Leaf course detail (`!hasChildren`) |
+| `ServiceJsonLd` | Leaf service detail |
 | `EventJsonLd` | Event detail |
+| `FaqPageJsonLd` / `buildFaqPageSchema` | FAQ blocks on detail pages |
 | `BreadcrumbJsonLd` | Nested course/service pages |
-| WebSite `SearchAction` | Points to `/search?q={search_term_string}` |
+| WebSite `SearchAction` | `/search?q={search_term_string}` |
 
 ## Search & index control
 
 - Unified search: `/search?q=…` — `noIndex: true` on result pages.
-- `/search` is **not** in sitemap (result pages are noindex).
+- `/search` is **not** in sitemap.
 - Legacy `/posts?q=…` redirects to `/search`.
-- CMS `seo.noIndex` on documents — excluded from sitemap GROQ queries.
+- CMS `seo.noIndex` documents are excluded from sitemap GROQ.
 
 ## Sitemap
 
@@ -49,64 +53,26 @@ description: TypeScript strictness, SEO, accessibility, and semantic HTML
 - Dynamic routes include `lastModified` from CMS `_updatedAt` / `publishedAt`.
 - Slug queries filter `coalesce(seo.noIndex, false) != true`.
 
-## Performance (SEO-adjacent)
-
-- LCP hero: `priority` + correct `sizes` on above-the-fold `next/image`.
-- Fonts: subset weights in `app/layout.tsx` (`display: "swap"`, `preload: true`).
-- Images: Sanity CDN via `next/image` (WebP/AVIF in `next.config.ts`).
-- `poweredByHeader: false` in `next.config.ts`.
-
 ## HTML & a11y
 
 - One **`h1` per page**; logical heading hierarchy.
 - Semantic tags: `main`, `nav`, `section`, `article`, `header`, `footer`.
-- Skip link + `#main-content` (already in site layout).
-- Interactive elements: labels, `aria-*` where needed; 44px touch targets on mobile chrome (see `globals.css`).
+- Skip link + `#main-content` (site layout).
+- Target WCAG 2.2 Level AA. Keyboard-operable UI with visible focus.
+- Associate labels with every form field; placeholder is not a label.
+- Custom radiogroups: arrow-key navigation; only selected option `tabIndex={0}`.
+- Respect `prefers-reduced-motion`. Trap focus in modals; Escape to close.
+- Arabic/Urdu wrappers: set `lang` + `dir="rtl"` on the nearest text wrapper.
 
 ## Images & content
 
-- Meaningful `alt` on all content images.
-- No blank image placeholders in production UI — use CMS image or styled fallback block.
+- Meaningful `alt` on content images; empty `alt=""` only when decorative.
 - OG fallback: `public/og-default.png` when no CMS image.
-
-## TypeScript Strictness
-
-* Strict mode must remain enabled. Do not use `any`.
-* Use `unknown` for untrusted/external values and narrow types safely.
-* Do not suppress errors with `@ts-ignore`. Use `@ts-expect-error` only when the error is intentional, and provide an explanatory comment.
-* Define explicit types for public component props, API responses, form payloads, Sanity query results, and environment configuration.
-* Avoid unsafe type assertions (`as Type`). Never cast unvalidated external data directly to an application type.
-* Prefer discriminated unions over multiple loosely related Boolean flags. Use exhaustive checks for important unions.
-
-## SEO Metadata & URL Rules
-
-* Every indexable page must have: unique page title, unique description, canonical URL, Open Graph metadata, social image, and indexing directives.
-* For CMS-driven pages, use `generateMetadata` to derive metadata dynamically.
-* **Strict Canonicalization:** Output a self-referencing canonical URL in the metadata object (`alternates: { canonical: '...' }`) on all routes.
-* **Trailing Slash Consistency:** Enforce a strict URL structure (either always trailing slash, or never) via Next.js config and Cloudflare page rules. Redirect the alternate version via a 301 redirect.
-* Use short, lowercase, and stable slugs. Redirect old URLs if slugs change.
-* Exclude drafts, preview routes, studio routes, and private/search results from the sitemap.
-* Validate all generated JSON-LD structured data and escape output safely.
-
-## Accessibility (a11y)
-
-* Target WCAG 2.2 Level AA compliance for public interfaces.
-* Keyboard accessibility: all interactive features must be keyboard-operable, and visible focus indicators are mandatory. Do not remove outlines without providing an accessible replacement.
-* Use native HTML controls over custom ones when possible.
-* Associate a visual label with every form field; placeholder text is not a label.
-* Every interactive input element, selector, or textarea must have an associated programmatic label or `aria-label` attribute to pass Lighthouse accessibility audits.
-* For custom `radiogroup` button structures, implement standard keyboard arrow-key navigation and manage `tabIndex` (only the active/selected option should have `tabIndex={0}`, with others at `tabIndex={-1}`) to prevent keyboard tab-trapping.
-* Contrast: maintain sufficient contrast ratio. Do not communicate meaning via color alone.
-* Respect `prefers-reduced-motion`.
-* Trap focus inside modal overlays, restore focus when closed, allow closing with Escape, and expose correct modal roles.
-* Urdu and Arabic content must support Right-to-Left (RTL) rendering without breaking English layout styling. Ensure foreign language scripts (e.g., Arabic, Urdu) specify `lang` and `dir` attributes (e.g., `lang="ar" dir="rtl"`) on the closest text wrapper to enable screen readers to pronounce them using correct voice synthesis.
-* PWA manifest icons must be square (e.g. 512x512). Avoid stretching rectangular social images; use Sanity image URL builders to dynamically crop a square format from the brand logo or favicon.
 
 ## Avoid
 
 - Client-only metadata hacks.
 - Duplicate SEO title/description logic outside `lib/cms/page.ts` / `lib/seo/`.
-- Hardcoded site name when `getSiteSettings()` is available.
+- Hardcoded site name when `getSiteSettings()` / `resolveSiteName()` is available.
 - Using article image as Organization `publisher.logo` in JSON-LD.
 - Silently bypassing keyboard accessibility or removing focus rings.
-

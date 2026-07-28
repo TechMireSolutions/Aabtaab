@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { CalendarDays, User } from "lucide-react";
-import DetailBackButton from "@/components/layout/DetailBackButton";
+import ArticleDetailShell from "@/components/layout/ArticleDetailShell";
 import FaqAccordionSection from "@/components/content/FaqAccordionSection";
 import ProseSection from "@/components/portable-text/ProseSection";
 import { buildPostPageMetadata, resolvePostImageUrls } from "@/lib/cms/post";
@@ -41,7 +41,7 @@ export default async function PostDetailPage({
     : getDefaultOgImageUrl();
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-950">
+    <>
       <ArticleJsonLd
         title={post.title}
         description={post.seo?.metaDescription || post.excerpt}
@@ -63,9 +63,7 @@ export default async function PostDetailPage({
         ]}
       />
 
-      <DetailBackButton href="/posts" label="Back to Articles" />
-
-      <article className="container-content section-y">
+      <ArticleDetailShell backHref="/posts" backLabel="Back to Articles">
         {post.categories && post.categories.length > 0 && (
           <div className="mb-4 flex flex-wrap gap-2 sm:mb-5">
             {post.categories.map((cat) => (
@@ -115,7 +113,7 @@ export default async function PostDetailPage({
         {post.body && <ProseSection value={post.body} variant="article" />}
 
         <FaqAccordionSection items={post.faqItems} />
-      </article>
-    </div>
+      </ArticleDetailShell>
+    </>
   );
 }

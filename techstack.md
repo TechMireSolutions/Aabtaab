@@ -35,7 +35,7 @@
 | Layer | Technology |
 |-------|------------|
 | Email | Resend (primary) + Nodemailer SMTP fallback |
-| Rate limiting | Upstash Redis (optional; in-memory fallback) |
+| Rate limiting | Upstash Redis (optional; **strongly recommended in production**) + in-memory fallback when unset |
 | Spam | Cloudflare Turnstile (optional) |
 | Monitoring | Sentry (`@sentry/nextjs`, optional) |
 | CDN / edge | Cloudflare proxy · Full (strict) SSL |
@@ -62,13 +62,34 @@ Additional project scripts (kept): `typecheck`, `test:watch`, `test:e2e`, `migra
 
 ### CI Preflight Check
 
+**Local quick check:**
+
 ```bash
-npm run lint && npm run test && npm run build && npm audit --audit-level=high
+npm run lint && npm run typecheck && npm run test && npm run build && npm audit --audit-level=high
 ```
+
+**Full CI** (`.github/workflows/ci.yml`) also runs Playwright: install Chromium then `npm run test:e2e`.
 
 ---
 
-## Deployment & Infrastructure (aabtaab.com)
+## SEO & indexing
+
+- Metadata builders: `lib/seo/metadata.ts`, `lib/cms/page.ts`, `lib/cms/post.ts`, `lib/cms/event.ts`
+- JSON-LD helpers: `lib/seo/JsonLd.tsx` (import via `lib/seo`)
+- Sitemap: `app/sitemap.ts` → `getSitemapSlugs()` in `lib/cms/queries.ts` (do not re-query Sanity in the page)
+- Robots: `app/robots.ts` — disallow `/studio/`, `/api/`, `/search`
+- Trailing slash: **`trailingSlash: false`** in `next.config.ts`
+- Search: `/search?q=…` (noindex); legacy `/posts?q=…` redirects here
+
+## File structure
+
+Domain-first layout: `app/(site)/`, `components/{content,layout,sections}/`, `lib/{cms,catalog,contact,seo,fallbacks}/`, `sanity/`, `types/`, `e2e/`, `deploy/`, `scripts/`. Full placement rules: `.cursor/rules/06-file-structure.mdc`.
+
+## CMS
+
+Sanity 6 embedded Studio at `/studio`. Schemas in `sanity/schemaTypes/`; GROQ in `sanity/lib/queries/`; app reads via `lib/cms/queries.ts` + `sanityFetch`. Migrated field names: `faqItems`, `seo` object, `ctaPrimaryLabel` / `ctaSecondaryLabel`. Details: `.cursor/rules/03-sanity-cms.mdc`.
+
+## Production & infrastructure
 
 ```
 Internet ──► Apache (HTTPS/HTTP2)
@@ -134,7 +155,7 @@ Runtime entry: `deploy/runtime.cjs` → `next start` on port **3000** (from `ser
 
 ```
 app/(site)/          Public English LTR pages
-app/api/             contact, review, revalidate, draft, search
+app/api/             contact, review, revalidate, draft, draft/disable, search
 app/studio/          Embedded Sanity Studio
 app/globals.css      Tailwind v4 design system
 lib/                 CMS facades, contact, SEO, rate-limit

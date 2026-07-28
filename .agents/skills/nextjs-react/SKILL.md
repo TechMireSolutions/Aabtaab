@@ -40,12 +40,26 @@ import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/fetch";
 | Static CMS slug | `defineCmsPageMetadata("about", { path, fallbackTitle, fallbackDescription })` |
 | Nested course/service | `buildNestedSlugMetadata` |
 | Blog post | `buildPostPageMetadata` |
-| Event / search | `buildPageMetadata` |
+| Event | `buildEventPageMetadata` |
+| Search / generic | `buildPageMetadata` |
 
 ## Images
 
 - Always `next/image` for Sanity URLs via `sanity/lib/image.ts` helpers.
 - Set accurate `sizes` for cards, hero, article layouts.
+
+## Page composition
+
+Compose shared shells — do not reimplement chrome:
+
+| Need | Use |
+|------|-----|
+| Catalog listing header | `PageHeader` / `CatalogPageLayout` |
+| Course/service hero | `CourseHeroSection` / `ServiceHeroSection` |
+| Post/event detail | `ArticleDetailShell` |
+| Privacy/terms | `LegalPageShell` |
+
+See skill `content-sections` and rule `08-dry-policy`.
 
 ## Avoid
 

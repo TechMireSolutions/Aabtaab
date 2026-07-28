@@ -34,7 +34,7 @@ CI env placeholders: `NEXT_PUBLIC_SANITY_PROJECT_ID=ci-placeholder`, `NEXT_PUBLI
 
 1. Verify secrets + validate SSH key (`ssh-keygen -y`)
 2. Write key to `~/.ssh/deploy_key`, verify with native `ssh`, then run `scripts/deploy-remote.sh` on the VPS
-3. On server: `git pull`, `npm ci`, `npm run build`, `pm2 startOrRestart`
+3. On server: `git pull`, `npm ci`, `npm run build`, then **`pm2 delete aabtaab-next`** (ignore missing) and **`pm2 start ecosystem.config.cjs --update-env`** — do not use `startOrRestart` (stale args risk).
 
 ## Required GitHub secrets (deploy only)
 
@@ -74,7 +74,9 @@ See skill `deploy-production` for full manual flow.
 
 ```bash
 npm run lint
+npm run typecheck
 npm run test
+npm run test:e2e   # needs .next build + Playwright Chromium
 NEXT_PUBLIC_SANITY_PROJECT_ID=... NEXT_PUBLIC_SANITY_DATASET=production npm run build
 ```
 

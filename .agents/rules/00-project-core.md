@@ -17,15 +17,15 @@ description: Aabtaab stack, paths, agent config, and universal coding principles
 * **Linting:** **ESLint 10.8** + `@next/eslint-plugin-next` (custom flat config)
 * **Validation:** **Zod**
 * **Email:** **Resend** with **Nodemailer** fallback
-* **Rate limiting:** **Upstash Redis** (distributed)
-* **Spam Protection:** **Cloudflare Turnstile** (validated on backend)
-* **Monitoring:** **Sentry**
+* **Rate limiting:** **Upstash Redis** (optional; **strongly recommended in production**) + in-memory fallback when unset
+* **Spam Protection:** **Cloudflare Turnstile** (optional; validate on backend when keys set)
+* **Monitoring:** **Sentry** (optional)
 * **Testing:** **Vitest** (unit) and **Playwright** (E2E)
-* **Hosting:** **Hetzner VPS** (PM2 fork `aabtaab-next`, port **3000**)
+* **Hosting:** **Hetzner VPS** (PM2 fork `aabtaab-next`, port **3000**; PM2 entry `deploy/runtime.cjs` → `next start`)
 * **Proxy / CDN:** **Cloudflare** + Apache → `127.0.0.1:3000`
-* **CI/CD:** **GitHub Actions**
+* **CI/CD:** **GitHub Actions** (lint, typecheck, unit, build, audit, Playwright E2E)
 
-Full reference: [techstack.md](file:///Users/syedaalin/Documents/aabtaab/techstack.md) (dependencies, SEO, production, env vars).
+Full reference: [techstack.md](file:///Users/syedaalin/Documents/aabtaab/techstack.md) (dependencies, SEO, production, env vars). Keep version numbers aligned with techstack — do not invent newer pins here.
 
 ## Paths
 
@@ -34,9 +34,14 @@ Full reference: [techstack.md](file:///Users/syedaalin/Documents/aabtaab/techsta
 | Site pages | `app/(site)/` |
 | CMS schemas | `sanity/schemaTypes/` |
 | CMS queries | `sanity/lib/queries/`, `lib/cms/queries.ts` |
-| API routes | `app/api/` (contact, revalidate, draft) |
+| API routes | `app/api/` (contact, review, revalidate, draft, draft/disable, search) |
 | Shared UI | `components/content/`, `components/layout/` |
 | Design system | `app/globals.css` |
+| Fallbacks | `lib/fallbacks/` |
+| Unit tests | colocated `*.test.ts` (today under `lib/`) |
+| E2E tests | `e2e/*.spec.ts` |
+| npm Next launcher | `scripts/run-next.mjs` (dev/start/CI) |
+| PM2 entry | `deploy/runtime.cjs` → `next start` |
 | Production port | `server.config.cjs` → 3000 |
 
 ## Agent config (single source of truth)
@@ -54,7 +59,7 @@ Edit **only** `.cursor/rules/` and `.cursor/skills/`, then run `npm run sync:age
 1. **Minimize scope** — smallest correct diff; no drive-by refactors.
 2. **Match existing patterns** — read surrounding code before adding abstractions.
 3. **Use `@/` imports** — no deep relative paths when alias works.
-4. **Verify** — run `npm run lint`, `npm run test`, and `npm run build` after substantive changes.
+4. **Verify** — run `npm run lint`, `npm run test`, `npm run test:e2e` (when UI/routes change), and `npm run build` after substantive changes.
 5. **No git commits/push** unless the user explicitly asks.
 6. **Pull Request Rules:** Every PR must have one clear purpose, explain impact, include tests, pass CI, avoid unrelated formatting, and explicitly mention env/Sanity schema updates.
 7. **AI Coding Assistant Rules:** Read files before proposing changes, preserve stack, do not invent variables/schemas without implementation, produce type-safe code, never write placeholders like "implement later", and make the smallest safe change.
@@ -69,7 +74,7 @@ A feature is complete only when it works on desktop and mobile, TypeScript/lint 
 * **Never** expose server tokens (`SANITY_API_TOKEN`) to Client Components.
 * **Never** trust client-side validation alone.
 * **Never** render raw CMS HTML or use unparameterized queries with user input.
-* **Never** store rate limits in local process memory (use Redis).
+* Prefer **Upstash Redis** for rate limits in production (`UPSTASH_REDIS_*`). In-memory fallback in `lib/rate-limit.ts` is for local/dev (and Redis outage fallback) — do not rely on process memory as the sole production limiter under PM2.
 * **Never** log secrets, passwords, or complete sensitive form payloads.
 * **Never** return internal stack traces / error details to users.
 * **Never** make entire pages Client Components unnecessarily.

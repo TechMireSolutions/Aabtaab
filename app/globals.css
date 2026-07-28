@@ -65,6 +65,7 @@
   --size-hero-glow: 37.5rem;
   --size-fab: 3.25rem;
   --size-fab-icon: 1.625rem;
+  --size-logo: 2.625rem;
   --size-touch-min: 2.75rem;
   --opacity-hero-image: 0.18;
 
@@ -679,6 +680,15 @@
 
 @utility badge-trust {
   @apply flex size-9 shrink-0 items-center justify-center rounded-xl border border-brand-100 dark:border-brand-900/50 bg-brand-50 dark:bg-brand-900/30 text-base font-bold text-brand-700 dark:text-brand-400;
+}
+
+@utility badge-notice {
+  @apply inline-flex items-center gap-2 rounded-full border border-gold-500/30 bg-gold-500/10 px-4 py-2 text-sm-plus font-medium text-gold-600 dark:text-gold-400;
+}
+
+@utility size-logo {
+  width: var(--size-logo);
+  height: var(--size-logo);
 }
 
 @utility chip-outline {

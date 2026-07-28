@@ -16,14 +16,14 @@ app/
   (site)/              # Public site — route group, shared layout
     {route}/page.tsx
     {route}/_components/   # Private to that route (underscore prefix)
-  api/{name}/route.ts  # contact, revalidate, draft, draft/disable, search
+  api/{name}/route.ts  # contact, review, revalidate, draft, draft/disable, search
   studio/              # Embedded Sanity Studio
   globals.css          # Tailwind v4 design system (single CSS source)
   layout.tsx, sitemap.ts, robots.ts, global-error.tsx
 
 components/
   content/             # Reusable CMS-driven sections (2+ pages)
-  layout/              # Site chrome (Header, Footer, PageHeader, PreviewBanner)
+  layout/              # Site chrome + shells (Header, PageHeader, ArticleDetailShell, LegalPageShell)
   sections/            # Homepage-only blocks
   cards/, portable-text/, icons/, ui/, studio/
 
@@ -32,8 +32,8 @@ lib/
   catalog/             # Nested catalog helpers
   contact/             # Zod schema, email HTML, notify
   seo/                 # Metadata + JSON-LD
-  fallbacks/           # Defaults when CMS empty
-  constants.ts, paths.ts, urls.ts, revalidate.ts
+  fallbacks/           # Defaults when CMS empty (nav, about, …)
+  constants.ts, paths.ts, urls.ts, revalidate.ts, env.ts
   rate-limit.ts, request-ip.ts
 
 sanity/
@@ -42,9 +42,10 @@ sanity/
 
 types/                 # Shared TS by domain — not per component file
 
-scripts/               # Migrations, production start, agent sync, OG generator
+deploy/                # PM2 runtime bridge (`runtime.cjs`)
+scripts/               # Migrations, run-next, agent sync, OG generator
 public/                # Static assets (og-default.png)
-e2e/                   # Playwright smoke tests
+e2e/                   # Playwright: smoke, navigation, seo, contact
 ```
 
 ## Placement rules
@@ -57,7 +58,10 @@ e2e/                   # Playwright smoke tests
 | CMS fetch helper | `lib/cms/queries.ts` or `sanity/lib/queries/{domain}.ts` |
 | GROQ for new domain | `sanity/lib/queries/{domain}.ts` + export in `index.ts` |
 | Shared type | `types/{domain}.ts` |
+| Shared layout shell (2+ pages) | `components/layout/` (e.g. `ArticleDetailShell`) |
 | Default/fallback copy | `lib/fallbacks/{feature}.ts` |
+| Unit test | Colocated `*.test.ts` next to the module |
+| E2E flow | `e2e/{feature}.spec.ts` |
 | One-off script | `scripts/{kebab-name}.mjs` |
 
 ## Modern App Router conventions
@@ -92,5 +96,5 @@ e2e/                   # Playwright smoke tests
 - Create catch-all `utils/` or `helpers/` folders — use domain folders.
 - Add per-component CSS files — extend `app/globals.css` `@utility` instead.
 - Colocate Sanity schemas outside `sanity/schemaTypes/`.
-- Barrel-export everything — only `sanity/lib/queries/index.ts` is an approved barrel.
+- Barrel-export everything — approved barrels only: `sanity/lib/queries/index.ts` and `lib/seo/index.ts`. Do not add new barrels without updating this rule.
 

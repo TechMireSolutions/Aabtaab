@@ -34,8 +34,9 @@ import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/fetch";
 ## Metadata
 
 - Static CMS pages: `defineCmsPageMetadata("slug", { path, fallbackTitle, fallbackDescription })`.
-- Dynamic slugs: `buildNestedSlugMetadata`, `buildPostPageMetadata`, `buildPageMetadata` (events, search).
+- Dynamic slugs: `buildNestedSlugMetadata`, `buildPostPageMetadata`, `buildEventPageMetadata`, `buildPageMetadata` (search, generic).
 - Search results: `noIndex: true` via `buildPageMetadata`.
+- Compose page chrome via shared shells (`PageHeader`, `ArticleDetailShell`, `LegalPageShell`) — see `08-dry-policy`.
 
 ## Images
 
@@ -49,15 +50,17 @@ Keep handlers thin — business logic in `lib/`:
 | Route | Logic home |
 |-------|------------|
 | `/api/contact` | `lib/contact/` |
+| `/api/review` | review schema + notify (same validation/rate-limit patterns) |
 | `/api/revalidate` | `lib/revalidate.ts` |
 | `/api/draft`, `/api/draft/disable` | draft mode only |
+| `/api/search` | `lib/cms/search.ts` |
 
 ## Component design constraints
 
 * Each component must have one clear responsibility. Avoid components with excessive props or unrelated behaviour.
 * Prefer composition over large conditional components.
-* Do not duplicate layout, button, card, form, or typography patterns.
-* Extract reusable patterns only after their shared behaviour is understood. Avoid premature abstractions.
+* Prefer existing design-system utilities and shared shells over copying layout/button/card/form patterns — extract at **2+** uses (see `08-dry-policy`).
+* Extract reusable patterns only after shared behaviour is clear. Avoid premature abstractions.
 * Keep server-only code out of client bundles.
 
 ## Form & UI feedback states

@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, Sparkles, Info } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
 import PageHeader from "@/components/layout/PageHeader";
+import SearchEmptyState from "@/components/layout/SearchEmptyState";
 import { searchSite } from "@/lib/cms/search";
 import { getSiteSettings } from "@/lib/cms/queries";
 import { resolveSiteName } from "@/lib/constants";
@@ -68,33 +69,7 @@ export default async function SearchPage({
           )}
 
           {term && totalCount === 0 && (
-            <div className="text-center py-12">
-              <div className="inline-flex items-center gap-2 rounded-full bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 px-4 py-2 mb-4">
-                <Info size={14} className="text-amber-600 dark:text-amber-400" />
-                <span className="text-sm-plus font-medium text-amber-700 dark:text-amber-300">
-                  &ldquo;{term}&rdquo; is not available yet
-                </span>
-              </div>
-              <p className="text-sm-plus text-gray-500 dark:text-slate-400 mb-6 max-w-md mx-auto">
-                We don&apos;t have content matching this keyword right now. Try searching for something else, or explore these pages:
-              </p>
-              <div className="flex flex-wrap justify-center gap-3">
-                {[
-                  { label: "Online Courses", href: "/online-courses" },
-                  { label: "Our Services", href: "/services" },
-                  { label: "Upcoming Events", href: "/events" },
-                  { label: "Articles", href: "/posts" },
-                ].map((item) => (
-                  <Link
-                    key={item.label}
-                    href={item.href}
-                    className="card-interactive px-5 py-3 text-sm-plus font-semibold text-slate-800 dark:text-slate-200"
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </div>
-            </div>
+            <SearchEmptyState term={term} className="py-12" />
           )}
 
           {keywordMatch && (

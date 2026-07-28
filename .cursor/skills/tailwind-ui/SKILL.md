@@ -44,6 +44,8 @@ description: >-
 | Footer social icon | `icon-btn-subtle` (dark-mode aware, hover scale + brand glow) |
 | Footer/contact text link | `chip-outline` or `chip-outline-sm` (dark-mode aware, hover scale + brand glow) |
 | Dark hero badges | `badge-hero` / `badge-hero-muted` |
+| Soft notice chip | `badge-notice` |
+| Logo sizing | `size-logo` / `size-logo-lg` |
 | Donate/sacred accent | `text-eyebrow-gold` + `eyebrow-line-gold` |
 | Hero stagger animation | `motion-safe:animate-fade-up` + `motion-safe:animate-delay-*` |
 | WhatsApp FAB | `whatsapp-fab` (self-contained: position, size, colour, float animation, pill expand) + `pb-fab-safe` on `<main>` |

@@ -12,37 +12,19 @@ description: >-
 ## Implementation Steps
 
 ### 1. Environment Variables Validation
-- Define environment schemas in `lib/env/` or on load using Zod:
-```typescript
-import { z } from "zod";
+- Define environment schemas in **`lib/env.ts`** using Zod (public + server schemas).
+- Never reference `process.env` directly outside `lib/env.ts` or core load modules.
 
-const serverEnvSchema = z.object({
-  SANITY_API_TOKEN: z.string().min(1),
-  SANITY_REVALIDATE_SECRET: z.string().min(1),
-  RESEND_API_KEY: z.string().optional(),
-});
-```
-- Never reference `process.env` directly outside configuration files or core load modules.
-
-### 2. public form validation & protection
-- Always define a Zod validator for public form payloads:
-```typescript
-import { z } from "zod";
-
-export const contactFormSchema = z.object({
-  name: z.string().trim().min(1, "Name is required").max(100),
-  email: z.string().trim().email("Invalid email address").max(150),
-  message: z.string().trim().min(5).max(1000),
-  website: z.string().max(0).optional(), // Honeypot
-});
-```
-- If the honeypot field (`website`) is not empty, silently reject or abort the submission to block bots without exposing the failure reason.
+### 2. Public form validation & protection
+- Use `lib/contact/schema.ts` (`parseContactBody`) — purposes: `general` | `course` | `service` | `other`.
+- If the honeypot field (`website`) is non-empty after trim, reject as `"Invalid submission"`.
+- Prefer skill `contact-form-api` for the full flow.
 
 ### 3. API rate limiting
-- public API routes must be protected using `@upstash/ratelimit`.
-- **Bot Whitelisting:** When implementing Upstash Redis rate limiting for your application routes, explicitly bypass or whitelist known search engine user agents (Googlebot, Bingbot) to prevent accidental crawl blocks.
-- If Redis is unavailable, fallback to an in-memory or graceful allowance while logging a warning to Sentry.
-- **Strict SSL/HTTPS:** Ensure Cloudflare's "Always Use HTTPS" is enabled. No page or asset should be served over HTTP.
+- Protect public write routes via `checkContactRateLimit` in `lib/rate-limit.ts`.
+- Prefer **Upstash Redis** in production (`UPSTASH_REDIS_*` — strongly recommended, optional per techstack). Memory fallback is for local/dev and Redis errors (Sentry).
+- **Bot Whitelisting:** bypass known crawlers on crawl-facing rate-limited routes when appropriate.
+- **Strict SSL/HTTPS:** Cloudflare “Always Use HTTPS” + **Full (strict)** SSL.
 
 
 ### 4. Cloudflare Turnstile Verification

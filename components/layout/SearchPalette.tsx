@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState, useTransition, useCallback, useMemo } from "react";
-import { Search, X, BookOpen, Calendar, FileText, Settings, ArrowRight, CornerDownLeft, Sparkles, Info } from "lucide-react";
+import { Search, X, BookOpen, Calendar, FileText, Settings, ArrowRight, CornerDownLeft, Sparkles } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { SiteSearchResult, KeywordMatch } from "@/types/search";
 import { SEARCH_TYPE_LABELS } from "@/types/search";
+import SearchEmptyState, { QuickNavChips } from "@/components/layout/SearchEmptyState";
 
 interface SearchPaletteProps {
   isOpen: boolean;
@@ -196,55 +197,14 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
           className="max-h-[420px] overflow-y-auto p-2 scrollbar-hide"
         >
           {!resolvedHasQuery ? (
-            <div className="px-4 py-8 text-center text-sm-plus text-gray-500 dark:text-slate-400">
-              <p className="font-semibold text-slate-800 dark:text-slate-200 mb-2">
-                Quick Navigation
-              </p>
-              <div className="flex flex-wrap justify-center gap-2 mt-4">
-                {[
-                  { label: "Online Courses", href: "/online-courses" },
-                  { label: "Our Services", href: "/services" },
-                  { label: "Upcoming Events", href: "/events" },
-                  { label: "Read Articles", href: "/posts" },
-                ].map((item) => (
-                  <button
-                    key={item.label}
-                    onClick={() => handleSelect(item.href)}
-                    className="chip-outline-sm dark:border-slate-800 dark:bg-slate-800/40 dark:text-slate-300 dark:hover:border-brand-500"
-                  >
-                    {item.label}
-                  </button>
-                ))}
-              </div>
-            </div>
+            <QuickNavChips onSelect={handleSelect} />
           ) : totalItems === 0 && !resolvedIsLoading ? (
-            <div className="px-4 py-8 text-center">
-              <div className="inline-flex items-center gap-2 rounded-full bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800 px-4 py-2 mb-4">
-                <Info size={14} className="text-amber-600 dark:text-amber-400" />
-                <span className="text-sm-plus font-medium text-amber-700 dark:text-amber-300">
-                  &ldquo;{query}&rdquo; is not available yet
-                </span>
-              </div>
-              <p className="text-xs text-gray-500 dark:text-slate-400 mb-4">
-                Try searching for something else, or explore these suggestions:
-              </p>
-              <div className="flex flex-wrap justify-center gap-2">
-                {[
-                  { label: "Online Courses", href: "/online-courses" },
-                  { label: "Our Services", href: "/services" },
-                  { label: "Upcoming Events", href: "/events" },
-                  { label: "Articles", href: "/posts" },
-                ].map((item) => (
-                  <button
-                    key={item.label}
-                    onClick={() => handleSelect(item.href)}
-                    className="chip-outline-sm dark:border-slate-800 dark:bg-slate-800/40 dark:text-slate-300 dark:hover:border-brand-500"
-                  >
-                    {item.label}
-                  </button>
-                ))}
-              </div>
-            </div>
+            <SearchEmptyState
+              term={query}
+              variant="button"
+              onSelect={handleSelect}
+              className="px-4 py-8"
+            />
           ) : (
             <ul className="space-y-1">
               {keywordMatch && (() => {

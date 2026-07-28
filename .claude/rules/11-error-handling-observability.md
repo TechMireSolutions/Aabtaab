@@ -40,5 +40,4 @@
 * Use structured server logs.
 * Include timestamps, severity levels (info, warn, error), and request context where possible.
 * Avoid logging complete request bodies, tokens, or credentials.
-* Maintain a lightweight health endpoint (e.g., `/api/health` if needed) for deployment monitoring.
-* The health endpoint must not expose secrets or internal configuration details.
+* Prefer deploy health checks via existing scripts (`scripts/deploy-remote.sh` / process uptime) — do **not** add a public `/api/health` unless product requires it; if added, never expose secrets or internal config.

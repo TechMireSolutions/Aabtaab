@@ -9,6 +9,7 @@ import NavLinks from "@/components/layout/NavLinks";
 import MobileNavSidebarLoader from "@/components/layout/MobileNavSidebarLoader";
 
 import { DEFAULT_SITE_NAME } from "@/lib/constants";
+import { FALLBACK_NAV } from "@/lib/fallbacks/nav";
 import type { NavItem } from "@/types/site-navigation";
 
 const SearchPalette = dynamic(() => import("@/components/layout/SearchPalette"), {
@@ -22,16 +23,6 @@ interface HeaderProps {
   navItems?: NavItem[];
   searchPlaceholder?: string;
 }
-
-const FALLBACK_NAV: NavItem[] = [
-  { label: "Online Classes", href: "/online-courses" },
-  { label: "Services", href: "/services" },
-  { label: "Events", href: "/events" },
-  { label: "Articles", href: "/posts" },
-  { label: "Dar ul Quran", href: "/dar-ul-quran" },
-  { label: "Donate", href: "/donate" },
-  { label: "About", href: "/about" },
-];
 
 function buildNavLinks(
   navItems: NavItem[] | undefined,
@@ -126,7 +117,7 @@ export default function Header({
   return (
     <>
       <header
-        className={`sticky top-0 z-50 border-b border-gray-200/80 dark:border-slate-800/80 bg-white/90 dark:bg-slate-950/90 shadow-header backdrop-blur-md transition-all duration-300 ${scrolled ? "py-0.5 shadow-md bg-white/96 dark:bg-slate-950/96" : ""
+        className={`sticky top-0 z-50 border-b border-gray-200/80 dark:border-slate-800/80 bg-white/90 dark:bg-slate-950/90 shadow-header backdrop-blur-md transition-all duration-300 ${scrolled ? "py-0.5 bg-white/96 dark:bg-slate-950/96" : ""
           }`}
       >
         <div
@@ -156,7 +147,7 @@ export default function Header({
 
           <Link
             href="/donate"
-            className="ml-auto hidden items-center gap-2 rounded-full bg-brand-600 px-5 py-2 text-sm-plus font-semibold text-white shadow-md shadow-brand-600/25 animate-donate-glow transition-all duration-200 hover:bg-brand-700 hover:shadow-lg hover:shadow-brand-600/30 hover:scale-105 active:scale-95 lg:inline-flex"
+            className="ml-auto hidden items-center gap-2 rounded-full bg-brand-600 px-5 py-2 text-sm-plus font-semibold text-white shadow-brand-sm animate-donate-glow transition-all duration-200 hover:bg-brand-700 hover:shadow-brand-lg hover:scale-105 active:scale-95 lg:inline-flex"
           >
             Donate
           </Link>

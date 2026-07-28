@@ -31,4 +31,14 @@ describe("clientIpFromRequest", () => {
       "unknown",
     );
   });
+
+  it("returns empty string for blank first forwarded hop", () => {
+    const req = requestWithHeaders({ "x-forwarded-for": "  , 10.0.0.1" });
+    expect(clientIpFromRequest(req)).toBe("");
+  });
+
+  it("trims x-real-ip", () => {
+    const req = requestWithHeaders({ "x-real-ip": " 192.0.2.55 " });
+    expect(clientIpFromRequest(req)).toBe("192.0.2.55");
+  });
 });
