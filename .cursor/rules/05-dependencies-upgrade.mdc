@@ -45,6 +45,7 @@ Apply when upgrading deps, touching `package.json`, CI, or Node engine constrain
 | **TypeScript** | **6.0.3** only — do not add dual TS 7 setup |
 | **Sanity audit fixes** | Transitive `js-yaml`/`uuid`/`adm-zip` — use `overrides`; do not downgrade Sanity |
 | **sharp** | Override **0.35.0** until Next pins a patched libvips bundle |
+| **minimatch / brace-expansion** | Override `minimatch` **^10.2.5** + `brace-expansion` **^5.0.8** (do not override brace-expansion alone — breaks ESLint minimatch 3) |
 | **Production port** | Change only `server.config.cjs` (`PRODUCTION_PORT = 3000`) |
 | **Studio** | `sanity`, `@sanity/vision`, `next-sanity` must stay on Sanity 6 matrix |
 

@@ -155,7 +155,7 @@ scripts/run-next.mjs Dev/prod Next launcher (port 3000)
 |------|------------|
 | **ESLint** | Pin **v9.39.4** — v10 breaks `eslint-config-next` |
 | **TypeScript** | **6.0.3** only (no dual TS 7 setup) |
-| **npm audit** | Transitive `sharp`/`adm-zip`/`brace-expansion` pinned via `overrides` until upstream resolves |
+| **npm audit** | Transitive `sharp`/`adm-zip`/`minimatch`+`brace-expansion` pinned via `overrides` until upstream resolves |
 | **Node on VPS** | Deploy loads nvm from `.nvmrc` (24.17.0) |
 | **Production port** | Change only `server.config.cjs` (`PRODUCTION_PORT = 3000`) |
 | **Lockfile** | Always `npm ci` on server |

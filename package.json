@@ -20,7 +20,7 @@
     "sync:agents": "node scripts/sync-agent-config.mjs"
   },
   "dependencies": {
-    "@portabletext/react": "^6.2.0",
+    "@portabletext/react": "^7.0.1",
     "@sanity/client": "^7.25.0",
     "@sanity/image-url": "^2.1.1",
     "@sanity/vision": "^6.7.0",
@@ -61,6 +61,7 @@
     "uuid": "^11.1.1",
     "sharp": "^0.35.0",
     "adm-zip": "^0.6.0",
+    "minimatch": "^10.2.5",
     "brace-expansion": "^5.0.8"
   },
   "browserslist": [
