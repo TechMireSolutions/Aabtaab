@@ -6,19 +6,13 @@ import { getHomepageHeroData } from "@/lib/cms/queries";
 import { ogImageUrl } from "@/sanity/lib/image";
 import dynamic from "next/dynamic";
 import HomeHero from "@/components/sections/HomeHero";
-import HomeSections from "@/components/sections/HomeSections";
 import HomeSectionsSkeleton from "@/components/sections/HomeSectionsSkeleton";
 import { sanitizePublicCopy } from "@/lib/fallbacks/cms-copy";
+import UpcomingEventsLoader from "./_components/UpcomingEventsLoader";
+import HomeCountriesLoader from "./_components/HomeCountriesLoader";
+import HomeSectionsLoader from "./_components/HomeSectionsLoader";
 
 const HomeAbout = dynamic(() => import("@/components/sections/HomeAbout"), {
-  ssr: true,
-});
-
-const UpcomingEventsCountdown = dynamic(() => import("@/components/sections/UpcomingEventsCountdown"), {
-  ssr: true,
-});
-
-const HomeCountries = dynamic(() => import("@/components/sections/HomeCountries"), {
   ssr: true,
 });
 
@@ -70,19 +64,19 @@ export default async function HomePage() {
         scholarCount={scholarCount}
       />
       <Suspense fallback={<HomeSectionsSkeleton />}>
-        <UpcomingEventsCountdown />
+        <UpcomingEventsLoader />
       </Suspense>
-      <HomeAbout 
-        homepage={hp} 
-        quotes={quotes} 
-        scholarCount={scholarCount} 
-        countryCount={countryCount} 
+      <HomeAbout
+        homepage={hp}
+        quotes={quotes}
+        scholarCount={scholarCount}
+        countryCount={countryCount}
       />
       <Suspense fallback={<HomeSectionsSkeleton />}>
-        <HomeCountries />
+        <HomeCountriesLoader />
       </Suspense>
       <Suspense fallback={<HomeSectionsSkeleton />}>
-        <HomeSections />
+        <HomeSectionsLoader />
       </Suspense>
     </>
   );

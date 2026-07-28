@@ -7,11 +7,16 @@ import FaqAccordionSection from "@/components/content/FaqAccordionSection";
 import ProseSection from "@/components/portable-text/ProseSection";
 import { buildPostPageMetadata, resolvePostImageUrls } from "@/lib/cms/post";
 import { resolveSiteName } from "@/lib/constants";
-import { getPostBySlug, getSiteSettings } from "@/lib/cms/queries";
+import { getPostBySlug, getSiteSettings, getSitemapSlugs } from "@/lib/cms/queries";
 import { ArticleJsonLd, BreadcrumbJsonLd, getDefaultOgImageUrl, getSiteUrl } from "@/lib/seo";
 import { urlFor } from "@/sanity/lib/image";
 
 const siteUrl = getSiteUrl();
+
+export async function generateStaticParams() {
+  const { posts } = await getSitemapSlugs();
+  return (posts ?? []).map((post) => ({ slug: post.slug }));
+}
 
 export async function generateMetadata({
   params,

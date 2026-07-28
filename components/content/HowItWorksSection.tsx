@@ -1,4 +1,4 @@
-import type { LabeledStep } from "@/types/course";
+import type { LabeledStep } from "@/types/content-sections";
 
 interface HowItWorksSectionProps {
   heading?: string;

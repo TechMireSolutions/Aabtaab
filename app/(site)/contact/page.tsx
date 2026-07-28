@@ -1,4 +1,3 @@
-import { Mail, Phone, MessageCircle, MapPin } from "lucide-react";
 import dynamic from "next/dynamic";
 import PageHeader from "@/components/layout/PageHeader";
 import ProseSection from "@/components/portable-text/ProseSection";
@@ -9,10 +8,13 @@ import {
   getContactFormOptions,
   getSiteSettings,
 } from "@/lib/cms/queries";
-import { whatsappUrl, mapsUrl, EXTERNAL_LINK_PROPS } from "@/lib/urls";
+import { EXTERNAL_LINK_PROPS } from "@/lib/urls";
 import OpensInNewTab from "@/components/ui/OpensInNewTab";
 import { sanitizePublicCopy } from "@/lib/fallbacks/cms-copy";
-import { buildFooterSocialLinks } from "@/lib/fallbacks/footer-nav";
+import {
+  buildContactPageItems,
+  buildFooterSocialLinks,
+} from "@/lib/fallbacks/footer-nav";
 
 const ContactForm = dynamic(() => import("./_components/ContactForm"), {
   ssr: true,
@@ -36,38 +38,7 @@ export default async function ContactPage() {
   const socialLinks = buildFooterSocialLinks(settings).filter(
     (link) => link.variant === "icon",
   );
-
-  const contactItems = [
-    settings?.email && {
-      Icon: Mail,
-      label: "Email",
-      value: settings.email,
-      href: `mailto:${settings.email}`,
-    },
-    settings?.phone && {
-      Icon: Phone,
-      label: "Phone",
-      value: settings.phone,
-      href: `tel:${settings.phone}`,
-    },
-    settings?.whatsapp && {
-      Icon: MessageCircle,
-      label: "WhatsApp",
-      value: settings.whatsapp,
-      href: whatsappUrl(settings.whatsapp),
-    },
-    settings?.address && {
-      Icon: MapPin,
-      label: "Address",
-      value: settings.address,
-      href: mapsUrl(settings.address, settings.addressLink),
-    },
-  ].filter(Boolean) as {
-    Icon: React.ElementType;
-    label: string;
-    value: string;
-    href: string | null;
-  }[];
+  const contactItems = buildContactPageItems(settings);
 
   const submitLabel: string =
     settings?.contactFormSubmitLabel || "Send Message";
@@ -98,11 +69,8 @@ export default async function ContactPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-5 gap-6 lg:gap-8 items-start">
             <div className="lg:col-span-2 space-y-3">
-              {contactItems.map(({ Icon, label, value, href }) => (
-                <div
-                  key={label}
-                  className="card-contact"
-                >
+              {contactItems.map(({ Icon, label, value, href, external }) => (
+                <div key={label} className="card-contact">
                   <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-brand-50 border border-brand-100 flex items-center justify-center shrink-0">
                     <Icon
                       size={14}
@@ -111,17 +79,15 @@ export default async function ContactPage() {
                     />
                   </div>
                   <div className="min-w-0">
-                    <p className="heading-col mb-0.5">
-                      {label}
-                    </p>
+                    <p className="heading-col mb-0.5">{label}</p>
                     {href ? (
                       <a
                         href={href}
-                        {...(href.startsWith("http") ? EXTERNAL_LINK_PROPS : {})}
+                        {...(external ? EXTERNAL_LINK_PROPS : {})}
                         className="text-sm-plus text-slate-700 transition-colors break-all hover:text-brand-700"
                       >
                         {value}
-                        {href.startsWith("http") ? <OpensInNewTab /> : null}
+                        {external ? <OpensInNewTab /> : null}
                       </a>
                     ) : (
                       <p className="text-sm-plus text-slate-700 whitespace-pre-line">

@@ -3,6 +3,7 @@ import {
   FALLBACK_QUICK_LINKS,
   FOOTER_ALL_SERVICES_LINK,
   FOOTER_LEGAL_LINKS,
+  buildContactPageItems,
   buildFooterContactItems,
   buildFooterServiceNavLinks,
   buildFooterSocialLinks,
@@ -227,6 +228,28 @@ describe("buildFooterContactItems", () => {
         href: "/contact",
       }),
     ]);
+  });
+});
+
+describe("buildContactPageItems", () => {
+  it("orders channels for the contact page and strips WhatsApp label prefix", () => {
+    const items = buildContactPageItems({
+      email: "edu@example.com",
+      phone: "+92 300",
+      whatsapp: "+92 300 111",
+      address: "Karachi",
+    });
+    expect(items.map((i) => i.label)).toEqual([
+      "Email",
+      "Phone",
+      "WhatsApp",
+      "Address",
+    ]);
+    expect(items.find((i) => i.label === "WhatsApp")?.value).toBe("+92 300 111");
+  });
+
+  it("returns empty when only footer fallback would apply", () => {
+    expect(buildContactPageItems({})).toEqual([]);
   });
 });
 

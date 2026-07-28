@@ -1,17 +1,9 @@
 import { NextResponse } from "next/server";
 import { getSanityWriteClient } from "@/sanity/lib/writeClient";
-import { z } from "zod";
 import * as Sentry from "@sentry/nextjs";
 import { env } from "@/lib/env";
 import { clientIpFromRequest, checkContactRateLimit } from "@/lib/rate-limit";
-
-const reviewSchema = z.object({
-  name: z.string().trim().min(2).max(100),
-  role: z.string().trim().max(100).optional(),
-  quote: z.string().trim().min(10).max(1000),
-  website: z.string().optional(),
-  token: z.string().optional(),
-});
+import { parseReviewBody } from "@/lib/review/schema";
 
 const MAX_BODY_BYTES = 8_192;
 
@@ -39,19 +31,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
     }
 
-    const parsed = reviewSchema.safeParse(body);
+    const parsed = parseReviewBody(body);
     if (!parsed.success) {
-      return NextResponse.json(
-        { error: parsed.error.issues[0]?.message ?? "Invalid input" },
-        { status: 400 },
-      );
-    }
-
-    if (parsed.data.website?.trim()) {
-      return NextResponse.json(
-        { error: "Invalid submission" },
-        { status: 400 },
-      );
+      return NextResponse.json({ error: parsed.error }, { status: 400 });
     }
 
     const turnstileSecret = env.TURNSTILE_SECRET_KEY;

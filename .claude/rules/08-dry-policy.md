@@ -42,6 +42,8 @@ Never invent a new helper when the SSOT table already names one.
 | URL / external links / contact hrefs | `lib/urls.ts` (`whatsappUrl`, `mapsUrl`, `EXTERNAL_LINK_PROPS`, `safeContactHref`) |
 | Site search facade | `searchSite` → `lib/cms/search.ts`; keywords → `lib/cms/keywords.ts`; labels → `lib/cms/search-labels.ts` |
 | Contact form logic | `lib/contact/` (schema, notify, email-html) |
+| Review form logic | `lib/review/schema.ts` (shared client + `/api/review`) |
+| Contact page channels | `buildContactPageItems` → `lib/fallbacks/footer-nav.ts` (same hrefs as footer) |
 | Rate limiting / IP | `lib/rate-limit.ts`, `lib/request-ip.ts` |
 | Default copy | `lib/fallbacks/` |
 | Cache invalidation | `lib/revalidate.ts` + `CACHE_TAGS` |

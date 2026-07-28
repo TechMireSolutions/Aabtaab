@@ -4,13 +4,7 @@ import { useState } from "react";
 import Script from "next/script";
 import { z } from "zod";
 import { publicEnv } from "@/lib/env";
-
-const formSchema = z.object({
-  name: z.string().min(2, "Name is required"),
-  role: z.string().optional(),
-  quote: z.string().min(10, "Review must be at least 10 characters"),
-  website: z.string().optional(),
-});
+import { reviewBodySchema } from "@/lib/review/schema";
 
 type FormStatus = "idle" | "loading" | "success" | "error";
 
@@ -33,7 +27,7 @@ export default function ReviewForm() {
     };
 
     try {
-      const validData = formSchema.parse(data);
+      const validData = reviewBodySchema.parse(data);
       const turnstileToken =
         (formData.get("cf-turnstile-response") as string) || undefined;
 

@@ -1,4 +1,3 @@
-import { getCountries } from "@/lib/cms/queries";
 import { Globe2 } from "lucide-react";
 import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
@@ -25,9 +24,11 @@ function getCountryCode(flagStr: string) {
   return trimmed.substring(0, 2).toUpperCase();
 }
 
-export default async function HomeCountries() {
-  const countries: Country[] = (await getCountries()) ?? [];
-
+export default function HomeCountries({
+  countries,
+}: {
+  countries: Country[];
+}) {
   if (countries.length === 0) return null;
 
   const isSmallList = countries.length < 5;

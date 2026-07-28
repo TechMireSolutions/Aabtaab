@@ -10,12 +10,17 @@ import {
   formatEventLocation,
   resolveEventImageUrls,
 } from "@/lib/cms/event";
-import { getEventBySlug, getSiteSettings } from "@/lib/cms/queries";
+import { getEventBySlug, getSiteSettings, getSitemapSlugs } from "@/lib/cms/queries";
 import { EventJsonLd, BreadcrumbJsonLd, getSiteUrl } from "@/lib/seo";
 import { EXTERNAL_LINK_PROPS } from "@/lib/urls";
 import OpensInNewTab from "@/components/ui/OpensInNewTab";
 
 const siteUrl = getSiteUrl();
+
+export async function generateStaticParams() {
+  const { events } = await getSitemapSlugs();
+  return (events ?? []).map((event) => ({ slug: event.slug }));
+}
 
 export async function generateMetadata({
   params,

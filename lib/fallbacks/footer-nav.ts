@@ -241,6 +241,38 @@ export function buildFooterContactItems(
   return items;
 }
 
+const CONTACT_PAGE_ORDER = ["email", "phone", "whatsapp", "address"] as const;
+type ContactPageKind = (typeof CONTACT_PAGE_ORDER)[number];
+
+const CONTACT_PAGE_LABELS: Record<ContactPageKind, string> = {
+  email: "Email",
+  phone: "Phone",
+  whatsapp: "WhatsApp",
+  address: "Address",
+};
+
+/** Contact page channel cards — same hrefs as footer, contact-friendly labels/order. */
+export function buildContactPageItems(settings?: SiteSettings | null) {
+  return buildFooterContactItems(settings)
+    .filter((item): item is FooterContactItem & { kind: ContactPageKind } =>
+      (CONTACT_PAGE_ORDER as readonly string[]).includes(item.kind),
+    )
+    .sort(
+      (a, b) =>
+        CONTACT_PAGE_ORDER.indexOf(a.kind) - CONTACT_PAGE_ORDER.indexOf(b.kind),
+    )
+    .map((item) => ({
+      Icon: item.Icon,
+      label: CONTACT_PAGE_LABELS[item.kind],
+      value:
+        item.kind === "whatsapp" && settings?.whatsapp
+          ? settings.whatsapp
+          : item.value,
+      href: item.href ?? null,
+      external: Boolean(item.external),
+    }));
+}
+
 export function buildFooterSocialLinks(
   settings?: SiteSettings | null,
 ): FooterSocialLink[] {

@@ -1,4 +1,4 @@
-import type { LabeledDescription } from "@/types/course";
+import type { LabeledDescription } from "@/types/content-sections";
 
 interface CommitmentSectionProps {
   heading?: string;

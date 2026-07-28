@@ -15,7 +15,7 @@ import { buildNestedCatalogPageContext } from "@/lib/catalog/nested-page";
 import type { CourseChild } from "@/types/course";
 import type { SlugParent } from "@/types/sanity";
 import { buildNestedSlugMetadata } from "@/lib/cms/page";
-import { getCourseBySlug, getSiteSettings } from "@/lib/cms/queries";
+import { getCourseBySlug, getSiteSettings, getSitemapSlugs } from "@/lib/cms/queries";
 import { mapCourseChildForGrid } from "@/lib/catalog/nested-children";
 import { resolveSiteName } from "@/lib/constants";
 import { absoluteUrl, CourseJsonLd, FaqPageJsonLd, faqItemsToSchema, resolveDocOgImage } from "@/lib/seo";
@@ -28,6 +28,20 @@ const COURSE_BASE = {
 };
 
 const COURSE_CHILD_LABELS = { parent: "View Courses", leaf: "Enroll Now" } as const;
+
+export async function generateStaticParams() {
+  const { courses } = await getSitemapSlugs();
+  return (courses ?? []).map((course) => {
+    const path = buildNestedContentPath(
+      "online-courses",
+      course.slug,
+      course.parent,
+    );
+    return {
+      slug: path.replace(/^\/online-courses\//, "").split("/").filter(Boolean),
+    };
+  });
+}
 
 export async function generateMetadata({
   params,

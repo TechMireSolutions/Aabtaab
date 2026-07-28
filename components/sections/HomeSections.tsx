@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { getHomepageCarouselsData } from "@/lib/cms/queries";
 import { formatEventDateRange } from "@/lib/cms/event";
 import { urlFor } from "@/sanity/lib/image";
 import dynamic from "next/dynamic";
@@ -11,23 +10,36 @@ import {
   formatSubjectLabel,
   normalizePublicTitle,
 } from "@/lib/catalog/subjects";
+import type { EventSummary } from "@/types/event";
+import type {
+  HomeCourseSummary,
+  HomePostSummary,
+  HomeServiceSummary,
+  HomepageSettings,
+  Testimonial,
+} from "@/types/homepage";
 
 const CarouselSection = dynamic(() => import("@/components/sections/CarouselSection"), {
   ssr: true,
 });
 
+export interface HomeSectionsProps {
+  posts: HomePostSummary[];
+  services: HomeServiceSummary[];
+  courses: HomeCourseSummary[];
+  homepage: HomepageSettings | null;
+  testimonials: Testimonial[];
+  upcomingEvents: EventSummary[];
+}
 
-
-export default async function HomeSections() {
-  const {
-    posts,
-    services,
-    courses,
-    homepage: hp,
-    testimonials,
-    upcomingEvents,
-  } = await getHomepageCarouselsData();
-
+export default function HomeSections({
+  posts,
+  services,
+  courses,
+  homepage: hp,
+  testimonials,
+  upcomingEvents,
+}: HomeSectionsProps) {
   const courseItems: CarouselItem[] = (courses ?? []).map((c) => ({
     id: c._id,
     image: c.featuredImage

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Check } from "lucide-react";
-import type { LabeledDescription } from "@/types/course";
+import type { LabeledDescription } from "@/types/content-sections";
 
 interface WhyUsImageSectionProps {
   heading?: string;

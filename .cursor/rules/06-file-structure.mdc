@@ -34,6 +34,7 @@ lib/
   cms/                 # Cached queries, search facade, keywords, search-labels
   catalog/             # Nested catalog helpers + formatters (price/CTA labels)
   contact/             # Zod schema, email HTML, notify
+  review/              # Review form Zod schema (shared with /api/review)
   seo/                 # Metadata + JSON-LD (approved barrel: index.ts)
   fallbacks/           # Defaults when CMS empty (nav, footer-nav, about, dar-ul-quran, …)
   security/            # Timing-safe secret compares

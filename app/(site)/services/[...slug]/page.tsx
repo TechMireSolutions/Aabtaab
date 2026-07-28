@@ -15,7 +15,7 @@ import { buildNestedCatalogPageContext } from "@/lib/catalog/nested-page";
 import type { ServiceChild } from "@/types/service";
 import type { SlugParent } from "@/types/sanity";
 import { buildNestedSlugMetadata } from "@/lib/cms/page";
-import { getServiceBySlug, getSiteSettings } from "@/lib/cms/queries";
+import { getServiceBySlug, getSiteSettings, getSitemapSlugs } from "@/lib/cms/queries";
 import { mapServiceChildForGrid } from "@/lib/catalog/nested-children";
 import { buildNestedBreadcrumbItems, buildNestedContentPath } from "@/lib/paths";
 import { resolveSiteName } from "@/lib/constants";
@@ -32,6 +32,20 @@ const SERVICE_BASE = {
   label: "Services",
   eyebrow: "Services",
 };
+
+export async function generateStaticParams() {
+  const { services } = await getSitemapSlugs();
+  return (services ?? []).map((service) => {
+    const path = buildNestedContentPath(
+      "services",
+      service.slug,
+      service.parent,
+    );
+    return {
+      slug: path.replace(/^\/services\//, "").split("/").filter(Boolean),
+    };
+  });
+}
 
 const SERVICE_CHILD_LABELS = { parent: "View Services", leaf: "Learn More" } as const;
 
