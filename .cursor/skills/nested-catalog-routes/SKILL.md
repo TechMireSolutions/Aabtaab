@@ -31,7 +31,7 @@ return (
     excerpt={course.excerpt}
     context={context}
     childCards={context.childItems.map((child) =>
-      mapCourseChildForGrid(child, COURSE_CHILD_LABELS),
+      mapCourseChildForGrid(child, COURSE_NESTED_CTA_LABELS),
     )}
     jsonLd={…}
   >
@@ -55,6 +55,7 @@ return (
 | `lib/paths.ts` | `getContentAncestry`, `buildNestedBreadcrumbItems`, `buildNestedContentPath` |
 | `lib/catalog/nested-page.ts` | `resolveCurrentSlug`, `buildNestedCatalogPageContext`, `nestedStaticParamsFromEntries`, `ensureCanonicalNestedPath` |
 | `lib/catalog/nested-children.ts` | `mapCourseChildForGrid`, `mapServiceChildForGrid` |
+| `lib/catalog/formatters.ts` | `COURSE_NESTED_CTA_LABELS`, `SERVICE_NESTED_CTA_LABELS`, `nestedListCtaLabel` |
 | `components/layout/NestedCatalogPageShell.tsx` | Shared breadcrumbs + children vs leaf chrome |
 | `lib/cms/page.ts` | `buildNestedSlugMetadata` |
 | `lib/cms/queries.ts` | `getCourseBySlug`, `getServiceBySlug` |

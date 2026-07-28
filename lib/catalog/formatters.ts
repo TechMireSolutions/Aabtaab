@@ -1,5 +1,20 @@
 /** Catalog list/card presentation helpers (price · duration, CTA labels). */
 
+export const COURSE_NESTED_CTA_LABELS = {
+  parent: "View Courses",
+  leaf: "Enroll Now",
+} as const;
+
+export const SERVICE_NESTED_CTA_LABELS = {
+  parent: "View Services",
+  leaf: "Book Now",
+} as const;
+
+export type NestedCtaLabels = {
+  parent: string;
+  leaf: string;
+};
+
 export function formatPriceDuration(
   price?: string,
   duration?: string,
@@ -10,7 +25,7 @@ export function formatPriceDuration(
 
 export function nestedListCtaLabel(
   childCount: number | undefined,
-  labels: { parent: string; leaf: string },
+  labels: NestedCtaLabels,
 ): string {
   return childCount && childCount > 0 ? labels.parent : labels.leaf;
 }

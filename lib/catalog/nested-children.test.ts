@@ -8,8 +8,10 @@ import {
   mapCourseChildForGrid,
   mapServiceChildForGrid,
 } from "@/lib/catalog/nested-children";
-
-const labels = { parent: "View Courses", leaf: "Enroll" };
+import {
+  COURSE_NESTED_CTA_LABELS,
+  SERVICE_NESTED_CTA_LABELS,
+} from "@/lib/catalog/formatters";
 
 describe("mapCourseChildForGrid", () => {
   it("prefers excerpt over price/duration", () => {
@@ -24,7 +26,7 @@ describe("mapCourseChildForGrid", () => {
         childCount: 0,
         featuredImage: { asset: { _ref: "image-1" } },
       },
-      labels,
+      COURSE_NESTED_CTA_LABELS,
     );
 
     expect(card).toEqual({
@@ -33,7 +35,7 @@ describe("mapCourseChildForGrid", () => {
       title: "Quran",
       imageUrl: "https://cdn.example/card.jpg",
       description: "Learn Quran",
-      ctaLabel: "Enroll",
+      ctaLabel: "Enroll Now",
     });
   });
 
@@ -47,7 +49,7 @@ describe("mapCourseChildForGrid", () => {
         duration: "10 weeks",
         childCount: 2,
       },
-      labels,
+      COURSE_NESTED_CTA_LABELS,
     );
 
     expect(card.imageUrl).toBeNull();
@@ -67,11 +69,11 @@ describe("mapServiceChildForGrid", () => {
         icon: { asset: { _ref: "image-2" } },
         childCount: 0,
       },
-      { parent: "View Services", leaf: "Learn More" },
+      SERVICE_NESTED_CTA_LABELS,
     );
 
     expect(card.imageUrl).toBe("https://cdn.example/card.jpg");
     expect(card.description).toBe("Variable");
-    expect(card.ctaLabel).toBe("Learn More");
+    expect(card.ctaLabel).toBe("Book Now");
   });
 });

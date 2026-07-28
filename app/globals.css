@@ -752,6 +752,10 @@
   @apply py-24 text-center text-base-plus text-slate-600 dark:text-slate-400;
 }
 
+@utility grid-catalog-cards {
+  @apply grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3;
+}
+
 /* ── Backgrounds & Special Effects ── */
 @utility bg-dot-grid {
   background-image: radial-gradient(circle, var(--color-dot-grid) 1px, transparent 1px);

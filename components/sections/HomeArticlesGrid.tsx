@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import ContentCard from "@/components/cards/ContentCard";
-import { urlFor } from "@/sanity/lib/image";
+import PostCardGrid from "@/components/content/PostCardGrid";
 import type { HomePostSummary, HomepageSettings } from "@/types/homepage";
 
 interface HomeArticlesGridProps {
@@ -44,23 +43,7 @@ export default function HomeArticlesGrid({
             />
           </Link>
         </div>
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {list.map((post) => (
-            <ContentCard
-              key={post._id}
-              href={`/posts/${post.slug.current}`}
-              image={
-                post.mainImage
-                  ? urlFor(post.mainImage).width(480).height(360).url()
-                  : null
-              }
-              title={post.title}
-              description={post.excerpt ?? null}
-              badge={post.categories?.[0]?.title ?? null}
-              ctaLabel="Read More"
-            />
-          ))}
-        </div>
+        <PostCardGrid posts={list} />
       </div>
     </section>
   );

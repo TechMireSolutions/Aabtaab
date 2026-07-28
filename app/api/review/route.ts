@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import { getSanityWriteClient } from "@/sanity/lib/writeClient";
 import * as Sentry from "@sentry/nextjs";
-import { env } from "@/lib/env";
 import { clientIpFromRequest, checkContactRateLimit } from "@/lib/rate-limit";
 import { parseReviewBody } from "@/lib/review/schema";
+import { verifyTurnstileOrSkip } from "@/lib/security/verify-turnstile";
 
 const MAX_BODY_BYTES = 8_192;
 
@@ -36,37 +36,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: parsed.error }, { status: 400 });
     }
 
-    const turnstileSecret = env.TURNSTILE_SECRET_KEY;
-    if (turnstileSecret) {
-      const token = parsed.data.token;
-      if (!token) {
-        return NextResponse.json(
-          {
-            error:
-              "Security check failed. Please refresh the page and try again.",
-          },
-          { status: 400 },
-        );
-      }
-      const verifyRes = await fetch(
-        "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            secret: turnstileSecret,
-            response: token,
-            remoteip: ip,
-          }),
-        },
-      );
-      const verifyData = (await verifyRes.json()) as { success?: boolean };
-      if (!verifyData.success) {
-        return NextResponse.json(
-          { error: "Security verification failed. Please try again." },
-          { status: 400 },
-        );
-      }
+    const turnstileError = await verifyTurnstileOrSkip({
+      token: parsed.data.token,
+      ip,
+    });
+    if (turnstileError) {
+      return NextResponse.json({ error: turnstileError }, { status: 400 });
     }
 
     const { name, role, quote } = parsed.data;

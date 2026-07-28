@@ -30,7 +30,7 @@ description: >-
 
 ### 4. Cloudflare Turnstile
 - Optional when keys are set. Load widget only if `NEXT_PUBLIC_TURNSTILE_SITE_KEY` exists.
-- Verify server-side against `https://challenges.cloudflare.com/turnstile/v0/siteverify` when `TURNSTILE_SECRET_KEY` is set.
+- Server verify SSOT: `verifyTurnstileOrSkip` in `lib/security/verify-turnstile.ts` (used by `/api/contact` and `/api/review`).
 - Reset widget after success/error:
 ```typescript
 const turnstile = (window as unknown as { turnstile?: { reset: () => void } }).turnstile;

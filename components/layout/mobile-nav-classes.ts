@@ -6,20 +6,6 @@
 export const TW_MOBILE_HEADER =
   "flex shrink-0 items-center justify-between border-b border-gray-100 dark:border-slate-800 px-5 pb-4 pt-[max(1rem,env(safe-area-inset-top))]";
 
-export const TW_MOBILE_SEARCH_STRIP =
-  "shrink-0 space-y-2 border-b border-gray-100 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/60 px-5 py-3";
-
-export const TW_MOBILE_SEARCH_LABEL =
-  "text-2xs font-bold uppercase tracking-kicker text-gray-400";
-
-export const TW_SEARCH_FORM_MOBILE =
-  "flex overflow-hidden rounded-xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 focus-within:border-brand-600 focus-within:ring-2 focus-within:ring-brand-600/30";
-
-export const TW_MOBILE_SEARCH_INPUT =
-  "min-h-11 min-w-0 flex-1 border-0 bg-transparent px-3 text-sm-plus text-slate-700 dark:text-slate-200 outline-none placeholder:text-gray-400 dark:placeholder:text-slate-500";
-
-export const TW_MOBILE_SEARCH_SUBMIT = "btn-search-submit shrink-0";
-
 export const TW_MOBILE_NAV_SCROLL =
   "flex-1 overflow-y-auto overscroll-contain px-3 py-3 pb-[max(1rem,env(safe-area-inset-bottom))]";
 

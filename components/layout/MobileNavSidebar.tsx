@@ -2,10 +2,10 @@
 
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import NavLinks from "@/components/layout/NavLinks";
+import SiteBrandLogo from "@/components/layout/SiteBrandLogo";
 import {
   TW_MOBILE_CLOSE_BTN,
   TW_MOBILE_HEADER,
@@ -141,28 +141,12 @@ export default function MobileNavSidebar({
                 onClick={closeAndFocusTrigger}
                 className="group flex min-h-11 min-w-0 flex-1 items-center gap-2.5 rounded-lg pe-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
               >
-                <div className="size-10 shrink-0 overflow-hidden rounded-full border-2 border-brand-400 transition-transform duration-200 group-hover:scale-105">
-                  {logoUrl ? (
-                    <Image
-                      src={logoUrl}
-                      alt=""
-                      width={40}
-                      height={40}
-                      sizes="40px"
-                      className="h-full w-full object-cover"
-                    />
-                  ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-linear-to-br from-brand-100 to-brand-50 text-lg font-bold text-brand-700 select-none" aria-hidden="true">
-                      {siteName.charAt(0).toUpperCase()}
-                    </div>
-                  )}
-                </div>
-                <span
-                  id={titleId}
-                  className="truncate text-base font-bold tracking-heading text-slate-900 dark:text-white"
-                >
-                  {siteName}
-                </span>
+                <SiteBrandLogo
+                  siteName={siteName}
+                  logoUrl={logoUrl}
+                  variant="mobile"
+                  labelId={titleId}
+                />
               </Link>
               <button
                 type="button"

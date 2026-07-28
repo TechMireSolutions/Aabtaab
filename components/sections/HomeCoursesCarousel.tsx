@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import { urlFor } from "@/sanity/lib/image";
-import { formatPriceDuration } from "@/lib/catalog/formatters";
+import { formatPriceDuration, COURSE_NESTED_CTA_LABELS } from "@/lib/catalog/formatters";
 import {
   formatSubjectLabel,
   normalizePublicTitle,
@@ -30,7 +30,7 @@ export default function HomeCoursesCarousel({
     description: formatPriceDuration(c.price, c.duration),
     href: `/online-courses/${c.slug.current}`,
     badge: c.subject ? formatSubjectLabel(c.subject) : null,
-    ctaLabel: "Enroll Now",
+    ctaLabel: COURSE_NESTED_CTA_LABELS.leaf,
   }));
 
   if (items.length === 0) return null;

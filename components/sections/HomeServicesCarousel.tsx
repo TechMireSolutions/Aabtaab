@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import { urlFor } from "@/sanity/lib/image";
+import { SERVICE_NESTED_CTA_LABELS } from "@/lib/catalog/formatters";
 import type { HomeServiceSummary, HomepageSettings } from "@/types/homepage";
 
 const CarouselSection = dynamic(
@@ -28,7 +29,7 @@ export default function HomeServicesCarousel({
       : (s.price ?? null),
     href: `/services/${s.slug.current}`,
     badge: null,
-    ctaLabel: "Book Now",
+    ctaLabel: SERVICE_NESTED_CTA_LABELS.leaf,
   }));
 
   if (items.length === 0) return null;

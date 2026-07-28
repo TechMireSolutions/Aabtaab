@@ -5,7 +5,7 @@ import { Search, RotateCcw, BookOpen, User } from "lucide-react";
 import ContentCard from "@/components/cards/ContentCard";
 import type { TopLevelCourseSummary } from "@/types/catalog";
 import { cardImageUrl } from "@/sanity/lib/image";
-import { formatPriceDuration, nestedListCtaLabel } from "@/lib/catalog/formatters";
+import { formatPriceDuration, nestedListCtaLabel, COURSE_NESTED_CTA_LABELS } from "@/lib/catalog/formatters";
 import {
   formatSubjectLabel,
   normalizePublicTitle,
@@ -138,7 +138,7 @@ export default function CourseExplorer({ courses }: CourseExplorerProps) {
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        <div className="grid-catalog-cards">
           {filteredCourses.map((course) => (
             <ContentCard
               key={course._id}
@@ -155,10 +155,10 @@ export default function CourseExplorer({ courses }: CourseExplorerProps) {
                 formatPriceDuration(course.price, course.duration) ||
                 null
               }
-              ctaLabel={nestedListCtaLabel(course.childCount, {
-                parent: "View Courses",
-                leaf: "Enroll Now",
-              })}
+              ctaLabel={nestedListCtaLabel(
+                course.childCount,
+                COURSE_NESTED_CTA_LABELS,
+              )}
             />
           ))}
         </div>

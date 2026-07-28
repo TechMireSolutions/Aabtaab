@@ -7,8 +7,8 @@ import {
   checkContactRateLimit,
   clientIpFromRequest,
 } from "@/lib/rate-limit";
+import { verifyTurnstileOrSkip } from "@/lib/security/verify-turnstile";
 import { getSanityWriteClient } from "@/sanity/lib/writeClient";
-import { env } from "@/lib/env";
 
 const MAX_BODY_BYTES = 16_384;
 
@@ -53,38 +53,9 @@ export async function POST(req: Request) {
       token,
     } = parsed.data;
 
-    const turnstileSecret = env.TURNSTILE_SECRET_KEY;
-    if (turnstileSecret) {
-      if (!token) {
-        return NextResponse.json(
-          {
-            error:
-              "Security check failed. Please refresh the page and try again.",
-          },
-          { status: 400 },
-        );
-      }
-
-      const verifyRes = await fetch(
-        "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            secret: turnstileSecret,
-            response: token,
-            remoteip: ip,
-          }),
-        },
-      );
-
-      const verifyData = (await verifyRes.json()) as { success?: boolean };
-      if (!verifyData.success) {
-        return NextResponse.json(
-          { error: "Security verification failed. Please try again." },
-          { status: 400 },
-        );
-      }
+    const turnstileError = await verifyTurnstileOrSkip({ token, ip });
+    if (turnstileError) {
+      return NextResponse.json({ error: turnstileError }, { status: 400 });
     }
 
     const fullName = [firstName, lastName].filter(Boolean).join(" ");

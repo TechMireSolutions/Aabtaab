@@ -20,6 +20,7 @@ import type { ServiceChild } from "@/types/service";
 import { buildNestedSlugMetadata } from "@/lib/cms/page";
 import { getServiceBySlug, getSiteSettings, getSitemapSlugs } from "@/lib/cms/queries";
 import { mapServiceChildForGrid } from "@/lib/catalog/nested-children";
+import { SERVICE_NESTED_CTA_LABELS } from "@/lib/catalog/formatters";
 import { resolveSiteName } from "@/lib/constants";
 import {
   absoluteUrl,
@@ -34,8 +35,6 @@ const SERVICE_BASE = {
   label: "Services",
   eyebrow: "Services",
 };
-
-const SERVICE_CHILD_LABELS = { parent: "View Services", leaf: "Learn More" } as const;
 
 export async function generateStaticParams() {
   const { services } = await getSitemapSlugs();
@@ -84,7 +83,7 @@ export default async function ServiceCatchAllPage({
       excerpt={service.excerpt}
       context={context}
       childCards={context.childItems.map((child) =>
-        mapServiceChildForGrid(child, SERVICE_CHILD_LABELS),
+        mapServiceChildForGrid(child, SERVICE_NESTED_CTA_LABELS),
       )}
       jsonLd={
         <>

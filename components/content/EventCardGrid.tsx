@@ -20,7 +20,7 @@ export default function EventCardGrid({
   }
 
   return (
-    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+    <div className="grid-catalog-cards">
       {events.map((event) => {
         const slug = event.slug.current;
         const location = formatEventLocation(event);

@@ -38,7 +38,7 @@ export default function NestedChildrenGrid({
       {excerpt && (
         <p className="text-body-muted mb-10 max-w-copy">{excerpt}</p>
       )}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3">
+      <div className="grid-catalog-cards">
         {items.map((child) => (
           <ContentCard
             key={child._id}

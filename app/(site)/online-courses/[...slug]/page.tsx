@@ -20,6 +20,7 @@ import type { CourseChild } from "@/types/course";
 import { buildNestedSlugMetadata } from "@/lib/cms/page";
 import { getCourseBySlug, getSiteSettings, getSitemapSlugs } from "@/lib/cms/queries";
 import { mapCourseChildForGrid } from "@/lib/catalog/nested-children";
+import { COURSE_NESTED_CTA_LABELS } from "@/lib/catalog/formatters";
 import { resolveSiteName } from "@/lib/constants";
 import { absoluteUrl, CourseJsonLd, FaqPageJsonLd, faqItemsToSchema, resolveDocOgImage } from "@/lib/seo";
 
@@ -28,8 +29,6 @@ const COURSE_BASE = {
   label: "Online Courses",
   eyebrow: "Courses",
 };
-
-const COURSE_CHILD_LABELS = { parent: "View Courses", leaf: "Enroll Now" } as const;
 
 export async function generateStaticParams() {
   const { courses } = await getSitemapSlugs();
@@ -80,7 +79,7 @@ export default async function CourseCatchAllPage({
       excerpt={course.excerpt}
       context={context}
       childCards={context.childItems.map((child) =>
-        mapCourseChildForGrid(child, COURSE_CHILD_LABELS),
+        mapCourseChildForGrid(child, COURSE_NESTED_CTA_LABELS),
       )}
       jsonLd={
         <>

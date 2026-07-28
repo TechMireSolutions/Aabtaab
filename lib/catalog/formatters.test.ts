@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   formatPriceDuration,
   nestedListCtaLabel,
+  SERVICE_NESTED_CTA_LABELS,
 } from "@/lib/catalog/formatters";
 
 describe("formatPriceDuration", () => {
@@ -21,14 +22,16 @@ describe("formatPriceDuration", () => {
 });
 
 describe("nestedListCtaLabel", () => {
-  const labels = { parent: "View Services", leaf: "Learn More" };
-
   it("uses parent label when children exist", () => {
-    expect(nestedListCtaLabel(3, labels)).toBe("View Services");
+    expect(nestedListCtaLabel(3, SERVICE_NESTED_CTA_LABELS)).toBe(
+      "View Services",
+    );
   });
 
   it("uses leaf label when no children", () => {
-    expect(nestedListCtaLabel(0, labels)).toBe("Learn More");
-    expect(nestedListCtaLabel(undefined, labels)).toBe("Learn More");
+    expect(nestedListCtaLabel(0, SERVICE_NESTED_CTA_LABELS)).toBe("Book Now");
+    expect(nestedListCtaLabel(undefined, SERVICE_NESTED_CTA_LABELS)).toBe(
+      "Book Now",
+    );
   });
 });
