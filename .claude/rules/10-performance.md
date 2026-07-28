@@ -41,7 +41,7 @@ Choose rendering intentionally:
 
 ## 4. Fonts
 
-* **Font Loading:** Use `next/font` for local or Google fonts to ensure CSS is inlined and zero layout shift occurs during font loading (Plus Jakarta Sans via `next/font/google` in `app/layout.tsx`).
+* **Font Loading:** Use `next/font` for local or Google fonts to ensure CSS is inlined and zero layout shift occurs during font loading (Inter via `next/font/google` in `app/layout.tsx`).
 * Avoid loading unnecessary font families or weights.
 * Define reliable fallback fonts.
 * Ensure text remains visible while fonts load (`display: "swap"`).

@@ -17,7 +17,7 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <html lang="en">
+    <html lang="en" dir="ltr">
       <body>
         <NextError statusCode={0} title="Something went wrong" />
       </body>

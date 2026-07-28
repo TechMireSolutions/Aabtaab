@@ -5,14 +5,15 @@ module.exports = {
   apps: [
     {
       name: "aabtaab-next",
-      script: "node_modules/next/dist/bin/next",
-      args: `start -p ${PRODUCTION_PORT}`,
+      script: "deploy/runtime.cjs",
       cwd: __dirname,
-      instances: "max",
-      exec_mode: "cluster",
+      instances: 1,
+      exec_mode: "fork",
+      max_memory_restart: "1G",
       env: {
         NODE_ENV: "production",
         PORT: PRODUCTION_PORT,
+        HOSTNAME: "127.0.0.1",
       },
     },
   ],

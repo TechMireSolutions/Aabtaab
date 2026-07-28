@@ -23,8 +23,9 @@ disable-model-invocation: true
 2. `npm run lint`
 3. `npm run test` (Vitest)
 4. `npm run build`
-5. Install Playwright Chromium
-6. `npm run test:e2e` (smoke tests against prod server on port 3000)
+5. `npm audit --audit-level=high`
+6. Install Playwright Chromium
+7. `npm run test:e2e` (smoke tests via `scripts/run-next.mjs start` on port 3000)
 
 CI env placeholders: `NEXT_PUBLIC_SANITY_PROJECT_ID=ci-placeholder`, `NEXT_PUBLIC_SANITY_DATASET=production`.
 

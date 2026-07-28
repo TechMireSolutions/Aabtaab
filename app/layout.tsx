@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans, Playfair_Display, Noto_Nastaliq_Urdu } from "next/font/google";
+import { Inter, Playfair_Display, Noto_Nastaliq_Urdu } from "next/font/google";
 import { resolveSiteName } from "@/lib/constants";
 import { env } from "@/lib/env";
 import { getSiteSettings } from "@/lib/cms/queries";
@@ -9,10 +9,10 @@ import { JsonLd, WebSiteJsonLd } from "@/lib/seo";
 import { getSiteUrl } from "@/lib/seo";
 import "./globals.css";
 
-const jakarta = Plus_Jakarta_Sans({
+const inter = Inter({
   subsets: ["latin"],
   weight: ["400", "600", "700"],
-  variable: "--font-jakarta",
+  variable: "--font-inter",
   display: "swap",
   preload: true,
   adjustFontFallback: true,
@@ -242,7 +242,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://api.alquran.cloud" />
       </head>
       <body
-        className={`${jakarta.variable} ${playfair.variable} ${nastaliq.variable} font-sans antialiased relative`}
+        className={`${inter.variable} ${playfair.variable} ${nastaliq.variable} font-sans antialiased relative`}
         suppressHydrationWarning
       >
         {/* Organization schema injected into every page */}

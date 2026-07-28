@@ -8,6 +8,8 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   trailingSlash: false,
 
+  reactCompiler: true,
+
   typescript: {
     ignoreBuildErrors: true,
   },

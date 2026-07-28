@@ -57,7 +57,8 @@ let serverData: Partial<z.infer<typeof serverEnvSchema>> = {};
 if (isServer) {
   const serverResult = serverEnvSchema.safeParse({
     SANITY_API_TOKEN: process.env.SANITY_API_TOKEN,
-    SANITY_REVALIDATE_SECRET: process.env.SANITY_REVALIDATE_SECRET,
+    SANITY_REVALIDATE_SECRET:
+      process.env.SANITY_REVALIDATE_SECRET || process.env.REVALIDATE_SECRET,
     SANITY_PREVIEW_SECRET: process.env.SANITY_PREVIEW_SECRET,
     RESEND_API_KEY: process.env.RESEND_API_KEY,
     EMAIL_FROM: process.env.EMAIL_FROM,
@@ -94,7 +95,11 @@ export const env = {
   NEXT_PUBLIC_SENTRY_DSN: publicData.NEXT_PUBLIC_SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN,
   // Server-only variables (will be undefined/unusable on the client)
   SANITY_API_TOKEN: serverData.SANITY_API_TOKEN || (isServer ? process.env.SANITY_API_TOKEN || "" : ""),
-  SANITY_REVALIDATE_SECRET: serverData.SANITY_REVALIDATE_SECRET || (isServer ? process.env.SANITY_REVALIDATE_SECRET || "" : ""),
+  SANITY_REVALIDATE_SECRET:
+    serverData.SANITY_REVALIDATE_SECRET ||
+    (isServer
+      ? process.env.SANITY_REVALIDATE_SECRET || process.env.REVALIDATE_SECRET || ""
+      : ""),
   SANITY_PREVIEW_SECRET: serverData.SANITY_PREVIEW_SECRET || (isServer ? process.env.SANITY_PREVIEW_SECRET : undefined),
   RESEND_API_KEY: serverData.RESEND_API_KEY || (isServer ? process.env.RESEND_API_KEY : undefined),
   EMAIL_FROM: serverData.EMAIL_FROM || (isServer ? process.env.EMAIL_FROM : undefined),

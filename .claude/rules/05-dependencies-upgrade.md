@@ -15,11 +15,11 @@ Apply when upgrading deps, touching `package.json`, CI, or Node engine constrain
 | Layer | Target |
 |-------|--------|
 | Runtime | Node **24.17** (`.nvmrc`; `engines` ≥22.12) |
-| Framework | Next.js **16** (match `eslint-config-next`) |
-| UI | React **19** + React DOM **19** |
-| CMS | Sanity **6** + `next-sanity` + `@sanity/client` |
-| CSS | Tailwind **4** + `@tailwindcss/postcss` |
-| Language | TypeScript **7** (type-check/build) / **6** (ESLint) |
+| Framework | Next.js **16.2.12** (match `eslint-config-next`) |
+| UI | React **19.2.8** + React Compiler **1.0** |
+| CMS | Sanity **6.7** + `next-sanity` **13.2** + `@sanity/client` **7.25** |
+| CSS | Tailwind **4.3.3** + `@tailwindcss/postcss` |
+| Language | TypeScript **6.0.3** (strict, target ES2022) |
 
 ## Upgrade workflow
 
@@ -42,8 +42,9 @@ Apply when upgrading deps, touching `package.json`, CI, or Node engine constrain
 | Package | Constraint |
 |---------|------------|
 | **ESLint** | Stay on **v9.39.4** until `eslint-config-next` plugins support v10 (v10 tested — breaks `react/display-name` rule) |
-| **TypeScript** | Use v7.0.2 for builds/typecheck and v6.0.3 alias for ESLint (workaround for `Cannot read properties of undefined (reading 'Cjs')` error) |
-| **Sanity audit fixes** | Transitive `js-yaml`/`uuid` — do not downgrade Sanity to fix |
+| **TypeScript** | **6.0.3** only — do not add dual TS 7 setup |
+| **Sanity audit fixes** | Transitive `js-yaml`/`uuid`/`adm-zip` — use `overrides`; do not downgrade Sanity |
+| **sharp** | Override **0.35.0** until Next pins a patched libvips bundle |
 | **Production port** | Change only `server.config.cjs` (`PRODUCTION_PORT = 3000`) |
 | **Studio** | `sanity`, `@sanity/vision`, `next-sanity` must stay on Sanity 6 matrix |
 
@@ -56,7 +57,7 @@ Apply when upgrading deps, touching `package.json`, CI, or Node engine constrain
 ## PM2 & Hetzner Deployment
 
 * Use Node.js version defined in `.nvmrc` (currently Node **24.17.0**).
-* Run PM2 in cluster mode (`instances: "max"` or structured cluster via `ecosystem.config.cjs`).
+* PM2 runs in **fork** mode (`instances: 1` via `ecosystem.config.cjs`).
 * Processes must remain completely stateless: do not store sessions, rate limits, or message queues in local process memory.
 * Do not expose port 3000 directly to the public internet; use Hetzner firewall rules to restrict traffic to Cloudflare origin IP addresses.
 * Run the Node application process under a restricted system user rather than `root`.
