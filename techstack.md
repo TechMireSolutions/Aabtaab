@@ -19,7 +19,7 @@
 | Runtime | Node.js | ≥ 22.12 (CI/Prod **24.18.0**) | Managed via NVM; required for Sanity v6 engine |
 | Framework | Next.js (App Router) | **16.2.12** (Active LTS) | Patched for July 2026 SSR/Server Action security advisories; Turbopack build engine |
 | UI Library | React / React DOM | **19.2.8** | RSC-first architecture; React Compiler 1.0 for memoization |
-| Language | TypeScript | **6.0.3** (+ **7.0.2** side-by-side) | Strict mode, target **ES2022**; TS6 for ESLint; `typecheck:ts7` for TS7 |
+| Language | TypeScript | **7.0.2** | Strict mode, target **ES2022**; Next uses `experimental.useTypeScriptCli` |
 | Styling | Tailwind CSS v4 | **4.3.3** | Native CSS-first theme engine (`@import "tailwindcss"`) |
 | Icons | lucide-react | **1.27.0** | Client components; `optimizePackageImports` enabled |
 | Typography | Inter / System Sans | Google Fonts | Non-blocking `display: swap` |
@@ -28,7 +28,7 @@
 | CMS Bridge | next-sanity | **13.2.2** | Cached `sanityFetch` wrapper, Studio embedding |
 | Validation | Zod | **4.4.3** | Schema validation for API payloads and forms |
 | Tests | Vitest | **4.1.10** | Unit testing under `lib/*.test.ts` |
-| Linting | ESLint + Config Next | **10.8.0** / **16.2.12** | React version pinned in `eslint.config.mjs` (eslint-plugin-react ESLint 10 workaround) |
+| Linting | ESLint + Next/React plugins | **10.8.0** | Custom flat config (no `eslint-config-next` / `typescript-eslint` — incompatible with TS 7.0) |
 
 ### Supporting stack
 
@@ -153,8 +153,9 @@ scripts/run-next.mjs Dev/prod Next launcher (port 3000)
 
 | Item | Constraint |
 |------|------------|
-| **ESLint** | **10.8.0** — set `settings.react.version` in `eslint.config.mjs` until `eslint-plugin-react` supports ESLint 10 natively |
-| **TypeScript** | Keep **6.0.3** as primary (`typescript`) for ESLint/`typescript-eslint`; optional **7.0.2** via `typescript-7` alias (`npm run typecheck:ts7`) until TS 7.1 API |
+| **ESLint** | Custom flat config with `@next/eslint-plugin-next` + react plugins — `eslint-config-next` embeds `typescript-eslint`, which rejects TS 7.0 |
+| **TypeScript** | **7.0.2** primary; Next requires `experimental.useTypeScriptCli: true` until TS 7.1 JS API |
+| **eslint-plugin-react** | Peer range still ends at ESLint 9 — install with `legacy-peer-deps=true` in `.npmrc`; pin `settings.react.version` |
 | **npm audit** | Transitive `sharp`/`adm-zip`/`minimatch`+`brace-expansion` pinned via `overrides` until upstream resolves |
 | **PM2** | Deploy deletes `aabtaab-next` before `pm2 start` so stale `args` are not retained |
 | **Node on VPS** | Deploy loads nvm from `.nvmrc` (24.18.0) |

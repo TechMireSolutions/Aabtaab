@@ -17,6 +17,8 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ["lucide-react"],
     inlineCss: true,
+    // TypeScript 7 has no JS Compiler API — run project-local `tsc` instead
+    useTypeScriptCli: true,
   },
 
   turbopack: {

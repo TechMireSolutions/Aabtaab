@@ -19,7 +19,7 @@ Apply when upgrading deps, touching `package.json`, CI, or Node engine constrain
 | UI | React **19.2.8** + React Compiler **1.0** |
 | CMS | Sanity **6.7** + `next-sanity` **13.2** + `@sanity/client` **7.25** |
 | CSS | Tailwind **4.3.3** + `@tailwindcss/postcss` |
-| Language | TypeScript **6.0.3** (primary) + **7.0.2** alias `typescript-7` |
+| Language | TypeScript **7.0.2** (`experimental.useTypeScriptCli`) |
 
 ## Upgrade workflow
 
@@ -41,11 +41,12 @@ Apply when upgrading deps, touching `package.json`, CI, or Node engine constrain
 
 | Package | Constraint |
 |---------|------------|
-| **ESLint** | **10.x** OK with `settings.react.version` in `eslint.config.mjs` (workaround for `eslint-plugin-react` until it supports ESLint 10) |
-| **TypeScript** | Primary **6.0.3** for ESLint/`typescript-eslint` (peer `<6.1`). Optional **7.0.2** via `typescript-7` alias — do not replace primary until TS 7.1 API |
+| **ESLint** | Custom flat config (`@next/eslint-plugin-next`, react, hooks, jsx-a11y). Do **not** reintroduce `eslint-config-next` until it drops `typescript-eslint` or TS 7.1 lands |
+| **TypeScript** | **7.0.2** — keep `experimental.useTypeScriptCli: true` in `next.config.ts` |
+| **legacy-peer-deps** | `.npmrc` sets `legacy-peer-deps=true` for `eslint-plugin-react` vs ESLint 10 |
 | **Sanity audit fixes** | Transitive `js-yaml`/`uuid`/`adm-zip` — use `overrides`; do not downgrade Sanity |
 | **sharp** | Override **0.35.0** until Next pins a patched libvips bundle |
-| **minimatch / brace-expansion** | Override `minimatch` **^10.2.5** + `brace-expansion` **^5.0.8** (do not override brace-expansion alone — breaks ESLint minimatch 3) |
+| **minimatch / brace-expansion** | Override `minimatch` **^10.2.5** + `brace-expansion` **^5.0.8** (do not override brace-expansion alone — breaks older minimatch) |
 | **PM2 deploy** | Always `pm2 delete` then `pm2 start` — `startOrRestart` can keep stale `args` |
 | **Production port** | Change only `server.config.cjs` (`PRODUCTION_PORT = 3000`) |
 | **Studio** | `sanity`, `@sanity/vision`, `next-sanity` must stay on Sanity 6 matrix |

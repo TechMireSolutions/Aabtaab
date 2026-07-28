@@ -35,9 +35,6 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
-      - name: Typecheck (TypeScript 7)
-        run: npm run typecheck:ts7
-
       - name: Test
         run: npm run test
 
