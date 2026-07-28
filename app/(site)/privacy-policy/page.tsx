@@ -3,11 +3,13 @@ import LegalPageShell, {
   legalSiteName,
 } from "@/components/layout/LegalPageShell";
 import { DEFAULT_SITE_NAME } from "@/lib/constants";
+import { buildPageMetadata } from "@/lib/seo/metadata";
 
-export const metadata = {
+export const metadata = buildPageMetadata({
   title: "Privacy Policy",
   description: `Privacy Policy for ${DEFAULT_SITE_NAME}`,
-};
+  path: "/privacy-policy",
+});
 
 export default function PrivacyPolicyPage() {
   const site = legalSiteName();

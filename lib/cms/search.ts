@@ -39,5 +39,5 @@ export const searchSite = cache(async (term: string): Promise<SearchResponse> =>
     revalidate: 3600,
   });
 
-  return { keywordMatch, suggestions, results };
+  return { keywordMatch, suggestions, results: results ?? [] };
 });

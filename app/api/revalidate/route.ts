@@ -7,16 +7,18 @@ import {
   REVALIDATE_OPTIONS,
   revalidateSlugCollection,
 } from "@/lib/revalidate";
+import { secretsEqual } from "@/lib/security/secrets";
 
 const SANITY_REVALIDATE_SECRET = env.SANITY_REVALIDATE_SECRET;
 
 export async function POST(request: NextRequest) {
   try {
+    // Prefer header secret; query ?secret= kept for legacy Sanity webhooks only.
     const secret =
       request.headers.get("x-sanity-webhook-secret") ??
       new URL(request.url).searchParams.get("secret");
 
-    if (!SANITY_REVALIDATE_SECRET || secret !== SANITY_REVALIDATE_SECRET) {
+    if (!secretsEqual(secret, SANITY_REVALIDATE_SECRET)) {
       return NextResponse.json({ message: "Invalid secret" }, { status: 401 });
     }
 

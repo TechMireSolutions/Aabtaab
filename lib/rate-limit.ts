@@ -6,40 +6,63 @@ import { clientIpFromRequest } from "@/lib/request-ip";
 
 export { clientIpFromRequest };
 
-const WINDOW_MS = 15 * 60 * 1000;
-const MAX_REQUESTS = 5;
+const CONTACT_WINDOW_MS = 15 * 60 * 1000;
+const CONTACT_MAX = 5;
 
-let upstashLimiter: Ratelimit | null = null;
+const SEARCH_WINDOW_MS = 60 * 1000;
+const SEARCH_MAX = 60;
+
+let contactUpstashLimiter: Ratelimit | null = null;
+let searchUpstashLimiter: Ratelimit | null = null;
 const memoryHits = new Map<string, { count: number; resetAt: number }>();
 
-function getUpstashLimiter(): Ratelimit | null {
+function getRedis(): Redis | null {
   const url = env.UPSTASH_REDIS_REST_URL;
   const token = env.UPSTASH_REDIS_REST_TOKEN;
   if (!url || !token) return null;
+  return new Redis({ url, token });
+}
 
-  if (!upstashLimiter) {
-    upstashLimiter = new Ratelimit({
-      redis: new Redis({
-        url,
-        token,
-      }),
-      limiter: Ratelimit.slidingWindow(MAX_REQUESTS, "15 m"),
+function getContactUpstashLimiter(): Ratelimit | null {
+  const redis = getRedis();
+  if (!redis) return null;
+  if (!contactUpstashLimiter) {
+    contactUpstashLimiter = new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(CONTACT_MAX, "15 m"),
       prefix: "aabtaab:contact",
     });
   }
-  return upstashLimiter;
+  return contactUpstashLimiter;
 }
 
-function checkMemoryLimit(key: string): boolean {
+function getSearchUpstashLimiter(): Ratelimit | null {
+  const redis = getRedis();
+  if (!redis) return null;
+  if (!searchUpstashLimiter) {
+    searchUpstashLimiter = new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(SEARCH_MAX, "1 m"),
+      prefix: "aabtaab:search",
+    });
+  }
+  return searchUpstashLimiter;
+}
+
+function checkMemoryLimit(
+  key: string,
+  max: number,
+  windowMs: number,
+): boolean {
   const now = Date.now();
   const entry = memoryHits.get(key);
 
   if (!entry || now > entry.resetAt) {
-    memoryHits.set(key, { count: 1, resetAt: now + WINDOW_MS });
+    memoryHits.set(key, { count: 1, resetAt: now + windowMs });
     return true;
   }
 
-  if (entry.count >= MAX_REQUESTS) {
+  if (entry.count >= max) {
     return false;
   }
 
@@ -47,21 +70,49 @@ function checkMemoryLimit(key: string): boolean {
   return true;
 }
 
-export async function checkContactRateLimit(
+async function checkWithFallback(
   identifier: string,
+  limiter: Ratelimit | null,
+  max: number,
+  windowMs: number,
 ): Promise<{ allowed: boolean }> {
-  const limiter = getUpstashLimiter();
-
   if (limiter) {
     try {
       const { success } = await limiter.limit(identifier);
       return { allowed: success };
     } catch (error) {
-      console.error("Upstash rate limiting failed, falling back to local memory:", error);
+      console.error(
+        "Upstash rate limiting failed, falling back to local memory:",
+        error,
+      );
       Sentry.captureException(error);
-      return { allowed: checkMemoryLimit(identifier) };
+      return { allowed: checkMemoryLimit(identifier, max, windowMs) };
     }
   }
 
-  return { allowed: checkMemoryLimit(identifier) };
+  return { allowed: checkMemoryLimit(identifier, max, windowMs) };
+}
+
+/** Public form writes: 5 requests / 15 minutes / IP */
+export async function checkContactRateLimit(
+  identifier: string,
+): Promise<{ allowed: boolean }> {
+  return checkWithFallback(
+    identifier,
+    getContactUpstashLimiter(),
+    CONTACT_MAX,
+    CONTACT_WINDOW_MS,
+  );
+}
+
+/** Search API: 60 requests / minute / IP */
+export async function checkSearchRateLimit(
+  identifier: string,
+): Promise<{ allowed: boolean }> {
+  return checkWithFallback(
+    identifier,
+    getSearchUpstashLimiter(),
+    SEARCH_MAX,
+    SEARCH_WINDOW_MS,
+  );
 }

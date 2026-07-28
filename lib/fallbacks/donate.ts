@@ -1,21 +1,15 @@
+/** Soft defaults only — prefer CMS `donateCauses` when configured. */
 export const DEFAULT_DONATE_CAUSES = [
   {
     title: "General Donation",
-    description: "Support the overall mission of Aabtaab",
+    description: "Support Aabtaab’s educational and community mission",
   },
   {
-    title: "Quran Education",
-    description: "Fund free Quran classes for children",
+    title: "Education Programs",
+    description: "Help sustain online courses and learning resources",
   },
   {
-    title: "Muharram Programs",
-    description: "Help organise Majalis and Aza events",
-  },
-  {
-    title: "Dar Ul Quran Support",
-    description: "Contribute to our sister Quranic institute",
+    title: "Community Programs",
+    description: "Support majalis, gatherings, and outreach",
   },
 ] as const;
-
-export const DEFAULT_PAYPAL_DONATE_URL =
-  "https://www.paypal.com/donate/?hosted_button_id=Q22WVGY8WWZ4C";

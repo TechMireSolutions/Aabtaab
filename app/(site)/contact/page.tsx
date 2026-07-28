@@ -74,7 +74,11 @@ export default async function ContactPage() {
         eyebrow={page?.eyebrow || "Reach Out"}
         title={page?.title || "Contact Us"}
         subtitle={
-          sanitizePublicCopy(page?.subtitle) ||
+          sanitizePublicCopy(page?.subtitle)
+            ?.replace(/\bavailable\s*24\/7\b/gi, "happy to help")
+            ?.replace(/\b24\/7\b/g, "")
+            ?.replace(/\s{2,}/g, " ")
+            ?.trim() ||
           "Get in touch for services, courses, or general inquiries"
         }
       />

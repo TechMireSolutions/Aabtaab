@@ -81,7 +81,7 @@ export function buildNestedSlugMetadata(
     title,
     description,
     path: canonicalPath,
-    noIndex: doc?.seo?.noIndex,
+    noIndex: !doc || Boolean(doc.seo?.noIndex),
     ogImage: resolveDocOgImage(doc),
     keywords: doc?.seo?.keywords,
   });

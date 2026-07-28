@@ -5,12 +5,18 @@ const EMPTY_CATALOG_HREFS: Record<string, keyof CatalogCounts> = {
   "/scholars": "scholars",
   "/events": "events",
   "/posts": "posts",
+  "/articles": "posts",
 };
 
 export interface CatalogCounts {
-  scholars: number;
-  events: number;
-  posts: number;
+  /** null = unknown (CMS outage) — fail open and keep the link */
+  scholars: number | null;
+  events: number | null;
+  posts: number | null;
+}
+
+function normalizeNavPath(href: string | undefined): string {
+  return href?.split("?")[0]?.replace(/\/$/, "") || "";
 }
 
 export function filterNavForEmptyCatalogs(
@@ -19,9 +25,11 @@ export function filterNavForEmptyCatalogs(
 ): NavItem[] {
   if (!items?.length) return [];
   return items.filter((item) => {
-    const path = item.href?.split("?")[0]?.replace(/\/$/, "") || "";
+    const path = normalizeNavPath(item.href);
     const countKey = EMPTY_CATALOG_HREFS[path];
     if (!countKey) return true;
-    return counts[countKey] > 0;
+    const count = counts[countKey];
+    if (count === null || count === undefined) return true;
+    return count > 0;
   });
 }

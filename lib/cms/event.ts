@@ -23,7 +23,7 @@ export async function buildEventPageMetadata(slug: string): Promise<Metadata> {
     title,
     description,
     path,
-    noIndex: event?.seo?.noIndex,
+    noIndex: !event || Boolean(event.seo?.noIndex),
     ogImage: og,
     keywords: event?.seo?.keywords,
   });

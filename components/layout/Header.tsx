@@ -28,7 +28,18 @@ function buildNavLinks(
   navItems: NavItem[] | undefined,
   darulQuranUrl?: string,
 ): NavItem[] {
-  const base = navItems?.length ? [...navItems] : [...FALLBACK_NAV];
+  const base = (navItems?.length ? [...navItems] : [...FALLBACK_NAV]).map(
+    (item) => {
+      if (darulQuranUrl && /dar\s*ul\s*quran/i.test(item.label)) {
+        return {
+          ...item,
+          href: darulQuranUrl,
+          external: true,
+        };
+      }
+      return item;
+    },
+  );
   const hasDarUlQuran = base.some((item) =>
     /dar\s*ul\s*quran/i.test(item.label),
   );

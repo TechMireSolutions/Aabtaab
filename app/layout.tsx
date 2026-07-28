@@ -76,9 +76,8 @@ export async function generateMetadata(): Promise<Metadata> {
       default: siteName,
       template: `%s | ${siteName}`,
     },
-    alternates: {
-      canonical: "/",
-    },
+    // Canonical is set per-page via buildPageMetadata — do not set "/" here
+    // or child routes that omit alternates inherit the homepage URL.
 
     // ── Core meta ───────────────────────────────────────────────────────────
     description,
@@ -87,11 +86,11 @@ export async function generateMetadata(): Promise<Metadata> {
       "Islamic education",
       "Shia Muslim",
       "Quran for kids",
-      "Islamic school USA",
-      "Shia parenting",
       "online Islamic courses",
       "Muharram events",
-      "Shia community United States",
+      "Shia community",
+      "Niyabat Ziarat",
+      "Khums",
     ],
 
     // ── Robots ──────────────────────────────────────────────────────────────

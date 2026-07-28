@@ -33,7 +33,7 @@ export async function buildPostPageMetadata(slug: string): Promise<Metadata> {
     title,
     description,
     path: canonicalPath,
-    noIndex: post?.seo?.noIndex,
+    noIndex: !post || Boolean(post.seo?.noIndex),
     ogImage: ogImageUrl,
     keywords: post?.seo?.keywords,
   });

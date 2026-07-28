@@ -11,7 +11,7 @@ vi.mock("@/lib/env", () => ({
   },
 }));
 
-import { checkContactRateLimit } from "@/lib/rate-limit";
+import { checkContactRateLimit, checkSearchRateLimit } from "@/lib/rate-limit";
 
 describe("checkContactRateLimit (memory fallback)", () => {
   beforeEach(() => {
@@ -37,5 +37,16 @@ describe("checkContactRateLimit (memory fallback)", () => {
     await expect(checkContactRateLimit(key)).resolves.toEqual({
       allowed: false,
     });
+  });
+});
+
+describe("checkSearchRateLimit (memory fallback)", () => {
+  it("allows more requests than the contact limiter", async () => {
+    const key = `test-search-${Date.now()}-${Math.random()}`;
+    for (let i = 0; i < 10; i += 1) {
+      await expect(checkSearchRateLimit(key)).resolves.toEqual({
+        allowed: true,
+      });
+    }
   });
 });

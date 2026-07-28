@@ -3,11 +3,14 @@ import { getTestimonials } from "@/lib/cms/queries";
 import PageHeader from "@/components/layout/PageHeader";
 import ReviewForm from "@/components/sections/ReviewForm";
 import { Quote, MessageSquareHeart, Sparkles } from "lucide-react";
+import { buildPageMetadata } from "@/lib/seo/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "Student Reviews",
-  description: "Read what our students and community members say about Aabtaab, and submit your own review.",
-};
+  description:
+    "Read what our students and community members say about Aabtaab, and submit your own review.",
+  path: "/reviews",
+});
 
 export default async function ReviewsPage() {
   const testimonials = await getTestimonials() || [];

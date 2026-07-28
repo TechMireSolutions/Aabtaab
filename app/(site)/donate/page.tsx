@@ -11,7 +11,6 @@ import {
 } from "@/lib/cms/queries";
 import {
   DEFAULT_DONATE_CAUSES,
-  DEFAULT_PAYPAL_DONATE_URL,
 } from "@/lib/fallbacks/donate";
 
 export const generateMetadata = defineCmsPageMetadata("donate", {
@@ -89,31 +88,35 @@ export default async function DonatePage() {
             </h2>
             <p className="text-body-muted mx-auto mb-6 max-w-sm text-slate-400">
               {settings?.donateHowToText ||
-                "Contact us for bank transfer details or use the online payment link below."}
+                (settings?.donateUrl
+                  ? "Contact us for bank transfer details or use the online payment link below."
+                  : "Contact us for bank transfer details and local payment options.")}
             </p>
             <div className="flex flex-col justify-center gap-3 sm:flex-row">
-              <a
-                href={settings?.donateUrl || DEFAULT_PAYPAL_DONATE_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group btn-paypal"
-              >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  aria-hidden="true"
+              {settings?.donateUrl ? (
+                <a
+                  href={settings.donateUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group btn-paypal"
                 >
-                  <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 2.28a.78.78 0 0 1 .77-.65h7.794c2.728 0 4.636.602 5.668 1.79.49.56.802 1.147.952 1.795.157.676.13 1.484-.08 2.47l-.007.045v.387l.277.157c.232.13.442.29.625.472.31.318.524.72.636 1.194.115.483.103 1.056-.036 1.705-.164.76-.428 1.42-.785 1.963a5.09 5.09 0 0 1-1.247 1.39c-.478.365-1.04.64-1.674.82-.617.175-1.32.264-2.09.264h-.497a1.41 1.41 0 0 0-1.393 1.19l-.112.61-.58 3.672-.026.14a.78.78 0 0 1-.77.648z" />
-                </svg>
-                {settings?.donatePayOnlineLabel || "Donate via PayPal"}
-                <ArrowRight
-                  size={14}
-                  strokeWidth={2.5}
-                  className="transition-transform group-hover:translate-x-0.5"
-                />
-              </a>
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 2.28a.78.78 0 0 1 .77-.65h7.794c2.728 0 4.636.602 5.668 1.79.49.56.802 1.147.952 1.795.157.676.13 1.484-.08 2.47l-.007.045v.387l.277.157c.232.13.442.29.625.472.31.318.524.72.636 1.194.115.483.103 1.056-.036 1.705-.164.76-.428 1.42-.785 1.963a5.09 5.09 0 0 1-1.247 1.39c-.478.365-1.04.64-1.674.82-.617.175-1.32.264-2.09.264h-.497a1.41 1.41 0 0 0-1.393 1.19l-.112.61-.58 3.672-.026.14a.78.78 0 0 1-.77.648z" />
+                  </svg>
+                  {settings?.donatePayOnlineLabel || "Donate via PayPal"}
+                  <ArrowRight
+                    size={14}
+                    strokeWidth={2.5}
+                    className="transition-transform group-hover:translate-x-0.5"
+                  />
+                </a>
+              ) : null}
               <Link href="/contact" className="btn-pill-ghost">
                 {settings?.donateContactLabel || "Contact Us"}
               </Link>
@@ -134,7 +137,7 @@ export default async function DonatePage() {
                 Use any of these local payment options for easy bank transfers and mobile payments.
               </p>
             </div>
-            <DynamicPaymentMethods methods={paymentMethods} />
+            <DynamicPaymentMethods methods={paymentMethods ?? []} />
           </div>
 
           <p className="text-caption mt-6 text-center">

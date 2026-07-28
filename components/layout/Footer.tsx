@@ -33,19 +33,27 @@ function ColHeading({ id, children }: { id?: string; children: React.ReactNode }
 function NavLink({
   href,
   children,
+  external,
 }: {
   href: string;
   children: React.ReactNode;
+  external?: boolean;
 }) {
   return (
     <li>
       <Link
         href={href}
+        {...(external
+          ? { target: "_blank", rel: "noopener noreferrer" }
+          : {})}
         className="group relative flex items-center py-1.5 text-sm text-slate-400 hover:text-brand-400 transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-400"
       >
         <span className="transition-transform duration-200 group-hover:translate-x-1">
           {children}
         </span>
+        {external ? (
+          <span className="sr-only"> (opens in new tab)</span>
+        ) : null}
       </Link>
     </li>
   );
@@ -178,8 +186,8 @@ export default function Footer({
             <nav className="lg:col-span-2" aria-labelledby="footer-quick-links">
               <ColHeading id="footer-quick-links">Quick Links</ColHeading>
               <ul className="space-y-1">
-                {quickLinks.map(({ label, href }) => (
-                  <NavLink key={href} href={href}>
+                {quickLinks.map(({ label, href, external }) => (
+                  <NavLink key={href} href={href} external={external}>
                     {label}
                   </NavLink>
                 ))}

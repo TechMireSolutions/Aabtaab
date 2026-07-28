@@ -46,12 +46,20 @@ async function fetchFromSanity<T>(
   params: QueryParams,
 ): Promise<T> {
   if (!env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
-    console.warn("⚠️ NEXT_PUBLIC_SANITY_PROJECT_ID is not configured. Returning null for Sanity fetch.");
+    console.warn(
+      "⚠️ NEXT_PUBLIC_SANITY_PROJECT_ID is not configured. Returning null for Sanity fetch.",
+    );
     return null as unknown as T;
   }
   const preview = await isDraftModeEnabled();
   const activeClient = preview ? getPreviewClient() : client;
   return activeClient.fetch<T>(query, params);
+}
+
+function reportFetchError(error: unknown, context: string): never {
+  console.error(context, error);
+  Sentry.captureException(error);
+  throw error instanceof Error ? error : new Error(String(error));
 }
 
 export async function sanityFetch<T>({
@@ -61,7 +69,9 @@ export async function sanityFetch<T>({
   revalidate = 3600,
 }: SanityFetchOptions): Promise<T> {
   if (!env.NEXT_PUBLIC_SANITY_PROJECT_ID) {
-    console.warn("⚠️ NEXT_PUBLIC_SANITY_PROJECT_ID is missing. Sanity fetch skipped.");
+    console.warn(
+      "⚠️ NEXT_PUBLIC_SANITY_PROJECT_ID is missing. Sanity fetch skipped.",
+    );
     return null as unknown as T;
   }
 
@@ -71,9 +81,7 @@ export async function sanityFetch<T>({
     try {
       return await fetchFromSanity<T>(query, params);
     } catch (error) {
-      console.error("Sanity fetch failed:", error);
-      Sentry.captureException(error);
-      return null as unknown as T;
+      reportFetchError(error, "Sanity fetch failed:");
     }
   }
 
@@ -82,9 +90,9 @@ export async function sanityFetch<T>({
       try {
         return await client.fetch<T>(query, params);
       } catch (error) {
-        console.error("Sanity fetch failed in production:", error);
-        Sentry.captureException(error);
-        return null as unknown as T;
+        // Rethrow so callers get an error boundary / 500 instead of a soft 404.
+        // Failed responses are not cached by unstable_cache when the fn throws.
+        reportFetchError(error, "Sanity fetch failed in production:");
       }
     },
     [query, JSON.stringify(params)],

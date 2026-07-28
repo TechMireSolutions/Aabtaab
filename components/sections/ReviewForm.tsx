@@ -1,12 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import Script from "next/script";
 import { z } from "zod";
+import { env } from "@/lib/env";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name is required"),
   role: z.string().optional(),
   quote: z.string().min(10, "Review must be at least 10 characters"),
+  website: z.string().optional(),
 });
 
 type FormStatus = "idle" | "loading" | "success" | "error";
@@ -20,27 +23,45 @@ export default function ReviewForm() {
     setStatus("loading");
     setErrorMessage("");
 
-    const formData = new FormData(e.currentTarget);
+    const form = e.currentTarget;
+    const formData = new FormData(form);
     const data = {
       name: formData.get("name") as string,
       role: formData.get("role") as string,
       quote: formData.get("quote") as string,
+      website: (formData.get("website") as string) || "",
     };
 
     try {
       const validData = formSchema.parse(data);
+      const turnstileToken =
+        (formData.get("cf-turnstile-response") as string) || undefined;
+
       const res = await fetch("/api/review", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(validData),
+        body: JSON.stringify({
+          name: validData.name,
+          role: validData.role,
+          quote: validData.quote,
+          website: validData.website,
+          token: turnstileToken,
+        }),
       });
 
       if (!res.ok) {
-        throw new Error("Failed to submit review");
+        const payload = (await res.json().catch(() => null)) as {
+          error?: string;
+        } | null;
+        throw new Error(payload?.error || "Failed to submit review");
       }
 
       setStatus("success");
-      (e.target as HTMLFormElement).reset();
+      form.reset();
+      const turnstile = (
+        window as unknown as { turnstile?: { reset: () => void } }
+      ).turnstile;
+      turnstile?.reset();
     } catch (err: unknown) {
       setStatus("error");
       if (err instanceof z.ZodError) {
@@ -77,6 +98,16 @@ export default function ReviewForm() {
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+          <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden="true">
+            <label htmlFor="review-website">Website</label>
+            <input
+              id="review-website"
+              name="website"
+              type="text"
+              tabIndex={-1}
+              autoComplete="off"
+            />
+          </div>
           <div>
             <label
               htmlFor="review-name"
@@ -128,6 +159,21 @@ export default function ReviewForm() {
               disabled={status === "loading"}
             />
           </div>
+
+          {env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
+            <div className="flex justify-start py-1">
+              <Script
+                src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+                async
+                defer
+              />
+              <div
+                className="cf-turnstile"
+                data-sitekey={env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+                data-theme="light"
+              />
+            </div>
+          )}
 
           {status === "error" && (
             <div

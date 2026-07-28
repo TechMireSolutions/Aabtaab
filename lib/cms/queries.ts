@@ -123,10 +123,11 @@ export const getSiteLayoutData = cache(async () => {
       }),
     ]);
 
+  // null counts = unknown (fetch returned null) — fail open in nav filter
   const counts = {
-    scholars: catalogCounts?.scholars ?? 0,
-    events: catalogCounts?.events ?? 0,
-    posts: catalogCounts?.posts ?? 0,
+    scholars: catalogCounts?.scholars ?? null,
+    events: catalogCounts?.events ?? null,
+    posts: catalogCounts?.posts ?? null,
   };
 
   const headerItems = filterNavForEmptyCatalogs(

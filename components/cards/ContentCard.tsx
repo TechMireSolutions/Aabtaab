@@ -64,7 +64,7 @@ export default function ContentCard({
       <div className="flex flex-1 flex-col px-4 pt-4 pb-5">
         {badge && <span className="badge-pill mb-3">{badge}</span>}
 
-        <h3 className="mb-2 line-clamp-2 text-base-plus n font-semibold leading-snug text-[var(--color-text-page)]">
+        <h3 className="mb-2 line-clamp-2 text-base-plus font-semibold leading-snug text-[var(--color-text-page)]">
           <Link
             href={href}
             className="rounded-sm transition-colors duration-150 hover:text-brand-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600"
