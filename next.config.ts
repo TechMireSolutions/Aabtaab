@@ -28,7 +28,11 @@ const nextConfig: NextConfig = {
     },
   },
 
-  webpack: (config, { isServer }) => {
+  webpack: (config, { isServer, dev }) => {
+    // Small VPS deploys: limit webpack parallelism to avoid SIGSEGV under memory pressure.
+    if (!dev && process.env.NEXT_BUILD_LOW_MEM === "1") {
+      config.parallelism = 1;
+    }
     if (!isServer) {
       config.resolve ??= {};
       config.resolve.alias = {
