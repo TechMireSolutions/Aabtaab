@@ -19,12 +19,13 @@ Never invent a new helper when the SSOT table already names one.
 | Concern | Home |
 |---------|------|
 | CMS page metadata | `defineCmsPageMetadata`, `buildNestedSlugMetadata` → `lib/cms/page.ts` |
-| Cached Sanity reads | `getCmsPage`, `getSiteSettings`, `getPosts`, `getContactFormOptions`, … → `lib/cms/queries.ts` |
+| Cached Sanity reads | `getCmsPage`, `getSiteSettings`, `getPosts`, … → `lib/cms/queries.ts` (domain modules `queries-*.ts`) |
 | Site name fallback | `DEFAULT_SITE_NAME`, `resolveSiteName()` → `lib/constants.ts` |
 | Sitemap slugs | `getSitemapSlugs` → `lib/cms/queries.ts` |
 | Site search | `searchSite` → `lib/cms/search.ts` |
 | Production caching | `sanityFetch` → `sanity/lib/fetch.ts` (only place for `unstable_cache`) |
 | Catalog page shell | `CatalogPageLayout` + `PageHeader` (supports `above` slot) |
+| Nested course/service catch-all | `NestedCatalogPageShell` + `lib/catalog/nested-page.ts` |
 | Catalog dark hero | `CatalogDarkHero` → `CourseHeroSection` / `ServiceHeroSection` |
 | Article detail chrome | `ArticleDetailShell` (posts, events) |
 | Legal pages | `LegalPageShell` + `LegalSection` (privacy, terms) |

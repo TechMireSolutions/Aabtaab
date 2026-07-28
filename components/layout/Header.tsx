@@ -7,9 +7,7 @@ import dynamic from "next/dynamic";
 import NavLinks from "@/components/layout/NavLinks";
 import MobileNavSidebarLoader from "@/components/layout/MobileNavSidebarLoader";
 import SiteBrandLogo from "@/components/layout/SiteBrandLogo";
-
 import { DEFAULT_SITE_NAME } from "@/lib/constants";
-import { FALLBACK_NAV, withoutHomeNavItems } from "@/lib/fallbacks/nav";
 import type { NavItem } from "@/types/site-navigation";
 
 const SearchPalette = dynamic(() => import("@/components/layout/SearchPalette"), {
@@ -17,55 +15,20 @@ const SearchPalette = dynamic(() => import("@/components/layout/SearchPalette"),
 });
 
 interface HeaderProps {
-  darulQuranUrl?: string;
   siteName?: string;
   logoUrl?: string | null;
-  navItems?: NavItem[];
-  searchPlaceholder?: string;
-}
-
-function buildNavLinks(
-  navItems: NavItem[] | undefined,
-  darulQuranUrl?: string,
-): NavItem[] {
-  const base = (navItems?.length ? [...navItems] : [...FALLBACK_NAV]).map(
-    (item) => {
-      if (darulQuranUrl && /dar\s*ul\s*quran/i.test(item.label)) {
-        return {
-          ...item,
-          href: darulQuranUrl,
-          external: true,
-        };
-      }
-      return item;
-    },
-  );
-  const hasDarUlQuran = base.some((item) =>
-    /dar\s*ul\s*quran/i.test(item.label),
-  );
-  if (!hasDarUlQuran) {
-    base.push({
-      label: "Dar ul Quran",
-      href: darulQuranUrl || "/dar-ul-quran",
-      external: !!darulQuranUrl,
-    });
-  }
-  // Logo/site name already goes home — skip a redundant Home item from CMS.
-  return withoutHomeNavItems(base);
+  /** Pre-resolved on the server via `buildHeaderNavLinks`. */
+  navLinks: NavItem[];
 }
 
 export default function Header({
-  darulQuranUrl,
   siteName = DEFAULT_SITE_NAME,
   logoUrl,
-  navItems,
+  navLinks,
 }: HeaderProps) {
   const [searchOpen, setSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const allNavLinks = buildNavLinks(navItems, darulQuranUrl);
-  const desktopNavLinks = allNavLinks.filter(
-    (item) => !/donate/i.test(item.label),
-  );
+  const desktopNavLinks = navLinks.filter((item) => !/donate/i.test(item.label));
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
@@ -102,7 +65,7 @@ export default function Header({
           <MobileNavSidebarLoader
             siteName={siteName}
             logoUrl={logoUrl}
-            navLinks={allNavLinks}
+            navLinks={navLinks}
           />
 
           <Link

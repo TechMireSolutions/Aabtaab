@@ -74,8 +74,9 @@ npm run lint && npm run typecheck && npm run test && npm run build && npm audit 
 ## SEO & indexing
 
 - Metadata builders: `lib/seo/metadata.ts`, `lib/cms/page.ts`, `lib/cms/post.ts`, `lib/cms/event.ts`
-- JSON-LD helpers: `lib/seo/JsonLd.tsx` (import via `lib/seo`)
+- JSON-LD helpers: `lib/seo/json-ld*.tsx` (import via `lib/seo`)
 - Sitemap: `app/sitemap.ts` → `getSitemapSlugs()` in `lib/cms/queries.ts` (do not re-query Sanity in the page)
+- CMS reads: `lib/cms/queries.ts` facade → `queries-{site,homepage,catalog,content}.ts`
 - Robots: `app/robots.ts` — disallow `/studio/`, `/api/`, `/search`
 - Trailing slash: **`trailingSlash: false`** in `next.config.ts`
 - Search: `/search?q=…` (noindex); legacy `/posts?q=…` redirects here

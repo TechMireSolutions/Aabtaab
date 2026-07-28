@@ -4,17 +4,13 @@ import { buildPageMetadata, JsonLd, getSiteUrl } from "@/lib/seo";
 import { resolveSiteName } from "@/lib/constants";
 import { getHomepageHeroData } from "@/lib/cms/queries";
 import { ogImageUrl } from "@/sanity/lib/image";
-import dynamic from "next/dynamic";
 import HomeHero from "@/components/sections/HomeHero";
+import HomeAbout from "@/components/sections/HomeAbout";
 import HomeSectionsSkeleton from "@/components/sections/HomeSectionsSkeleton";
 import { sanitizePublicCopy } from "@/lib/fallbacks/cms-copy";
 import UpcomingEventsLoader from "./_components/UpcomingEventsLoader";
 import HomeCountriesLoader from "./_components/HomeCountriesLoader";
 import HomeSectionsLoader from "./_components/HomeSectionsLoader";
-
-const HomeAbout = dynamic(() => import("@/components/sections/HomeAbout"), {
-  ssr: true,
-});
 
 export async function generateMetadata(): Promise<Metadata> {
   const { settings, homepage: hp } = await getHomepageHeroData();

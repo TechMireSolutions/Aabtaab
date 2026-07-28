@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 import SearchEmptyState from "@/components/layout/SearchEmptyState";
-import { SEARCH_TYPE_LABELS } from "@/lib/cms/search-labels";
+import { searchTypeLabel } from "@/lib/cms/search-labels";
 import type { SearchResponse } from "@/types/search";
 
 interface SearchResultsProps {
@@ -53,9 +53,7 @@ export default function SearchResults({
                   Quick Match
                 </span>
                 <span className="badge-pill">
-                  {SEARCH_TYPE_LABELS[
-                    keywordMatch.category as keyof typeof SEARCH_TYPE_LABELS
-                  ] || keywordMatch.category}
+                  {searchTypeLabel(keywordMatch.category)}
                 </span>
               </div>
               <span className="text-lg font-semibold text-slate-900 dark:text-white">
@@ -80,9 +78,7 @@ export default function SearchResults({
                 className="card-interactive flex items-center gap-3 p-4"
               >
                 <span className="badge-pill">
-                  {SEARCH_TYPE_LABELS[
-                    sug.category as keyof typeof SEARCH_TYPE_LABELS
-                  ] || sug.category}
+                  {searchTypeLabel(sug.category)}
                 </span>
                 <span className="text-sm-plus font-semibold text-slate-800 dark:text-slate-200 line-clamp-1">
                   {sug.label}
@@ -112,7 +108,7 @@ export default function SearchResults({
                   className="card-interactive flex flex-col gap-1 p-4 sm:p-5"
                 >
                   <span className="badge-pill w-fit">
-                    {SEARCH_TYPE_LABELS[item._type]}
+                    {searchTypeLabel(item._type)}
                   </span>
                   <span className="text-base-plus font-semibold text-slate-900 dark:text-white">
                     {item.title}

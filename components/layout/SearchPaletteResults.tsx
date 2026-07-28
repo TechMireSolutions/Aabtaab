@@ -9,7 +9,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import type { SiteSearchResult, KeywordMatch } from "@/types/search";
-import { SEARCH_TYPE_LABELS } from "@/lib/cms/search-labels";
+import { searchTypeLabel } from "@/lib/cms/search-labels";
 
 const TYPE_ICONS = {
   course: BookOpen,
@@ -96,9 +96,7 @@ export default function SearchPaletteResults({
                       Quick Match
                     </span>
                     <span className="badge-pill">
-                      {SEARCH_TYPE_LABELS[
-                        keywordMatch.category as keyof typeof SEARCH_TYPE_LABELS
-                      ] || keywordMatch.category}
+                      {searchTypeLabel(keywordMatch.category)}
                     </span>
                   </div>
                   <p className="mt-1.5 text-sm-plus font-semibold text-slate-800 dark:text-slate-200 line-clamp-1">
@@ -152,9 +150,7 @@ export default function SearchPaletteResults({
                         : ""
                     }`}
                   >
-                    {SEARCH_TYPE_LABELS[
-                      sug.category as keyof typeof SEARCH_TYPE_LABELS
-                    ] || sug.category}
+                    {searchTypeLabel(sug.category)}
                   </span>
                 </div>
                 <p className="mt-1.5 text-sm-plus font-semibold text-slate-800 dark:text-slate-200 line-clamp-1">
@@ -205,7 +201,7 @@ export default function SearchPaletteResults({
                         : ""
                     }`}
                   >
-                    {SEARCH_TYPE_LABELS[item._type]}
+                    {searchTypeLabel(item._type)}
                   </span>
                 </div>
                 <p className="mt-1.5 text-sm-plus font-semibold text-slate-800 dark:text-slate-200 line-clamp-1">

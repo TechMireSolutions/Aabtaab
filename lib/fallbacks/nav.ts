@@ -11,6 +11,8 @@ export const FALLBACK_NAV: NavItem[] = [
   { label: "About", href: "/about" },
 ];
 
+const DAR_UL_QURAN_LABEL = /dar\s*ul\s*quran/i;
+
 /** True when the item duplicates the header logo/home link. */
 export function isHomeNavItem(item: NavItem): boolean {
   const path = item.href?.split("?")[0]?.replace(/\/$/, "") || "";
@@ -22,6 +24,37 @@ export function withoutHomeNavItems(items: NavItem[]): NavItem[] {
   return items.filter((item) => !isHomeNavItem(item));
 }
 
+/**
+ * Resolve header nav for layout/chrome: CMS or fallback, Dar Ul Quran override,
+ * ensure Dar Ul Quran exists, drop redundant Home.
+ */
+export function buildHeaderNavLinks(
+  navItems: NavItem[] | undefined,
+  darulQuranUrl?: string,
+): NavItem[] {
+  const base = (navItems?.length ? [...navItems] : [...FALLBACK_NAV]).map(
+    (item) => {
+      if (darulQuranUrl && DAR_UL_QURAN_LABEL.test(item.label)) {
+        return {
+          ...item,
+          href: darulQuranUrl,
+          external: true,
+        };
+      }
+      return item;
+    },
+  );
+  const hasDarUlQuran = base.some((item) => DAR_UL_QURAN_LABEL.test(item.label));
+  if (!hasDarUlQuran) {
+    base.push({
+      label: "Dar ul Quran",
+      href: darulQuranUrl || "/dar-ul-quran",
+      external: !!darulQuranUrl,
+    });
+  }
+  return withoutHomeNavItems(base);
+}
+
 /** Search empty / quick-nav chips (SSOT for palette + search page) */
 export const SEARCH_QUICK_LINKS = [
   { label: "Online Courses", href: "/online-courses" },
@@ -29,3 +62,4 @@ export const SEARCH_QUICK_LINKS = [
   { label: "Upcoming Events", href: "/events" },
   { label: "Articles", href: "/posts" },
 ] as const;
+

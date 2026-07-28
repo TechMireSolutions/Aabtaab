@@ -35,7 +35,9 @@ if (!course) notFound();
 | File | Purpose |
 |------|---------|
 | `lib/paths.ts` | `getContentAncestry`, `buildNestedBreadcrumbItems`, `buildNestedContentPath` |
+| `lib/catalog/nested-page.ts` | `buildNestedCatalogPageContext`, `nestedStaticParamsFromEntries`, `ensureCanonicalNestedPath` |
 | `lib/catalog/nested-children.ts` | `mapCourseChildForGrid`, `mapServiceChildForGrid` |
+| `components/layout/NestedCatalogPageShell.tsx` | Shared breadcrumbs + children vs leaf chrome |
 | `lib/cms/page.ts` | `buildNestedSlugMetadata` |
 | `lib/cms/queries.ts` | `getCourseBySlug`, `getServiceBySlug` |
 
@@ -45,7 +47,7 @@ if (!course) notFound();
 
 ## Components
 
-`NestedBreadcrumbs`, `NestedChildrenGrid`, `CatalogDarkHero` via `CourseHeroSection` / `ServiceHeroSection`, shared content sections, `CtaBandSection` + `SiteContactFooter`.
+`NestedCatalogPageShell` (compose leaf sections as `children`), `NestedBreadcrumbs`, `NestedChildrenGrid`, `CatalogDarkHero` via `CourseHeroSection` / `ServiceHeroSection`, shared content sections, `CtaBandSection` + `SiteContactFooter`.
 
 ## Tests
 

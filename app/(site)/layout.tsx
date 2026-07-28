@@ -6,6 +6,7 @@ import PreviewBanner from "@/components/layout/PreviewBanner";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
 import { getSiteLayoutData } from "@/lib/cms/queries";
 import { LOGO_IMAGE_PX } from "@/lib/constants";
+import { buildHeaderNavLinks } from "@/lib/fallbacks/nav";
 import { urlFor } from "@/sanity/lib/image";
 
 export default async function SiteLayout({
@@ -24,17 +25,20 @@ export default async function SiteLayout({
     ? urlFor(settings.logo).width(LOGO_IMAGE_PX).height(LOGO_IMAGE_PX).url()
     : null;
 
+  const navLinks = buildHeaderNavLinks(
+    headerNav?.items,
+    settings?.darulQuranUrl,
+  );
+
   return (
     <>
       <a href="#main-content" className="skip-link">
         Skip to main content
       </a>
       <Header
-        darulQuranUrl={settings?.darulQuranUrl}
         siteName={settings?.siteName}
         logoUrl={logoUrl}
-        navItems={headerNav?.items}
-        searchPlaceholder={settings?.searchPlaceholder}
+        navLinks={navLinks}
       />
       <main
         id="main-content"

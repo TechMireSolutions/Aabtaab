@@ -41,7 +41,7 @@ getDefaultOgImageUrl(); // https://…/og-default.png
 
 `buildPageMetadata` applies the default OG automatically when `ogImage` is omitted.
 
-## JSON-LD (`lib/seo/JsonLd.tsx`)
+## JSON-LD (`lib/seo/json-ld*.tsx`, import via `lib/seo`)
 
 | Helper | Where |
 |--------|-------|
