@@ -45,7 +45,7 @@ export default function FooterBrandColumn({
           aria-label={FOOTER_SECTION_LABELS.social}
         >
           {socialLinks.map((link) => {
-            if (link.variant === "pill" || link.key === "darulQuran") {
+            if (link.variant === "pill") {
               return (
                 <li key={link.key}>
                   <a
@@ -61,7 +61,9 @@ export default function FooterBrandColumn({
               );
             }
 
-            const Icon = SOCIAL_ICONS[link.key];
+            const Icon = SOCIAL_ICONS[link.key as keyof typeof SOCIAL_ICONS];
+            if (!Icon) return null;
+
             return (
               <li key={link.key}>
                 <a

@@ -18,17 +18,9 @@ export default function FooterLegalBar({ siteName }: FooterLegalBarProps) {
           {formatFooterCopyright(siteName)}
         </p>
         <nav aria-label={FOOTER_SECTION_LABELS.legal}>
-          <ul className="flex flex-wrap items-center justify-center gap-x-1 md:justify-end md:gap-x-4">
-            {FOOTER_LEGAL_LINKS.map((link, index) => (
-              <li key={link.href} className="flex items-center gap-x-1 md:gap-x-4">
-                {index > 0 && (
-                  <span
-                    aria-hidden="true"
-                    className="select-none text-slate-800"
-                  >
-                    |
-                  </span>
-                )}
+          <ul className="flex flex-wrap items-center justify-center divide-x divide-slate-800 md:justify-end">
+            {FOOTER_LEGAL_LINKS.map((link) => (
+              <li key={link.href} className="flex items-center px-2 first:ps-0 last:pe-0 sm:px-3">
                 <Link href={link.href} className="footer-legal-link">
                   {link.label}
                 </Link>
