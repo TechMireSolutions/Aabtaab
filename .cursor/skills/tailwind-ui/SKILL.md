@@ -41,7 +41,7 @@ description: >-
 | Featured image (post/event) | `media-hero` |
 | Square CMS image | `media-frame` / `media-placeholder` |
 | Pricing table wrapper | `table-shell` |
-| Site footer shell / CTA band | `footer-shell`, `footer-cta-band` |
+| Site footer shell / CTA / legal | `footer-shell`, `footer-cta-band`, `footer-legal-bar` |
 | Footer social / pill / links | `footer-social-btn`, `footer-pill-link`, `footer-nav-link`, `footer-contact-link`, `footer-contact-static`, `footer-legal-link`, `footer-heading` |
 | Light-surface social chips | `icon-btn-subtle` / `chip-outline` (contact page — not the forced-dark footer) |
 | Logo mark | `SiteBrandLogo` + `size-logo` / `LOGO_DISPLAY_PX` |

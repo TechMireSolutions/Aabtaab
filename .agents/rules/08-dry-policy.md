@@ -34,7 +34,7 @@ Never invent a new helper when the SSOT table already names one.
 | Nav / search empty links | `lib/fallbacks/nav.ts` + `SearchEmptyState` |
 | About fallback pillars | `lib/fallbacks/about.ts` |
 | Env validation | `lib/env.ts` |
-| Footer CMS / chrome data | **SSOT** `lib/fallbacks/footer-nav.ts` — `FALLBACK_QUICK_LINKS`, `resolveFooterTagline`, `resolveFooterNavForLayout` / `resolveFooterQuickLinks`, `FOOTER_CTA`, `FOOTER_LEGAL_LINKS`, `FOOTER_ALL_SERVICES_LINK`, `buildFooterServiceNavLinks`, `buildFooterContactItems`, `buildFooterSocialLinks`, `formatFooterCopyright`; layout via `getSiteLayoutData()`; presentation `components/layout/Footer.tsx` + `footer-*` utilities |
+| Footer CMS / chrome data | **SSOT** `lib/fallbacks/footer-nav.ts` — `FALLBACK_QUICK_LINKS`, `FOOTER_SECTION_LABELS`, `resolveFooterTagline`, `resolveFooterNavForLayout` / `resolveFooterQuickLinks`, `FOOTER_CTA`, `FOOTER_LEGAL_LINKS`, `FOOTER_ALL_SERVICES_LINK`, `buildFooterServiceNavLinks`, `buildFooterContactItems`, `buildFooterSocialLinks`, `formatFooterCopyright`; layout via `getSiteLayoutData()`; presentation `components/layout/Footer*.tsx` + `footer-*` utilities |
 | Site brand mark | `SiteBrandLogo` (`header`/`footer`) + `LOGO_DISPLAY_PX` / `LOGO_IMAGE_PX` |
 | External new-tab links | `EXTERNAL_LINK_PROPS` + `mapsUrl` → `lib/urls.ts`; `OpensInNewTab` → `components/ui/OpensInNewTab.tsx` |
 | Nested child cards | `mapCourseChildForGrid`, `mapServiceChildForGrid` → `lib/catalog/` |

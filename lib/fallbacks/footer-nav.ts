@@ -64,6 +64,15 @@ export const FOOTER_LEGAL_LINKS = [
   { label: "Terms & Conditions", href: "/terms-of-service" },
 ] as const;
 
+/** Column / region labels for footer presentation (SSOT). */
+export const FOOTER_SECTION_LABELS = {
+  quickLinks: "Quick Links",
+  services: "Services",
+  contact: "Contact",
+  social: "Social media",
+  legal: "Legal",
+} as const;
+
 export const FOOTER_CONTACT_FALLBACK = {
   label: "Contact us for details",
   href: "/contact",
@@ -127,7 +136,10 @@ export function resolveFooterTagline(settings?: {
   return DEFAULT_FOOTER_TAGLINE;
 }
 
-/** CMS items when present; otherwise FALLBACK_QUICK_LINKS (presentation defense). */
+/** CMS items when present; otherwise FALLBACK_QUICK_LINKS.
+ *  Prefer `footerNav.items` from `getSiteLayoutData()` in the Footer UI —
+ *  that path already applies empty-catalog filtering via `resolveFooterNavForLayout`.
+ */
 export function resolveFooterQuickLinks(
   items?: NavItem[] | null,
 ): NavItem[] {

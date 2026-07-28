@@ -3,6 +3,7 @@ import {
   FALLBACK_QUICK_LINKS,
   FOOTER_ALL_SERVICES_LINK,
   FOOTER_LEGAL_LINKS,
+  FOOTER_SECTION_LABELS,
   buildContactPageItems,
   buildFooterContactItems,
   buildFooterServiceNavLinks,
@@ -14,6 +15,14 @@ import {
   resolveFooterQuickLinks,
   resolveFooterTagline,
 } from "@/lib/fallbacks/footer-nav";
+
+describe("FOOTER_SECTION_LABELS", () => {
+  it("exposes stable column labels", () => {
+    expect(FOOTER_SECTION_LABELS.quickLinks).toBe("Quick Links");
+    expect(FOOTER_SECTION_LABELS.contact).toBe("Contact");
+    expect(FOOTER_SECTION_LABELS.legal).toBe("Legal");
+  });
+});
 
 describe("filterNavForEmptyCatalogs", () => {
   const items = [
