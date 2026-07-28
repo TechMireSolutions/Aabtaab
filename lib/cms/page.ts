@@ -3,6 +3,7 @@ import { buildPageMetadata } from "@/lib/seo/metadata";
 import { resolveDocOgImage } from "@/lib/seo/resolve-og-image";
 import type { CmsPageSummary } from "@/types/cms-page";
 import type { SeoData, SlugParent } from "@/types/sanity";
+import { sanitizePublicCopy } from "@/lib/fallbacks/cms-copy";
 import { getCmsPage } from "./queries";
 import { buildNestedContentPath } from "../paths";
 
@@ -25,8 +26,8 @@ export function buildCmsPageMetadata(
       page?.title ||
       options.fallbackTitle,
     description:
-      page?.seo?.metaDescription ||
-      page?.subtitle ||
+      sanitizePublicCopy(page?.seo?.metaDescription) ||
+      sanitizePublicCopy(page?.subtitle) ||
       options.fallbackDescription,
     path: options.path,
     noIndex: options.noIndex ?? page?.seo?.noIndex,

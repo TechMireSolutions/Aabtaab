@@ -8,6 +8,7 @@ import dynamic from "next/dynamic";
 import HomeHero from "@/components/sections/HomeHero";
 import HomeSections from "@/components/sections/HomeSections";
 import HomeSectionsSkeleton from "@/components/sections/HomeSectionsSkeleton";
+import { sanitizePublicCopy } from "@/lib/fallbacks/cms-copy";
 
 const HomeAbout = dynamic(() => import("@/components/sections/HomeAbout"), {
   ssr: true,
@@ -27,10 +28,11 @@ export async function generateMetadata(): Promise<Metadata> {
   const ogImage =
     (hp?.heroImage ? ogImageUrl(hp.heroImage) : undefined) ??
     (settings?.logo ? ogImageUrl(settings.logo) : undefined);
+
   return buildPageMetadata({
     title: `${siteName} — Faith. Knowledge. Access`,
     description:
-      settings?.description ||
+      sanitizePublicCopy(settings?.description) ||
       "Shia Islamic knowledge, online courses, and community services for Muslims worldwide.",
     path: "/",
     absoluteTitle: true,
@@ -42,6 +44,9 @@ export default async function HomePage() {
   const { settings, homepage: hp, quotes, courseCount, scholarCount, countryCount } = await getHomepageHeroData();
   const siteName = resolveSiteName(settings);
   const siteUrl = getSiteUrl();
+  const pageDescription =
+    sanitizePublicCopy(settings?.description || hp?.heroSubtitle) ||
+    undefined;
 
   return (
     <>
@@ -52,7 +57,7 @@ export default async function HomePage() {
           "@id": `${siteUrl}/#webpage`,
           url: siteUrl,
           name: siteName,
-          description: settings?.description || hp?.heroSubtitle,
+          description: pageDescription,
           isPartOf: { "@id": `${siteUrl}/#organization` },
           inLanguage: "en-US",
         }}

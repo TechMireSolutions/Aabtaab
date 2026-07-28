@@ -7,6 +7,7 @@ import { getSiteSettings } from "@/lib/cms/queries";
 import { urlFor } from "@/sanity/lib/image";
 import { JsonLd, WebSiteJsonLd } from "@/lib/seo";
 import { getSiteUrl } from "@/lib/seo";
+import { sanitizePublicCopy } from "@/lib/fallbacks/cms-copy";
 import "./globals.css";
 
 const inter = Inter({
@@ -52,7 +53,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const siteName = resolveSiteName(settings);
   const siteUrl = settings?.siteUrl || "https://aabtaab.com";
   const description =
-    settings?.description ||
+    sanitizePublicCopy(settings?.description) ||
     "Shia Islamic knowledge, online courses, and community services for Muslims in the United States.";
   const faviconUrl = settings?.favicon
     ? urlFor(settings.favicon).width(256).height(256).url()
@@ -179,7 +180,7 @@ async function SiteSchemas() {
     "@id": `${siteUrl}/#organization`,
     name: resolveSiteName(settings),
     url: siteUrl,
-    description: settings?.description,
+    description: sanitizePublicCopy(settings?.description),
     ...(logoUrl && {
       logo: {
         "@type": "ImageObject",
@@ -221,7 +222,7 @@ async function SiteSchemas() {
       <WebSiteJsonLd
         siteName={resolveSiteName(settings)}
         siteUrl={siteUrl}
-        description={settings?.description}
+        description={sanitizePublicCopy(settings?.description)}
       />
     </>
   );
