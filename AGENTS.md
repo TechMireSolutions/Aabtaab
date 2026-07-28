@@ -5,7 +5,7 @@
 
 **Skill-first:** before implementing in a domain, read the matching skill in `.cursor/skills/` (and its linked rule). Skills are workflows; rules are constraints; `techstack.md` wins on factual stack.
 
-## Rules (13)
+## Rules (15)
 
 | File | Scope |
 |------|--------|
@@ -22,13 +22,16 @@
 | `10-performance` | Caching, images, fonts, CWV |
 | `11-error-handling-observability` | Errors, logging, Sentry |
 | `12-testing` | Vitest + Playwright (unit + E2E) |
+| `13-mobile-first-responsive` | Mobile-first layout, touch, safe areas |
+| `14-ui-ux-best-practices` | Hierarchy, feedback, forms UX, motion, trust |
 
-## Skills (16)
+## Skills (17)
 
 | Skill | When to use |
 |-------|-------------|
 | `nextjs-react` | App Router pages, RSC fetch, metadata, images, API routes |
 | `tailwind-ui` | Styling, `globals.css`, className refactors |
+| `mobile-responsive-ux` | Mobile-first layout, touch targets, UI/UX feedback patterns |
 | `sanity-cms` | Schemas, GROQ, migrations, draft preview |
 | `content-sections` | Course/service sections, shells, CTA + contact footer |
 | `nested-catalog-routes` | `[...slug]` catalog pages, breadcrumbs |
@@ -79,6 +82,7 @@ Key policies (must stay aligned with techstack):
 - Rate limit: Upstash Redis **optional but strongly recommended** in production; memory fallback for local / Redis errors
 - Secrets: timing-safe compares when tightening webhook/preview auth; never ship write tokens to the client
 - A11y: WCAG 2.2 AA intent; missing CMS detail docs → `notFound()` (no soft 404)
+- Mobile/UI: mobile-first (`13`); UI/UX patterns (`14`); skill `mobile-responsive-ux`
 - PM2: `pm2 delete` then `pm2 start` (not `reload` / `startOrRestart`)
 - Types: `npm run typecheck` authoritative (`ignoreBuildErrors` on build)
 - Tests: colocated `*.test.ts` + `e2e/{smoke,navigation,seo,contact}.spec.ts` (desktop + mobile)

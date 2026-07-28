@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import CatalogDarkHero from "@/components/content/CatalogDarkHero";
+import OpensInNewTab from "@/components/ui/OpensInNewTab";
 import { heroImageUrl } from "@/sanity/lib/image";
 import {
   formatSubjectLabel,
   normalizePublicTitle,
 } from "@/lib/catalog/subjects";
+import { EXTERNAL_LINK_PROPS } from "@/lib/urls";
 
 interface CourseHeroSectionProps {
   title: string;
@@ -62,11 +64,11 @@ export default function CourseHeroSection({
         {enrollExternal ? (
           <a
             href={enrollHref}
-            target="_blank"
-            rel="noopener noreferrer"
+            {...EXTERNAL_LINK_PROPS}
             className={ctaClassName}
           >
             {heroCtaLabel}
+            <OpensInNewTab />
             <ArrowRight
               size={14}
               strokeWidth={2.5}

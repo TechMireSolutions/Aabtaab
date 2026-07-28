@@ -12,6 +12,8 @@ import {
 import {
   DEFAULT_DONATE_CAUSES,
 } from "@/lib/fallbacks/donate";
+import { EXTERNAL_LINK_PROPS } from "@/lib/urls";
+import OpensInNewTab from "@/components/ui/OpensInNewTab";
 
 export const generateMetadata = defineCmsPageMetadata("donate", {
   path: "/donate",
@@ -96,8 +98,7 @@ export default async function DonatePage() {
               {settings?.donateUrl ? (
                 <a
                   href={settings.donateUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  {...EXTERNAL_LINK_PROPS}
                   className="group btn-paypal"
                 >
                   <svg
@@ -110,6 +111,7 @@ export default async function DonatePage() {
                     <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 2.28a.78.78 0 0 1 .77-.65h7.794c2.728 0 4.636.602 5.668 1.79.49.56.802 1.147.952 1.795.157.676.13 1.484-.08 2.47l-.007.045v.387l.277.157c.232.13.442.29.625.472.31.318.524.72.636 1.194.115.483.103 1.056-.036 1.705-.164.76-.428 1.42-.785 1.963a5.09 5.09 0 0 1-1.247 1.39c-.478.365-1.04.64-1.674.82-.617.175-1.32.264-2.09.264h-.497a1.41 1.41 0 0 0-1.393 1.19l-.112.61-.58 3.672-.026.14a.78.78 0 0 1-.77.648z" />
                   </svg>
                   {settings?.donatePayOnlineLabel || "Donate via PayPal"}
+                  <OpensInNewTab />
                   <ArrowRight
                     size={14}
                     strokeWidth={2.5}

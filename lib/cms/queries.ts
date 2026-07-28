@@ -45,7 +45,7 @@ import type {
 } from "@/types/homepage";
 import type { Scholar } from "@/types/scholar";
 import type { FooterNav, FooterService, HeaderNav } from "@/types/site-navigation";
-import { filterNavForEmptyCatalogs } from "@/lib/fallbacks/footer-nav";
+import { filterNavForEmptyCatalogs, resolveFooterNavForLayout } from "@/lib/fallbacks/footer-nav";
 import { FALLBACK_NAV } from "@/lib/fallbacks/nav";
 
 export const getSiteSettings = cache(fetchSiteSettingsUncached);
@@ -147,12 +147,7 @@ export const getSiteLayoutData = cache(async () => {
   return {
     settings,
     headerNav: { items: headerItems },
-    footerNav: footerNav
-      ? {
-          ...footerNav,
-          items: filterNavForEmptyCatalogs(footerNav.items, counts),
-        }
-      : footerNav,
+    footerNav: { items: resolveFooterNavForLayout(footerNav, counts) },
     footerServices,
   };
 });

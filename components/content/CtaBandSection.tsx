@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, MessageCircle } from "lucide-react";
+import OpensInNewTab from "@/components/ui/OpensInNewTab";
+import { EXTERNAL_LINK_PROPS } from "@/lib/urls";
 
 interface CtaBandSectionProps {
   heading?: string;
@@ -35,19 +37,21 @@ export default function CtaBandSection({
         {subtitle && (
           <p className="text-body-muted mb-8 text-slate-400">{subtitle}</p>
         )}
-        <div className={`flex flex-wrap justify-center gap-3 ${footer ? "mb-8" : ""}`}>
+        <div
+          className={`flex flex-wrap justify-center gap-3 ${footer ? "mb-8" : ""}`}
+        >
           {useAnchor ? (
             <a
               href={primaryHref}
-              target={primaryExternal ? "_blank" : undefined}
-              rel={primaryExternal ? "noopener noreferrer" : undefined}
+              {...(primaryExternal ? EXTERNAL_LINK_PROPS : {})}
               className="btn-pill-accent group"
             >
               {primaryLabel}
+              {primaryExternal ? <OpensInNewTab /> : null}
               <ArrowRight
                 size={14}
                 strokeWidth={2.5}
-                className="transition-transform group-hover:translate-x-0.5"
+                className="motion-safe:transition-transform motion-safe:group-hover:translate-x-0.5"
               />
             </a>
           ) : (
@@ -56,18 +60,18 @@ export default function CtaBandSection({
               <ArrowRight
                 size={14}
                 strokeWidth={2.5}
-                className="transition-transform group-hover:translate-x-0.5"
+                className="motion-safe:transition-transform motion-safe:group-hover:translate-x-0.5"
               />
             </Link>
           )}
           <a
             href={secondaryHref}
-            target="_blank"
-            rel="noopener noreferrer"
+            {...EXTERNAL_LINK_PROPS}
             className="btn-pill-ghost"
           >
-            <MessageCircle size={14} />
+            <MessageCircle size={14} aria-hidden="true" />
             {secondaryLabel}
+            <OpensInNewTab />
           </a>
         </div>
         {footer}

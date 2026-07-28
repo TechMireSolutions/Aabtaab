@@ -74,6 +74,7 @@ Key resolved policies:
 - **Rate limit:** Upstash Redis optional but **strongly recommended** in production; memory fallback for local / Redis errors — see `09-security` / `techstack.md`
 - **Secrets:** compare webhook/preview secrets with timing-safe equality when tightening auth; never ship write tokens to the client
 - **A11y:** WCAG 2.2 AA intent; one `h1`; `notFound()` for missing CMS detail docs (no soft 404)
+- **Mobile / UI UX:** rules `13-mobile-first-responsive` + `14-ui-ux-best-practices`; skill `mobile-responsive-ux`
 - **PM2:** `pm2 delete` then `pm2 start` (never `startOrRestart` / `reload` for this app)
 - **Types:** `npm run typecheck` is authoritative (`ignoreBuildErrors` on `next build`)
 - **Tests:** Vitest colocated + Playwright `e2e/` (desktop + mobile) — see `12-testing`

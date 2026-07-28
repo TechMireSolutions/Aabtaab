@@ -3,6 +3,8 @@ import {
   type PortableTextProps,
   type PortableTextComponents,
 } from "@portabletext/react";
+import OpensInNewTab from "@/components/ui/OpensInNewTab";
+import { EXTERNAL_LINK_PROPS } from "@/lib/urls";
 
 type PortableTextValue = PortableTextProps["value"];
 
@@ -27,11 +29,9 @@ const semanticComponents: PortableTextComponents = {
       const href = value?.href || "";
       const isExternal = /^https?:\/\//.test(href);
       return (
-        <a
-          href={href}
-          {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-        >
+        <a href={href} {...(isExternal ? EXTERNAL_LINK_PROPS : {})}>
           {children}
+          {isExternal ? <OpensInNewTab /> : null}
         </a>
       );
     },

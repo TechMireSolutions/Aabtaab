@@ -12,6 +12,8 @@ import {
 } from "@/lib/cms/event";
 import { getEventBySlug, getSiteSettings } from "@/lib/cms/queries";
 import { EventJsonLd, BreadcrumbJsonLd, getSiteUrl } from "@/lib/seo";
+import { EXTERNAL_LINK_PROPS } from "@/lib/urls";
+import OpensInNewTab from "@/components/ui/OpensInNewTab";
 
 const siteUrl = getSiteUrl();
 
@@ -125,12 +127,12 @@ export default async function EventDetailPage({
           <div className="mt-10">
             <a
               href={event.registrationUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+              {...EXTERNAL_LINK_PROPS}
               className="btn-primary inline-flex items-center gap-2"
             >
               Register
-              <ExternalLink size={14} />
+              <ExternalLink size={14} aria-hidden="true" />
+              <OpensInNewTab />
             </a>
           </div>
         )}

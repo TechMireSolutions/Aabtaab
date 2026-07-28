@@ -1,18 +1,22 @@
 import Link from "next/link";
-import Image from "next/image";
-import {
-  Clock,
-  Mail,
-  Phone,
-  MapPin,
-  MessageSquare,
-  ExternalLink
-} from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import type { FooterNav, FooterService } from "@/types/site-navigation";
 import type { SiteSettings } from "@/types/sanity";
 import { resolveSiteName } from "@/lib/constants";
+import {
+  FOOTER_CTA,
+  FOOTER_LEGAL_LINKS,
+  buildFooterContactItems,
+  buildFooterServiceNavLinks,
+  buildFooterSocialLinks,
+  formatFooterCopyright,
+  resolveFooterQuickLinks,
+  resolveFooterTagline,
+} from "@/lib/fallbacks/footer-nav";
 import { FacebookIcon, YoutubeIcon } from "@/components/icons/SocialIcons";
-import { whatsappUrl } from "@/lib/urls";
+import SiteBrandLogo from "@/components/layout/SiteBrandLogo";
+import OpensInNewTab from "@/components/ui/OpensInNewTab";
+import { EXTERNAL_LINK_PROPS } from "@/lib/urls";
 
 interface FooterProps {
   settings?: SiteSettings;
@@ -21,10 +25,14 @@ interface FooterProps {
   footerServices?: FooterService[];
 }
 
+const SOCIAL_ICONS = {
+  facebook: FacebookIcon,
+  youtube: YoutubeIcon,
+} as const;
 
-function ColHeading({ id, children }: { id?: string; children: React.ReactNode }) {
+function ColHeading({ id, children }: { id: string; children: React.ReactNode }) {
   return (
-    <h3 id={id} className="text-sm font-bold uppercase tracking-wider text-white mb-5">
+    <h3 id={id} className="footer-heading">
       {children}
     </h3>
   );
@@ -43,24 +51,17 @@ function NavLink({
     <li>
       <Link
         href={href}
-        {...(external
-          ? { target: "_blank", rel: "noopener noreferrer" }
-          : {})}
-        className="group relative flex items-center py-1.5 text-sm text-slate-400 hover:text-brand-400 transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-400"
+        {...(external ? EXTERNAL_LINK_PROPS : {})}
+        className="footer-nav-link group"
       >
-        <span className="transition-transform duration-200 group-hover:translate-x-1">
+        <span className="motion-safe:transition-transform motion-safe:duration-200 motion-safe:group-hover:translate-x-1">
           {children}
         </span>
-        {external ? (
-          <span className="sr-only"> (opens in new tab)</span>
-        ) : null}
+        {external ? <OpensInNewTab /> : null}
       </Link>
     </li>
   );
 }
-
-const CONTACT_LINK_CLASS =
-  "flex items-start gap-3 py-2 text-sm text-slate-400 hover:text-brand-400 transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-400";
 
 export default function Footer({
   settings,
@@ -69,123 +70,103 @@ export default function Footer({
   footerServices,
 }: FooterProps) {
   const siteName = resolveSiteName(settings);
-  const tagline =
-    settings?.tagline ||
-    "Spreading the light of Ahlul Bayt (A.S.) through education, authentic content, and spiritual services. Join us in our mission to serve the Ummah.";
-
-  const quickLinks = footerNav?.items || [];
-
-  const services = (footerServices || []).map((s) => ({
-    label: s.title,
-    href: `/services/${s.slug}`,
-  })).slice(0, 5);
+  const tagline = resolveFooterTagline(settings);
+  const quickLinks = resolveFooterQuickLinks(footerNav?.items);
+  const services = buildFooterServiceNavLinks(footerServices);
+  const contactItems = buildFooterContactItems(settings);
+  const socialLinks = buildFooterSocialLinks(settings);
 
   return (
-    <footer className="bg-slate-950 text-slate-300 border-t border-slate-900 relative overflow-hidden">
-      {/* Decorative top gradient border */}
-      <div className="absolute top-0 inset-x-0 h-px bg-linear-to-r from-transparent via-brand-500/50 to-transparent" />
-      
-      {/* Stay connected — honest CTA (no fake subscribe form) */}
+    <footer className="footer-shell">
+      <div
+        className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-brand-500/50 to-transparent"
+        aria-hidden="true"
+      />
+
       <div className="border-b border-slate-900">
-        <div className="container-page py-10 sm:py-12">
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8 bg-slate-900/50 p-6 sm:p-10 rounded-2xl border border-slate-800/50 relative overflow-hidden">
-            <div className="absolute top-0 right-0 -mr-20 -mt-20 size-64 bg-brand-500/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="container-page pt-6 pb-fab-safe sm:pt-10 lg:pt-12 lg:pb-12">
+          <div className="footer-cta-band">
+            <div
+              className="pointer-events-none absolute top-0 right-0 -mt-20 -mr-20 size-64 rounded-full bg-brand-500/10 blur-3xl"
+              aria-hidden="true"
+            />
             <div className="relative z-10 max-w-xl">
-              <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">
-                Stay connected
-              </h3>
-              <p className="text-sm sm:text-base text-slate-400 leading-relaxed">
-                Get updates on new courses, events, and articles — reach out and we&apos;ll keep you in the loop.
+              <h2 className="mb-2 text-xl font-bold text-white sm:text-2xl">
+                {FOOTER_CTA.title}
+              </h2>
+              <p className="text-sm leading-relaxed text-slate-400 sm:text-base">
+                {FOOTER_CTA.body}
               </p>
             </div>
-            <div className="relative z-10 flex w-full lg:max-w-md gap-2">
+            <div className="relative z-10 flex w-full lg:max-w-md">
               <Link
-                href="/contact"
+                href={FOOTER_CTA.actionHref}
                 className="btn-primary w-full justify-center lg:w-auto"
               >
-                Contact us
+                {FOOTER_CTA.actionLabel}
               </Link>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Main Footer Content */}
-      <div className="container-page py-12 sm:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-x-8 gap-y-12">
-          
-          {/* Col 1 — Brand & Intro (4 cols) */}
-          <div className="lg:col-span-4 flex flex-col">
+      <div className="container-page section-y lg:py-16">
+        <div className="grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-2 md:gap-y-10 lg:grid-cols-12 lg:gap-y-12">
+          <div className="flex flex-col lg:col-span-4">
             <Link
               href="/"
-              className="inline-flex items-center gap-3 mb-6 group"
+              className="group mb-4 inline-flex items-center gap-3 sm:mb-6"
             >
-              {logoUrl ? (
-                <Image
-                  src={logoUrl}
-                  alt={siteName}
-                  width={48}
-                  height={48}
-                  className="size-12 rounded-full border border-slate-800 object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-              ) : (
-                <div className="size-12 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-lg font-bold text-brand-400 select-none transition-transform duration-300 group-hover:scale-105" aria-hidden="true">
-                  {siteName.charAt(0).toUpperCase()}
-                </div>
-              )}
-              <span className="font-bold text-xl text-white tracking-tight transition-colors duration-200 group-hover:text-brand-400">
-                {siteName}
-              </span>
+              <SiteBrandLogo
+                siteName={siteName}
+                logoUrl={logoUrl}
+                variant="footer"
+              />
             </Link>
 
-            <p className="text-sm text-slate-400 leading-relaxed mb-8 max-w-sm">
+            <p className="mb-6 max-w-sm text-sm leading-relaxed text-slate-400 sm:mb-8">
               {tagline}
             </p>
 
-            {/* Social Icons */}
-            <div className="flex items-center gap-3 mt-auto">
-              {settings?.facebook && (
-                <a
-                  href={settings.facebook}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Facebook"
-                  className="flex size-10 items-center justify-center rounded-full bg-slate-900 border border-slate-800 text-slate-400 hover:bg-brand-600 hover:text-white hover:border-brand-600 transition-all duration-200"
-                >
-                  <FacebookIcon />
-                </a>
-              )}
-              {settings?.youtube && (
-                <a
-                  href={settings.youtube}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="YouTube"
-                  className="flex size-10 items-center justify-center rounded-full bg-slate-900 border border-slate-800 text-slate-400 hover:bg-brand-600 hover:text-white hover:border-brand-600 transition-all duration-200"
-                >
-                  <YoutubeIcon />
-                </a>
-              )}
-              {settings?.darulQuranUrl && (
-                <a
-                  href={settings.darulQuranUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Dar ul Quran"
-                  className="inline-flex h-10 items-center gap-2 rounded-full bg-slate-900 border border-slate-800 px-4 text-sm font-medium text-slate-400 hover:bg-brand-600 hover:text-white hover:border-brand-600 transition-all duration-200"
-                >
-                  Dar ul Quran
-                  <ExternalLink size={12} aria-hidden="true" />
-                </a>
-              )}
-            </div>
+            {socialLinks.length > 0 && (
+              <div className="mt-auto flex flex-wrap items-center gap-3">
+                {socialLinks.map((link) => {
+                  if (link.variant === "pill" || link.key === "darulQuran") {
+                    return (
+                      <a
+                        key={link.key}
+                        href={link.href}
+                        {...EXTERNAL_LINK_PROPS}
+                        className="footer-pill-link"
+                      >
+                        {link.label}
+                        <ExternalLink size={12} aria-hidden="true" />
+                        <OpensInNewTab />
+                      </a>
+                    );
+                  }
+
+                  const Icon = SOCIAL_ICONS[link.key];
+                  return (
+                    <a
+                      key={link.key}
+                      href={link.href}
+                      {...EXTERNAL_LINK_PROPS}
+                      aria-label={`${link.label} (opens in new tab)`}
+                      className="footer-social-btn"
+                    >
+                      <Icon />
+                    </a>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
-          {/* Col 2 — Quick Links (2 cols) */}
           {quickLinks.length > 0 && (
             <nav className="lg:col-span-2" aria-labelledby="footer-quick-links">
               <ColHeading id="footer-quick-links">Quick Links</ColHeading>
-              <ul className="space-y-1">
+              <ul className="space-y-0 sm:space-y-1">
                 {quickLinks.map(({ label, href, external }) => (
                   <NavLink key={href} href={href} external={external}>
                     {label}
@@ -195,11 +176,10 @@ export default function Footer({
             </nav>
           )}
 
-          {/* Col 3 — Services (2 cols) */}
           {services.length > 0 && (
             <nav className="lg:col-span-2" aria-labelledby="footer-services">
               <ColHeading id="footer-services">Services</ColHeading>
-              <ul className="space-y-1">
+              <ul className="space-y-0 sm:space-y-1">
                 {services.map(({ label, href }) => (
                   <NavLink key={href} href={href}>
                     {label}
@@ -209,91 +189,80 @@ export default function Footer({
             </nav>
           )}
 
-          {/* Col 4 — Contact Info (4 cols) */}
-          <div className="lg:col-span-4">
-            <ColHeading>Contact Information</ColHeading>
-            <ul className="flex flex-col gap-3">
-              {settings?.address && (
-                <li>
-                  <a
-                    href={settings.addressLink || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(settings.address)}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={CONTACT_LINK_CLASS}
-                    title="View on Google Maps"
-                  >
-                    <MapPin size={16} className="text-brand-500 shrink-0 mt-0.5" aria-hidden="true" />
-                    <span className="whitespace-pre-line leading-relaxed">{settings.address}</span>
-                  </a>
-                </li>
-              )}
-              {settings?.phone && (
-                <li>
-                  <a href={`tel:${settings.phone}`} className={CONTACT_LINK_CLASS}>
-                    <Phone size={16} className="text-brand-500 shrink-0 mt-0.5" aria-hidden="true" />
-                    <span>{settings.phone}</span>
-                  </a>
-                </li>
-              )}
-              {settings?.whatsapp && (
-                <li>
-                  <a
-                    href={whatsappUrl(settings.whatsapp)}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={CONTACT_LINK_CLASS}
-                  >
-                    <MessageSquare size={16} className="text-brand-500 shrink-0 mt-0.5" aria-hidden="true" />
-                    <span>WhatsApp: {settings.whatsapp}</span>
-                  </a>
-                </li>
-              )}
-              {settings?.email && (
-                <li>
-                  <a href={`mailto:${settings.email}`} className={CONTACT_LINK_CLASS}>
-                    <Mail size={16} className="text-brand-500 shrink-0 mt-0.5" aria-hidden="true" />
-                    <span className="truncate">{settings.email}</span>
-                  </a>
-                </li>
-              )}
-              {settings?.workingHours && (
-                <li className="flex items-start gap-3 py-2 text-sm text-slate-400">
-                  <Clock size={16} className="text-brand-500 shrink-0 mt-0.5" aria-hidden="true" />
-                  <span>{settings.workingHours}</span>
-                </li>
-              )}
-              {!settings?.email && !settings?.phone && !settings?.address && (
-                <li className="text-sm text-slate-500 italic py-2">
-                  Please add contact info in Sanity → Site Settings
-                </li>
-              )}
-            </ul>
-          </div>
+          <nav className="lg:col-span-4" aria-labelledby="footer-contact">
+            <ColHeading id="footer-contact">Contact Information</ColHeading>
+            <ul className="flex flex-col gap-1 sm:gap-3">
+              {contactItems.map((item) => {
+                const Icon = item.Icon;
+                const content = (
+                  <>
+                    <Icon
+                      size={16}
+                      className="mt-0.5 shrink-0 text-brand-500"
+                      aria-hidden="true"
+                    />
+                    <span className={item.valueClassName}>
+                      {item.value}
+                      {item.external ? <OpensInNewTab /> : null}
+                    </span>
+                  </>
+                );
 
+                if (!item.href) {
+                  return (
+                    <li key={item.kind} className="footer-contact-static">
+                      {content}
+                    </li>
+                  );
+                }
+
+                if (item.href.startsWith("/") && !item.external) {
+                  return (
+                    <li key={item.kind}>
+                      <Link href={item.href} className="footer-contact-link">
+                        {content}
+                      </Link>
+                    </li>
+                  );
+                }
+
+                return (
+                  <li key={item.kind}>
+                    <a
+                      href={item.href}
+                      {...(item.external ? EXTERNAL_LINK_PROPS : {})}
+                      className="footer-contact-link"
+                      title={item.title}
+                    >
+                      {content}
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
         </div>
       </div>
 
-      {/* Bottom Bar — Copyright & Legal */}
       <div className="border-t border-slate-900 bg-slate-950">
-        <div className="container-page py-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-slate-500 text-center md:text-left">
-            &copy; {new Date().getFullYear()} {siteName}. All rights reserved.
+        <div className="container-page flex flex-col items-center justify-between gap-4 py-5 sm:py-6 md:flex-row">
+          <p className="text-center text-sm text-slate-500 md:text-left">
+            {formatFooterCopyright(siteName)}
           </p>
           <nav aria-label="Footer legal links">
-            <div className="flex items-center justify-center md:justify-end gap-4 text-sm text-slate-500">
-              <Link
-                href="/privacy-policy"
-                className="hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-brand-400 rounded-sm"
-              >
-                Privacy Policy
-              </Link>
-              <span aria-hidden="true" className="text-slate-800">|</span>
-              <Link
-                href="/terms-of-service"
-                className="hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-brand-400 rounded-sm"
-              >
-                Terms &amp; Conditions
-              </Link>
+            <div className="flex items-center justify-center gap-1 md:justify-end md:gap-4">
+              {FOOTER_LEGAL_LINKS.map((link, index) => (
+                <span key={link.href} className="contents">
+                  {index > 0 && (
+                    <span aria-hidden="true" className="text-slate-800">
+                      |
+                    </span>
+                  )}
+                  <Link href={link.href} className="footer-legal-link">
+                    {link.label}
+                  </Link>
+                </span>
+              ))}
             </div>
           </nav>
         </div>

@@ -5,6 +5,7 @@ import Footer from "@/components/layout/Footer";
 import PreviewBanner from "@/components/layout/PreviewBanner";
 import WhatsAppButton from "@/components/ui/WhatsAppButton";
 import { getSiteLayoutData } from "@/lib/cms/queries";
+import { LOGO_IMAGE_PX } from "@/lib/constants";
 import { urlFor } from "@/sanity/lib/image";
 
 export default async function SiteLayout({
@@ -18,9 +19,9 @@ export default async function SiteLayout({
   // Extract once — used for both the padding guard and the FAB render
   const whatsappNumber = settings?.whatsapp ?? null;
 
-  // Fetch at 2× the largest display size (52px footer logo on sm+) for Retina sharpness
+  // Fetch at 2× display size (`LOGO_DISPLAY_PX`) for Retina sharpness
   const logoUrl = settings?.logo
-    ? urlFor(settings.logo).width(104).height(104).url()
+    ? urlFor(settings.logo).width(LOGO_IMAGE_PX).height(LOGO_IMAGE_PX).url()
     : null;
 
   return (

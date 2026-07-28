@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { Search } from "lucide-react";
 import dynamic from "next/dynamic";
 import NavLinks from "@/components/layout/NavLinks";
 import MobileNavSidebarLoader from "@/components/layout/MobileNavSidebarLoader";
+import SiteBrandLogo from "@/components/layout/SiteBrandLogo";
 
 import { DEFAULT_SITE_NAME } from "@/lib/constants";
 import { FALLBACK_NAV, withoutHomeNavItems } from "@/lib/fallbacks/nav";
@@ -53,43 +53,6 @@ function buildNavLinks(
   // Logo/site name already goes home — skip a redundant Home item from CMS.
   return withoutHomeNavItems(base);
 }
-
-function SiteLogo({
-  siteName,
-  logoUrl,
-}: {
-  siteName: string;
-  logoUrl?: string | null;
-}) {
-  const size = 42;
-
-  return (
-    <>
-      <div className="size-logo shrink-0 overflow-hidden rounded-full border-2 border-brand-400 transition-transform duration-200 group-hover:scale-105">
-        {logoUrl ? (
-          <Image
-            src={logoUrl}
-            alt=""
-            width={size}
-            height={size}
-            sizes={`${size}px`}
-            priority
-            className="h-full w-full object-cover"
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center bg-linear-to-br from-brand-100 to-brand-50 text-lg font-bold text-brand-700 select-none" aria-hidden="true">
-            {siteName.charAt(0).toUpperCase()}
-          </div>
-        )}
-      </div>
-      <span className="hidden text-lg-plus font-bold tracking-heading text-slate-900 dark:text-slate-50 md:block">
-        {siteName}
-      </span>
-    </>
-  );
-}
-
-
 
 export default function Header({
   darulQuranUrl,
@@ -147,7 +110,12 @@ export default function Header({
             aria-label={siteName}
             className="group flex shrink-0 items-center gap-3"
           >
-            <SiteLogo siteName={siteName} logoUrl={logoUrl} />
+            <SiteBrandLogo
+              siteName={siteName}
+              logoUrl={logoUrl}
+              variant="header"
+              priority
+            />
           </Link>
 
           <nav

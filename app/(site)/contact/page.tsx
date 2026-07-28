@@ -9,8 +9,10 @@ import {
   getContactFormOptions,
   getSiteSettings,
 } from "@/lib/cms/queries";
-import { whatsappUrl } from "@/lib/urls";
+import { whatsappUrl, mapsUrl, EXTERNAL_LINK_PROPS } from "@/lib/urls";
+import OpensInNewTab from "@/components/ui/OpensInNewTab";
 import { sanitizePublicCopy } from "@/lib/fallbacks/cms-copy";
+import { buildFooterSocialLinks } from "@/lib/fallbacks/footer-nav";
 
 const ContactForm = dynamic(() => import("./_components/ContactForm"), {
   ssr: true,
@@ -31,6 +33,9 @@ export default async function ContactPage() {
   ]);
 
   const { courses, services } = formOptions;
+  const socialLinks = buildFooterSocialLinks(settings).filter(
+    (link) => link.variant === "icon",
+  );
 
   const contactItems = [
     settings?.email && {
@@ -55,7 +60,7 @@ export default async function ContactPage() {
       Icon: MapPin,
       label: "Address",
       value: settings.address,
-      href: null,
+      href: mapsUrl(settings.address, settings.addressLink),
     },
   ].filter(Boolean) as {
     Icon: React.ElementType;
@@ -112,11 +117,11 @@ export default async function ContactPage() {
                     {href ? (
                       <a
                         href={href}
-                        target={href.startsWith("http") ? "_blank" : undefined}
-                        rel="noopener noreferrer"
-                        className="text-sm-plus text-slate-700 hover:text-brand-700 transition-colors break-all"
+                        {...(href.startsWith("http") ? EXTERNAL_LINK_PROPS : {})}
+                        className="text-sm-plus text-slate-700 transition-colors break-all hover:text-brand-700"
                       >
                         {value}
+                        {href.startsWith("http") ? <OpensInNewTab /> : null}
                       </a>
                     ) : (
                       <p className="text-sm-plus text-slate-700 whitespace-pre-line">
@@ -127,34 +132,30 @@ export default async function ContactPage() {
                 </div>
               ))}
 
-              {(settings?.facebook || settings?.youtube) && (
+              {socialLinks.length > 0 && (
                 <div className="flex gap-2 pt-1">
-                  {settings?.facebook && (
+                  {socialLinks.map((link) => (
                     <a
-                      href={settings.facebook}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      key={link.key}
+                      href={link.href}
+                      {...EXTERNAL_LINK_PROPS}
                       className="chip-outline"
                     >
-                      <FacebookIcon size={13} /> Facebook
+                      {link.key === "facebook" ? (
+                        <FacebookIcon size={13} />
+                      ) : (
+                        <YoutubeIcon size={13} />
+                      )}{" "}
+                      {link.label}
+                      <OpensInNewTab />
                     </a>
-                  )}
-                  {settings?.youtube && (
-                    <a
-                      href={settings.youtube}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="chip-outline"
-                    >
-                      <YoutubeIcon size={13} /> YouTube
-                    </a>
-                  )}
+                  ))}
                 </div>
               )}
 
               {contactItems.length === 0 && (
-                <p className="text-body-muted italic">
-                  Add contact details in Sanity Studio → Site Settings.
+                <p className="text-body-muted">
+                  Use the form to reach us — we typically reply soon.
                 </p>
               )}
             </div>

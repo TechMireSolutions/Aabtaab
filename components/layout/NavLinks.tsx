@@ -8,6 +8,8 @@ import {
   TW_MOBILE_NAV_ROW_ACTIVE,
 } from "@/lib/tailwind";
 import type { NavItem } from "@/types/site-navigation";
+import OpensInNewTab from "@/components/ui/OpensInNewTab";
+import { EXTERNAL_LINK_PROPS } from "@/lib/urls";
 
 function isActive(pathname: string, href: string): boolean {
   return (
@@ -21,8 +23,6 @@ interface NavLinksProps {
   variant: "desktop" | "mobile";
   onNavigate?: () => void;
 }
-
-
 
 export default function NavLinks({ links, variant, onNavigate }: NavLinksProps) {
   const pathname = usePathname();
@@ -38,8 +38,7 @@ export default function NavLinks({ links, variant, onNavigate }: NavLinksProps) 
               <Link
                 href={item.href}
                 onClick={onNavigate}
-                target={item.external ? "_blank" : undefined}
-                rel={item.external ? "noopener noreferrer" : undefined}
+                {...(item.external ? EXTERNAL_LINK_PROPS : {})}
                 aria-current={active ? "page" : undefined}
                 className={`${TW_MOBILE_NAV_ROW} ${
                   active
@@ -51,7 +50,7 @@ export default function NavLinks({ links, variant, onNavigate }: NavLinksProps) 
                 {item.external && (
                   <>
                     <ExternalLink className="size-3.5 shrink-0 text-gray-400" />
-                    <span className="sr-only"> (opens in new tab)</span>
+                    <OpensInNewTab />
                   </>
                 )}
               </Link>
@@ -70,8 +69,7 @@ export default function NavLinks({ links, variant, onNavigate }: NavLinksProps) 
           <Link
             key={item.label}
             href={item.href}
-            target={item.external ? "_blank" : undefined}
-            rel={item.external ? "noopener noreferrer" : undefined}
+            {...(item.external ? EXTERNAL_LINK_PROPS : {})}
             aria-current={active ? "page" : undefined}
             className={`link-underline text-sm-plus font-medium whitespace-nowrap transition-colors duration-150 ${
               active
@@ -80,9 +78,7 @@ export default function NavLinks({ links, variant, onNavigate }: NavLinksProps) 
             }`}
           >
             {item.label}
-            {item.external && (
-              <span className="sr-only"> (opens in new tab)</span>
-            )}
+            {item.external ? <OpensInNewTab /> : null}
           </Link>
         );
       })}

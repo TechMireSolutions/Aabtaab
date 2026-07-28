@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   formatPriceDuration,
+  mapsUrl,
   nestedListCtaLabel,
   whatsappUrl,
 } from "@/lib/urls";
@@ -20,6 +21,20 @@ describe("whatsappUrl", () => {
 
   it("falls back to contact when number has no digits", () => {
     expect(whatsappUrl("n/a")).toBe("/contact");
+  });
+});
+
+describe("mapsUrl", () => {
+  it("prefers a custom address link", () => {
+    expect(mapsUrl("Karachi", "https://maps.example/place")).toBe(
+      "https://maps.example/place",
+    );
+  });
+
+  it("builds a Google Maps search URL", () => {
+    expect(mapsUrl("Block 20 Karachi")).toContain(
+      "query=Block%2020%20Karachi",
+    );
   });
 });
 

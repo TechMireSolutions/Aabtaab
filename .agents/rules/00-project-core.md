@@ -113,3 +113,5 @@ A feature is complete only when:
 | `10-performance.mdc` | Caching, dynamic components, layouts, CWV |
 | `11-error-handling-observability.mdc` | Telemetry, logging, Sentry, error boundaries |
 | `12-testing.mdc` | Test suites, Vitest, Playwright configs |
+| `13-mobile-first-responsive.mdc` | `*.tsx`, `*.css` — mobile-first layout, touch, safe areas |
+| `14-ui-ux-best-practices.mdc` | `*.tsx`, `*.css` — hierarchy, feedback, forms, motion, trust |

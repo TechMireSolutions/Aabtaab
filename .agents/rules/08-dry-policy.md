@@ -29,11 +29,13 @@ Never invent a new helper when the SSOT table already names one.
 | Article detail chrome | `ArticleDetailShell` (posts, events) |
 | Legal pages | `LegalPageShell` + `LegalSection` (privacy, terms) |
 | Content sections | `components/content/*` |
-| Contact footer block | `SiteContactFooter` (course + service CTA bands) |
+| Contact footer block | `SiteContactFooter` — reuses `buildFooterContactItems` for email/phone links |
 | Nav / search empty links | `lib/fallbacks/nav.ts` + `SearchEmptyState` |
 | About fallback pillars | `lib/fallbacks/about.ts` |
 | Env validation | `lib/env.ts` |
-| Footer CMS quick links | `footerNavQuery` → `getSiteLayoutData()` → `FooterNav` in `types/site-navigation.ts`; fallback `FALLBACK_QUICK_LINKS` in `Footer.tsx` |
+| Footer CMS / chrome data | **SSOT** `lib/fallbacks/footer-nav.ts` — quick links, tagline, CTA, legal, `buildFooterServiceNavLinks`, contact/social builders, `formatFooterCopyright`; layout via `getSiteLayoutData()` |
+| Site brand mark | `SiteBrandLogo` (`header`/`footer`) + `LOGO_DISPLAY_PX` / `LOGO_IMAGE_PX` |
+| External new-tab links | `EXTERNAL_LINK_PROPS` + `mapsUrl` → `lib/urls.ts`; `OpensInNewTab` → `components/ui/OpensInNewTab.tsx` |
 | Nested child cards | `mapCourseChildForGrid`, `mapServiceChildForGrid` → `lib/catalog/` |
 | Breadcrumbs / paths | `lib/paths.ts` |
 | URL / formatting | `lib/urls.ts` |

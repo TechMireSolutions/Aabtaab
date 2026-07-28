@@ -8,6 +8,22 @@ export function whatsappUrl(
   return `https://wa.me/${clean}?text=${encodeURIComponent(message)}`;
 }
 
+/** Prefer CMS maps link; otherwise Google Maps search for the address. */
+export function mapsUrl(
+  address: string,
+  addressLink?: string | null,
+): string {
+  const custom = addressLink?.trim();
+  if (custom) return custom;
+  return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`;
+}
+
+/** Safe defaults for links that open a new browsing context */
+export const EXTERNAL_LINK_PROPS = {
+  target: "_blank",
+  rel: "noopener noreferrer",
+} as const;
+
 export function formatPriceDuration(
   price?: string,
   duration?: string,

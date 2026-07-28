@@ -1,4 +1,4 @@
-import { whatsappUrl } from "@/lib/urls";
+import { EXTERNAL_LINK_PROPS, whatsappUrl } from "@/lib/urls";
 
 interface WhatsAppButtonProps {
   /** Phone number in any format — non-digits are stripped before building the wa.me URL. */
@@ -11,9 +11,8 @@ export default function WhatsAppButton({ phoneNumber }: WhatsAppButtonProps) {
   return (
     <a
       href={href}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Chat on WhatsApp"
+      {...EXTERNAL_LINK_PROPS}
+      aria-label="Chat on WhatsApp (opens in new tab)"
       title="Chat on WhatsApp"
       className="whatsapp-fab group"
     >

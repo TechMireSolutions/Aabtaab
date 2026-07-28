@@ -41,8 +41,8 @@ description: >-
 | Featured image (post/event) | `media-hero` |
 | Square CMS image | `media-frame` / `media-placeholder` |
 | Pricing table wrapper | `table-shell` |
-| Footer social icon | `icon-btn-subtle` (dark-mode aware, hover scale + brand glow) |
-| Footer/contact text link | `chip-outline` or `chip-outline-sm` (dark-mode aware, hover scale + brand glow) |
+| Footer social icon | `footer-social-btn` (always-dark footer) or `icon-btn-subtle` on light surfaces |
+| Footer/contact text link | `footer-contact-link` / `footer-nav-link` / `footer-legal-link`; contact page chips: `chip-outline` |
 | Dark hero badges | `badge-hero` / `badge-hero-muted` |
 | Soft notice chip | `badge-notice` |
 | Logo sizing | `size-logo` / `size-logo-lg` |
@@ -59,6 +59,7 @@ Never add uncapped infinite animations on LCP content. Respect `prefers-reduced-
 - Prefer logical properties (`ps`/`pe`) for RTL text islands.
 - Hover affordances need keyboard/touch equivalents.
 - Form inputs ≥16px on mobile (avoid iOS zoom).
+- For layout/touch/UX checklists, use skill **`mobile-responsive-ux`** (rules `13` + `14`).
 
 ## When to extend `globals.css`
 

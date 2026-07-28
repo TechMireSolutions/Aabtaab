@@ -1,0 +1,77 @@
+# ui ux best practices
+
+> Modern UI/UX patterns — hierarchy, feedback, forms, navigation, motion, and trust
+
+**Scope:** `**/*.{tsx,css}`
+
+# UI / UX Best Practices
+
+**Styling SSOT:** rule `02` + `app/globals.css` · **Responsive:** rule `13-mobile-first-responsive` · **A11y/SEO:** rule `04` · **Skill:** `mobile-responsive-ux`
+
+Apply within the existing Aabtaab design system (`brand-*`, `gold-*`, shells, `@utility`). Do not introduce a new visual language or generic AI aesthetic that fights the brand.
+
+## Information hierarchy
+
+* One primary job per section: one heading + short supporting copy + one clear action when needed.
+* One **`h1` per page**; follow a logical heading order (`h2` → `h3`).
+* Brand and page purpose must be obvious in the first viewport without dashboard clutter (no competing promo chips, stat strips, or stacked CTAs in the hero unless the existing pattern requires it).
+* Prefer composition via shared shells (`PageHeader`, `CatalogDarkHero`, `ArticleDetailShell`, `LegalPageShell`, content sections) over one-off marketing layouts.
+
+## Calls to action & trust
+
+* Each important page needs a clear primary action (Enrol, Contact, Donate, etc.).
+* One primary button per section; secondary actions use `btn-secondary` / ghost / text links — not a second `btn-primary`.
+* Keep primary actions reachable without excessive scrolling on mobile.
+* No deceptive urgency, fake scarcity, or fabricated testimonials/reviews.
+* Contact and legal pages must stay discoverable (`/contact`, `/privacy-policy`, `/terms-of-service`).
+
+## Feedback & states
+
+Every async or interactive feature must handle: **idle · loading · success · validation error · server error · empty**.
+
+* Disable duplicate submits while loading; re-enable after errors.
+* Show field-level errors next to fields; announce status with `aria-live` / `role="alert"` when needed.
+* Empty states use `empty-state` / `SearchEmptyState` patterns with a next step (links, CTA).
+* Loading UI must be **layout-stable** (skeletons matching final size) — no content jump.
+
+## Forms & input UX
+
+* Visible labels for every control; placeholder is not a label.
+* Group related fields; keep purpose radios/keyboard patterns accessible (see contact form).
+* Preserve safe user input after validation errors.
+* Honeypot stays visually hidden with the established a11y-safe pattern (`-left-[9999px]`), not `display: none` alone if that breaks the anti-bot approach.
+* Optional Turnstile only when configured — never block the happy path in local/CI when keys are unset.
+
+## Navigation & wayfinding
+
+* Site nav + footer must work with touch, keyboard, and screen readers.
+* Mobile menu: labeled control (`Open navigation menu`), focus trap while open, Escape/close restores focus.
+* Use `<Link>` for internal routes; breadcrumbs on nested catalogs (`NestedBreadcrumbs`).
+* Skip link → `#main-content` must remain present and first-focusable in the site chrome.
+* Icon-only controls need `aria-label`; decorative icons `aria-hidden`.
+
+## Motion & delight
+
+* Prefer `motion-safe:animate-*` utilities; respect `prefers-reduced-motion`.
+* Motion supports hierarchy (e.g. hero fade-up) — never uncapped infinite animation on LCP content.
+* Do not convey meaning by animation or color alone.
+* Keep transitions short and purposeful; avoid parallax or heavy scroll-jacking.
+
+## Visual density & cards
+
+* Prefer design-system surfaces (`card-surface`, `card-interactive`) only when they aid scanning or interaction — avoid card-wrapping everything.
+* Maintain consistent spacing via `section-y*` utilities rather than one-off padding.
+* Dark/light: use existing dark-aware utilities (`icon-btn-subtle`, `chip-outline`) — do not invent a second theme system.
+
+## Inclusive UX
+
+* WCAG 2.2 AA contrast for text and essential UI chrome.
+* Visible `focus-visible` rings — never remove focus styles.
+* Arabic/Urdu islands: nearest wrapper gets `lang` + `dir="rtl"`; prefer logical properties (`ps`/`pe`).
+* Errors and help text must be readable by assistive tech, not color-only.
+
+## Verify
+
+* Desktop + mobile E2E when UI changes (`npm run test:e2e`).
+* Keyboard-only pass for nav, search palette, forms, accordions, drawers.
+* Spot-check contrast on `brand-*` / `gold-*` against section backgrounds.

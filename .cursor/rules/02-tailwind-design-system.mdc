@@ -98,8 +98,9 @@ alwaysApply: false
 
 | Utility | Use for |
 |---------|---------|
-| `icon-btn-subtle` | Footer social icon buttons (dark-mode aware, hover scale+glow) |
-| `chip-outline` / `chip-outline-sm` | Footer/contact text chips (dark-mode aware, hover scale+glow) |
+| `icon-btn-subtle` | Light/dark chrome social buttons (contact page, light surfaces) |
+| `footer-shell` / `footer-heading` / `footer-nav-link` / `footer-contact-link` / `footer-contact-static` / `footer-social-btn` / `footer-pill-link` / `footer-cta-band` / `footer-legal-link` | Always-dark site footer chrome (`bg-slate-950`) |
+| `chip-outline` / `chip-outline-sm` | Contact page social chips (dark-mode aware) |
 | `check-icon-sm` | Why-us checklist icons |
 | `link-underline` | Header nav active/hover |
 | `bg-dot-grid` / `bg-hero-glow` / `hero-glow-offset` | Decorative backgrounds |
@@ -137,31 +138,12 @@ layout → spacing → typography → visual (bg/border/shadow) → interactive 
 * **Individual transform properties** (`translate`, `rotate`, `scale`) must always declare an identity base (`translate: 0 0`) on elements that change them on hover/focus — prevents a stacking-context jump the first time the state applies.
 * **`calc-size()` for animating to `auto`** — use `inline-size: calc-size(max-content, size + Xrem)` with an `inline-size: auto` fallback immediately before it for Firefox/Safari. Opt in per-element with `interpolate-size: allow-keywords`.
 
-## Mobile & responsiveness rules
+## Mobile, a11y & UX
 
-* **Design mobile-first.** Test layouts at small, medium, large, and extra-large widths.
-* Do not rely on fixed desktop widths. Avoid horizontal scrolling entirely.
-* Interactive controls should have an approximate minimum target size of **44 by 44 pixels** on mobile viewports.
-* Form inputs should use a readable font size, normally at least **16 pixels** on mobile to prevent automatic browser zoom on iOS.
-* Navigation must remain fully usable with touch, keyboard, and screen readers.
-* Do not hide essential content on mobile.
-* Tables must scroll or adapt safely on small screens. Long words, URLs, and email addresses must wrap correctly.
-* Prefer **logical properties** (`ps`/`pe`, `ms`/`me`, `start`/`end`) when styling bilingual RTL islands (`lang` + `dir="rtl"` wrappers).
-
-## Accessibility & contrast
-
-* Text/background pairs using `brand-*` / `gold-*` / muted surfaces must remain **WCAG 2.2 AA** contrast for body and UI text.
-* Never remove `focus-visible` rings; interactive utilities must keep a visible focus state.
-* Decorative motion only — never convey meaning by animation alone.
-* Hover-only affordances must have an equivalent for touch/keyboard.
-
-## UX calls to action & trust
-
-* Important pages must have a clear primary action (e.g. Enrol, Contact, Donate).
-* Do not place multiple competing primary buttons in the same section.
-* Make important actions visible without excessive scrolling. Do not use deceptive urgency.
-* Maintain discoverable, accurate pages for: About, Contact, Privacy Policy, and Terms of Service (`/privacy-policy`, `/terms-of-service`). FAQ content lives in CMS-driven `FaqAccordionSection` blocks — not a standalone `/faq` route unless added later.
-* Contact details must be accurate and consistent. Do not publish fake testimonials or reviews.
+* **Mobile-first / touch / safe areas:** rule `13-mobile-first-responsive` (+ skill `mobile-responsive-ux`).
+* **Hierarchy, CTAs, forms feedback, motion, trust:** rule `14-ui-ux-best-practices`.
+* Keep WCAG 2.2 AA contrast for `brand-*` / `gold-*` text; never remove `focus-visible`.
+* Prefer logical properties (`ps`/`pe`) for RTL islands; hover affordances need touch/keyboard equivalents.
 
 ## Examples
 

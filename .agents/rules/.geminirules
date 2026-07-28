@@ -17,8 +17,10 @@ Active rule files in this folder:
 - `10-performance.md`
 - `11-error-handling-observability.md`
 - `12-testing.md`
+- `13-mobile-first-responsive.md`
+- `14-ui-ux-best-practices.md`
 
-Skills: `.agents/skills/` (cache-revalidation, contact-form-api, content-sections, deploy-production, error-handling-telemetry, events-feature, github-ci-deploy, nested-catalog-routes, nextjs-react, performance-optimization, sanity-cms, security, seo-metadata, sync-agent-config, tailwind-ui, testing-vitest-playwright)
+Skills: `.agents/skills/` (cache-revalidation, contact-form-api, content-sections, deploy-production, error-handling-telemetry, events-feature, github-ci-deploy, mobile-responsive-ux, nested-catalog-routes, nextjs-react, performance-optimization, sanity-cms, security, seo-metadata, sync-agent-config, tailwind-ui, testing-vitest-playwright)
 
 **Canonical docs:** `techstack.md` (stack) → `.cursor/rules/` (standards) → `.cursor/skills/` (workflows).
 
