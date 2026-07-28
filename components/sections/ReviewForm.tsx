@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Script from "next/script";
 import { z } from "zod";
-import { env } from "@/lib/env";
+import { publicEnv } from "@/lib/env";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name is required"),
@@ -160,7 +160,7 @@ export default function ReviewForm() {
             />
           </div>
 
-          {env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
+          {publicEnv.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
             <div className="flex justify-start py-1">
               <Script
                 src="https://challenges.cloudflare.com/turnstile/v0/api.js"
@@ -169,7 +169,7 @@ export default function ReviewForm() {
               />
               <div
                 className="cf-turnstile"
-                data-sitekey={env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+                data-sitekey={publicEnv.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
                 data-theme="light"
               />
             </div>

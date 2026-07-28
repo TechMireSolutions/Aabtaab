@@ -8,6 +8,8 @@ describe("filterNavForEmptyCatalogs", () => {
     { label: "Events", href: "/events" },
     { label: "Articles", href: "/posts" },
     { label: "Articles alias", href: "/articles" },
+    { label: "Courses", href: "/online-courses" },
+    { label: "Services", href: "/services" },
     { label: "Reviews", href: "/reviews" },
   ];
 
@@ -17,8 +19,10 @@ describe("filterNavForEmptyCatalogs", () => {
         scholars: 0,
         events: 0,
         posts: 2,
+        courses: 3,
+        services: 1,
       }).map((i) => i.href),
-    ).toEqual(["/", "/posts", "/articles", "/reviews"]);
+    ).toEqual(["/", "/posts", "/articles", "/online-courses", "/services", "/reviews"]);
   });
 
   it("hides /articles when posts count is zero", () => {
@@ -27,6 +31,8 @@ describe("filterNavForEmptyCatalogs", () => {
         scholars: 0,
         events: 0,
         posts: 0,
+        courses: 0,
+        services: 0,
       }).map((i) => i.href),
     ).toEqual(["/", "/reviews"]);
   });
@@ -37,6 +43,8 @@ describe("filterNavForEmptyCatalogs", () => {
         scholars: 3,
         events: 1,
         posts: 1,
+        courses: 2,
+        services: 4,
       }).map((i) => i.href),
     ).toEqual([
       "/",
@@ -44,6 +52,8 @@ describe("filterNavForEmptyCatalogs", () => {
       "/events",
       "/posts",
       "/articles",
+      "/online-courses",
+      "/services",
       "/reviews",
     ]);
   });
@@ -54,6 +64,8 @@ describe("filterNavForEmptyCatalogs", () => {
         scholars: null,
         events: null,
         posts: null,
+        courses: null,
+        services: null,
       }).map((i) => i.href),
     ).toEqual([
       "/",
@@ -61,6 +73,8 @@ describe("filterNavForEmptyCatalogs", () => {
       "/events",
       "/posts",
       "/articles",
+      "/online-courses",
+      "/services",
       "/reviews",
     ]);
   });

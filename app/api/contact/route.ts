@@ -10,6 +10,8 @@ import {
 import { getSanityWriteClient } from "@/sanity/lib/writeClient";
 import { env } from "@/lib/env";
 
+const MAX_BODY_BYTES = 16_384;
+
 export async function POST(req: Request) {
   try {
     const ip = clientIpFromRequest(req);
@@ -21,7 +23,18 @@ export async function POST(req: Request) {
       );
     }
 
-    const raw = await req.json();
+    const rawText = await req.text();
+    if (rawText.length > MAX_BODY_BYTES) {
+      return NextResponse.json({ error: "Payload too large" }, { status: 413 });
+    }
+
+    let raw: unknown;
+    try {
+      raw = JSON.parse(rawText);
+    } catch {
+      return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
+    }
+
     const parsed = parseContactBody(raw);
     if (!parsed.success) {
       return NextResponse.json({ error: parsed.error }, { status: 400 });
@@ -40,12 +53,14 @@ export async function POST(req: Request) {
       token,
     } = parsed.data;
 
-    // Verify Cloudflare Turnstile token if secret key is configured in env
     const turnstileSecret = env.TURNSTILE_SECRET_KEY;
     if (turnstileSecret) {
       if (!token) {
         return NextResponse.json(
-          { error: "Security check failed. Please refresh the page and try again." },
+          {
+            error:
+              "Security check failed. Please refresh the page and try again.",
+          },
           { status: 400 },
         );
       }
@@ -60,10 +75,10 @@ export async function POST(req: Request) {
             response: token,
             remoteip: ip,
           }),
-        }
+        },
       );
 
-      const verifyData = await verifyRes.json();
+      const verifyData = (await verifyRes.json()) as { success?: boolean };
       if (!verifyData.success) {
         return NextResponse.json(
           { error: "Security verification failed. Please try again." },
@@ -91,19 +106,33 @@ export async function POST(req: Request) {
       status: "new",
     });
 
-    await sendContactNotification({
-      subject: `New ${purposeText}${appliedFor ? ` — ${appliedFor}` : ""} from ${fullName}`,
-      fields: {
-        fullName,
-        email,
-        phone,
-        country,
-        city,
-        purposeText,
-        appliedFor: appliedFor || undefined,
-        message,
-      },
-    });
+    // After durable write: never fail the request if email delivery fails.
+    try {
+      const emailed = await sendContactNotification({
+        subject: `New ${purposeText}${appliedFor ? ` — ${appliedFor}` : ""} from ${fullName}`,
+        fields: {
+          fullName,
+          email,
+          phone,
+          country,
+          city,
+          purposeText,
+          appliedFor: appliedFor || undefined,
+          message,
+        },
+      });
+      if (!emailed) {
+        Sentry.captureMessage("Contact saved but email not delivered", {
+          level: "warning",
+          tags: { category: "contact_submission" },
+        });
+      }
+    } catch (notifyError) {
+      console.error("Contact email notify error:", notifyError);
+      Sentry.captureException(notifyError, {
+        tags: { category: "contact_submission" },
+      });
+    }
 
     return NextResponse.json({ success: true });
   } catch (err) {

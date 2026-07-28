@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { articleHeroImageUrl } from "@/sanity/lib/image";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import { resolveDocOgImage } from "@/lib/seo/resolve-og-image";
@@ -17,13 +18,15 @@ export function resolvePostImageUrls(post: Post) {
 
 export async function buildPostPageMetadata(slug: string): Promise<Metadata> {
   const post = await getPostBySlug(slug);
-  const { ogImageUrl } = post ? resolvePostImageUrls(post) : {};
+  if (!post) notFound();
 
-  const title = post?.seo?.metaTitle ?? post?.title ?? "Article";
-  const description = post?.seo?.metaDescription ?? post?.excerpt;
+  const { ogImageUrl } = resolvePostImageUrls(post);
+
+  const title = post.seo?.metaTitle ?? post.title ?? "Article";
+  const description = post.seo?.metaDescription ?? post.excerpt;
   const path = `/posts/${slug}`;
 
-  const canonicalPath = post?.seo?.canonicalUrl
+  const canonicalPath = post.seo?.canonicalUrl
     ? post.seo.canonicalUrl.startsWith("http")
       ? new URL(post.seo.canonicalUrl).pathname
       : post.seo.canonicalUrl
@@ -33,9 +36,9 @@ export async function buildPostPageMetadata(slug: string): Promise<Metadata> {
     title,
     description,
     path: canonicalPath,
-    noIndex: !post || Boolean(post.seo?.noIndex),
+    noIndex: Boolean(post.seo?.noIndex),
     ogImage: ogImageUrl,
-    keywords: post?.seo?.keywords,
+    keywords: post.seo?.keywords,
   });
 
   return {
@@ -43,8 +46,8 @@ export async function buildPostPageMetadata(slug: string): Promise<Metadata> {
     openGraph: {
       ...base.openGraph,
       type: "article",
-      publishedTime: post?.publishedAt,
-      authors: post?.author?.name ? [post.author.name] : undefined,
+      publishedTime: post.publishedAt,
+      authors: post.author?.name ? [post.author.name] : undefined,
     },
   };
 }

@@ -7,6 +7,7 @@ import Link from "next/link";
 import { urlFor } from "@/sanity/lib/image";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import { safeContactHref } from "@/lib/urls/safe-href";
+import type { Scholar } from "@/types/scholar";
 
 export const metadata = buildPageMetadata({
   title: "Our Scholars",
@@ -41,8 +42,7 @@ export default async function ScholarsPage() {
             </div>
           ) : (
             <div className="flex flex-wrap justify-center gap-8 md:gap-10">
-              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-              {scholars.map((scholar: any) => {
+              {scholars.map((scholar: Scholar) => {
                 const contactHref = safeContactHref(scholar.contactDetails);
                 return (
                   <div
@@ -75,13 +75,11 @@ export default async function ScholarsPage() {
                       {scholar.qualifications &&
                         scholar.qualifications.length > 0 && (
                           <div className="mb-6 flex flex-wrap gap-2">
-                            {scholar.qualifications.map(
-                              (qual: string, idx: number) => (
-                                <span key={idx} className="badge-pill">
-                                  {qual}
-                                </span>
-                              ),
-                            )}
+                            {scholar.qualifications.map((qual) => (
+                              <span key={qual} className="badge-pill">
+                                {qual}
+                              </span>
+                            ))}
                           </div>
                         )}
 

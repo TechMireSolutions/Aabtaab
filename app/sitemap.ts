@@ -19,12 +19,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: absoluteUrl("/"), changeFrequency: "daily", priority: 1 },
     { url: absoluteUrl("/about"), changeFrequency: "monthly", priority: 0.8 },
-    {
-      url: absoluteUrl("/online-courses"),
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-    { url: absoluteUrl("/services"), changeFrequency: "weekly", priority: 0.9 },
     { url: absoluteUrl("/donate"), changeFrequency: "monthly", priority: 0.7 },
     { url: absoluteUrl("/contact"), changeFrequency: "monthly", priority: 0.7 },
     {
@@ -45,6 +39,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   // Only list catalog hubs when they have content
+  if (courses.length > 0) {
+    staticRoutes.push({
+      url: absoluteUrl("/online-courses"),
+      changeFrequency: "weekly",
+      priority: 0.9,
+    });
+  }
+  if (services.length > 0) {
+    staticRoutes.push({
+      url: absoluteUrl("/services"),
+      changeFrequency: "weekly",
+      priority: 0.9,
+    });
+  }
   if (posts.length > 0) {
     staticRoutes.push({
       url: absoluteUrl("/posts"),

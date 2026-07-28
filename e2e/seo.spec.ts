@@ -19,11 +19,12 @@ test.describe("seo and robots", () => {
     expect(body).toMatch(/Sitemap:\s*https?:\/\/.+\/sitemap\.xml/i);
   });
 
-  test("unknown route returns 404", async ({ page }) => {
+  test("unknown route returns branded 404", async ({ page }) => {
     const res = await page.goto(
       `/this-page-does-not-exist-${Date.now()}`,
     );
     expect(res?.status()).toBe(404);
-    await expect(page.locator("body")).toBeVisible();
+    await expect(page.getByRole("heading", { name: /page not found/i })).toBeVisible();
+    await expect(page.getByRole("link", { name: /back to home/i })).toBeVisible();
   });
 });

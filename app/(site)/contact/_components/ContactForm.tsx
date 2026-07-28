@@ -2,7 +2,7 @@
 
 import { useId, useState } from "react";
 import Script from "next/script";
-import { env } from "@/lib/env";
+import { publicEnv } from "@/lib/env";
 import type {
   ContactFormOption,
   ContactPurpose,
@@ -82,7 +82,7 @@ export default function ContactForm({
       )?.value ?? "";
 
     try {
-      const token = env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ? getValue("cf-turnstile-response") : undefined;
+      const token = publicEnv.NEXT_PUBLIC_TURNSTILE_SITE_KEY ? getValue("cf-turnstile-response") : undefined;
 
       const res = await fetch("/api/contact", {
         method: "POST",
@@ -315,12 +315,12 @@ export default function ContactForm({
         />
       </div>
 
-      {env.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
+      {publicEnv.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
         <div className="flex justify-start py-1">
           <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer />
           <div
             className="cf-turnstile"
-            data-sitekey={env.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
+            data-sitekey={publicEnv.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
             data-theme="light"
           />
         </div>

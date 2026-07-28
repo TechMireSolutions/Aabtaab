@@ -6,6 +6,8 @@ const EMPTY_CATALOG_HREFS: Record<string, keyof CatalogCounts> = {
   "/events": "events",
   "/posts": "posts",
   "/articles": "posts",
+  "/online-courses": "courses",
+  "/services": "services",
 };
 
 export interface CatalogCounts {
@@ -13,6 +15,8 @@ export interface CatalogCounts {
   scholars: number | null;
   events: number | null;
   posts: number | null;
+  courses: number | null;
+  services: number | null;
 }
 
 function normalizeNavPath(href: string | undefined): string {

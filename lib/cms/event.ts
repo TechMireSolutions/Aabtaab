@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { cardImageUrl } from "@/sanity/lib/image";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import { resolveDocOgImage } from "@/lib/seo/resolve-og-image";
@@ -13,19 +14,21 @@ export function resolveEventImageUrls(event: EventDetail) {
 
 export async function buildEventPageMetadata(slug: string): Promise<Metadata> {
   const event = await getEventBySlug(slug);
-  const { ogImageUrl: og } = event ? resolveEventImageUrls(event) : {};
+  if (!event) notFound();
 
-  const title = event?.seo?.metaTitle ?? event?.title ?? "Event";
-  const description = event?.seo?.metaDescription ?? event?.description;
+  const { ogImageUrl: og } = resolveEventImageUrls(event);
+
+  const title = event.seo?.metaTitle ?? event.title ?? "Event";
+  const description = event.seo?.metaDescription ?? event.description;
   const path = `/events/${slug}`;
 
   return buildPageMetadata({
     title,
     description,
     path,
-    noIndex: !event || Boolean(event.seo?.noIndex),
+    noIndex: Boolean(event.seo?.noIndex),
     ogImage: og,
-    keywords: event?.seo?.keywords,
+    keywords: event.seo?.keywords,
   });
 }
 

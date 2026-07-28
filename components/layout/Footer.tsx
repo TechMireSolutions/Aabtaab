@@ -129,8 +129,8 @@ export default function Footer({
                   className="size-12 rounded-full border border-slate-800 object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               ) : (
-                <div className="size-12 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-2xl select-none transition-transform duration-300 group-hover:scale-105">
-                  ⛵
+                <div className="size-12 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-lg font-bold text-brand-400 select-none transition-transform duration-300 group-hover:scale-105" aria-hidden="true">
+                  {siteName.charAt(0).toUpperCase()}
                 </div>
               )}
               <span className="font-bold text-xl text-white tracking-tight transition-colors duration-200 group-hover:text-brand-400">

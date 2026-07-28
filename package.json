@@ -8,7 +8,8 @@
   "scripts": {
     "dev": "node scripts/run-next.mjs dev",
     "typecheck": "tsc --noEmit",
-    "build": "next build",
+    "build": "next build --webpack",
+    "build:turbo": "next build",
     "start": "node scripts/run-next.mjs start",
     "lint": "eslint .",
     "test": "vitest run",

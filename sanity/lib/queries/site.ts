@@ -28,7 +28,7 @@ export const footerServicesQuery = `
 export const homepageSettingsQuery = `*[_type == "homepageSettings"][0]`;
 
 export const testimonialsQuery = `
-  *[_type == "testimonial"] | order(order asc) {
+  *[_type == "testimonial" && status == "approved"] | order(order asc) {
     _id, quote, name, role
   }
 `;

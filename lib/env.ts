@@ -87,12 +87,32 @@ if (isServer) {
 
 const publicData = publicResult.success ? publicResult.data : {} as Partial<z.infer<typeof publicEnvSchema>>;
 
+/** Safe subset for Client Components — public keys only. */
+export const publicEnv = {
+  NEXT_PUBLIC_SANITY_PROJECT_ID:
+    publicData.NEXT_PUBLIC_SANITY_PROJECT_ID ||
+    process.env.NEXT_PUBLIC_SANITY_PROJECT_ID ||
+    "",
+  NEXT_PUBLIC_SANITY_DATASET:
+    publicData.NEXT_PUBLIC_SANITY_DATASET ||
+    process.env.NEXT_PUBLIC_SANITY_DATASET ||
+    "production",
+  NEXT_PUBLIC_SITE_URL:
+    publicData.NEXT_PUBLIC_SITE_URL ||
+    process.env.NEXT_PUBLIC_SITE_URL ||
+    "https://aabtaab.com",
+  NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION:
+    publicData.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ||
+    process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
+  NEXT_PUBLIC_SENTRY_DSN:
+    publicData.NEXT_PUBLIC_SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN,
+  NEXT_PUBLIC_TURNSTILE_SITE_KEY:
+    publicData.NEXT_PUBLIC_TURNSTILE_SITE_KEY ||
+    process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
+} as const;
+
 export const env = {
-  NEXT_PUBLIC_SANITY_PROJECT_ID: publicData.NEXT_PUBLIC_SANITY_PROJECT_ID || process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "",
-  NEXT_PUBLIC_SANITY_DATASET: publicData.NEXT_PUBLIC_SANITY_DATASET || process.env.NEXT_PUBLIC_SANITY_DATASET || "production",
-  NEXT_PUBLIC_SITE_URL: publicData.NEXT_PUBLIC_SITE_URL || process.env.NEXT_PUBLIC_SITE_URL || "https://aabtaab.com",
-  NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION: publicData.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION,
-  NEXT_PUBLIC_SENTRY_DSN: publicData.NEXT_PUBLIC_SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN,
+  ...publicEnv,
   // Server-only variables (will be undefined/unusable on the client)
   SANITY_API_TOKEN: serverData.SANITY_API_TOKEN || (isServer ? process.env.SANITY_API_TOKEN || "" : ""),
   SANITY_REVALIDATE_SECRET:
@@ -108,6 +128,5 @@ export const env = {
   EMAIL_PASS: serverData.EMAIL_PASS || (isServer ? process.env.EMAIL_PASS : undefined),
   UPSTASH_REDIS_REST_URL: serverData.UPSTASH_REDIS_REST_URL || (isServer ? process.env.UPSTASH_REDIS_REST_URL : undefined),
   UPSTASH_REDIS_REST_TOKEN: serverData.UPSTASH_REDIS_REST_TOKEN || (isServer ? process.env.UPSTASH_REDIS_REST_TOKEN : undefined),
-  NEXT_PUBLIC_TURNSTILE_SITE_KEY: publicData.NEXT_PUBLIC_TURNSTILE_SITE_KEY || process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY,
   TURNSTILE_SECRET_KEY: serverData.TURNSTILE_SECRET_KEY || (isServer ? process.env.TURNSTILE_SECRET_KEY : undefined),
 } as const;

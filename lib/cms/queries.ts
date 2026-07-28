@@ -43,6 +43,7 @@ import type {
   HomepageSettings,
   Testimonial,
 } from "@/types/homepage";
+import type { Scholar } from "@/types/scholar";
 import type { FooterNav, FooterService, HeaderNav } from "@/types/site-navigation";
 import { filterNavForEmptyCatalogs } from "@/lib/fallbacks/footer-nav";
 import { FALLBACK_NAV } from "@/lib/fallbacks/nav";
@@ -108,16 +109,22 @@ export const getSiteLayoutData = cache(async () => {
         scholars?: number;
         events?: number;
         posts?: number;
+        courses?: number;
+        services?: number;
       } | null>({
         query: `{
           "scholars": count(*[_type == "scholar"]),
           "events": count(*[_type == "event"]),
-          "posts": count(*[_type == "post"])
+          "posts": count(*[_type == "post"]),
+          "courses": count(*[_type == "course"]),
+          "services": count(*[_type == "service"])
         }`,
         tags: [
           CACHE_TAGS.siteSettings,
           CACHE_TAGS.posts,
           CACHE_TAGS.events,
+          CACHE_TAGS.courses,
+          CACHE_TAGS.services,
         ],
         revalidate: 3600,
       }),
@@ -128,6 +135,8 @@ export const getSiteLayoutData = cache(async () => {
     scholars: catalogCounts?.scholars ?? null,
     events: catalogCounts?.events ?? null,
     posts: catalogCounts?.posts ?? null,
+    courses: catalogCounts?.courses ?? null,
+    services: catalogCounts?.services ?? null,
   };
 
   const headerItems = filterNavForEmptyCatalogs(
@@ -286,8 +295,7 @@ export const getTestimonials = cache(async () => {
 });
 
 export const getScholars = cache(async () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return sanityFetch<any[]>({
+  return sanityFetch<Scholar[]>({
     query: `*[_type == "scholar"] | order(order asc, name asc) {
       _id, name, slug, image, qualifications, contactDetails, bio
     }`,

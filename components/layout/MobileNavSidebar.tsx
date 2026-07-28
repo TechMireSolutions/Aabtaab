@@ -152,8 +152,8 @@ export default function MobileNavSidebar({
                       className="h-full w-full object-cover"
                     />
                   ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-linear-to-br from-brand-100 to-brand-50 text-lg select-none">
-                      ⛵
+                    <div className="flex h-full w-full items-center justify-center bg-linear-to-br from-brand-100 to-brand-50 text-lg font-bold text-brand-700 select-none" aria-hidden="true">
+                      {siteName.charAt(0).toUpperCase()}
                     </div>
                   )}
                 </div>

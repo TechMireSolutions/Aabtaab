@@ -44,7 +44,7 @@ export default function ContentCard({
           {image ? (
             <Image
               src={image}
-              alt=""
+              alt={title}
               fill
               sizes="(max-width: 640px) 85vw, (max-width: 1024px) 45vw, 320px"
               loading={lazyImage ? "lazy" : undefined}
@@ -52,8 +52,11 @@ export default function ContentCard({
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-linear-to-br from-brand-50 via-brand-50 to-slate-100">
-              <span className="text-5xl opacity-25 select-none" aria-hidden="true">
-                📖
+              <span
+                className="text-3xl font-bold text-brand-300/80 select-none"
+                aria-hidden="true"
+              >
+                {title.charAt(0).toUpperCase()}
               </span>
             </div>
           )}

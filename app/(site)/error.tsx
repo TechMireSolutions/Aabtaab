@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import * as Sentry from "@sentry/nextjs";
-import { env } from "@/lib/env";
+import { publicEnv } from "@/lib/env";
 
 export default function SiteError({
   error,
@@ -13,7 +13,7 @@ export default function SiteError({
   reset: () => void;
 }) {
   useEffect(() => {
-    if (env.NEXT_PUBLIC_SENTRY_DSN) {
+    if (publicEnv.NEXT_PUBLIC_SENTRY_DSN) {
       Sentry.captureException(error);
     }
   }, [error]);

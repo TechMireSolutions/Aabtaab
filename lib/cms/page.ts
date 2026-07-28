@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import { resolveDocOgImage } from "@/lib/seo/resolve-og-image";
 import type { CmsPageSummary } from "@/types/cms-page";
@@ -63,26 +64,28 @@ export function buildNestedSlugMetadata(
   slugParts: string[],
   fallbackTitle: string,
 ): Metadata {
+  if (!doc) notFound();
+
   const segment = basePath.replace(/^\//, "") as "online-courses" | "services";
   const canonicalPath =
-    doc?.slug?.current && (segment === "online-courses" || segment === "services")
+    doc.slug?.current && (segment === "online-courses" || segment === "services")
       ? buildNestedContentPath(segment, doc.slug.current, doc.parent as SlugParent | null)
       : `${basePath}/${slugParts.join("/")}`;
 
-  const title = doc?.seo?.metaTitle || doc?.title || fallbackTitle;
+  const title = doc.seo?.metaTitle || doc.title || fallbackTitle;
   const kindLabel =
     segment === "services" ? "religious service" : "online course";
   const description =
-    doc?.seo?.metaDescription ||
-    doc?.excerpt ||
+    doc.seo?.metaDescription ||
+    doc.excerpt ||
     `${title} — ${kindLabel} from Aabtaab.`;
 
   return buildPageMetadata({
     title,
     description,
     path: canonicalPath,
-    noIndex: !doc || Boolean(doc.seo?.noIndex),
+    noIndex: Boolean(doc.seo?.noIndex),
     ogImage: resolveDocOgImage(doc),
-    keywords: doc?.seo?.keywords,
+    keywords: doc.seo?.keywords,
   });
 }

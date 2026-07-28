@@ -1,3 +1,4 @@
+import * as Sentry from "@sentry/nextjs";
 import { env } from "@/lib/env";
 import type { ContactEmailFields } from "./email-html";
 import { buildContactNotificationHtml } from "./email-html";
@@ -19,7 +20,15 @@ async function sendViaResend(
   const resend = new Resend(apiKey);
   const from = env.EMAIL_FROM || "Aabtaab Contact <onboarding@resend.dev>";
 
-  await resend.emails.send({ from, to, subject, html });
+  const { error } = await resend.emails.send({ from, to, subject, html });
+  if (error) {
+    console.error("Resend email failed:", error);
+    Sentry.captureException(
+      error instanceof Error ? error : new Error(String(error)),
+      { tags: { category: "contact_email", channel: "resend" } },
+    );
+    return false;
+  }
   return true;
 }
 
@@ -49,16 +58,47 @@ async function sendViaSmtp(
   return true;
 }
 
-/** Resend API preferred; falls back to Gmail SMTP. No-op if EMAIL_TO unset. */
+/**
+ * Prefer Resend; fall back to SMTP.
+ * Returns true only when a channel accepted the message.
+ * Returns false (without throwing) when EMAIL_TO is unset or all channels fail.
+ */
 export async function sendContactNotification({
   subject,
   fields,
-}: NotifyOptions): Promise<void> {
+}: NotifyOptions): Promise<boolean> {
   const to = env.EMAIL_TO;
-  if (!to) return;
+  if (!to) {
+    Sentry.captureMessage("Contact notification skipped: EMAIL_TO unset", {
+      level: "warning",
+      tags: { category: "contact_email" },
+    });
+    return false;
+  }
 
   const html = buildContactNotificationHtml(fields);
 
-  if (await sendViaResend(to, subject, html)) return;
-  await sendViaSmtp(to, subject, html);
+  try {
+    if (await sendViaResend(to, subject, html)) return true;
+  } catch (error) {
+    console.error("Resend threw:", error);
+    Sentry.captureException(error, {
+      tags: { category: "contact_email", channel: "resend" },
+    });
+  }
+
+  try {
+    if (await sendViaSmtp(to, subject, html)) return true;
+  } catch (error) {
+    console.error("SMTP threw:", error);
+    Sentry.captureException(error, {
+      tags: { category: "contact_email", channel: "smtp" },
+    });
+  }
+
+  Sentry.captureMessage("Contact notification failed on all channels", {
+    level: "error",
+    tags: { category: "contact_email" },
+  });
+  return false;
 }
