@@ -9,7 +9,7 @@ import NavLinks from "@/components/layout/NavLinks";
 import MobileNavSidebarLoader from "@/components/layout/MobileNavSidebarLoader";
 
 import { DEFAULT_SITE_NAME } from "@/lib/constants";
-import { FALLBACK_NAV } from "@/lib/fallbacks/nav";
+import { FALLBACK_NAV, withoutHomeNavItems } from "@/lib/fallbacks/nav";
 import type { NavItem } from "@/types/site-navigation";
 
 const SearchPalette = dynamic(() => import("@/components/layout/SearchPalette"), {
@@ -50,7 +50,8 @@ function buildNavLinks(
       external: !!darulQuranUrl,
     });
   }
-  return base;
+  // Logo/site name already goes home — skip a redundant Home item from CMS.
+  return withoutHomeNavItems(base);
 }
 
 function SiteLogo({

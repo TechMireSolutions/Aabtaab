@@ -11,6 +11,17 @@ export const FALLBACK_NAV: NavItem[] = [
   { label: "About", href: "/about" },
 ];
 
+/** True when the item duplicates the header logo/home link. */
+export function isHomeNavItem(item: NavItem): boolean {
+  const path = item.href?.split("?")[0]?.replace(/\/$/, "") || "";
+  return path === "" || /^home$/i.test(item.label.trim());
+}
+
+/** Drop Home from topbar/mobile nav — logo already links to `/`. */
+export function withoutHomeNavItems(items: NavItem[]): NavItem[] {
+  return items.filter((item) => !isHomeNavItem(item));
+}
+
 /** Search empty / quick-nav chips (SSOT for palette + search page) */
 export const SEARCH_QUICK_LINKS = [
   { label: "Online Courses", href: "/online-courses" },
