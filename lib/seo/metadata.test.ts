@@ -34,7 +34,7 @@ describe("seo metadata helpers", () => {
     expect(meta.alternates?.canonical).toBe(`${getSiteUrl()}/about`);
     expect(meta.robots).toMatchObject({ index: true, follow: true });
     expect(meta.openGraph?.url).toBe(`${getSiteUrl()}/about`);
-    expect(meta.twitter?.card).toBe("summary_large_image");
+    expect(meta.twitter).toMatchObject({ card: "summary_large_image" });
   });
 
   it("sets noindex robots when requested", () => {
