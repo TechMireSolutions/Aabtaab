@@ -16,21 +16,38 @@ if (argv.length === 0) {
   process.exit(1);
 }
 
-const hasPortFlag = argv.some((arg, i) => {
+/** Drop bare numeric leftovers (e.g. PM2 stale args → `start --port 3000 3000`). */
+function sanitizeArgs(args) {
+  const out = [];
+  for (let i = 0; i < args.length; i += 1) {
+    const arg = args[i];
+    const prev = out[out.length - 1];
+    const prevIsPortFlag = prev === "-p" || prev === "--port";
+    if (/^\d+$/.test(arg) && !prevIsPortFlag) {
+      continue;
+    }
+    out.push(arg);
+  }
+  return out;
+}
+
+const cleaned = sanitizeArgs(argv);
+
+const hasPortFlag = cleaned.some((arg, i) => {
   if (arg === "-p" || arg === "--port") return true;
   if (arg.startsWith("--port=")) return true;
   if (arg.startsWith("-p=") || /^-p\d+$/.test(arg)) return true;
-  return arg === "-p" && argv[i + 1] != null;
+  return arg === "-p" && cleaned[i + 1] != null;
 });
 
-const command = argv[0];
-const rest = argv.slice(1);
+const command = cleaned[0];
+const rest = cleaned.slice(1);
 const port = String(process.env.PORT || PRODUCTION_PORT);
 
 const nextArgs =
   !hasPortFlag && (command === "dev" || command === "start")
     ? [command, "--port", port, ...rest]
-    : argv;
+    : cleaned;
 
 const child = spawn(process.execPath, [nextBin, ...nextArgs], {
   stdio: "inherit",

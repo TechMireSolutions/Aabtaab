@@ -13,6 +13,8 @@
 * **UI:** **React 19.2.8** + **Inter** (`next/font`, LTR `en`)
 * **Styling:** **Tailwind CSS v4.3.3** (single CSS entrypoint in `app/globals.css`)
 * **CMS:** **Sanity 6.7** (embedded Studio at `/studio`)
+* **Language:** **TypeScript 6.0.3** (primary) + **TypeScript 7.0.2** side-by-side (`typecheck:ts7`)
+* **Linting:** **ESLint 10.8** + `eslint-config-next` 16.2.12
 * **Validation:** **Zod**
 * **Email:** **Resend** with **Nodemailer** fallback
 * **Rate limiting:** **Upstash Redis** (distributed)

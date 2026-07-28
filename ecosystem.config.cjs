@@ -6,6 +6,7 @@ module.exports = {
     {
       name: "aabtaab-next",
       script: "deploy/runtime.cjs",
+      args: [],
       cwd: __dirname,
       instances: 1,
       exec_mode: "fork",

@@ -53,7 +53,8 @@ cd /var/www/aabtaab_next
 git pull && npm ci
 npm run migrate:sanity:dry && npm run migrate:sanity   # if CMS migrations pending
 npm run build
-pm2 startOrRestart ecosystem.config.cjs --update-env && pm2 save
+pm2 delete aabtaab-next >/dev/null 2>&1 || true
+pm2 start ecosystem.config.cjs --update-env && pm2 save
 ```
 
 ## Pre-deploy local check

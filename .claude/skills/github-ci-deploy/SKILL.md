@@ -21,12 +21,13 @@ disable-model-invocation: true
 
 1. `npm ci` (Node from `.nvmrc` — 24.17.0)
 2. `npm run lint`
-3. `npm run typecheck`
-4. `npm run test` (Vitest)
-5. `npm run build`
-6. `npm audit --audit-level=high`
-7. Install Playwright Chromium
-8. `npm run test:e2e` (smoke tests via `scripts/run-next.mjs start` on port 3000)
+3. `npm run typecheck` (TypeScript 6)
+4. `npm run typecheck:ts7` (TypeScript 7 side-by-side)
+5. `npm run test` (Vitest)
+6. `npm run build`
+7. `npm audit --audit-level=high`
+8. Install Playwright Chromium
+9. `npm run test:e2e` (smoke tests via `scripts/run-next.mjs start` on port 3000)
 
 CI env placeholders: `NEXT_PUBLIC_SANITY_PROJECT_ID=ci-placeholder`, `NEXT_PUBLIC_SANITY_DATASET=production`.
 

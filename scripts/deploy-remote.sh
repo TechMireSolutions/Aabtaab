@@ -68,7 +68,10 @@ echo "==> Building"
 npm run build
 
 echo "==> Restarting PM2"
-pm2 startOrRestart ecosystem.config.cjs --update-env
+# startOrRestart can retain stale `args` from older ecosystem entries (e.g. `start -p 3000`
+# applied after the script path changed). Delete + start forces a clean process definition.
+pm2 delete aabtaab-next >/dev/null 2>&1 || true
+pm2 start ecosystem.config.cjs --update-env
 pm2 save
 
 echo "==> Health check ${HEALTH_URL}"
