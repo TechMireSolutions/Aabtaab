@@ -1,7 +1,13 @@
-import UpcomingEventsCountdown from "@/components/sections/UpcomingEventsCountdown";
+import dynamic from "next/dynamic";
 import { getHomepageCarouselsData } from "@/lib/cms/queries";
+
+const EventsCountdown = dynamic(
+  () => import("@/components/sections/EventsCountdown"),
+  { ssr: true },
+);
 
 export default async function UpcomingEventsLoader() {
   const { upcomingEvents } = await getHomepageCarouselsData();
-  return <UpcomingEventsCountdown events={upcomingEvents ?? []} />;
+  if (!upcomingEvents?.length) return null;
+  return <EventsCountdown events={upcomingEvents} />;
 }

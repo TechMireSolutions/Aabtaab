@@ -1,5 +1,5 @@
 import { Quote, MessageSquareHeart, Sparkles } from "lucide-react";
-import type { Testimonial } from "@/types/homepage";
+import type { Testimonial } from "@/types/testimonial";
 
 export default function ReviewsList({
   testimonials,

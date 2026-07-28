@@ -28,13 +28,6 @@ export interface HomeServiceSummary {
   children?: { title: string }[];
 }
 
-export interface Testimonial {
-  _id: string;
-  name: string;
-  role?: string;
-  quote: string;
-}
-
 export interface HomepageSettings {
   heroImage?: { asset: { _ref: string } };
   heroArabicText?: string;

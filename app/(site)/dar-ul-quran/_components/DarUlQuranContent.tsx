@@ -1,158 +1,27 @@
 "use client";
 
-import { useEffect, useState, useTransition } from "react";
-import { BookOpen, AlertCircle, BookMarked, HelpCircle } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import PageHeader from "@/components/layout/PageHeader";
-import {
-  SHIA_INSIGHTS,
-  COMMON_SURAHS,
-  type Surah,
-  type Ayah,
-  type ShiaInsight,
-} from "@/lib/fallbacks/dar-ul-quran";
+import { useDarUlQuran } from "./useDarUlQuran";
+import DarUlQuranInsight from "./DarUlQuranInsight";
+import DarUlQuranVerses from "./DarUlQuranVerses";
 
 export default function DarUlQuranContent() {
-  const [surahs, setSurahs] = useState<Surah[]>([]);
-  const [selectedSurah, setSelectedSurah] = useState<number>(1);
-  const [selectedAyah, setSelectedAyah] = useState<number>(0); // 0 means all ayahs
-  const [arabicVerses, setArabicVerses] = useState<Ayah[]>([]);
-  const [englishVerses, setEnglishVerses] = useState<Ayah[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [, startTransition] = useTransition();
-  const [expandedTafsir, setExpandedTafsir] = useState<number | null>(null);
-  const [activeInsight, setActiveInsight] = useState<ShiaInsight | null>(null);
-
-  const [prevSurah, setPrevSurah] = useState(selectedSurah);
-  if (selectedSurah !== prevSurah) {
-    setPrevSurah(selectedSurah);
-    setLoading(true);
-    setError("");
-    setExpandedTafsir(null);
-  }
-
-  const [prevAyah, setPrevAyah] = useState(selectedAyah);
-  if (selectedAyah !== prevAyah) {
-    setPrevAyah(selectedAyah);
-    setExpandedTafsir(null);
-    const verseKey = `${selectedSurah}:${selectedAyah}`;
-    const verseInsight = SHIA_INSIGHTS.find((i) => i.key === verseKey);
-    if (verseInsight) {
-      setActiveInsight(verseInsight);
-    } else if (activeInsight?.key) {
-      setActiveInsight(SHIA_INSIGHTS.find((i) => !i.key) || null);
-    }
-  }
-
-  // Fetch Surahs list
-  useEffect(() => {
-    async function fetchSurahs() {
-      // 1. Try to read from localStorage first
-      try {
-        const storage = typeof window !== "undefined" ? window.localStorage : null;
-        const cached = storage?.getItem("aabtaab:surahs");
-        if (cached) {
-          setSurahs(JSON.parse(cached));
-        }
-      } catch (e) {
-        console.error("Failed to read surahs from localStorage", e);
-      }
-
-      // 2. Fetch fresh list from API
-      try {
-        const res = await fetch("https://api.alquran.cloud/v1/surah");
-        if (res.ok) {
-          const data = await res.json();
-          setSurahs(data.data);
-          // Write to cache
-          try {
-            const storage = typeof window !== "undefined" ? window.localStorage : null;
-            storage?.setItem("aabtaab:surahs", JSON.stringify(data.data));
-          } catch (e) {
-            console.error("Failed to save surahs to localStorage", e);
-          }
-        } else {
-          // fallback to common list if offline and no cache
-          setSurahs((prev) => (prev.length > 0 ? prev : (COMMON_SURAHS as Surah[])));
-        }
-      } catch {
-        setSurahs((prev) => (prev.length > 0 ? prev : (COMMON_SURAHS as Surah[])));
-      }
-    }
-    fetchSurahs();
-  }, []);
-
-  // Fetch selected Surah content (Arabic & English Shakir)
-  useEffect(() => {
-    startTransition(async () => {
-      // 1. Try to read from localStorage first
-      try {
-        const storage = typeof window !== "undefined" ? window.localStorage : null;
-        const cached = storage?.getItem(`aabtaab:surah:${selectedSurah}`);
-        if (cached) {
-          const parsed = JSON.parse(cached);
-          if (parsed && Array.isArray(parsed.arabic) && Array.isArray(parsed.english)) {
-            setArabicVerses(parsed.arabic);
-            setEnglishVerses(parsed.english);
-            setLoading(false);
-            return;
-          }
-        }
-      } catch (e) {
-        console.error("Failed to read cached surah from localStorage", e);
-      }
-
-      // 2. Fetch fresh content from API if not cached
-      try {
-        const [arabicRes, englishRes] = await Promise.all([
-          fetch(`https://api.alquran.cloud/v1/surah/${selectedSurah}/quran-uthmani`),
-          fetch(`https://api.alquran.cloud/v1/surah/${selectedSurah}/en.shakir`),
-        ]);
-
-        if (arabicRes.ok && englishRes.ok) {
-          const arabicData = await arabicRes.json();
-          const englishData = await englishRes.json();
-          const arabicAyahs = arabicData.data.ayahs;
-          const englishAyahs = englishData.data.ayahs;
-
-          setArabicVerses(arabicAyahs);
-          setEnglishVerses(englishAyahs);
-
-          // Write to cache
-          try {
-            const storage = typeof window !== "undefined" ? window.localStorage : null;
-            storage?.setItem(
-              `aabtaab:surah:${selectedSurah}`,
-              JSON.stringify({ arabic: arabicAyahs, english: englishAyahs })
-            );
-          } catch (e) {
-            console.error("Failed to save surah content to localStorage", e);
-          }
-        } else {
-          setError("Failed to fetch surah content from the public Quran database.");
-        }
-      } catch {
-        setError("Network error. Please check your connection and try again.");
-      } finally {
-        setLoading(false);
-      }
-    });
-  }, [selectedSurah]);
-
-  // Set initial random insight
-  useEffect(() => {
-    if (!activeInsight) {
-      const nonVerseSpecific = SHIA_INSIGHTS.filter((i) => !i.key);
-      const randomIndex = Math.floor(Math.random() * nonVerseSpecific.length);
-      const timer = setTimeout(() => {
-        setActiveInsight(nonVerseSpecific[randomIndex]);
-      }, 0);
-      return () => clearTimeout(timer);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const activeSurahDetails = surahs.find((s) => s.number === selectedSurah);
+  const {
+    surahs,
+    selectedSurah,
+    setSelectedSurah,
+    selectedAyah,
+    setSelectedAyah,
+    arabicVerses,
+    englishVerses,
+    loading,
+    error,
+    expandedTafsir,
+    setExpandedTafsir,
+    activeInsight,
+    activeSurahDetails,
+  } = useDarUlQuran();
 
   return (
     <div>
@@ -166,23 +35,30 @@ export default function DarUlQuranContent() {
       <div className="section-muted min-h-screen">
         <div className="container-page">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-            {/* Left Column: Selector panel */}
             <div className="lg:col-span-4 space-y-4">
               <div className="card-glass p-5">
                 <h3 className="text-base-plus font-semibold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
-                  <BookOpen size={16} className="text-brand-600 dark:text-brand-400" />
+                  <BookOpen
+                    size={16}
+                    className="text-brand-600 dark:text-brand-400"
+                  />
                   Select Scripture
                 </h3>
 
                 <div className="space-y-3.5">
                   <div>
-                    <label htmlFor="surah-select" className="text-caption font-semibold mb-1 block">Surah (Chapter)</label>
+                    <label
+                      htmlFor="surah-select"
+                      className="text-caption font-semibold mb-1 block"
+                    >
+                      Surah (Chapter)
+                    </label>
                     <select
                       id="surah-select"
                       value={selectedSurah}
                       onChange={(e) => {
                         setSelectedSurah(Number(e.target.value));
-                        setSelectedAyah(0); // Reset ayah selection
+                        setSelectedAyah(0);
                       }}
                       className="w-full rounded-xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-2.5 text-sm-plus text-slate-700 dark:text-slate-300 focus:border-brand-600 focus:outline-none"
                     >
@@ -199,7 +75,12 @@ export default function DarUlQuranContent() {
                   </div>
 
                   <div>
-                    <label htmlFor="ayah-select" className="text-caption font-semibold mb-1 block">Ayah (Verse)</label>
+                    <label
+                      htmlFor="ayah-select"
+                      className="text-caption font-semibold mb-1 block"
+                    >
+                      Ayah (Verse)
+                    </label>
                     <select
                       id="ayah-select"
                       value={selectedAyah}
@@ -208,7 +89,9 @@ export default function DarUlQuranContent() {
                     >
                       <option value={0}>Show Full Surah</option>
                       {activeSurahDetails &&
-                        Array.from({ length: activeSurahDetails.numberOfAyahs }).map((_, i) => (
+                        Array.from({
+                          length: activeSurahDetails.numberOfAyahs,
+                        }).map((_, i) => (
                           <option key={i + 1} value={i + 1}>
                             Verse {i + 1}
                           </option>
@@ -218,133 +101,20 @@ export default function DarUlQuranContent() {
                 </div>
               </div>
 
-              {/* Shia Tafsir Insight Widget */}
-              {activeInsight ? (
-                <div className="rounded-3xl border border-gold-500/30 bg-gold-950/20 dark:bg-gold-950/10 p-5 shadow-sm text-slate-900 dark:text-slate-100">
-                  <div className="flex items-start gap-2.5">
-                    <BookMarked className="text-gold-500 mt-0.5 shrink-0" size={18} />
-                    <div>
-                      <p className="badge-sm-gold-ghost mb-2">{activeInsight.type}</p>
-                      <h4 className="font-display font-bold text-base-plus text-gold-600 dark:text-gold-400">
-                        {activeInsight.title}
-                      </h4>
-                      <p className="text-2xs text-gold-600/70 dark:text-gold-400/60 uppercase tracking-widest mt-0.5 font-bold">
-                        {activeInsight.source}
-                      </p>
-                      {activeInsight.arabic && (
-                        <p className="font-arabic text-lg text-right text-slate-800 dark:text-slate-200 leading-relaxed mt-3" dir="rtl" lang="ar">
-                          {activeInsight.arabic}
-                        </p>
-                      )}
-                      <p className="text-sm-plus leading-relaxed text-slate-700 dark:text-slate-300 mt-3 border-t border-gold-500/10 pt-2.5">
-                        {activeInsight.text}
-                      </p>
-                      <p className="text-xs text-slate-400 dark:text-slate-500 mt-3 pt-2 border-t border-gold-500/10">
-                        <span className="font-semibold">Reference:</span> {activeInsight.reference}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div className="rounded-3xl border border-dashed border-gray-200 dark:border-slate-800 bg-white/40 dark:bg-slate-900/10 p-5 text-center text-sm-plus text-gray-400 dark:text-slate-500">
-                  <HelpCircle className="mx-auto text-gray-300 dark:text-slate-700 mb-2" size={24} />
-                  Select a verse like 5:55, 33:33, 3:61, or 42:23 to view specific Tafsir, or explore the Quran.
-                </div>
-              )}
+              <DarUlQuranInsight insight={activeInsight} />
             </div>
 
-            {/* Right Column: Verses display */}
             <div className="lg:col-span-8 space-y-4">
-              {loading ? (
-                <div className="card-glass flex flex-col items-center justify-center py-24 text-center">
-                  <div className="animate-spin rounded-full border-4 border-brand-500 border-t-transparent size-8" />
-                  <p className="text-sm-plus text-gray-500 mt-4">Retrieving holy script...</p>
-                </div>
-              ) : error ? (
-                <div className="rounded-2xl border border-red-100 bg-red-50/50 p-5 text-center text-red-700">
-                  <AlertCircle className="mx-auto mb-2" />
-                  <p>{error}</p>
-                </div>
-              ) : (
-                <div className="card-glass p-6 sm:p-8 space-y-8">
-                  {/* Bismillah header (except for Surah 9) */}
-                  {selectedSurah !== 9 && selectedAyah === 0 && (
-                    <div className="text-center border-b border-gray-100 dark:border-slate-800 pb-6">
-                      <p className="font-arabic text-3xl text-slate-900 dark:text-white leading-loose" dir="rtl" lang="ar">
-                        بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ
-                      </p>
-                      <p className="text-xs-plus uppercase tracking-widest text-gold-600 mt-2 font-semibold">
-                        In the Name of Allah, the Beneficent, the Merciful
-                      </p>
-                    </div>
-                  )}
-
-                  <div className="divide-y divide-gray-100 dark:divide-slate-800/60">
-                    {arabicVerses
-                      .filter((v) => selectedAyah === 0 || v.numberInSurah === selectedAyah)
-                      .map((verse, index) => {
-                        const engVerse = englishVerses.find((ev) => ev.numberInSurah === verse.numberInSurah); const isShiaVerse = SHIA_INSIGHTS.some((i) => i.key === `${selectedSurah}:${verse.numberInSurah}`);
-
-                        return (
-                          <div
-                            key={verse.number}
-                            className={`py-6 flex flex-col ${index === 0 ? "pt-0" : ""
-                              }`}
-                          >
-                            <div className="flex items-center justify-between mb-4">
-                              <span className="flex size-7 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-xs font-semibold text-slate-700 dark:text-slate-300">
-                                {verse.numberInSurah}
-                              </span>
-                              {isShiaVerse && (
-                                <button
-                                  onClick={() => setExpandedTafsir((prev) => (prev === verse.numberInSurah ? null : verse.numberInSurah))}
-                                  className={`badge-pill cursor-pointer text-2xs uppercase tracking-wider font-bold transition-all ${expandedTafsir === verse.numberInSurah
-                                      ? "bg-gold-500 text-white border-gold-600"
-                                      : "bg-gold-100/70 dark:bg-gold-950/20 border-gold-200 dark:border-gold-800/40 text-gold-600 dark:text-gold-400"
-                                    }`}
-                                >
-                                  {expandedTafsir === verse.numberInSurah ? "Hide Tafsir" : "Tafsir Available"}
-                                </button>
-                              )}
-                            </div>
-
-                            <p className="font-arabic text-2xl sm:text-3xl text-right text-slate-900 dark:text-white leading-loose mb-4 select-all" dir="rtl" lang="ar">
-                              {verse.text}
-                            </p>
-
-                            {engVerse && (
-                              <p className="text-sm-plus leading-relaxed text-slate-700 dark:text-slate-300 select-all border-l-2 border-brand-500/20 pl-4">
-                                {engVerse.text}
-                              </p>
-                            )}
-
-                            {expandedTafsir === verse.numberInSurah && isShiaVerse && (
-                              <div className="mt-4 rounded-2xl border border-gold-500/20 bg-gold-50/30 dark:bg-gold-950/10 p-4 sm:p-5 motion-safe:animate-scale-in text-slate-900 dark:text-slate-100">
-                                {(() => {
-                                  const insight = SHIA_INSIGHTS.find(i => i.key === `${selectedSurah}:${verse.numberInSurah}`); return insight && (
-                                    <div className="flex items-start gap-2.5">
-                                      <BookMarked className="text-gold-600 dark:text-gold-400 mt-0.5 shrink-0" size={18} />
-                                      <div>
-                                        <h4 className="font-display font-bold text-sm-plus text-gold-700 dark:text-gold-400">
-                                          {insight.title}
-                                        </h4>
-                                        <p className="text-2xs text-gold-600/70 dark:text-gold-400/60 uppercase tracking-widest mt-0.5 font-bold">
-                                          {insight.source}
-                                        </p>
-                                        <p className="text-sm-plus leading-relaxed text-slate-700 dark:text-slate-300 mt-3 border-t border-gold-500/10 pt-2.5">
-                                          {insight.text}
-                                        </p>
-                                      </div>
-                                    </div>
-                                  );
-                                })()}</div>
-                            )}
-                          </div>
-                        );
-                      })}
-                  </div>
-                </div>
-              )}
+              <DarUlQuranVerses
+                selectedSurah={selectedSurah}
+                selectedAyah={selectedAyah}
+                arabicVerses={arabicVerses}
+                englishVerses={englishVerses}
+                loading={loading}
+                error={error}
+                expandedTafsir={expandedTafsir}
+                setExpandedTafsir={setExpandedTafsir}
+              />
             </div>
           </div>
         </div>

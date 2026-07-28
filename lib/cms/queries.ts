@@ -46,8 +46,8 @@ import type {
   HomePostSummary,
   HomeServiceSummary,
   HomepageSettings,
-  Testimonial,
 } from "@/types/homepage";
+import type { Testimonial } from "@/types/testimonial";
 import type { Scholar } from "@/types/scholar";
 import type { Country } from "@/types/country";
 import type { FooterNav, FooterService, HeaderNav } from "@/types/site-navigation";
