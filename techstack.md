@@ -16,7 +16,7 @@
 
 | Layer | Technology | Version | Operational & Architecture Notes |
 |-------|------------|---------|----------------------------------|
-| Runtime | Node.js | ≥ 22.12 (CI/Prod **24.17.0**) | Managed via NVM; required for Sanity v6 engine |
+| Runtime | Node.js | ≥ 22.12 (CI/Prod **24.18.0**) | Managed via NVM; required for Sanity v6 engine |
 | Framework | Next.js (App Router) | **16.2.12** (Active LTS) | Patched for July 2026 SSR/Server Action security advisories; Turbopack build engine |
 | UI Library | React / React DOM | **19.2.8** | RSC-first architecture; React Compiler 1.0 for memoization |
 | Language | TypeScript | **6.0.3** (+ **7.0.2** side-by-side) | Strict mode, target **ES2022**; TS6 for ESLint; `typecheck:ts7` for TS7 |
@@ -157,7 +157,7 @@ scripts/run-next.mjs Dev/prod Next launcher (port 3000)
 | **TypeScript** | Keep **6.0.3** as primary (`typescript`) for ESLint/`typescript-eslint`; optional **7.0.2** via `typescript-7` alias (`npm run typecheck:ts7`) until TS 7.1 API |
 | **npm audit** | Transitive `sharp`/`adm-zip`/`minimatch`+`brace-expansion` pinned via `overrides` until upstream resolves |
 | **PM2** | Deploy deletes `aabtaab-next` before `pm2 start` so stale `args` are not retained |
-| **Node on VPS** | Deploy loads nvm from `.nvmrc` (24.17.0) |
+| **Node on VPS** | Deploy loads nvm from `.nvmrc` (24.18.0) |
 | **Production port** | Change only `server.config.cjs` (`PRODUCTION_PORT = 3000`) |
 | **Lockfile** | Always `npm ci` on server |
 

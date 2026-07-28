@@ -8,7 +8,7 @@
 
 ## Stack
 
-* **Runtime:** Node.js **24.17.0** (`.nvmrc`, engine requirements ≥22.12.0)
+* **Runtime:** Node.js **24.18.0** (`.nvmrc`, engine requirements ≥22.12.0)
 * **Framework:** **Next.js 16.2.12** (App Router, RSC, ISR, React Compiler 1.0)
 * **UI:** **React 19.2.8** + **Inter** (`next/font`, LTR `en`)
 * **Styling:** **Tailwind CSS v4.3.3** (single CSS entrypoint in `app/globals.css`)

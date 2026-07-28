@@ -19,7 +19,7 @@ disable-model-invocation: true
 
 ## CI pipeline (`ci.yml`)
 
-1. `npm ci` (Node from `.nvmrc` — 24.17.0)
+1. `npm ci` (Node from `.nvmrc` — 24.18.0)
 2. `npm run lint`
 3. `npm run typecheck` (TypeScript 6)
 4. `npm run typecheck:ts7` (TypeScript 7 side-by-side)

@@ -14,7 +14,7 @@ Apply when upgrading deps, touching `package.json`, CI, or Node engine constrain
 
 | Layer | Target |
 |-------|--------|
-| Runtime | Node **24.17** (`.nvmrc`; `engines` ≥22.12) |
+| Runtime | Node **24.18** (`.nvmrc`; `engines` ≥22.12) |
 | Framework | Next.js **16.2.12** (match `eslint-config-next`) |
 | UI | React **19.2.8** + React Compiler **1.0** |
 | CMS | Sanity **6.7** + `next-sanity` **13.2** + `@sanity/client` **7.25** |
@@ -58,7 +58,7 @@ Apply when upgrading deps, touching `package.json`, CI, or Node engine constrain
 
 ## PM2 & Hetzner Deployment
 
-* Use Node.js version defined in `.nvmrc` (currently Node **24.17.0**).
+* Use Node.js version defined in `.nvmrc` (currently Node **24.18.0**).
 * PM2 runs in **fork** mode (`instances: 1` via `ecosystem.config.cjs`).
 * Processes must remain completely stateless: do not store sessions, rate limits, or message queues in local process memory.
 * Do not expose port 3000 directly to the public internet; use Hetzner firewall rules to restrict traffic to Cloudflare origin IP addresses.
