@@ -151,28 +151,48 @@ export default function HomeAbout({ homepage: hp, quotes = [], scholarCount, cou
                 </p>
               </div>
 
-              <div className="mt-8 grid grid-cols-3 gap-4 border-t border-white/10 pt-6 relative z-10">
-                {[
-                  {
-                    value: hp?.aboutStat1Value || "500+",
-                    label: hp?.aboutStat1Label || "Students",
-                  },
-                  {
-                    value: scholarCount && scholarCount > 0 ? `${scholarCount}+` : hp?.aboutStat2Value || "10+",
-                    label: hp?.aboutStat2Label || "Scholars",
-                  },
-                  {
-                    value: countryCount && countryCount > 0 ? `${countryCount}+` : hp?.aboutStat3Value || "5+",
-                    label: hp?.aboutStat3Label || "Countries",
-                  },
-                ].map((stat, i) => (
-                  <div key={i} className="text-center group">
-                    <div className="text-xl-plus font-bold text-white group-hover:text-gold-400 transition-colors">
-                      {stat.value}
+              <div
+                className={`mt-8 grid gap-4 border-t border-white/10 pt-6 relative z-10 ${
+                  scholarCount && scholarCount > 0
+                    ? "grid-cols-3"
+                    : "grid-cols-2"
+                }`}
+              >
+                {(
+                  [
+                    {
+                      value: hp?.aboutStat1Value || "500+",
+                      label: hp?.aboutStat1Label || "Students",
+                    },
+                    scholarCount && scholarCount > 0
+                      ? {
+                          value: `${scholarCount}+`,
+                          label: hp?.aboutStat2Label || "Scholars",
+                        }
+                      : null,
+                    {
+                      value:
+                        countryCount && countryCount > 0
+                          ? `${countryCount}+`
+                          : hp?.aboutStat3Value || "5+",
+                      label: hp?.aboutStat3Label || "Countries",
+                    },
+                  ] as Array<{ value: string; label: string } | null>
+                )
+                  .filter(
+                    (stat): stat is { value: string; label: string } =>
+                      stat != null,
+                  )
+                  .map((stat) => (
+                    <div key={stat.label} className="text-center group">
+                      <div className="text-xl-plus font-bold text-white group-hover:text-gold-400 transition-colors">
+                        {stat.value}
+                      </div>
+                      <div className="text-xs text-slate-400 mt-1 uppercase tracking-wider">
+                        {stat.label}
+                      </div>
                     </div>
-                    <div className="text-xs text-slate-400 mt-1 uppercase tracking-wider">{stat.label}</div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
 

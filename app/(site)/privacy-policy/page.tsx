@@ -5,7 +5,7 @@ import LegalPageShell, {
 import { DEFAULT_SITE_NAME } from "@/lib/constants";
 
 export const metadata = {
-  title: `Privacy Policy | ${DEFAULT_SITE_NAME}`,
+  title: "Privacy Policy",
   description: `Privacy Policy for ${DEFAULT_SITE_NAME}`,
 };
 

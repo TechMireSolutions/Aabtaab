@@ -23,12 +23,12 @@ const HomeCountries = dynamic(() => import("@/components/sections/HomeCountries"
 
 export async function generateMetadata(): Promise<Metadata> {
   const { settings, homepage: hp } = await getHomepageHeroData();
+  const siteName = resolveSiteName(settings);
   const ogImage =
     (hp?.heroImage ? ogImageUrl(hp.heroImage) : undefined) ??
     (settings?.logo ? ogImageUrl(settings.logo) : undefined);
-
   return buildPageMetadata({
-    title: resolveSiteName(settings),
+    title: `${siteName} — Faith. Knowledge. Access`,
     description:
       settings?.description ||
       "Shia Islamic knowledge, online courses, and community services for Muslims worldwide.",
@@ -57,7 +57,13 @@ export default async function HomePage() {
           inLanguage: "en-US",
         }}
       />
-      <HomeHero settings={settings} homepage={hp} siteName={siteName} courseCount={courseCount} />
+      <HomeHero
+        settings={settings}
+        homepage={hp}
+        siteName={siteName}
+        courseCount={courseCount}
+        scholarCount={scholarCount}
+      />
       <Suspense fallback={<HomeSectionsSkeleton />}>
         <UpcomingEventsCountdown />
       </Suspense>

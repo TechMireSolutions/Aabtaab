@@ -47,7 +47,7 @@ export const course = defineType({
       options: {
         list: [
           { title: "Quran", value: "quran" },
-          { title: "Nejul Balagha", value: "nejul-balagha" },
+          { title: "Nahjul Balagha", value: "nejul-balagha" },
           { title: "Jurisprudence (Fiqh)", value: "jurisprudence" },
           { title: "Ethics (Akhlaq)", value: "ethics" },
           { title: "History", value: "history" },

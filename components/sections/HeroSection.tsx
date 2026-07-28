@@ -16,17 +16,17 @@ interface HeroSectionProps {
   cta2Label?: string;
   cta2Link?: string;
   courseCount?: number;
+  scholarCount?: number;
+  studentStat?: string;
+  studentLabel?: string;
 }
 
 const DEFAULT_LINES = ["Learn Quran, Fiqh &", "More From Shia", "Scholars."];
 
-
-
-
-
 function StatIcon({ label }: { label: string }) {
   const paths: Record<string, string> = {
-    Students: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75",
+    Students:
+      "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75",
     Courses:
       "M4 19.5A2.5 2.5 0 0 1 6.5 17H20M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z",
     Scholars:
@@ -60,6 +60,9 @@ export default function HeroSection({
   cta2Label = "Our Services",
   cta2Link = "/services",
   courseCount,
+  scholarCount,
+  studentStat,
+  studentLabel = "Students",
 }: HeroSectionProps) {
   const resolvedSubtitle =
     subtitle ?? `${siteName} — Faith. Knowledge. Access.`;
@@ -67,13 +70,21 @@ export default function HeroSection({
     description ??
     `At ${siteName}, we bring accessible and affordable Shia Islamic education to everyone, no matter where you are in the world.`;
 
-  const displayCourseCount = courseCount && courseCount > 0 ? `${courseCount}+` : "20+";
+  const displayCourseCount =
+    courseCount && courseCount > 0 ? `${courseCount}+` : null;
+  const displayScholarCount =
+    scholarCount && scholarCount > 0 ? `${scholarCount}+` : null;
+  const displayStudentStat = studentStat?.trim() || null;
 
   const STATS = [
-    { value: "500+", label: "Students" },
-    { value: displayCourseCount, label: "Courses" },
-    { value: "10+", label: "Scholars" },
-  ];
+    displayStudentStat
+      ? { value: displayStudentStat, label: studentLabel || "Students" }
+      : null,
+    displayCourseCount ? { value: displayCourseCount, label: "Courses" } : null,
+    displayScholarCount
+      ? { value: displayScholarCount, label: "Scholars" }
+      : null,
+  ].filter(Boolean) as { value: string; label: string }[];
 
   const titleLines = title ? title.split("\n") : DEFAULT_LINES;
   const imageAlt =
@@ -148,21 +159,23 @@ export default function HeroSection({
             </Link>
           </div>
 
-          <div className="mt-8 flex flex-wrap items-center gap-5 border-t border-gray-100 dark:border-slate-800 pt-7 motion-safe:animate-fade-up motion-safe:animate-delay-300 sm:gap-6">
-            {STATS.map(({ value, label }) => (
-              <div key={label} className="flex items-center gap-2.5">
-                <div className="flex size-8 shrink-0 items-center justify-center rounded-xl border border-brand-100 dark:border-brand-900/50 bg-brand-50 dark:bg-brand-900/40 sm:size-9">
-                  <StatIcon label={label} />
+          {STATS.length > 0 && (
+            <div className="mt-8 flex flex-wrap items-center gap-5 border-t border-gray-100 dark:border-slate-800 pt-7 motion-safe:animate-fade-up motion-safe:animate-delay-300 sm:gap-6">
+              {STATS.map(({ value, label }) => (
+                <div key={label} className="flex items-center gap-2.5">
+                  <div className="flex size-8 shrink-0 items-center justify-center rounded-xl border border-brand-100 dark:border-brand-900/50 bg-brand-50 dark:bg-brand-900/40 sm:size-9">
+                    <StatIcon label={label} />
+                  </div>
+                  <div>
+                    <p className="text-base sm:text-lg-plus font-bold leading-none tracking-tight text-slate-900 dark:text-white">
+                      {value}
+                    </p>
+                    <p className="text-caption mt-0.5">{label}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-base sm:text-lg-plus font-bold leading-none tracking-tight text-slate-900 dark:text-white">
-                    {value}
-                  </p>
-                  <p className="text-caption mt-0.5">{label}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </section>

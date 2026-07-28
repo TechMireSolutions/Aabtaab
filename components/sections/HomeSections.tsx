@@ -7,6 +7,10 @@ import dynamic from "next/dynamic";
 import type { CarouselItem } from "@/components/sections/CarouselSection";
 import ContentCard from "@/components/cards/ContentCard";
 import { formatPriceDuration } from "@/lib/urls";
+import {
+  formatSubjectLabel,
+  normalizePublicTitle,
+} from "@/lib/catalog/subjects";
 
 const CarouselSection = dynamic(() => import("@/components/sections/CarouselSection"), {
   ssr: true,
@@ -29,10 +33,10 @@ export default async function HomeSections() {
     image: c.featuredImage
       ? urlFor(c.featuredImage).width(480).height(360).url()
       : null,
-    title: c.title,
+    title: normalizePublicTitle(c.title),
     description: formatPriceDuration(c.price, c.duration),
     href: `/online-courses/${c.slug.current}`,
-    badge: c.subject,
+    badge: c.subject ? formatSubjectLabel(c.subject) : null,
     ctaLabel: "Enroll Now",
   }));
 

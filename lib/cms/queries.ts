@@ -44,6 +44,8 @@ import type {
   Testimonial,
 } from "@/types/homepage";
 import type { FooterNav, FooterService, HeaderNav } from "@/types/site-navigation";
+import { filterNavForEmptyCatalogs } from "@/lib/fallbacks/footer-nav";
+import { FALLBACK_NAV } from "@/lib/fallbacks/nav";
 
 export const getSiteSettings = cache(fetchSiteSettingsUncached);
 
@@ -84,26 +86,65 @@ export const getServiceBySlug = cache(async (slug: string) => {
 });
 
 export const getSiteLayoutData = cache(async () => {
-  const [settings, headerNav, footerNav, footerServices] = await Promise.all([
-    getSiteSettings(),
-    sanityFetch<HeaderNav>({
-      query: headerNavQuery,
-      tags: [CACHE_TAGS.siteSettings],
-      revalidate: 86400,
-    }),
-    sanityFetch<FooterNav>({
-      query: footerNavQuery,
-      tags: [CACHE_TAGS.siteSettings],
-      revalidate: 86400,
-    }),
-    sanityFetch<FooterService[]>({
-      query: footerServicesQuery,
-      tags: [CACHE_TAGS.services],
-      revalidate: 3600,
-    }),
-  ]);
+  const [settings, headerNav, footerNav, footerServices, catalogCounts] =
+    await Promise.all([
+      getSiteSettings(),
+      sanityFetch<HeaderNav>({
+        query: headerNavQuery,
+        tags: [CACHE_TAGS.siteSettings],
+        revalidate: 86400,
+      }),
+      sanityFetch<FooterNav>({
+        query: footerNavQuery,
+        tags: [CACHE_TAGS.siteSettings],
+        revalidate: 86400,
+      }),
+      sanityFetch<FooterService[]>({
+        query: footerServicesQuery,
+        tags: [CACHE_TAGS.services],
+        revalidate: 3600,
+      }),
+      sanityFetch<{
+        scholars?: number;
+        events?: number;
+        posts?: number;
+      } | null>({
+        query: `{
+          "scholars": count(*[_type == "scholar"]),
+          "events": count(*[_type == "event"]),
+          "posts": count(*[_type == "post"])
+        }`,
+        tags: [
+          CACHE_TAGS.siteSettings,
+          CACHE_TAGS.posts,
+          CACHE_TAGS.events,
+        ],
+        revalidate: 3600,
+      }),
+    ]);
 
-  return { settings, headerNav, footerNav, footerServices };
+  const counts = {
+    scholars: catalogCounts?.scholars ?? 0,
+    events: catalogCounts?.events ?? 0,
+    posts: catalogCounts?.posts ?? 0,
+  };
+
+  const headerItems = filterNavForEmptyCatalogs(
+    headerNav?.items?.length ? headerNav.items : FALLBACK_NAV,
+    counts,
+  );
+
+  return {
+    settings,
+    headerNav: { items: headerItems },
+    footerNav: footerNav
+      ? {
+          ...footerNav,
+          items: filterNavForEmptyCatalogs(footerNav.items, counts),
+        }
+      : footerNav,
+    footerServices,
+  };
 });
 
 export const getHomepageHeroData = cache(async () => {

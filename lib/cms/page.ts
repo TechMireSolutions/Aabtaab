@@ -68,9 +68,17 @@ export function buildNestedSlugMetadata(
       ? buildNestedContentPath(segment, doc.slug.current, doc.parent as SlugParent | null)
       : `${basePath}/${slugParts.join("/")}`;
 
+  const title = doc?.seo?.metaTitle || doc?.title || fallbackTitle;
+  const kindLabel =
+    segment === "services" ? "religious service" : "online course";
+  const description =
+    doc?.seo?.metaDescription ||
+    doc?.excerpt ||
+    `${title} — ${kindLabel} from Aabtaab.`;
+
   return buildPageMetadata({
-    title: doc?.seo?.metaTitle || doc?.title || fallbackTitle,
-    description: doc?.seo?.metaDescription || doc?.excerpt,
+    title,
+    description,
     path: canonicalPath,
     noIndex: doc?.seo?.noIndex,
     ogImage: resolveDocOgImage(doc),

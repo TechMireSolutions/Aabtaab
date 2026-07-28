@@ -35,12 +35,16 @@ export default function ContentCard({
         <div className="absolute inset-x-0 top-0 z-10 h-card-accent bg-linear-to-r from-brand-400 via-brand-500 to-brand-300" />
       )}
 
-      <Link href={href} className="block shrink-0 overflow-hidden">
+      <Link
+        href={href}
+        aria-label={title}
+        className="block shrink-0 overflow-hidden"
+      >
         <div className="relative aspect-3/2 w-full bg-slate-100">
           {image ? (
             <Image
               src={image}
-              alt={title}
+              alt=""
               fill
               sizes="(max-width: 640px) 85vw, (max-width: 1024px) 45vw, 320px"
               loading={lazyImage ? "lazy" : undefined}
@@ -48,7 +52,9 @@ export default function ContentCard({
             />
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-linear-to-br from-brand-50 via-brand-50 to-slate-100">
-              <span className="text-5xl opacity-25 select-none">📖</span>
+              <span className="text-5xl opacity-25 select-none" aria-hidden="true">
+                📖
+              </span>
             </div>
           )}
           <div className="absolute inset-0 bg-slate-900/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />

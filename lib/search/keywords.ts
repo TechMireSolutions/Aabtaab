@@ -152,11 +152,11 @@ export const KEYWORD_GROUPS: KeywordGroup[] = [
   },
   {
     keywords: [
-      "nehjul balagha", "nahjul balagha", "nahj al-balagha",
+      "nehjul balagha", "nejul balagha", "nahjul balagha", "nahj al-balagha",
       "peak of eloquence", "imam ali sermons",
     ],
     entry: {
-      label: "Nehjul Balagha",
+      label: "Nahjul Balagha",
       href: "/online-courses/nejul-balagha",
       category: "course",
     },

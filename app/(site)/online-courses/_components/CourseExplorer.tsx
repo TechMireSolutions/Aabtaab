@@ -6,6 +6,10 @@ import ContentCard from "@/components/cards/ContentCard";
 import type { TopLevelCourseSummary } from "@/types/catalog";
 import { cardImageUrl } from "@/sanity/lib/image";
 import { formatPriceDuration, nestedListCtaLabel } from "@/lib/urls";
+import {
+  formatSubjectLabel,
+  normalizePublicTitle,
+} from "@/lib/catalog/subjects";
 
 interface CourseExplorerProps {
   courses: TopLevelCourseSummary[];
@@ -82,7 +86,7 @@ export default function CourseExplorer({ courses }: CourseExplorerProps) {
             <option value="">All Subjects</option>
             {subjects.map((subject) => (
               <option key={subject} value={subject}>
-                {subject}
+                {formatSubjectLabel(subject)}
               </option>
             ))}
           </select>
@@ -142,8 +146,10 @@ export default function CourseExplorer({ courses }: CourseExplorerProps) {
               image={
                 course.featuredImage ? cardImageUrl(course.featuredImage) : null
               }
-              title={course.title}
-              badge={course.subject}
+              title={normalizePublicTitle(course.title)}
+              badge={
+                course.subject ? formatSubjectLabel(course.subject) : null
+              }
               description={
                 course.excerpt ||
                 formatPriceDuration(course.price, course.duration) ||

@@ -2,6 +2,10 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import CatalogDarkHero from "@/components/content/CatalogDarkHero";
 import { heroImageUrl } from "@/sanity/lib/image";
+import {
+  formatSubjectLabel,
+  normalizePublicTitle,
+} from "@/lib/catalog/subjects";
 
 interface CourseHeroSectionProps {
   title: string;
@@ -31,20 +35,22 @@ export default function CourseHeroSection({
   const subtitle = heroSubtitle || excerpt;
   const ctaClassName = "btn-pill-accent group";
   const imageSrc = image ? heroImageUrl(image, 1400, 700) : null;
+  const displayTitle = normalizePublicTitle(title);
+  const subjectLabel = subject ? formatSubjectLabel(subject) : null;
 
   return (
     <CatalogDarkHero
-      title={title}
+      title={displayTitle}
       imageSrc={imageSrc}
-      imageAlt={image?.alt || title}
+      imageAlt={image?.alt || displayTitle}
     >
       <div className="mb-6 flex flex-wrap justify-center gap-2">
-        {subject && <span className="badge-hero">{subject}</span>}
+        {subjectLabel && <span className="badge-hero">{subjectLabel}</span>}
         {duration && <span className="badge-hero-muted">{duration}</span>}
         {instructor && <span className="badge-hero-muted">{instructor}</span>}
       </div>
 
-      <h1 className="text-hero mb-5 text-white">{title}</h1>
+      <h1 className="text-hero mb-5 text-white">{displayTitle}</h1>
 
       {subtitle && (
         <p className="mx-auto mb-10 max-w-copy text-base-plus leading-relaxed text-slate-300 sm:text-lg-plus">

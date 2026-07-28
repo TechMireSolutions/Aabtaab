@@ -5,7 +5,7 @@ import LegalPageShell, {
 import { DEFAULT_SITE_NAME } from "@/lib/constants";
 
 export const metadata = {
-  title: `Terms & Conditions | ${DEFAULT_SITE_NAME}`,
+  title: "Terms & Conditions",
   description: `Terms and Conditions for using ${DEFAULT_SITE_NAME} services`,
 };
 

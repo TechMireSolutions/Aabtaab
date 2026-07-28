@@ -2,12 +2,14 @@ import { urlFor } from "@/sanity/lib/image";
 import HeroSection from "@/components/sections/HeroSection";
 import type { HomepageSettings } from "@/types/homepage";
 import type { SiteSettings } from "@/types/sanity";
+import { sanitizePublicCopy } from "@/lib/fallbacks/cms-copy";
 
 interface HomeHeroProps {
   settings: SiteSettings | null;
   homepage: HomepageSettings | null;
   siteName: string;
   courseCount?: number;
+  scholarCount?: number;
 }
 
 export default function HomeHero({
@@ -15,6 +17,7 @@ export default function HomeHero({
   homepage: hp,
   siteName,
   courseCount,
+  scholarCount,
 }: HomeHeroProps) {
   const heroImageUrl = hp?.heroImage
     ? urlFor(hp.heroImage).width(1200).height(700).url()
@@ -28,7 +31,9 @@ export default function HomeHero({
       siteName={siteName}
       subtitle={hp?.heroArabicText || undefined}
       title={hp?.heroTitle ? hp.heroTitle.replace(/\\n/g, "\n") : undefined}
-      description={hp?.heroSubtitle || settings?.description || undefined}
+      description={sanitizePublicCopy(
+        hp?.heroSubtitle || settings?.description || undefined,
+      )}
       heroImage={heroImageUrl}
       heroImageAlt={hp?.heroTitle?.replace(/\\n/g, " ") || siteName}
       enrollingBadge={hp?.heroBadgeText ?? "Enrolling Now"}
@@ -37,6 +42,9 @@ export default function HomeHero({
       cta2Label={hp?.heroCta2Label || undefined}
       cta2Link={hp?.heroCta2Link || undefined}
       courseCount={courseCount}
+      scholarCount={scholarCount}
+      studentStat={hp?.aboutStat1Value}
+      studentLabel={hp?.aboutStat1Label}
     />
   );
 }

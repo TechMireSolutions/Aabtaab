@@ -10,6 +10,7 @@ import {
   getSiteSettings,
 } from "@/lib/cms/queries";
 import { whatsappUrl } from "@/lib/urls";
+import { sanitizePublicCopy } from "@/lib/fallbacks/cms-copy";
 
 const ContactForm = dynamic(() => import("./_components/ContactForm"), {
   ssr: true,
@@ -73,7 +74,7 @@ export default async function ContactPage() {
         eyebrow={page?.eyebrow || "Reach Out"}
         title={page?.title || "Contact Us"}
         subtitle={
-          page?.subtitle ||
+          sanitizePublicCopy(page?.subtitle) ||
           "Get in touch for services, courses, or general inquiries"
         }
       />

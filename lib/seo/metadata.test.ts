@@ -49,11 +49,13 @@ describe("seo metadata helpers", () => {
 
   it("uses absolute title when requested", () => {
     const meta = buildPageMetadata({
-      title: "Aabtaab",
+      title: "Aabtaab — Faith. Knowledge. Access",
       path: "/",
       absoluteTitle: true,
     });
 
-    expect(meta.title).toEqual({ absolute: "Aabtaab" });
+    expect(meta.title).toEqual({
+      absolute: "Aabtaab — Faith. Knowledge. Access",
+    });
   });
 });

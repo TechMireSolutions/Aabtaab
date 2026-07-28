@@ -1,5 +1,6 @@
 import { cardImageUrl } from "@/sanity/lib/image";
 import { formatPriceDuration, nestedListCtaLabel } from "@/lib/urls";
+import { normalizePublicTitle } from "@/lib/catalog/subjects";
 import type { CourseChild } from "@/types/course";
 import type { ServiceChild } from "@/types/service";
 
@@ -24,7 +25,7 @@ export function mapCourseChildForGrid(
   return {
     _id: child._id,
     slug: child.slug,
-    title: child.title,
+    title: normalizePublicTitle(child.title),
     imageUrl: child.featuredImage ? cardImageUrl(child.featuredImage) : null,
     description:
       child.excerpt ||
