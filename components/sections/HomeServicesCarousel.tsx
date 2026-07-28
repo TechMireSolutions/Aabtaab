@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { urlFor } from "@/sanity/lib/image";
+import { cardImageUrl } from "@/sanity/lib/image";
 import { SERVICE_NESTED_CTA_LABELS } from "@/lib/catalog/formatters";
 import type { HomeServiceSummary, HomepageSettings } from "@/types/homepage";
 
@@ -19,7 +19,7 @@ export default function HomeServicesCarousel({
 }: HomeServicesCarouselProps) {
   const items = (services ?? []).map((s) => ({
     id: s._id,
-    image: s.icon ? urlFor(s.icon).width(480).height(360).url() : null,
+    image: s.icon ? cardImageUrl(s.icon) : null,
     title: s.title,
     description: s.children?.length
       ? s.children

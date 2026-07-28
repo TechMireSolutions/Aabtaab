@@ -1,9 +1,9 @@
 "use client";
 
 import { useId, useState } from "react";
-import Script from "next/script";
 import { publicEnv } from "@/lib/env";
 import type { ContactFormOption, ContactPurpose } from "@/types/contact";
+import TurnstileWidget, { resetTurnstile } from "@/components/ui/TurnstileWidget";
 import ContactFormFields from "./ContactFormFields";
 
 interface ContactFormProps {
@@ -81,12 +81,7 @@ export default function ContactForm({
     } catch {
       setStatus("error");
     } finally {
-      if (typeof window !== "undefined") {
-        const turnstile = (
-          window as unknown as { turnstile?: { reset: () => void } }
-        ).turnstile;
-        turnstile?.reset();
-      }
+      resetTurnstile();
     }
   }
 
@@ -103,20 +98,7 @@ export default function ContactForm({
         options={options}
       />
 
-      {publicEnv.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
-        <div className="flex justify-start py-1">
-          <Script
-            src="https://challenges.cloudflare.com/turnstile/v0/api.js"
-            async
-            defer
-          />
-          <div
-            className="cf-turnstile"
-            data-sitekey={publicEnv.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-            data-theme="light"
-          />
-        </div>
-      )}
+      <TurnstileWidget />
 
       <button
         type="submit"

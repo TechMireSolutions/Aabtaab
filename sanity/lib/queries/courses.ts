@@ -39,5 +39,3 @@ export const allCoursePathsQuery = `
     ${PARENT_SLUG_CHAIN_FRAGMENT}
   }
 `;
-
-export const courseSlugsQuery = `*[_type == "course" && defined(slug.current)]{ "slug": slug.current }`;

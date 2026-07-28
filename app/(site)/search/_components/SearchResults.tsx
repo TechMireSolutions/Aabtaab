@@ -2,7 +2,9 @@ import Link from "next/link";
 import { ArrowRight, Sparkles } from "lucide-react";
 import SearchEmptyState from "@/components/layout/SearchEmptyState";
 import {
+  SearchQuickMatchBadge,
   SearchResultBody,
+  SearchSectionHeading,
   SearchTypeBadge,
 } from "@/components/ui/SearchResultMeta";
 import type { SearchResponse } from "@/types/search";
@@ -40,9 +42,7 @@ export default function SearchResults({
 
       {keywordMatch && (
         <div className="mb-8">
-          <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-slate-500 mb-3">
-            Direct Match
-          </h2>
+          <SearchSectionHeading>Direct Match</SearchSectionHeading>
           <Link
             href={keywordMatch.href}
             className="flex items-center gap-4 rounded-2xl border border-brand-200 dark:border-brand-800 bg-brand-50 dark:bg-brand-950/30 p-5 transition-colors hover:bg-brand-100 dark:hover:bg-brand-950/50"
@@ -52,9 +52,7 @@ export default function SearchResults({
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2 mb-1">
-                <span className="badge-pill bg-brand-100/80 border-brand-200 dark:bg-brand-900/50 dark:border-brand-800">
-                  Quick Match
-                </span>
+                <SearchQuickMatchBadge />
                 <SearchTypeBadge type={keywordMatch.category} />
               </div>
               <span className="text-lg font-semibold text-slate-900 dark:text-white">
@@ -68,9 +66,7 @@ export default function SearchResults({
 
       {suggestions.length > 0 && (
         <div className="mb-8">
-          <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-slate-500 mb-3">
-            Related Suggestions
-          </h2>
+          <SearchSectionHeading>Related Suggestions</SearchSectionHeading>
           <div className="grid gap-3 sm:grid-cols-2">
             {suggestions.map((sug) => (
               <Link
@@ -95,9 +91,7 @@ export default function SearchResults({
       {results.length > 0 && (
         <div>
           {(keywordMatch || suggestions.length > 0) && (
-            <h2 className="text-sm font-semibold uppercase tracking-widest text-gray-400 dark:text-slate-500 mb-3">
-              Search Results
-            </h2>
+            <SearchSectionHeading>Search Results</SearchSectionHeading>
           )}
           <ul className="space-y-3">
             {results.map((item) => (
@@ -126,3 +120,4 @@ export default function SearchResults({
     </>
   );
 }
+

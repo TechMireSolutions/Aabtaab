@@ -1,10 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Script from "next/script";
 import { z } from "zod";
-import { publicEnv } from "@/lib/env";
 import { reviewBodySchema } from "@/lib/review/schema";
+import TurnstileWidget, { resetTurnstile } from "@/components/ui/TurnstileWidget";
 
 type FormStatus = "idle" | "loading" | "success" | "error";
 
@@ -52,10 +51,7 @@ export default function ReviewForm() {
 
       setStatus("success");
       form.reset();
-      const turnstile = (
-        window as unknown as { turnstile?: { reset: () => void } }
-      ).turnstile;
-      turnstile?.reset();
+      resetTurnstile();
     } catch (err: unknown) {
       setStatus("error");
       if (err instanceof z.ZodError) {
@@ -154,20 +150,7 @@ export default function ReviewForm() {
             />
           </div>
 
-          {publicEnv.NEXT_PUBLIC_TURNSTILE_SITE_KEY && (
-            <div className="flex justify-start py-1">
-              <Script
-                src="https://challenges.cloudflare.com/turnstile/v0/api.js"
-                async
-                defer
-              />
-              <div
-                className="cf-turnstile"
-                data-sitekey={publicEnv.NEXT_PUBLIC_TURNSTILE_SITE_KEY}
-                data-theme="light"
-              />
-            </div>
-          )}
+          <TurnstileWidget />
 
           {status === "error" && (
             <div

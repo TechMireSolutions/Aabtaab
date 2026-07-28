@@ -1,13 +1,5 @@
 import { SEO_FRAGMENT } from "./fragments";
 
-export const upcomingEventsQuery = `
-  *[_type == "event" && startDate >= now()] | order(startDate asc) {
-    _id, title, slug, description, startDate, endDate,
-    eventType, status, image, isFree, price,
-    city, state, venueName, registrationUrl
-  }
-`;
-
 export const allEventsQuery = `
   *[_type == "event"] | order(startDate desc) {
     _id, title, slug, description, startDate, endDate,

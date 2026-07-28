@@ -1,5 +1,5 @@
 import dynamic from "next/dynamic";
-import { urlFor } from "@/sanity/lib/image";
+import { cardImageUrl } from "@/sanity/lib/image";
 import { formatPriceDuration, COURSE_NESTED_CTA_LABELS } from "@/lib/catalog/formatters";
 import {
   formatSubjectLabel,
@@ -23,9 +23,7 @@ export default function HomeCoursesCarousel({
 }: HomeCoursesCarouselProps) {
   const items = (courses ?? []).map((c) => ({
     id: c._id,
-    image: c.featuredImage
-      ? urlFor(c.featuredImage).width(480).height(360).url()
-      : null,
+    image: c.featuredImage ? cardImageUrl(c.featuredImage) : null,
     title: normalizePublicTitle(c.title),
     description: formatPriceDuration(c.price, c.duration),
     href: `/online-courses/${c.slug.current}`,

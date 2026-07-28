@@ -7,6 +7,7 @@ import {
   formatSubjectLabel,
   normalizePublicTitle,
 } from "@/lib/catalog/subjects";
+import { COURSE_NESTED_CTA_LABELS } from "@/lib/catalog/formatters";
 import { EXTERNAL_LINK_PROPS } from "@/lib/urls";
 
 interface CourseHeroSectionProps {
@@ -29,7 +30,7 @@ export default function CourseHeroSection({
   instructor,
   heroSubtitle,
   excerpt,
-  heroCtaLabel = "Enroll Now",
+  heroCtaLabel = COURSE_NESTED_CTA_LABELS.leaf,
   enrollHref,
   enrollExternal = false,
   image,

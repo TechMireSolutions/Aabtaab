@@ -8,14 +8,6 @@ export const postsQuery = `
   }
 `;
 
-export const featuredPostsQuery = `
-  *[_type == "post" && featured == true] | order(publishedAt desc)[0...6] {
-    _id, title, slug, mainImage, excerpt, publishedAt,
-    "categories": categories[]->{ _id, title, slug },
-    "author": author->{ name }
-  }
-`;
-
 export const postBySlugQuery = `
   *[_type == "post" && slug.current == $slug][0] {
     _id, title, slug, mainImage, body, publishedAt,

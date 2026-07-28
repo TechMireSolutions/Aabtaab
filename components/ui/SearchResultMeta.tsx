@@ -14,6 +14,20 @@ export function SearchTypeBadge({ type, className = "" }: SearchTypeBadgeProps) 
   );
 }
 
+/** Emphasized "Quick Match" pill shared by search page and palette. */
+export function SearchQuickMatchBadge() {
+  return <span className="badge-quick-match">Quick Match</span>;
+}
+
+interface SearchSectionHeadingProps {
+  children: React.ReactNode;
+}
+
+/** Section label above search result groups. */
+export function SearchSectionHeading({ children }: SearchSectionHeadingProps) {
+  return <h2 className="search-section-label">{children}</h2>;
+}
+
 interface SearchResultBodyProps {
   title: string;
   summary?: string | null;

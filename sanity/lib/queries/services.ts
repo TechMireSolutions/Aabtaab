@@ -34,5 +34,3 @@ export const allServicePathsQuery = `
     ${PARENT_SLUG_CHAIN_FRAGMENT}
   }
 `;
-
-export const serviceSlugsQuery = `*[_type == "service" && defined(slug.current)]{ "slug": slug.current }`;

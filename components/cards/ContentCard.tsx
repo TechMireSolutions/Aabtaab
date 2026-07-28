@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import { SERVICE_NESTED_CTA_LABELS } from "@/lib/catalog/formatters";
 
 interface ContentCardProps {
   image?: string | null;
@@ -18,7 +19,7 @@ export default function ContentCard({
   title,
   description,
   href,
-  ctaLabel = "Book Now",
+  ctaLabel = SERVICE_NESTED_CTA_LABELS.leaf,
   badge,
   active = false,
   lazyImage = true,

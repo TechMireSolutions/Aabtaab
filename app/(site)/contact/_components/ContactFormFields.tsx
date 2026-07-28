@@ -1,8 +1,9 @@
 "use client";
 
 import type { ContactFormOption, ContactPurpose } from "@/types/contact";
+import { CONTACT_PURPOSE_LABELS } from "@/lib/constants";
 
-export function FormLabel({
+function FormLabel({
   htmlFor,
   id,
   children,
@@ -165,12 +166,9 @@ export default function ContactFormFields({
           role="radiogroup"
           aria-labelledby={fieldIds.purpose}
           onKeyDown={(e) => {
-            const purposes: ContactPurpose[] = [
-              "general",
-              "course",
-              "service",
-              "other",
-            ];
+            const purposes = Object.keys(
+              CONTACT_PURPOSE_LABELS,
+            ) as ContactPurpose[];
             const idx = purposes.indexOf(purpose);
             let nextIdx = idx;
             if (e.key === "ArrowRight" || e.key === "ArrowDown") {
@@ -191,12 +189,9 @@ export default function ContactFormFields({
           className="grid grid-cols-2 gap-2"
         >
           {(
-            [
-              ["general", "General Inquiry"],
-              ["course", "Course Enrollment"],
-              ["service", "Service Request"],
-              ["other", "Other"],
-            ] as const
+            Object.entries(CONTACT_PURPOSE_LABELS) as Array<
+              [ContactPurpose, string]
+            >
           ).map(([value, label]) => (
             <button
               key={value}

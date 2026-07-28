@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import type { SiteSearchResult, KeywordMatch } from "@/types/search";
 import {
+  SearchQuickMatchBadge,
   SearchResultBody,
   SearchTypeBadge,
 } from "@/components/ui/SearchResultMeta";
@@ -101,9 +102,7 @@ export default function SearchPaletteResults({
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <span className="badge-pill bg-brand-100/80 border-brand-200 dark:bg-brand-900/50 dark:border-brand-800">
-                      Quick Match
-                    </span>
+                    <SearchQuickMatchBadge />
                     <SearchTypeBadge type={keywordMatch.category} />
                   </div>
                   <p className="mt-1.5 text-sm-plus font-semibold text-slate-800 dark:text-slate-200 line-clamp-1">

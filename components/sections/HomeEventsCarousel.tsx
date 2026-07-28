@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import { formatEventDateRange } from "@/lib/cms/event";
-import { urlFor } from "@/sanity/lib/image";
+import { cardImageUrl } from "@/sanity/lib/image";
 import type { EventSummary } from "@/types/event";
 
 const CarouselSection = dynamic(
@@ -19,9 +19,7 @@ export default function HomeEventsCarousel({
     .slice(0, 6)
     .map((event) => ({
       id: event._id,
-      image: event.image
-        ? urlFor(event.image).width(480).height(360).url()
-        : null,
+      image: event.image ? cardImageUrl(event.image) : null,
       title: event.title,
       description: formatEventDateRange(event.startDate, event.endDate),
       href: `/events/${event.slug.current}`,
