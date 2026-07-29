@@ -46,7 +46,7 @@ export default function HomeAboutQuotePanel({
 
   return (
     <div className="relative pb-10">
-      <div className="relative overflow-hidden rounded-3xl bg-slate-900 dark:bg-slate-900/50 p-8 text-white sm:p-10 min-h-[300px] flex flex-col justify-between shadow-xl">
+      <div className="relative overflow-hidden rounded-3xl bg-slate-900 dark:bg-slate-900/50 p-8 text-white sm:p-10 min-h-[300px] flex flex-col justify-between shadow-card">
         <div className="bg-hero-glow pointer-events-none absolute top-0 right-0 size-72 hero-glow-offset rounded-full opacity-60" />
 
         <div className="relative z-10 flex justify-end mb-2">
@@ -55,7 +55,7 @@ export default function HomeAboutQuotePanel({
               type="button"
               onClick={handleNextHadith}
               aria-label="Load next Hadith"
-              className="rounded-full border border-white/10 bg-white/5 p-2 text-slate-400 hover:text-gold-400 hover:border-gold-500/20 transition-all cursor-pointer"
+              className="flex size-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-400 transition-all hover:border-gold-500/20 hover:text-gold-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-400 cursor-pointer"
             >
               <RefreshCw size={14} className="animate-hover-spin" />
             </button>

@@ -10,7 +10,7 @@ type PortableTextValue = PortableTextProps["value"];
 
 const semanticComponents: PortableTextComponents = {
   block: {
-    h1: ({ children }) => <h1>{children}</h1>,
+    h1: ({ children }) => <h2>{children}</h2>,
     h2: ({ children }) => <h2>{children}</h2>,
     h3: ({ children }) => <h3>{children}</h3>,
     blockquote: ({ children }) => <blockquote>{children}</blockquote>,

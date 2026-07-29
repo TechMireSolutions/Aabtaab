@@ -71,7 +71,7 @@ export default function EventsCountdown({ events }: EventsCountdownProps) {
 
   return (
     <div className="container-page py-6">
-      <div className="relative overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-800 bg-linear-to-br from-slate-900 to-slate-950 px-6 py-6 text-white sm:px-10 sm:py-8 shadow-xl">
+      <div className="relative overflow-hidden rounded-3xl border border-slate-200 dark:border-slate-800 bg-linear-to-br from-slate-900 to-slate-950 px-6 py-6 text-white sm:px-10 sm:py-8 shadow-card">
         <div className="bg-hero-glow pointer-events-none absolute -right-24 top-1/2 size-72 -translate-y-1/2 rounded-full opacity-30" />
         
         <div className="relative z-10 flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">

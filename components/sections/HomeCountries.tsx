@@ -44,10 +44,10 @@ export default function HomeCountries({
   const renderCountryCard = (country: Country, key: string) => (
     <div
       key={key}
-      className="flex items-center gap-4 px-6 py-4 bg-white/70 dark:bg-slate-900/60 backdrop-blur-xl border border-white dark:border-slate-800 shadow-xl shadow-brand-900/5 rounded-3xl transition-transform hover:-translate-y-1"
+      className="flex items-center gap-4 px-6 py-4 bg-white/70 dark:bg-slate-900/60 backdrop-blur-xl border border-white dark:border-slate-800 shadow-card rounded-3xl transition-transform hover:-translate-y-1"
     >
       {country.flagImage ? (
-        <div className="relative h-8 w-11 shrink-0 overflow-hidden rounded-[4px] shadow-sm ring-1 ring-black/10 dark:ring-white/10">
+        <div className="relative h-8 w-11 shrink-0 overflow-hidden rounded-[4px] ring-1 ring-black/10 dark:ring-white/10">
           <Image
             src={urlFor(country.flagImage).width(120).height(80).url()}
             alt={`${country.name} Flag`}
@@ -79,20 +79,20 @@ export default function HomeCountries({
       </div>
 
       <div className="container-narrow relative z-10 text-center mb-16">
-        <div className="inline-flex items-center justify-center h-16 w-16 rounded-3xl bg-brand-100 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 mb-6 shadow-sm">
+        <div className="inline-flex items-center justify-center h-16 w-16 rounded-3xl bg-brand-100 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 mb-6 shadow-card">
           <Globe2 className="h-8 w-8" />
         </div>
         <h2 className="heading-section-lg mb-6">
           Serving Students Worldwide
         </h2>
-        <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
+        <p className="text-lg text-slate-600 dark:text-slate-400 max-w-copy mx-auto">
           We proudly provide authentic Islamic education to families across the globe. Join our growing international community.
         </p>
       </div>
 
       <div className="relative z-10 w-full overflow-hidden px-4">
         {isSmallList ? (
-          <div className="flex flex-wrap justify-center gap-6 max-w-5xl mx-auto">
+          <div className="flex flex-wrap justify-center gap-6 container-narrow">
             {countries.map((country, idx) => 
               renderCountryCard(country, `orig-${country._id}-${idx}`)
             )}

@@ -23,7 +23,7 @@ export default function LegalPageShell({
         subtitle={subtitle}
       />
       <div className="section-y bg-white dark:bg-slate-950">
-        <div className="container-content max-w-3xl">
+        <div className="container-content">
           <div className="space-y-6">{children}</div>
         </div>
       </div>

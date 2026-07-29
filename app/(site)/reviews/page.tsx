@@ -30,7 +30,7 @@ export default async function ReviewsPage() {
         <div className="container-narrow relative z-10 space-y-24">
           <ReviewsList testimonials={testimonials} />
 
-          <div className="mx-auto max-w-2xl w-full">
+          <div className="mx-auto max-w-copy w-full">
             <div className="text-center mb-10">
               <h2 className="heading-section-lg mb-4">Share Your Journey</h2>
               <p className="text-lead">

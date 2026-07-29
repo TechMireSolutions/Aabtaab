@@ -696,7 +696,7 @@
 }
 
 @utility chip-outline-sm {
-  @apply inline-flex min-h-11 items-center gap-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 px-2 py-1 text-xs-plus font-medium text-slate-600 dark:text-slate-400 transition-all duration-200 hover:scale-[1.02] hover:border-brand-500 dark:hover:border-brand-500 hover:text-brand-700 dark:hover:text-brand-400 hover:shadow-brand-sm focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 sm:min-h-0 sm:px-2.5 sm:py-1.5;
+  @apply inline-flex min-h-11 items-center gap-1 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/60 px-2.5 py-1.5 text-xs-plus font-medium text-slate-600 dark:text-slate-400 transition-all duration-200 hover:scale-[1.02] hover:border-brand-500 dark:hover:border-brand-500 hover:text-brand-700 dark:hover:text-brand-400 hover:shadow-brand-sm focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2;
 }
 
 @utility check-icon-sm {
