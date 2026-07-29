@@ -62,7 +62,7 @@ Edit **only** `.cursor/rules/` and `.cursor/skills/`, then run `npm run sync:age
 3. **Use `@/` imports** — no deep relative paths when alias works.
 4. **Skill-first** — before implementing in a domain, read the matching `.cursor/skills/*/SKILL.md` (and its linked rule). Skills are workflows; rules are constraints.
 5. **Verify** — run `npm run lint`, `npm run typecheck`, `npm run test`, `npm run test:e2e` (when UI/routes change), and `npm run build` after substantive changes. **`typecheck` is authoritative** (`ignoreBuildErrors` on build).
-6. **No git commits/push** unless the user explicitly asks.
+6. **Git:** create commits **only** when the user explicitly asks. **Never** `git push`, `git push -u`, or otherwise publish to GitHub/remotes — the user pushes themselves. Do not open PRs that require pushing unless the user has already pushed and asks for PR creation against the remote branch.
 7. **Pull Request Rules:** Every PR must have one clear purpose, explain impact, include tests, pass CI, avoid unrelated formatting, and explicitly mention env/Sanity schema updates.
 8. **AI Coding Assistant Rules:** Read files before proposing changes, preserve stack, do not invent variables/schemas without implementation, produce type-safe code, never write placeholders like "implement later", and make the smallest safe change.
 
