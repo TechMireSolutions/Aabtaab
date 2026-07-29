@@ -198,7 +198,7 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
 
         <div
           ref={scrollContainerRef}
-          className="max-h-[420px] overflow-y-auto p-2 scrollbar-hide"
+          className="max-h-105 overflow-y-auto p-2 scrollbar-hide"
         >
           {!resolvedHasQuery ? (
             <QuickNavChips onSelect={handleSelect} />

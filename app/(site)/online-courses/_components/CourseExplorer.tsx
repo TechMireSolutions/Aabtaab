@@ -81,7 +81,7 @@ export default function CourseExplorer({ courses }: CourseExplorerProps) {
             value={selectedSubject}
             onChange={(e) => setSelectedSubject(e.target.value)}
             aria-label="Filter courses by subject"
-            className="min-h-11 w-full appearance-none rounded-xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-2.5 pr-8 pl-10 text-sm-plus text-slate-700 dark:text-slate-300 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20 cursor-pointer"
+            className="select-field appearance-none cursor-pointer py-2.5 pr-8 pl-10"
           >
             <option value="">All Subjects</option>
             {subjects.map((subject) => (
@@ -100,7 +100,7 @@ export default function CourseExplorer({ courses }: CourseExplorerProps) {
             value={selectedInstructor}
             onChange={(e) => setSelectedInstructor(e.target.value)}
             aria-label="Filter courses by scholar"
-            className="min-h-11 w-full appearance-none rounded-xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-2.5 pr-8 pl-10 text-sm-plus text-slate-700 dark:text-slate-300 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20 cursor-pointer"
+            className="select-field appearance-none cursor-pointer py-2.5 pr-8 pl-10"
           >
             <option value="">All Scholars</option>
             {instructors.map((scholar) => (

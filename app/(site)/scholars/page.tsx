@@ -22,7 +22,7 @@ export default async function ScholarsPage() {
       />
 
       <section className="section-y relative bg-slate-50 dark:bg-slate-950 overflow-hidden flex-1">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-5xl h-[40rem] bg-brand-500/5 dark:bg-brand-500/10 blur-[120px] rounded-full pointer-events-none" />
+        <div className="pointer-events-none absolute top-0 left-1/2 h-160 w-full max-w-5xl -translate-x-1/2 rounded-full bg-brand-500/5 blur-orb dark:bg-brand-500/10" />
 
         <div className="container-narrow relative z-10">
           <ScholarsGrid scholars={scholars} />

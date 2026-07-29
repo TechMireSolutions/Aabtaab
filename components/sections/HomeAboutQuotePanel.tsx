@@ -46,7 +46,7 @@ export default function HomeAboutQuotePanel({
 
   return (
     <div className="relative pb-10">
-      <div className="relative overflow-hidden rounded-3xl bg-slate-900 dark:bg-slate-900/50 p-8 text-white sm:p-10 min-h-[300px] flex flex-col justify-between shadow-card">
+      <div className="relative flex min-h-72 flex-col justify-between overflow-hidden rounded-3xl bg-slate-900 p-8 text-white shadow-card dark:bg-slate-900/50 sm:p-10">
         <div className="bg-hero-glow pointer-events-none absolute top-0 right-0 size-72 hero-glow-offset rounded-full opacity-60" />
 
         <div className="relative z-10 flex justify-end mb-2">

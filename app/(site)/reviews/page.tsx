@@ -24,8 +24,8 @@ export default async function ReviewsPage() {
       />
 
       <section className="section-y relative bg-slate-50 dark:bg-slate-950 overflow-hidden flex-1">
-        <div className="absolute top-0 right-0 w-[50rem] h-[50rem] bg-brand-500/10 dark:bg-brand-500/20 blur-[120px] rounded-full pointer-events-none transform translate-x-1/3 -translate-y-1/4" />
-        <div className="absolute bottom-0 left-0 w-[40rem] h-[40rem] bg-brand-400/10 dark:bg-brand-400/15 blur-[120px] rounded-full pointer-events-none transform -translate-x-1/3 translate-y-1/3" />
+        <div className="absolute top-0 right-0 size-200 translate-x-1/3 -translate-y-1/4 rounded-full bg-brand-500/10 blur-orb pointer-events-none dark:bg-brand-500/20" />
+        <div className="absolute bottom-0 left-0 size-160 -translate-x-1/3 translate-y-1/3 rounded-full bg-brand-400/10 blur-orb pointer-events-none dark:bg-brand-400/15" />
 
         <div className="container-narrow relative z-10 space-y-24">
           <ReviewsList testimonials={testimonials} />

@@ -7,7 +7,7 @@ import type { SeoData } from "@/types/seo";
 import type { SlugParent } from "@/types/sanity";
 import { sanitizePublicCopy } from "@/lib/fallbacks/cms-copy";
 import { getCmsPage } from "./queries";
-import { buildNestedContentPath } from "../paths";
+import { buildNestedContentPath } from "@/lib/paths";
 
 interface CmsMetadataOptions {
   path: string;

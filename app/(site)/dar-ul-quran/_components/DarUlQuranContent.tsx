@@ -60,7 +60,7 @@ export default function DarUlQuranContent() {
                         setSelectedSurah(Number(e.target.value));
                         setSelectedAyah(0);
                       }}
-                      className="min-h-11 w-full rounded-xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-2.5 text-sm-plus text-slate-700 dark:text-slate-300 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20"
+                      className="select-field p-2.5"
                     >
                       {surahs.length === 0 ? (
                         <option>Loading Surahs...</option>
@@ -85,7 +85,7 @@ export default function DarUlQuranContent() {
                       id="ayah-select"
                       value={selectedAyah}
                       onChange={(e) => setSelectedAyah(Number(e.target.value))}
-                      className="min-h-11 w-full rounded-xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-2.5 text-sm-plus text-slate-700 dark:text-slate-300 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20"
+                      className="select-field p-2.5"
                     >
                       <option value={0}>Show Full Surah</option>
                       {activeSurahDetails &&

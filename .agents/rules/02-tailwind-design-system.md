@@ -64,6 +64,7 @@ description: Tailwind v4 design system — tokens, @utility classes, pure utilit
 | `btn-paypal` | PayPal donate (third-party brand hex — exception) |
 | `btn-search-submit` | Header/drawer search submit |
 | `input-field` | All text inputs & search fields |
+| `select-field` | Native `<select>` controls (filters, CMS pickers) |
 
 ## Surfaces & cards
 
@@ -103,7 +104,7 @@ description: Tailwind v4 design system — tokens, @utility classes, pure utilit
 | `chip-outline` / `chip-outline-sm` | Contact page social chips (dark-mode aware) |
 | `check-icon-sm` | Why-us checklist icons |
 | `link-underline` | Header nav active/hover |
-| `bg-dot-grid` / `bg-hero-glow` / `hero-glow-offset` | Decorative backgrounds |
+| `bg-dot-grid` / `bg-hero-glow` / `hero-glow-offset` / `blur-orb` | Decorative backgrounds |
 | `mobile-nav-overlay` / `mobile-nav-panel` | Mobile menu drawers |
 | `whatsapp-fab` | WhatsApp floating action button (owns position, size, colour, animation, expand) |
 | `animate-fade-up` + `animate-delay-*` | Staggered hero entrance (no inline delay) |
@@ -119,9 +120,10 @@ layout → spacing → typography → visual (bg/border/shadow) → interactive 
 | Pattern | Reason |
 |---------|--------|
 | `PreviewBanner` `amber-*` | Dev-only draft banner |
-| ContactForm `-left-[9999px]` | Honeypot a11y standard |
+| ContactForm / ReviewForm `-left-[9999px]` | Honeypot a11y standard |
 | `btn-paypal` hex colors | PayPal brand requirement |
 | Semantic status colors (`red-*` cancelled badge) | Meaning, not brand |
+| HomeCountries `w-[120vw]` globe | Full-bleed decorative scale |
 
 ## Tailwind & CSS guidelines
 

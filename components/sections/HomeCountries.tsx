@@ -47,7 +47,7 @@ export default function HomeCountries({
       className="flex items-center gap-4 px-6 py-4 bg-white/70 dark:bg-slate-900/60 backdrop-blur-xl border border-white dark:border-slate-800 shadow-card rounded-3xl transition-transform hover:-translate-y-1"
     >
       {country.flagImage ? (
-        <div className="relative h-8 w-11 shrink-0 overflow-hidden rounded-[4px] ring-1 ring-black/10 dark:ring-white/10">
+        <div className="relative h-8 w-11 shrink-0 overflow-hidden rounded ring-1 ring-black/10 dark:ring-white/10">
           <Image
             src={urlFor(country.flagImage).width(120).height(80).url()}
             alt={`${country.name} Flag`}
@@ -71,11 +71,11 @@ export default function HomeCountries({
   return (
     <section className="relative overflow-hidden bg-slate-50 dark:bg-slate-950 py-24 sm:py-32">
       {/* Premium Background Elements */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[80rem] h-[40rem] bg-brand-500/10 dark:bg-brand-500/5 blur-[120px] rounded-full pointer-events-none" />
+      <div className="pointer-events-none absolute top-1/2 left-1/2 h-160 w-full max-w-320 -translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-500/10 blur-orb dark:bg-brand-500/5" />
       
       {/* Subtle globe overlay in background */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03] dark:opacity-[0.02]">
-        <Globe2 className="w-[120vw] h-[120vw] max-w-[80rem] max-h-[80rem] text-brand-900 dark:text-white" />
+      <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.03] dark:opacity-[0.02]">
+        <Globe2 className="h-[120vw] w-[120vw] max-h-320 max-w-320 text-brand-900 dark:text-white" />
       </div>
 
       <div className="container-narrow relative z-10 text-center mb-16">

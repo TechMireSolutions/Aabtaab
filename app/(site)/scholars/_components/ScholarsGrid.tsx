@@ -27,9 +27,9 @@ export default function ScholarsGrid({ scholars }: { scholars: Scholar[] }) {
         return (
           <div
             key={scholar._id}
-            className="group card-surface card-hover-lift relative flex w-full max-w-[24rem] flex-col overflow-hidden"
+            className="group card-surface card-hover-lift relative flex w-full max-w-sm flex-col overflow-hidden"
           >
-            <div className="relative h-[20rem] w-full overflow-hidden bg-slate-100 dark:bg-slate-800 shrink-0">
+            <div className="relative h-80 w-full shrink-0 overflow-hidden bg-slate-100 dark:bg-slate-800">
               {scholar.image ? (
                 <Image
                   src={urlFor(scholar.image).width(600).height(800).url()}
