@@ -17,7 +17,7 @@ export default function DarUlQuranInsight({
   }
 
   return (
-    <div className="rounded-3xl border border-gold-500/30 bg-gold-950/20 dark:bg-gold-950/10 p-5 shadow-sm text-slate-900 dark:text-slate-100">
+    <div className="rounded-3xl border border-gold-500/30 bg-gold-950/20 dark:bg-gold-950/10 p-5 shadow-card text-slate-900 dark:text-slate-100">
       <div className="flex items-start gap-2.5">
         <BookMarked className="text-gold-500 mt-0.5 shrink-0" size={18} />
         <div>

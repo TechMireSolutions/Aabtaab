@@ -26,10 +26,18 @@
   --color-brand-900: #164e63;
   --color-brand-950: #082f49;
 
-  /* Gold Accent Palette */
+  /* Gold Accent Palette (amber-aligned; used for donate / sacred UI) */
+  --color-gold-50: #fffbeb;
+  --color-gold-100: #fef3c7;
+  --color-gold-200: #fde68a;
+  --color-gold-300: #fcd34d;
   --color-gold-400: #fbbf24;
   --color-gold-500: #f59e0b;
   --color-gold-600: #d97706;
+  --color-gold-700: #b45309;
+  --color-gold-800: #92400e;
+  --color-gold-900: #78350f;
+  --color-gold-950: #451a03;
 
   /* Typography Scale */
   --text-2xs: 0.625rem;
@@ -625,11 +633,11 @@
 }
 
 @utility card-contact {
-  @apply flex items-start gap-3 rounded-xl border border-gray-100 dark:border-slate-800/80 bg-white dark:bg-slate-900/50 px-4 py-3.5 shadow-sm sm:gap-3.5;
+  @apply flex items-start gap-3 rounded-xl border border-gray-100 dark:border-slate-800/80 bg-white dark:bg-slate-900/50 px-4 py-3.5 shadow-card sm:gap-3.5;
 }
 
 @utility card-quote {
-  @apply relative mx-auto mb-7 max-w-lg rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-5 shadow-sm;
+  @apply relative mx-auto mb-7 max-w-lg rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-5 shadow-card;
 }
 
 @utility h-card-accent {
@@ -667,7 +675,7 @@
 }
 
 @utility badge-enrolling {
-  @apply mb-5 inline-flex items-center gap-2 rounded-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-3.5 py-1.5 shadow-sm;
+  @apply mb-5 inline-flex items-center gap-2 rounded-full border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-3.5 py-1.5 shadow-card;
 }
 
 @utility badge-hero {

@@ -60,7 +60,7 @@ export default function CourseExplorer({ courses }: CourseExplorerProps) {
   return (
     <div className="space-y-6 sm:space-y-8">
       {/* Search & Filter Bar */}
-      <div className="flex flex-col gap-3 rounded-2xl border border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-900/60 p-4 sm:p-5 shadow-sm md:flex-row md:items-center">
+      <div className="flex flex-col gap-3 rounded-2xl border border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-900/60 p-4 sm:p-5 shadow-card md:flex-row md:items-center">
         {/* Search Field */}
         <div className="relative flex-1">
           <Search className="absolute top-1/2 left-3.5 size-4 -translate-y-1/2 text-gray-400 dark:text-slate-500" />
@@ -70,7 +70,7 @@ export default function CourseExplorer({ courses }: CourseExplorerProps) {
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search courses by name or topics..."
             aria-label="Search courses by name or topics"
-            className="w-full rounded-xl border border-gray-200 dark:border-slate-800 bg-transparent py-2.5 pr-4 pl-10 text-sm-plus text-slate-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20"
+            className="min-h-11 w-full rounded-xl border border-gray-200 dark:border-slate-800 bg-transparent py-2.5 pr-4 pl-10 text-sm-plus text-slate-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-slate-500 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20"
           />
         </div>
 
@@ -81,7 +81,7 @@ export default function CourseExplorer({ courses }: CourseExplorerProps) {
             value={selectedSubject}
             onChange={(e) => setSelectedSubject(e.target.value)}
             aria-label="Filter courses by subject"
-            className="w-full appearance-none rounded-xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-2.5 pr-8 pl-10 text-sm-plus text-slate-700 dark:text-slate-300 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20 cursor-pointer"
+            className="min-h-11 w-full appearance-none rounded-xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-2.5 pr-8 pl-10 text-sm-plus text-slate-700 dark:text-slate-300 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20 cursor-pointer"
           >
             <option value="">All Subjects</option>
             {subjects.map((subject) => (
@@ -100,7 +100,7 @@ export default function CourseExplorer({ courses }: CourseExplorerProps) {
             value={selectedInstructor}
             onChange={(e) => setSelectedInstructor(e.target.value)}
             aria-label="Filter courses by scholar"
-            className="w-full appearance-none rounded-xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-2.5 pr-8 pl-10 text-sm-plus text-slate-700 dark:text-slate-300 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20 cursor-pointer"
+            className="min-h-11 w-full appearance-none rounded-xl border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 py-2.5 pr-8 pl-10 text-sm-plus text-slate-700 dark:text-slate-300 focus:border-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-600/20 cursor-pointer"
           >
             <option value="">All Scholars</option>
             {instructors.map((scholar) => (
@@ -115,10 +115,11 @@ export default function CourseExplorer({ courses }: CourseExplorerProps) {
         {/* Reset Action */}
         {hasActiveFilters && (
           <button
+            type="button"
             onClick={resetFilters}
-            className="flex items-center justify-center gap-1.5 rounded-xl border border-gray-200 dark:border-slate-800 hover:border-brand-200 dark:hover:border-slate-700 bg-gray-50 dark:bg-slate-800 py-2.5 px-4 text-sm-plus font-medium text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
+            className="flex min-h-11 items-center justify-center gap-1.5 rounded-xl border border-gray-200 dark:border-slate-800 hover:border-brand-200 dark:hover:border-slate-700 bg-gray-50 dark:bg-slate-800 px-4 text-sm-plus font-medium text-slate-700 dark:text-slate-300 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 cursor-pointer"
           >
-            <RotateCcw size={14} />
+            <RotateCcw size={14} aria-hidden="true" />
             <span>Reset</span>
           </button>
         )}
@@ -131,8 +132,9 @@ export default function CourseExplorer({ courses }: CourseExplorerProps) {
             No courses match your selected search query or filters.
           </p>
           <button
+            type="button"
             onClick={resetFilters}
-            className="mt-4 btn-primary py-2 px-5 text-sm-plus"
+            className="mt-4 btn-primary min-h-11 px-5 text-sm-plus"
           >
             Clear Filters
           </button>
