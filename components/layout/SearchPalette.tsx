@@ -163,7 +163,7 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
         onClick={onClose}
       />
 
-      <div className="relative z-10 flex w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xl transition-all duration-300 animate-scale-in">
+      <div className="relative z-10 flex w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-overlay transition-all duration-300 animate-scale-in">
         <div className="relative flex items-center border-b border-gray-100 dark:border-slate-800 px-4 py-3.5">
           <Search className="size-5 text-gray-400 dark:text-slate-500 shrink-0" />
           <input
@@ -223,19 +223,19 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
         <div className="flex items-center justify-between border-t border-gray-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-900/50 px-4 py-3 text-2xs font-medium text-gray-400 dark:text-slate-500">
           <div className="flex gap-4">
             <span className="flex items-center gap-1">
-              <span className="rounded border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800 px-1 py-0.5 shadow-xs">
+              <span className="rounded border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800 px-1 py-0.5">
                 ↑↓
               </span>{" "}
               to navigate
             </span>
             <span className="flex items-center gap-1">
-              <span className="rounded border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800 px-1 py-0.5 shadow-xs flex items-center gap-0.5">
-                <CornerDownLeft size={8} /> Enter
+              <span className="flex items-center gap-0.5 rounded border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800 px-1 py-0.5">
+                <CornerDownLeft size={8} aria-hidden="true" /> Enter
               </span>{" "}
               to select
             </span>
             <span className="flex items-center gap-1">
-              <span className="rounded border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800 px-1.5 py-0.5 shadow-xs">
+              <span className="rounded border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800 px-1.5 py-0.5">
                 Esc
               </span>{" "}
               to close
@@ -243,7 +243,7 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
           </div>
           <div className="hidden sm:block">
             Press{" "}
-            <span className="rounded border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800 px-1.5 py-0.5 shadow-xs">
+            <span className="rounded border border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-800 px-1.5 py-0.5">
               ⌘K
             </span>{" "}
             to open

@@ -26,7 +26,7 @@ export default function ReviewsList({
             aria-hidden="true"
           />
           <h3 className="heading-section text-xl mb-2">No reviews yet</h3>
-          <p className="text-sm-plus max-w-sm mx-auto">
+          <p className="mx-auto max-w-copy text-sm-plus">
             Be the first to share your learning experience and inspire others.
           </p>
         </div>

@@ -81,7 +81,7 @@ export default function HomeAboutQuotePanel({
           <p className="text-caption mt-3.5 text-center font-semibold tracking-wide text-gold-500 flex flex-col items-center gap-1">
             <span>— {activeHadith.attribution}</span>
             {activeHadith.reference && (
-              <span className="text-[12px] font-normal text-slate-400">
+              <span className="text-xs font-normal text-slate-400">
                 [{activeHadith.reference}]
               </span>
             )}

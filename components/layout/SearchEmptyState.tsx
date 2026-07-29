@@ -24,7 +24,7 @@ export default function SearchEmptyState({
           &ldquo;{term}&rdquo; is not available yet
         </span>
       </div>
-      <p className="text-sm-plus text-gray-500 dark:text-slate-400 mb-6 max-w-md mx-auto">
+      <p className="mx-auto mb-6 max-w-copy text-sm-plus text-gray-500 dark:text-slate-400">
         We don&apos;t have content matching this keyword right now. Try something
         else, or explore these pages:
       </p>

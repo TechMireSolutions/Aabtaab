@@ -134,7 +134,7 @@ export default function CourseExplorer({ courses }: CourseExplorerProps) {
           <button
             type="button"
             onClick={resetFilters}
-            className="mt-4 btn-primary min-h-11 px-5 text-sm-plus"
+            className="mt-4 btn-primary px-5 text-sm-plus"
           >
             Clear Filters
           </button>

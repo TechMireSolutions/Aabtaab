@@ -110,6 +110,7 @@
   --shadow-whatsapp: 0 4px 20px rgb(37 211 102 / 0.45);
   --shadow-whatsapp-hover: 0 6px 28px rgb(37 211 102 / 0.6);
   --shadow-paypal: 0 4px 20px rgb(0 112 186 / 0.45);
+  --shadow-overlay: 0 25px 50px -12px rgb(0 0 0 / 0.25);
 }
 
 /* ==========================================================================
@@ -521,19 +522,19 @@
 }
 
 @utility btn-primary {
-  @apply inline-flex items-center gap-2 rounded-full bg-brand-700 px-5 py-2.5 text-sm-plus font-semibold text-white shadow-brand-sm transition-all duration-200 hover:-translate-y-px hover:bg-brand-800 hover:shadow-brand-lg focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-700;
+  @apply inline-flex min-h-11 items-center gap-2 rounded-full bg-brand-700 px-5 py-2.5 text-sm-plus font-semibold text-white shadow-brand-sm transition-all duration-200 hover:-translate-y-px hover:bg-brand-800 hover:shadow-brand-lg focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-brand-700;
 }
 
 @utility btn-secondary {
-  @apply inline-flex items-center rounded-full border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-5 py-2.5 text-sm-plus font-medium text-slate-800 dark:text-slate-200 transition-all duration-200 hover:-translate-y-px hover:border-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2;
+  @apply inline-flex min-h-11 items-center rounded-full border border-gray-300 dark:border-slate-700 bg-white dark:bg-slate-800 px-5 py-2.5 text-sm-plus font-medium text-slate-800 dark:text-slate-200 transition-all duration-200 hover:-translate-y-px hover:border-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700 hover:text-slate-900 dark:hover:text-white focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2;
 }
 
 @utility btn-pill-accent {
-  @apply inline-flex items-center gap-2 rounded-full bg-brand-500 px-8 py-3.5 text-sm font-bold text-slate-900 shadow-brand-band transition-all duration-200 hover:-translate-y-px hover:bg-brand-400;
+  @apply inline-flex min-h-11 items-center gap-2 rounded-full bg-brand-500 px-8 py-3.5 text-sm font-bold text-slate-900 shadow-brand-band transition-all duration-200 hover:-translate-y-px hover:bg-brand-400;
 }
 
 @utility btn-pill-ghost {
-  @apply inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-8 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-px hover:bg-white/15;
+  @apply inline-flex min-h-11 items-center gap-2 rounded-full border border-white/20 bg-white/10 px-8 py-3.5 text-sm font-semibold text-white transition-all duration-200 hover:-translate-y-px hover:bg-white/15;
 }
 
 @utility btn-paypal {
@@ -882,7 +883,7 @@
   max-width: 100%;
   height: 100dvh;
   max-height: 100dvh;
-  @apply fixed inset-y-0 start-0 flex flex-col border-e border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-2xl;
+  @apply fixed inset-y-0 start-0 flex flex-col border-e border-gray-100 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-overlay;
   animation: mobile-nav-slide-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 

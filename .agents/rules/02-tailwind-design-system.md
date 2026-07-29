@@ -15,7 +15,7 @@ description: Tailwind v4 design system — tokens, @utility classes, pure utilit
 3. **No arbitrary values** (`text-[13px]`, `w-[180px]`, `top-[68px]`, `shadow-[…]`, `scale-[1.06]`) when a token or `@utility` exists.
 4. **No inline `style={}`** for static colors, typography, shadows, or animation delays — use tokens / `animate-delay-*`. **Exception:** truly dynamic runtime values that cannot be expressed as classes.
 5. **Extend `globals.css` first** for patterns used **2+ times** — add `@theme` or `@utility`, not copy-paste classes.
-6. **Use shadow tokens** — `shadow-card`, `shadow-card-hover`, `shadow-brand-*` — not raw `shadow-sm` / `shadow-md` / `shadow-lg` on site UI.
+6. **Use shadow tokens** — `shadow-card`, `shadow-card-hover`, `shadow-brand-*`, `shadow-overlay` — not raw `shadow-sm` / `shadow-md` / `shadow-lg` / `shadow-2xl` on site UI.
 7. **Use container utilities** — never `max-w-7xl mx-auto px-4 sm:px-6` inline.
 
 ## Layout & sections
