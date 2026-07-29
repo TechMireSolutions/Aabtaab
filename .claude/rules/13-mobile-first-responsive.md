@@ -1,6 +1,6 @@
 # mobile first responsive
 
-> Mobile-first responsive layout — breakpoints, touch, safe areas, overflow, and viewport UX
+> Mobile-first responsive layout — breakpoints, fluid units, touch, overflow, and viewport verification
 
 **Scope:** `**/*.{tsx,css}`
 
@@ -8,54 +8,55 @@
 
 **Tokens / utilities:** rule `02-tailwind-design-system` · **UX patterns:** rule `14-ui-ux-best-practices` · **Skill:** `mobile-responsive-ux`
 
-Build **mobile first**, then enhance at `sm` / `md` / `lg` / `xl`. Never design desktop and “shrink”. Preserve Aabtaab shells and `@utility` classes — do not invent a parallel layout system.
+Build **mobile first**, then scale up with Tailwind `min-width` prefixes (`sm:` / `md:` / `lg:` / `xl:`). Never design desktop and “shrink”. Preserve Aabtaab shells and `@utility` classes — do not invent a parallel layout system.
 
-## Breakpoints & layout
+## 1. Core principles
 
-* Default styles = **phone** (~320–390 CSS px). Add complexity only at larger breakpoints.
-* Prefer Tailwind responsive prefixes (`sm:`, `md:`, `lg:`) over custom media queries.
+* **Mobile-first:** default styles = phone; add complexity only at larger breakpoints.
+* **Fluid layouts:** never hardcode fixed element widths in px for page chrome (e.g. `w-[1200px]`, `width: 1200px`). Prefer `%`, `rem`, `vw`, `max-w-*`, Flexbox, and CSS Grid so content reflows.
+* **No horizontal page scroll:** root/sections must not exceed the viewport. Prefer `max-w-full`, `min-w-0` on flex/grid children, and rely on global `box-sizing: border-box` (Tailwind preflight). Wide tables/media: `overflow-x-auto` (`table-shell`) or card reflow — never let the whole page scroll sideways.
 * Use `container-page` / `container-content` / `container-narrow` / `container-wide` / `container-hero` — never hand-roll `max-w-* mx-auto px-*`.
-* Stack by default (`flex-col` / single column grids); introduce multi-column only from `md:` / `lg:` when content needs it.
-* Avoid fixed widths that overflow small screens. Prefer `%`, `min-w-0`, `max-w-*`, and fluid type utilities (`heading-*`, `text-lead`).
-* **No horizontal page scroll.** Tables/code/wide media: wrap in `overflow-x-auto` (e.g. `table-shell`) or reflow.
 
-## Touch & interaction
+## 2. Standard breakpoints (Tailwind defaults)
 
-* Interactive targets ≈ **44×44px** on mobile (`min-h-11` / `min-w-11` / `size-11` patterns already used in chips/icons).
-* Space adjacent tap targets — avoid dense icon rows that cause mis-taps.
-* Do not rely on hover alone; every hover affordance needs a touch/keyboard equivalent (visible focus, tap state, or always-visible control).
-* Prefer tap-friendly controls over hover menus on small viewports (existing mobile drawer pattern: `mobile-nav-overlay` / `mobile-nav-panel`).
-* Respect `safe-area-inset-*` for notches/home indicators — use existing `pb-fab-safe`, `scroll-mt-header`, FAB positioning, and header scroll padding.
+| Range | Width | Tailwind | Typical use |
+|-------|-------|----------|-------------|
+| Mobile small / **default** | `< 640px` | _(base classes)_ | Single column, stacked nav → drawer |
+| Mobile large / tablet portrait | `≥ 640px` | `sm:` | Comfortable phone / small tablet |
+| Tablet landscape | `≥ 768px` | `md:` | Multi-column starts; desktop nav may appear |
+| Laptop / small desktop | `≥ 1024px` | `lg:` | Full layout, richer grids |
+| Large desktop | `≥ 1280px` | `xl:` | Max content width / sparse enhancements |
 
-## Typography & forms on small screens
+Prefer utility prefixes over custom `@media`. If a custom query is unavoidable, use the same **min-width** thresholds above.
 
-* Body/UI text must remain readable without pinch-zoom.
-* Form inputs/selects/textareas: **≥16px** on mobile (`input-field`) to prevent iOS focus zoom.
-* Long words, emails, URLs: allow wrap (`break-words` / overflow strategies) — never clip essential copy.
-* Keep line length comfortable in prose columns (`container-content`, `max-w-copy`).
+## 3. Navigation & interactivity
 
-## Media & performance on mobile
+* **Below `md` (`< 768px`):** top horizontal nav → hamburger + slide-out drawer (`mobile-nav-overlay` / `mobile-nav-panel`). Do not keep an unusable compressed desktop nav.
+* **From `md:`:** desktop horizontal nav may show when that is the existing Header pattern.
+* **Touch targets:** interactive controls ≥ **44×44px** on touch (`min-h-11` / `min-w-11` / `size-11`). Space adjacent targets to avoid mis-taps.
+* Hover-only UI is forbidden as the sole path — provide tap/keyboard equivalents.
+* **Tables & data:** wrap wide tables in `overflow-x-auto` (`table-shell`) **or** reflow rows into stacked cards on small screens.
 
-* Always set accurate `sizes` on `next/image`. Hidden-on-mobile images: `sizes="(max-width: 768px) 0px, …"`.
-* Prefer full-bleed or container-width heroes with stable aspect utilities (`media-hero`, `min-h-hero*`) — reserve space to prevent CLS.
-* One LCP image per route (`priority` + `fetchPriority="high"`); lazy-load the rest.
-* Do not ship desktop-only carousels that trap horizontal scroll without clear affordances.
+## 4. Typography & media
 
-## Chrome, sticky UI & viewport
+* Prefer fluid / relative type via design utilities (`heading-*`, `text-lead`, `text-sm`→`sm:text-base`, or `clamp()` in `@theme` / `@utility` when introducing new scales). Avoid fixed px type for body UI.
+* Images/video/SVG: constrain with `max-w-full` / container width and stable aspect (`media-hero`, `next/image` with `sizes` + `fill`/`width`/`height`). Never overflow the viewport.
+* Form inputs ≥ **16px** on mobile (`input-field`) to prevent iOS focus zoom.
+* Long words, emails, URLs: wrap (`break-words`) — no clipped essential copy.
 
-* Account for sticky header (`h-header`, `sticky-below-header`, `scroll-mt-header`) when placing in-page anchors.
-* WhatsApp FAB: keep `pb-fab-safe` on `<main>` so CTAs/footer aren’t covered.
-* Sticky bars must not obscure primary content or focusable controls.
-* Drawers/modals: trap focus, Escape to close, restore focus; lock background scroll while open.
+## 5. Chrome, safe areas & content priority
 
-## Content priority
+* Sticky header: `h-header`, `sticky-below-header`, `scroll-mt-header` (+ `safe-area-inset-top`).
+* WhatsApp FAB: `pb-fab-safe` on `<main>` (and footer bands that sit under the FAB).
+* Do **not** hide essential content on mobile (primary CTA, contact, legal, core destinations). Collapsing chrome (nav → menu) is OK if destinations stay reachable.
+* Drawers/modals: focus trap, Escape to close, restore focus; lock background scroll.
 
-* Do **not** hide essential content on mobile (`display: none` of primary CTA, contact paths, legal links, or core nav destinations).
-* Progressive disclosure is OK for secondary chrome (e.g. collapse nav into menu) — destinations must remain reachable.
-* Prefer fewer, clearer sections on small screens over dense multi-widget first viewports.
+## 6. Pre-commit verification
 
-## Verify
+Before calling a layout done, verify:
 
-* Manually check ~375px and ~390px widths plus `md` / `lg`.
-* Run Playwright **mobile-chrome** (Pixel 7) when UI/nav/forms change: `npm run test:e2e`.
-* Confirm no horizontal overflow, usable tap targets, and keyboard path for open/close menus.
+1. **Mobile 375px**, **Tablet 768px**, **Desktop 1440px** (also spot-check ~390px if touching iPhone-class layouts).
+2. No text overlap/clipping at edge viewport sizes; **no horizontal page scrollbar**.
+3. Forms, buttons, and inputs remain easily usable with touch on small viewports (≥44px targets, ≥16px inputs).
+4. Playwright **mobile-chrome** (Pixel 7) when UI/nav/forms change: `npm run test:e2e`.
+5. Keyboard open/close path for mobile nav / search / drawers.

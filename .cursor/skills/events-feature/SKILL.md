@@ -18,7 +18,7 @@ description: >-
 | List page | `app/(site)/events/page.tsx` |
 | Detail page | `app/(site)/events/[slug]/page.tsx` |
 | Event cards | `components/content/EventCardGrid.tsx` |
-| JSON-LD | `EventJsonLd` in `lib/seo/JsonLd.tsx` |
+| JSON-LD | `EventJsonLd` via `@/lib/seo` (`lib/seo/json-ld*.tsx`) |
 | Sitemap | Event slugs in `app/sitemap.ts` |
 | Revalidation | `CACHE_TAGS.events`, `CACHE_TAGS.event(slug)`; webhook case `"event"` |
 | Homepage | Upcoming events carousel (when CMS data exists) |
@@ -45,7 +45,7 @@ Use `buildEventPageMetadata` from `lib/cms/event.ts` with:
 
 Use `ArticleDetailShell` (back link + article container) → title/meta → media → description/prose → register CTA → `EventJsonLd` / breadcrumbs.
 
-Missing event → `notFound()`. Await `params` (Promise). One LCP image with `priority` + `fetchPriority="high"` when featured media is above the fold.
+Missing event → `notFound()`. Await `params` (Promise). One LCP image with `priority` + `fetchPriority="high"` when featured media is above the fold. Layout must remain fluid on mobile (rule `13` — **375 / 768 / 1440**).
 
 ## Draft preview
 

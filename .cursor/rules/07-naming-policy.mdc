@@ -50,7 +50,7 @@ Routes: `/posts` not `/articles`.
 
 - Path alias **`@/`** always — no `../../../`.
 - **Named exports** for components and helpers.
-- **Default export** only for Next.js `page.tsx`, `layout.tsx`, `loading.tsx`, `error.tsx`.
+- **Default export** only for Next.js special files: `page.tsx`, `layout.tsx`, `loading.tsx`, `error.tsx`, `not-found.tsx`, `global-error.tsx`, and `route.ts` handlers.
 - One primary export per component file (the component name matches filename).
 
 ## Sanity / GROQ

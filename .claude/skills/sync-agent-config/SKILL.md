@@ -77,6 +77,10 @@ Key resolved policies:
 - **Secrets:** compare webhook/preview secrets with timing-safe equality when tightening auth; never ship write tokens to the client
 - **A11y:** WCAG 2.2 AA intent; one `h1`; `notFound()` for missing CMS detail docs (no soft 404)
 - **Mobile / UI UX:** rules `13-mobile-first-responsive` + `14-ui-ux-best-practices`; skill `mobile-responsive-ux`
+- **Responsive SSOT:** mobile-first; Tailwind `sm:640` / `md:768` / `lg:1024` / `xl:1280`; fluid layouts; no horizontal page scroll; nav drawer below `md`; verify **375 / 768 / 1440**
+- **Error UI:** `app/(site)/{error,not-found,loading}.tsx` exist — extend; keep Sentry on boundaries when DSN set
+- **Turnstile:** contact **and** review verify when keys set (`verifyTurnstileOrSkip`)
+- **Revalidation:** `revalidateTag` + `CACHE_TAGS` only (no drive-by `revalidatePath`)
 - **PM2:** `pm2 delete` then `pm2 start` (never `startOrRestart` / `reload` for this app)
 - **Types:** `npm run typecheck` is authoritative (`ignoreBuildErrors` on `next build`)
 - **Tests:** Vitest colocated + Playwright `e2e/` (desktop + mobile) — see `12-testing`

@@ -62,8 +62,9 @@ Web server: `node scripts/run-next.mjs start --port 3000` (needs an existing `.n
 - [ ] No flake left unaddressed; no retries-as-fix
 - [ ] Mocks only where needed (Sanity image URLs, `next/cache`, Sentry, Upstash); reset between tests
 - [ ] Accessible selectors; scope contact fields to `#main-content form`
-- [ ] When adding `error.tsx` / `not-found.tsx`, extend E2E
+- [ ] When changing branded `error.tsx` / `not-found.tsx` / `loading.tsx`, extend E2E (files already exist under `app/(site)/`)
 - [ ] Security-critical helpers stay covered when touched (schema, rate-limit, revalidate, email HTML)
 - [ ] CI runs unit + E2E (`npm run test`, `npm run test:e2e`)
 - [ ] `npm run typecheck` passes (authoritative vs `next build`)
 - [ ] E2E asserts behaviour, not brittle CMS copy or full-page snapshots
+- [ ] After layout/UI changes, sanity-check **375 / 768 / 1440** (no horizontal scroll, touch-usable controls) — rule `13` / skill `mobile-responsive-ux`

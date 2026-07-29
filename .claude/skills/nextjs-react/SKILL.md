@@ -23,11 +23,12 @@ description: >-
 9. Missing detail documents → `notFound()`; rethrow Next control-flow errors if catching.
 10. Stable React `key`s from ids/slugs — never list index for CMS collections.
 11. External links → `EXTERNAL_LINK_PROPS` + `OpensInNewTab`; site layout data → `getSiteLayoutData()`.
+12. UI layout → rules `13`/`14` + skill `mobile-responsive-ux` (mobile-first breakpoints; verify 375/768/1440).
 
 ## Defaults
 
 - Server Components first; client islands for forms, nav drawer, carousels, search palette.
-- Internal navigation: always `<Link>` (prefetch).
+- Internal navigation: always `<Link>` (prefetch). Below `md`, use hamburger drawer — not a crushed desktop nav.
 - Streaming: selective `<Suspense>` with layout-stable skeletons (see homepage); don’t Suspense the whole page.
 - Prefer reading `searchParams` in pages, not layouts (avoids widening dynamic rendering).
 - Optional: `after()` from `next/server` for non-critical post-response work — never for sole authz.

@@ -60,7 +60,9 @@ Never add uncapped infinite animations on LCP content. Respect `prefers-reduced-
 - Prefer logical properties (`ps`/`pe`) for RTL text islands.
 - Hover affordances need keyboard/touch equivalents.
 - Form inputs ≥16px on mobile (avoid iOS zoom).
-- For layout/touch/UX checklists, use skill **`mobile-responsive-ux`** (rules `13` + `14`).
+- Mobile-first: base `<640`, then `sm:640` / `md:768` / `lg:1024` / `xl:1280`; nav drawer below `md`.
+- No fixed px page widths; no horizontal page scroll; verify **375 / 768 / 1440**.
+- For full layout/touch/UX checklists, use skill **`mobile-responsive-ux`** (rules `13` + `14`).
 
 ## When to extend `globals.css`
 

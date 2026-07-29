@@ -23,14 +23,15 @@ Choose rendering intentionally:
 * Request only required fields (project only what is used). Do not fetch complete documents when the page only needs a few fields.
 * Parameterise GROQ queries. Never concatenate untrusted input into GROQ strings.
 * Run independent requests concurrently with `Promise.all`. Avoid sequential request waterfalls.
-* Handle missing CMS documents gracefully.
+* Handle missing CMS documents intentionally: **detail routes** → `notFound()` (see `04` / `01`); listing cards / optional sections → null-safe UI (`return null`). Do not serve empty soft-404 `200` pages for missing slugs.
 * Define appropriate revalidation values for each content type.
 
 ## 3. Images
 
-* **Image Optimization:** Never use standard `<img>` tags. Always map Sanity images to the `next/image` component to ensure automatic WebP/AVIF conversion, lazy loading, and explicit width/height attributes (preventing Cumulative Layout Shift).
+* **Image Optimization:** Prefer `next/image` for CMS/content media via Sanity helpers — do not use raw `<img>` for Sanity CDN URLs. Always map those images through the image pipeline for WebP/AVIF, lazy loading, and explicit dimensions (CLS).
 * Every image must have known dimensions or a stable aspect ratio to avoid layout shift.
 * Provide a correct `sizes` attribute for responsive images. Prevent mobile payload overhead on hidden desktop images by setting sizes explicitly (e.g. `sizes="(max-width: 768px) 0px, 55vw"` on `hidden md:block` hero images).
+* Images/video must not overflow the viewport — constrain with container width / `max-w-full` and aspect utilities (rule `13`).
 * Use modern optimised formats (WebP, AVIF) through the Next.js image pipeline.
 * Use `priority` **and** `fetchPriority="high"` only for the genuine above-the-fold LCP image (e.g. heroes in `CatalogDarkHero` / homepage). At most **one** primary LCP image per route.
 * Lazy-load below-the-fold images.

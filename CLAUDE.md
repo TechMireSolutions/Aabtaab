@@ -29,7 +29,7 @@ npm run sync:agents
 | `10-performance` | Caching, images, CWV |
 | `11-error-handling-observability` | Errors, Sentry, logging |
 | `12-testing` | Vitest + Playwright |
-| `13-mobile-first-responsive` | Mobile-first layout, touch, safe areas |
+| `13-mobile-first-responsive` | Mobile-first breakpoints, fluid layout, touch, 375/768/1440 |
 | `14-ui-ux-best-practices` | Hierarchy, feedback, forms UX, motion |
 
 Mirrored to `.claude/rules/` and `.agents/rules/`.
@@ -57,4 +57,4 @@ Port **3000** · `server.config.cjs` · PM2 `ecosystem.config.cjs` / `deploy/run
 
 See `AGENTS.md` for full index. See [techstack.md](techstack.md) for deploy, env, and SEO.
 
-**Doc priority:** `techstack.md` → rules → skills. Caching only via `sanityFetch`. Rate limit Redis strongly recommended in production. `npm run typecheck` is authoritative (`ignoreBuildErrors` on build). Missing CMS detail docs → `notFound()`. Mobile-first UI: rules `13` / `14`. Footer chrome SSOT: `lib/fallbacks/footer-nav.ts` + `footer-*` utilities; external links via `EXTERNAL_LINK_PROPS` / `OpensInNewTab`.
+**Doc priority:** `techstack.md` → rules → skills. Caching only via `sanityFetch`. Rate limit Redis strongly recommended in production. `npm run typecheck` is authoritative (`ignoreBuildErrors` on build). Missing CMS detail docs → `notFound()`. Mobile-first UI: rules `13` / `14` (breakpoints `sm/md/lg/xl`; verify **375 / 768 / 1440**). Footer chrome SSOT: `lib/fallbacks/footer-nav.ts` + `footer-*` utilities; external links via `EXTERNAL_LINK_PROPS` / `OpensInNewTab`.

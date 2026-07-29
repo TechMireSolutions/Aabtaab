@@ -26,7 +26,7 @@ alwaysApply: false
 - Site defaults: `app/layout.tsx` `generateMetadata`.
 - Page helpers: `defineCmsPageMetadata`, `buildPageMetadata`, `buildNestedSlugMetadata`, `buildPostPageMetadata`, `buildEventPageMetadata`.
 - OG images: `resolveDocOgImage()` — seo override → featured/hero/icon; default `getDefaultOgImageUrl()` → `/og-default.png`.
-- JSON-LD: use helpers in `lib/seo/JsonLd.tsx` (import via `@/lib/seo`) — do not hand-roll schema.
+- JSON-LD: use helpers under `lib/seo/json-ld*.tsx` (import via `@/lib/seo`) — do not hand-roll schema.
 - **Sitemap:** `app/sitemap.ts` must call **`getSitemapSlugs()`** from `lib/cms/queries.ts` — do not re-query Sanity inside the sitemap file.
 - **Robots:** `app/robots.ts` disallows `/studio/`, `/api/`, `/search` and points at the sitemap.
 - Full reference: **`techstack.md`** § SEO & indexing.
@@ -77,6 +77,7 @@ alwaysApply: false
 - Meaningful `alt` on content images; empty `alt=""` only when decorative.
 - OG fallback: `public/og-default.png` when no CMS image.
 - Prefer accurate Open Graph `type` (`website` vs `article`) via existing metadata builders.
+- Media must stay within the viewport (`max-w-full` / `next/image` + aspect utilities) — see rule `13`.
 
 ## Avoid
 

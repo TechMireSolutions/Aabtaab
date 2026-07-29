@@ -55,6 +55,7 @@ Submissions save to Sanity even when email env is missing.
 - Statuses: `429` rate limit · `400` validation · `500` server error
 - Never log full form payloads or tokens; scrub before Sentry
 - Prefer Redis rate limiting in production; memory fallback is local/dev / Redis-error only
+- Form UI: touch-usable on mobile (≥44px targets, ≥16px inputs) — rule `13` / skill `mobile-responsive-ux`
 
 ## Tests
 

@@ -48,7 +48,7 @@ import { sanityFetch, CACHE_TAGS } from "@/sanity/lib/fetch";
 
 - Prefer RSC + selective `<Suspense>` with **layout-stable** fallbacks for slow independent sections (homepage pattern).
 - Do not wrap the whole page in one Suspense that delays LCP chrome (header/hero).
-- Route-level `loading.tsx` is **optional** and unused today — add only with a clear skeleton; do not invent globally.
+- Route-level `loading.tsx`: site shell **`app/(site)/loading.tsx` already exists**. Add nested route `loading.tsx` only with a clear layout-stable skeleton; do not invent redundant global loaders.
 
 ## Mutations (this repo)
 
@@ -76,7 +76,7 @@ Keep handlers thin — business logic in `lib/`:
 | Route | Logic home |
 |-------|------------|
 | `/api/contact` | `lib/contact/` |
-| `/api/review` | review schema + notify (same validation/rate-limit patterns) |
+| `/api/review` | `lib/review/schema.ts` + write client (Zod, rate limit, Turnstile when configured — same patterns as contact; **no** email notify) |
 | `/api/revalidate` | `lib/revalidate.ts` |
 | `/api/draft`, `/api/draft/disable` | draft mode only |
 | `/api/search` | `lib/cms/search.ts` |
@@ -90,12 +90,13 @@ Keep handlers thin — business logic in `lib/`:
 
 ## Form & UI feedback states
 
-Every async feature must handle: idle, loading, success, validation error, server error, empty.
+Every async feature must handle: idle, loading, success, validation error, server error, empty — full patterns in rule `14-ui-ux-best-practices`.
 
 * Do not leave buttons permanently disabled after an error.
 * Prevent duplicate submissions while loading.
 * Clear success confirmations; preserve safe input after validation errors.
 * Field-level errors near the corresponding fields; use `aria-live` / `role="alert"` where status isn’t otherwise announced.
+* Layout/UI work: follow rules `13` (mobile-first breakpoints, no horizontal scroll, ≥44px targets) and `14` (hierarchy, CTAs). Verify at **375 / 768 / 1440**.
 
 ## Optional (not used in this repo)
 

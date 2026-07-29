@@ -27,7 +27,7 @@
 | CMS | Sanity | **6.7.0** (6.x) | Embedded Studio at `/studio` |
 | CMS Bridge | next-sanity | **13.2.2** | Cached `sanityFetch` wrapper, Studio embedding |
 | Validation | Zod | **4.4.3** | Schema validation for API payloads and forms |
-| Tests | Vitest | **4.1.10** | Unit testing under `lib/*.test.ts` |
+| Tests | Vitest | **4.1.10** | Colocated `*.test.ts` (currently under `lib/`) |
 | Linting | ESLint + Next/React plugins | **10.8.0** | Custom flat config (no `eslint-config-next` / `typescript-eslint` — incompatible with TS 7.0) |
 
 ### Supporting stack
@@ -80,6 +80,17 @@ npm run lint && npm run typecheck && npm run test && npm run build && npm audit 
 - Robots: `app/robots.ts` — disallow `/studio/`, `/api/`, `/search`
 - Trailing slash: **`trailingSlash: false`** in `next.config.ts`
 - Search: `/search?q=…` (noindex); legacy `/posts?q=…` redirects here
+
+## Security & headers (summary)
+
+- CSP is **`Content-Security-Policy-Report-Only`** in `next.config.ts` until enforce is intentional — details in `.cursor/rules/09-security.mdc`.
+- Public writes: Zod + rate limit; Turnstile on `/api/contact` and `/api/review` when keys are set.
+- Full security standards: rule `09-security`.
+
+## Responsive UI (summary)
+
+- Mobile-first Tailwind breakpoints; verify layouts at **375 / 768 / 1440**.
+- SSOT: `.cursor/rules/13-mobile-first-responsive.mdc` + `14-ui-ux-best-practices.mdc`; skill `mobile-responsive-ux`.
 
 ## File structure
 
@@ -194,7 +205,7 @@ Upgrade workflow: `.cursor/rules/05-dependencies-upgrade.mdc`.
 cp .env.example .env.local
 npm install
 npm run dev                  # http://127.0.0.1:3000
-npm run lint && npm run test && npm run build && npm audit --audit-level=high
+npm run lint && npm run typecheck && npm run test && npm run build && npm audit --audit-level=high
 ```
 
 Production (VPS):

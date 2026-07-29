@@ -14,8 +14,10 @@ description: >-
 | Concern | Location |
 |---------|----------|
 | Sentry / instrumentation | `instrumentation.ts` + Sentry config files |
-| Global crash UI | `app/global-error.tsx` |
-| Segment errors / 404 UI | Not present yet — add `app/(site)/error.tsx` / `not-found.tsx` when improving resilience |
+| Global crash UI | `app/global-error.tsx` (keep Sentry wired when DSN set) |
+| Site segment errors | **Exists** — `app/(site)/error.tsx` |
+| Branded 404 | **Exists** — `app/(site)/not-found.tsx` + `app/not-found.tsx` |
+| Site loading | **Exists** — `app/(site)/loading.tsx` |
 | API errors | `app/api/*/route.ts` → generic JSON + `Sentry.captureException` |
 | Sanity fetch failures | `sanity/lib/fetch.ts` |
 | Rate-limit Redis failures | `lib/rate-limit.ts` |
@@ -24,7 +26,7 @@ description: >-
 
 ### 1. Error UI
 - Use `global-error.tsx` for root crashes (must include its own `<html>` / `<body>`).
-- When adding segment `error.tsx`: client component, reset button, no secrets, optional Sentry report.
+- **Extend** existing `app/(site)/error.tsx` / `not-found.tsx` — do not recreate. Keep Client Component + reset; no secrets.
 - Branded `not-found.tsx` should keep skip link / main landmark patterns.
 - Rethrow `notFound()` / `redirect()` control-flow errors — do not map them to generic 500s.
 

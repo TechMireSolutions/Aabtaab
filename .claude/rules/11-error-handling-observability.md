@@ -21,15 +21,14 @@
 
 | Concern | Location / status |
 |---------|-------------------|
-| Global crash UI | `app/global-error.tsx` (exists; wire Sentry) |
-| Segment `error.tsx` | **Missing** — prefer `app/(site)/error.tsx` when improving UX resilience |
-| Custom `not-found.tsx` | **Missing** — branded 404 when touching SEO/UX; E2E already asserts status 404 |
+| Global crash UI | `app/global-error.tsx` (keep Sentry wired when DSN set) |
+| Site segment `error.tsx` | **Exists** — `app/(site)/error.tsx` (Client Component + reset; report to Sentry) |
+| Branded 404 | **Exists** — `app/(site)/not-found.tsx` + root `app/not-found.tsx` |
+| Site loading UI | **Exists** — `app/(site)/loading.tsx` (layout-stable skeleton) |
 | API errors | Route handlers → generic JSON + `Sentry.captureException` |
 | Sanity fetch failures | `sanity/lib/fetch.ts` (null + Sentry) |
 
-Do not assume segment `error.tsx` / `not-found.tsx` already exist.
-
-When adding `error.tsx`: must be a Client Component with a reset affordance; never render secrets or digests to end users beyond a safe generic reference if needed for support.
+Extend existing boundaries — do **not** recreate them from scratch. When changing `error.tsx`: keep Client Component + reset affordance; never render secrets or digests to end users beyond a safe generic reference if needed for support.
 
 ## 3. Telemetry and Sentry
 

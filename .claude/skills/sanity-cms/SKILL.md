@@ -54,7 +54,7 @@ When draft mode is active, `sanityFetch` uses preview client and bypasses ISR ca
 
 ## On-Demand Revalidation (ISR)
 
-Set up Sanity webhooks connected to a Next.js API route (`/api/revalidate`) using `revalidatePath` or `revalidateTag`. This ensures search engines see fresh content without requiring full application rebuilds on Hetzner.
+Webhook: `POST /api/revalidate` → `lib/revalidate.ts` + `CACHE_TAGS` via **`revalidateTag`**. Do not add broad `revalidatePath` for CMS publishes unless explicitly required. Keeps search engines fresh without full rebuilds on Hetzner.
 
 
 ## Deploy note

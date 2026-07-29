@@ -45,12 +45,14 @@ Every async or interactive feature must handle: **idle · loading · success · 
 ## Navigation & wayfinding
 
 * Site nav + footer must work with touch, keyboard, and screen readers.
+* **`< md` (below 768px):** hamburger + slide-out drawer (`mobile-nav-overlay` / `mobile-nav-panel`) — do not leave a squeezed desktop nav.
 * Mobile menu: labeled control (`Open navigation menu`), focus trap while open, Escape/close restores focus.
 * Use `<Link>` for internal routes; breadcrumbs on nested catalogs (`NestedBreadcrumbs`).
 * Skip link → `#main-content` must remain present and first-focusable in the site chrome.
 * Icon-only controls need `aria-label`; decorative icons `aria-hidden`.
 * Footer columns that are lists of destinations should be labeled `<nav>` (`aria-labelledby` / `aria-label`).
 * Links that open a new tab: use `EXTERNAL_LINK_PROPS` + `OpensInNewTab` (or an equivalent `aria-label` that includes “opens in new tab”).
+* Touch targets ≥ **44×44px** on small viewports (see rule `13`).
 
 ## Motion & delight
 
@@ -74,6 +76,7 @@ Every async or interactive feature must handle: **idle · loading · success · 
 
 ## Verify
 
-* Desktop + mobile E2E when UI changes (`npm run test:e2e`).
+* Layout check at **375 / 768 / 1440** (rule `13`) plus desktop + mobile E2E when UI changes (`npm run test:e2e`).
 * Keyboard-only pass for nav, search palette, forms, accordions, drawers.
 * Spot-check contrast on `brand-*` / `gold-*` against section backgrounds.
+* No horizontal page scrollbar; no clipped/overlapping text at edge sizes.

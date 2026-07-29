@@ -15,6 +15,7 @@ description: >-
 - Never use raw `<img>` for CMS/media — use `next/image` + Sanity helpers.
 - Explicit dimensions or `fill` + stable aspect ratio (CLS).
 - Correct `sizes`; hidden-on-mobile images: `sizes="(max-width: 768px) 0px, …"`.
+- Constrain to viewport (`max-w-full` / container / aspect utilities) — no horizontal overflow (rule `13`).
 - LCP hero: `priority` + `fetchPriority="high"` — **one** primary LCP image per route.
 
 ```tsx
@@ -64,3 +65,4 @@ Prefer Lighthouse / field tools on staging — don’t guess from desktop-only. 
 - [ ] No new `unstable_cache` outside `sanityFetch`
 - [ ] Bundle impact reviewed for new client deps
 - [ ] `prefers-reduced-motion` respected for decorative motion
+- [ ] Media does not cause horizontal page scroll at 375 / 768 / 1440

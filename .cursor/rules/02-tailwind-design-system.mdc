@@ -132,7 +132,7 @@ layout → spacing → typography → visual (bg/border/shadow) → interactive 
 * Do not overuse `@apply`.
 * Keep global CSS (`app/globals.css`) limited to: base styles, theme variables, typography defaults, and necessary third-party overrides.
 * Avoid deeply nested CSS. Do not use `!important` unless required by a documented external library constraint.
-* Support dark mode only through the project's chosen strategy.
+* Support dark mode only through the project's chosen strategy: `prefers-color-scheme` tokens in `app/globals.css`, plus forced-dark chrome via `footer-*` utilities — do not invent a second theme system.
 * Verify that hover-only interactions also work on touch and keyboard devices.
 * **CSS `animation` wins over `transition` on the same property.** When a `@keyframes` animation targets a property (e.g. `box-shadow`), remove that property from the element's `transition` list — otherwise the transition silently has no effect. Document this in a comment on the `transition` declaration.
 * **Individual transform properties** (`translate`, `rotate`, `scale`) must always declare an identity base (`translate: 0 0`) on elements that change them on hover/focus — prevents a stacking-context jump the first time the state applies.
@@ -140,10 +140,13 @@ layout → spacing → typography → visual (bg/border/shadow) → interactive 
 
 ## Mobile, a11y & UX
 
-* **Mobile-first / touch / safe areas:** rule `13-mobile-first-responsive` (+ skill `mobile-responsive-ux`).
+* **Mobile-first / breakpoints / fluid layout / no horizontal scroll:** rule `13-mobile-first-responsive` (+ skill `mobile-responsive-ux`).
+* Standard Tailwind thresholds: base `<640` · `sm:640` · `md:768` · `lg:1024` · `xl:1280`. Nav drawer below `md`.
+* Verify layouts at **375 / 768 / 1440** before done.
 * **Hierarchy, CTAs, forms feedback, motion, trust:** rule `14-ui-ux-best-practices`.
 * Keep WCAG 2.2 AA contrast for `brand-*` / `gold-*` text; never remove `focus-visible`.
 * Prefer logical properties (`ps`/`pe`) for RTL islands; hover affordances need touch/keyboard equivalents.
+* Prefer relative/fluid sizing (`max-w-*`, `%`, `rem`, Grid/Flex) — avoid fixed px widths for page chrome.
 
 ## Examples
 

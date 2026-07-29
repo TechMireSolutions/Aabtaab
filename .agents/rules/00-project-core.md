@@ -12,13 +12,13 @@ description: Aabtaab stack, paths, agent config, and universal coding principles
 * **Framework:** **Next.js 16.2.12** (App Router, RSC, ISR, React Compiler 1.0)
 * **UI:** **React 19.2.8** + **Inter** (`next/font`, LTR `en`)
 * **Styling:** **Tailwind CSS v4.3.3** (single CSS entrypoint in `app/globals.css`)
-* **CMS:** **Sanity 6.7** (embedded Studio at `/studio`)
+* **CMS:** **Sanity 6.7.0** (embedded Studio at `/studio`; versions SSOT: `techstack.md`)
 * **Language:** **TypeScript 7.0.2** (`experimental.useTypeScriptCli`)
 * **Linting:** **ESLint 10.8** + `@next/eslint-plugin-next` (custom flat config)
 * **Validation:** **Zod**
 * **Email:** **Resend** with **Nodemailer** fallback
-* **Rate limiting:** **Upstash Redis** (optional; **strongly recommended in production**) + in-memory fallback when unset
-* **Spam Protection:** **Cloudflare Turnstile** (optional; validate on backend when keys set)
+* **Rate limiting:** **Upstash Redis** (optional; **strongly recommended in production**) + in-memory fallback when unset **or** Redis errors (do not rely on memory alone under PM2)
+* **Spam Protection:** **Cloudflare Turnstile** (optional; validate on `/api/contact` + `/api/review` when keys set)
 * **Monitoring:** **Sentry** (optional)
 * **Testing:** **Vitest** (unit) and **Playwright** (E2E)
 * **Hosting:** **Hetzner VPS** (PM2 fork `aabtaab-next`, port **3000**; PM2 entry `deploy/runtime.cjs` → `next start`)
@@ -74,11 +74,12 @@ When docs disagree: **`techstack.md`** → **rules** → **skills**. Do not inve
 
 A feature is complete only when:
 
-* It works on **desktop and mobile** (touch + keyboard).
+* It works on **desktop and mobile** (touch + keyboard), verified at **375 / 768 / 1440** for layout work (rule `13`).
 * `npm run typecheck` and lint pass without unsafe suppressions.
 * Inputs are validated on the **server**; public write endpoints are **rate-limited**.
 * Idle / loading / success / error / empty states are handled.
 * **WCAG 2.2 AA** intent is met for the touched UI (labels, focus, contrast, one `h1`).
+* No horizontal page overflow; tap targets usable on small viewports (rule `13`).
 * Metadata / canonical / JSON-LD / images are correct for new or changed public routes.
 * Unit and/or E2E tests cover critical paths changed.
 * Sentry records unexpected exceptions **without PII** when configured.
@@ -114,5 +115,5 @@ A feature is complete only when:
 | `10-performance.mdc` | Caching, dynamic components, layouts, CWV |
 | `11-error-handling-observability.mdc` | Telemetry, logging, Sentry, error boundaries |
 | `12-testing.mdc` | Test suites, Vitest, Playwright configs |
-| `13-mobile-first-responsive.mdc` | `*.tsx`, `*.css` — mobile-first layout, touch, safe areas |
+| `13-mobile-first-responsive.mdc` | `*.tsx`, `*.css` — mobile-first breakpoints, fluid layout, touch, verify 375/768/1440 |
 | `14-ui-ux-best-practices.mdc` | `*.tsx`, `*.css` — hierarchy, feedback, forms, motion, trust |

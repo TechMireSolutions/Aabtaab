@@ -71,7 +71,7 @@ Every public write endpoint must include:
 * Safe error responses.
 * Origin or request-context checks where applicable.
 * Protection against automated abuse (e.g., honeypot fields where forms are public).
-* Cloudflare Turnstile **when keys are configured** — verify `token` via `https://challenges.cloudflare.com/turnstile/v0/siteverify` on endpoints that collect it (contact). Routes without Turnstile widgets (e.g. `/api/review`) still require Zod + rate limiting.
+* Cloudflare Turnstile **when keys are configured** — verify via `verifyTurnstileOrSkip` on write endpoints that collect a token (**`/api/contact`** and **`/api/review`**). Always require Zod + rate limiting whether Turnstile keys are set or not.
 
 * Prefer **Upstash Redis** for abuse-sensitive routes (`lib/rate-limit.ts`). Set `UPSTASH_REDIS_*` in production when possible (**strongly recommended**; optional per `techstack.md`).
 * In-memory fallback is for local/dev when Redis is unset, and as a careful fallback when Redis errors (log to Sentry).

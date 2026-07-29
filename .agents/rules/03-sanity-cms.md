@@ -56,8 +56,7 @@ npm run migrate:sanity       # apply on server before build when schema/data cha
 
 ## Revalidation
 
-Webhook: `POST /api/revalidate` → `lib/revalidate.ts` + `CACHE_TAGS`.
-Set up Sanity webhooks connected to a Next.js API route (`/api/revalidate`) using `revalidatePath` or `revalidateTag`. This ensures search engines see fresh content dynamically without requiring full application rebuilds on Hetzner.
+Webhook: `POST /api/revalidate` → `lib/revalidate.ts` + `CACHE_TAGS` via **`revalidateTag`** (with `REVALIDATE_OPTIONS = { expire: 0 }`). Do **not** add broad `revalidatePath` for CMS publishes unless a product need is explicit. This keeps search engines fresh without full application rebuilds on Hetzner.
 
 Supported `_type` values include: `post`, `course`, `service`, `event`, `page`, `siteSettings`, `homepageSettings`, `navigation`, `testimonial`.
 

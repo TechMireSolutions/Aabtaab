@@ -8,7 +8,7 @@ description: >-
 
 # Content Sections
 
-**Styling:** skill `tailwind-ui` · **CMS fields:** rule `03-sanity-cms` · **DRY:** rule `08-dry-policy`
+**Styling:** skill `tailwind-ui` · **Responsive/UX:** skill `mobile-responsive-ux` (rules `13`/`14`) · **CMS fields:** rule `03-sanity-cms` · **DRY:** rule `08-dry-policy`
 
 ## Section library (`components/content/`)
 
@@ -77,3 +77,4 @@ Pass `footer={<SiteContactFooter site={site} />}` on course **and** service CTA 
 6. One job per section: one heading + short support copy; compose rather than mega-sections
 7. Extract at **2+** uses (`08-dry-policy`); match `tailwind-ui` utilities
 8. Verify keyboard/`aria` for interactive sections (FAQ accordion, etc.)
+9. Mobile-first layout: stack on base, enhance at `md:`/`lg:`; check **375 / 768 / 1440** (rule `13`)

@@ -95,6 +95,7 @@ getDefaultOgImageUrl(); // https://…/og-default.png
 6. Wire webhook revalidation tag if CMS-backed
 7. Accessibility: Arabic/Urdu texts have `lang` + `dir="rtl"`; inputs have labels/`aria-label`
 8. Canonical self-reference via builders; no trailing slash (`trailingSlash: false`)
+9. Layout: mobile-first (rule `13`) — no horizontal overflow; spot-check **375 / 768 / 1440**
 
 ## Verify
 ```bash

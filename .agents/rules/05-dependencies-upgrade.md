@@ -29,7 +29,7 @@ Apply when upgrading deps, touching `package.json`, CI, or Node engine constrain
 3. **Upgrade in groups:** framework → CMS → styling → dev tooling (not everything at once).
 4. **Install:** `npm install` — commit lockfile changes with the upgrade.
 5. **Security:** `npm audit` — use `npm audit fix`; never `--force` if it downgrades `next` or `sanity`.
-6. **Verify:** `npm run lint`, `npm run test`, then `npm run build` (Sanity env vars required).
+6. **Verify:** `npm run lint`, `npm run typecheck`, `npm run test`, then `npm run build` (Sanity env vars required).
 
 ## Version policy
 
@@ -66,7 +66,7 @@ Apply when upgrading deps, touching `package.json`, CI, or Node engine constrain
 * PM2 runs in **fork** mode (`instances: 1` via `ecosystem.config.cjs`).
 * Entry: `deploy/runtime.cjs` → `next start` on port **3000** (`server.config.cjs`).
 * On deploy: always **`pm2 delete aabtaab-next`** then **`pm2 start ecosystem.config.cjs --update-env`** — do **not** use `startOrRestart` or `pm2 reload` (stale `args` risk).
-* Keep app processes free of durable local state (sessions, queues). Rate limits: prefer Redis in production; memory fallback is local/dev only (see `09-security`).
+* Keep app processes free of durable local state (sessions, queues). Rate limits: prefer Redis in production; in-memory fallback when Redis is unset (local/dev) **and** as a careful fallback when Redis errors (log to Sentry) — see `09-security` / `techstack.md`. Do not rely on process memory as the sole production limiter under PM2.
 * Do not expose port 3000 directly to the public internet; use Hetzner firewall rules to restrict traffic to Cloudflare origin IP addresses.
 * Run the Node application process under a restricted system user rather than `root`.
 

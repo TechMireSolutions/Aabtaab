@@ -15,24 +15,37 @@ description: >-
 ## Workflow
 
 1. **Read** existing page/shell/section before inventing layout — compose `PageHeader`, heroes, content sections, footers.
-2. **Style mobile first** (base classes), then layer `sm:` / `md:` / `lg:`.
-3. **Use design-system utilities** (`container-*`, `section-y*`, `btn-*`, `input-field`, `card-*`, `pb-fab-safe`) — see rule `02`.
-4. **Check touch:** ~44px targets, no hover-only actions, safe areas for FAB/header.
-5. **Check UX:** one job per section, one primary CTA, full feedback states, labels + focus.
-6. **Verify** at ~375px width and with Playwright `mobile-chrome`.
+2. **Style mobile first** (base = `< 640px`), then layer `sm:` (640) → `md:` (768) → `lg:` (1024) → `xl:` (1280).
+3. **Fluid only** — no fixed px page widths; use `container-*`, `%`/`rem`/`max-w-*`, Grid/Flex, `min-w-0`.
+4. **Nav:** below `md` use hamburger + drawer (`mobile-nav-*`); desktop bar from `md:` when that is the Header pattern.
+5. **Touch:** ≥44×44px targets; inputs ≥16px (`input-field`); safe areas for FAB/header.
+6. **UX:** one job per section, one primary CTA, full feedback states, labels + focus.
+7. **Verify** at **375 / 768 / 1440** (+ Playwright `mobile-chrome`).
+
+## Breakpoints (quick ref)
+
+| Prefix | Min-width | Role |
+|--------|-----------|------|
+| _(base)_ | `< 640px` | Default mobile |
+| `sm:` | `640px` | Large phone / small tablet |
+| `md:` | `768px` | Tablet; desktop nav threshold |
+| `lg:` | `1024px` | Laptop |
+| `xl:` | `1280px` | Large desktop |
 
 ## Quick checklist
 
 ### Responsive layout
-- [ ] No horizontal page overflow
-- [ ] Columns stack on small screens; multi-column from `md:`/`lg:` only when needed
+- [ ] No horizontal page overflow (`max-w-full`, `min-w-0`, no `w-[1200px]`-style chrome)
+- [ ] Columns stack on base; multi-column from `md:` / `lg:` only when needed
 - [ ] Containers from `@utility` — not ad-hoc `max-w-* mx-auto px-*`
 - [ ] Sticky header / FAB don’t cover CTAs (`scroll-mt-header`, `pb-fab-safe`)
-- [ ] Tables/media scroll or reflow safely (`table-shell`, `overflow-x-auto`)
+- [ ] Tables: `table-shell` / `overflow-x-auto` **or** card reflow on small screens
+- [ ] Images/video constrained (`max-w-full` / `next/image` + aspect utilities)
 
 ### Touch & a11y
-- [ ] Tap targets ≈ 44×44px on mobile
+- [ ] Tap targets ≥ 44×44px on mobile
 - [ ] Inputs ≥16px (`input-field`)
+- [ ] Nav < 768px is drawer/hamburger — not crushed desktop links
 - [ ] Keyboard + Escape for drawers/menus; `aria-label` on icon buttons
 - [ ] `prefers-reduced-motion` / `motion-safe:` for decorative motion
 
@@ -41,15 +54,18 @@ description: >-
 - [ ] Idle / loading / success / error / empty handled without layout jump
 - [ ] Essential content not hidden on mobile
 - [ ] Empty states offer a next step
+- [ ] No text overlap/clip at 375 / 768 / 1440
 
 ## Common fixes
 
 | Problem | Fix |
 |---------|-----|
 | Desktop-first grid crushed on phone | Base `grid-cols-1`; `md:grid-cols-2` / `lg:grid-cols-3` |
+| Fixed `w-[1200px]` overflow | `w-full max-w-*` / `container-*` |
 | Hover-only reveal | Always-visible control or tap toggle |
 | iOS input zoom | Ensure `input-field` / ≥16px font |
 | FAB covers footer CTA | `pb-fab-safe` on `<main>`; footer Stay-connected band also uses `pb-fab-safe` under the CTA on small screens |
+| Wide table blows layout | `table-shell` + `overflow-x-auto` or stacked cards |
 | Competing primary buttons | One `btn-primary`; rest secondary/ghost |
 | Soft empty page | Real empty state + links (`SearchEmptyState` / `empty-state`) |
 | Dense footer link rows | `footer-nav-link` / `footer-contact-link` (`min-h-11` on mobile) |
@@ -67,3 +83,5 @@ description: >-
 npm run lint
 npm run test:e2e   # includes mobile-chrome
 ```
+
+Manual: **375px**, **768px**, **1440px** — no horizontal scrollbar, no clipped text, touch-usable controls.

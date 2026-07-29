@@ -22,7 +22,7 @@
 | `10-performance` | Caching, images, fonts, CWV |
 | `11-error-handling-observability` | Errors, logging, Sentry |
 | `12-testing` | Vitest + Playwright (unit + E2E) |
-| `13-mobile-first-responsive` | Mobile-first layout, touch, safe areas |
+| `13-mobile-first-responsive` | Mobile-first breakpoints, fluid layout, touch, verify 375/768/1440 |
 | `14-ui-ux-best-practices` | Hierarchy, feedback, forms UX, motion, trust |
 
 ## Skills (17)
@@ -71,10 +71,10 @@ When docs disagree, priority order:
 2. **Rules** (`.cursor/rules/`) — standards and constraints
 3. **Skills** (`.cursor/skills/`) — task workflows (must match rules)
 
-Key policies (must stay aligned with techstack):
+Key policies (aligned with **techstack.md** for stack facts; standards live in **rules** when techstack is silent):
 - Caching: `sanityFetch` in `sanity/lib/fetch.ts` only — no extra `unstable_cache`
 - Mutations: Route Handlers (`app/api/*`); React Compiler on — skip routine memoization
-- CSP: Report-Only until intentionally enforced
+- CSP: Report-Only until intentionally enforced (`09-security` / `next.config.ts`)
 - Styling: Tailwind v4 + `brand-*` / `gold-*` via `app/globals.css`
 - CMS fields: migrated names only (`faqItems`, `seo`, `ctaPrimaryLabel`)
 - Search: `/search?q=…` (not `/posts?q=…`); sitemap via `getSitemapSlugs()`
@@ -82,7 +82,8 @@ Key policies (must stay aligned with techstack):
 - Rate limit: Upstash Redis **optional but strongly recommended** in production; memory fallback for local / Redis errors
 - Secrets: timing-safe compares when tightening webhook/preview auth; never ship write tokens to the client
 - A11y: WCAG 2.2 AA intent; missing CMS detail docs → `notFound()`; new-tab links via `OpensInNewTab` / labeled `aria-label`
-- Mobile/UI: mobile-first (`13`); UI/UX patterns (`14`); skill `mobile-responsive-ux`; forced-dark footer uses `footer-*` utilities
+- Mobile/UI: mobile-first breakpoints base/`sm:640`/`md:768`/`lg:1024`/`xl:1280` (`13`); UI/UX (`14`); skill `mobile-responsive-ux`; verify **375 / 768 / 1440**; forced-dark footer uses `footer-*` utilities
+- Error UI: `app/(site)/{error,not-found,loading}.tsx` + root `not-found` / `global-error` exist — extend, don’t recreate
 - PM2: `pm2 delete` then `pm2 start` (not `reload` / `startOrRestart`)
 - Types: `npm run typecheck` authoritative (`ignoreBuildErrors` on build)
 - Tests: colocated `*.test.ts` + `e2e/{smoke,navigation,seo,contact}.spec.ts` (desktop + mobile)

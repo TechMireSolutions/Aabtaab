@@ -30,7 +30,7 @@ description: >-
 
 ### 4. Cloudflare Turnstile
 - Optional when keys are set. Load widget only if `NEXT_PUBLIC_TURNSTILE_SITE_KEY` exists.
-- Verify server-side with `verifyTurnstileOrSkip` (`lib/security/verify-turnstile.ts`).
+- Verify server-side with `verifyTurnstileOrSkip` (`lib/security/verify-turnstile.ts`) on **`/api/contact`** and **`/api/review`** when keys are set.
 - Client widget SSOT: `TurnstileWidget` + `resetTurnstile` (`components/ui/TurnstileWidget.tsx`).
 - Reset widget after success/error via `resetTurnstile()`.
 - When tightening CSP (currently Report-Only), allow `https://challenges.cloudflare.com`.

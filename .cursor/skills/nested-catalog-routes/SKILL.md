@@ -72,6 +72,7 @@ return (
 
 - Unit: `lib/paths.test.ts`, `lib/catalog/nested-children.test.ts`, `lib/catalog/nested-page.test.ts`, `lib/urls.test.ts`
 - E2E smoke: `/online-courses`, `/services` load in `e2e/smoke.spec.ts`
+- Layout: nested shells must stack cleanly on mobile (rule `13` — verify **375 / 768 / 1440**)
 
 ## Sitemap
 
