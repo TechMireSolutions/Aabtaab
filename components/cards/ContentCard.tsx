@@ -41,7 +41,7 @@ export default function ContentCard({
         aria-label={title}
         className="block shrink-0 overflow-hidden"
       >
-        <div className="relative aspect-3/2 w-full bg-slate-100">
+        <div className="relative aspect-3/2 w-full bg-slate-100 dark:bg-slate-800">
           {image ? (
             <Image
               src={image}
@@ -52,9 +52,9 @@ export default function ContentCard({
               className="hover-scale-image"
             />
           ) : (
-            <div className="flex h-full w-full items-center justify-center bg-linear-to-br from-brand-50 via-brand-50 to-slate-100">
+            <div className="flex h-full w-full items-center justify-center bg-linear-to-br from-brand-50 via-brand-50 to-slate-100 dark:from-slate-800 dark:via-slate-800 dark:to-slate-900">
               <span
-                className="text-3xl font-bold text-brand-300/80 select-none"
+                className="text-3xl font-bold text-brand-300/80 dark:text-slate-600 select-none"
                 aria-hidden="true"
               >
                 {title.charAt(0).toUpperCase()}

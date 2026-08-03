@@ -360,7 +360,7 @@
 }
 
 @utility section-muted {
-  @apply py-8 sm:py-12 bg-slate-50/40;
+  @apply py-8 sm:py-12 bg-slate-50/40 dark:bg-slate-950;
 }
 
 @utility section-y-lg {
