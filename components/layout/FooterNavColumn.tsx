@@ -20,7 +20,7 @@ export default function FooterNavColumn({
       <h3 id={id} className="footer-heading">
         {title}
       </h3>
-      <ul className="space-y-0 sm:space-y-1">
+      <ul className="grid grid-cols-2 gap-x-4 sm:block sm:space-y-1">
         {items.map(({ label, href, external }) => (
           <FooterNavLink key={href} href={href} external={external}>
             {label}

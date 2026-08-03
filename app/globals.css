@@ -735,7 +735,7 @@
 }
 
 @utility footer-contact-static {
-  @apply flex min-h-11 items-start gap-3 py-2.5 text-sm text-slate-400 sm:min-h-0 sm:py-2;
+  @apply flex items-start gap-3 py-1.5 text-sm text-slate-400 sm:min-h-0 sm:py-2;
 }
 
 @utility footer-social-btn {

@@ -51,7 +51,7 @@ export default function Footer({
       <FooterCtaBand />
 
       <div className="container-page section-y lg:py-16">
-        <div className="grid grid-cols-1 gap-x-8 gap-y-8 md:grid-cols-2 md:gap-y-10 lg:grid-cols-12 lg:gap-y-12">
+        <div className="grid grid-cols-1 gap-x-8 gap-y-6 md:grid-cols-2 md:gap-y-10 lg:grid-cols-12 lg:gap-y-12">
           <FooterBrandColumn
             siteName={siteName}
             logoUrl={logoUrl}

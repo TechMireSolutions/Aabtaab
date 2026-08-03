@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Search } from "lucide-react";
 import { usePathname } from "next/navigation";
 import NavLinks from "@/components/layout/NavLinks";
 import SiteBrandLogo from "@/components/layout/SiteBrandLogo";
@@ -18,6 +18,7 @@ interface MobileNavSidebarProps {
   siteName: string;
   logoUrl?: string | null;
   navLinks: NavItem[];
+  onSearchClick?: () => void;
 }
 
 const FOCUSABLE =
@@ -27,6 +28,7 @@ export default function MobileNavSidebar({
   siteName,
   logoUrl,
   navLinks,
+  onSearchClick,
 }: MobileNavSidebarProps) {
   const [open, setOpen] = useState(false);
   const panelRef = useRef<HTMLElement>(null);
@@ -104,7 +106,7 @@ export default function MobileNavSidebar({
   }, [open]);
 
   return (
-    <div className="lg:hidden">
+    <div className="lg:hidden ml-auto flex items-center gap-2">
       <button
         ref={triggerRef}
         type="button"
@@ -148,14 +150,29 @@ export default function MobileNavSidebar({
                   labelId={titleId}
                 />
               </Link>
-              <button
-                type="button"
-                onClick={closeAndFocusTrigger}
-                aria-label="Close navigation menu"
-                className={TW_MOBILE_CLOSE_BTN}
-              >
-                <X className="size-4.5" aria-hidden="true" />
-              </button>
+              <div className="flex items-center gap-2">
+                {onSearchClick && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      close();
+                      onSearchClick();
+                    }}
+                    aria-label="Search"
+                    className="flex size-11 items-center justify-center rounded-full text-gray-500 dark:text-slate-400 transition-colors hover:bg-gray-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2"
+                  >
+                    <Search className="size-5" aria-hidden="true" />
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={closeAndFocusTrigger}
+                  aria-label="Close navigation menu"
+                  className={TW_MOBILE_CLOSE_BTN}
+                >
+                  <X className="size-4.5" aria-hidden="true" />
+                </button>
+              </div>
             </div>
 
             <nav aria-label="Main navigation" className={TW_MOBILE_NAV_SCROLL}>

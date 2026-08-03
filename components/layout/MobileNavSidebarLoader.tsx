@@ -22,6 +22,7 @@ interface MobileNavSidebarLoaderProps {
   siteName: string;
   logoUrl?: string | null;
   navLinks: NavItem[];
+  onSearchClick?: () => void;
 }
 
 export default function MobileNavSidebarLoader(props: MobileNavSidebarLoaderProps) {

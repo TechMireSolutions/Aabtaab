@@ -62,12 +62,6 @@ export default function Header({
           className={`container-page flex items-center gap-2 lg:gap-8 transition-all duration-300 ${scrolled ? "h-14" : "h-header"
             }`}
         >
-          <MobileNavSidebarLoader
-            siteName={siteName}
-            logoUrl={logoUrl}
-            navLinks={navLinks}
-          />
-
           <Link
             href="/"
             aria-label={siteName}
@@ -80,6 +74,15 @@ export default function Header({
               priority
             />
           </Link>
+
+          <MobileNavSidebarLoader
+            siteName={siteName}
+            logoUrl={logoUrl}
+            navLinks={navLinks}
+            onSearchClick={() => setSearchOpen(true)}
+          />
+
+
 
           <nav
             aria-label="Main navigation"
@@ -99,7 +102,7 @@ export default function Header({
             type="button"
             onClick={() => setSearchOpen(true)}
             aria-label="Search"
-            className="ml-auto flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white text-slate-600 transition-colors hover:border-gray-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 dark:hover:border-slate-700 lg:ml-0"
+            className="hidden lg:flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white text-slate-600 transition-colors hover:border-gray-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 dark:hover:border-slate-700"
           >
             <Search className="size-5" aria-hidden="true" />
           </button>
