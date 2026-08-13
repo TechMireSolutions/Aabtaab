@@ -2,6 +2,7 @@ import type { NavItem } from "@/types/site-navigation";
 
 /** Default main nav when CMS header links are empty */
 export const FALLBACK_NAV: NavItem[] = [
+  { label: "Home", href: "/" },
   { label: "Online Classes", href: "/online-courses" },
   { label: "Services", href: "/services" },
   { label: "Events", href: "/events" },
@@ -52,7 +53,7 @@ export function buildHeaderNavLinks(
       external: !!darulQuranUrl,
     });
   }
-  return withoutHomeNavItems(base);
+  return base;
 }
 
 /** Search empty / quick-nav chips (SSOT for palette + search page) */

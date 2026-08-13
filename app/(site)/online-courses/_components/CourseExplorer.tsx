@@ -9,6 +9,7 @@ import { formatPriceDuration, nestedListCtaLabel, COURSE_NESTED_CTA_LABELS } fro
 import {
   formatSubjectLabel,
   normalizePublicTitle,
+  COURSE_SUBJECT_LABELS,
 } from "@/lib/catalog/subjects";
 
 interface CourseExplorerProps {
@@ -21,12 +22,17 @@ export default function CourseExplorer({ courses }: CourseExplorerProps) {
   const [selectedInstructor, setSelectedInstructor] = useState("");
 
   // Dynamically derive unique filter lists from course objects
+  // Use predefined subjects as base, plus any dynamically found ones
   const subjects = useMemo(() => {
-    return Array.from(new Set(courses.map((c) => c.subject).filter(Boolean))) as string[];
+    const predefined = Object.keys(COURSE_SUBJECT_LABELS);
+    const dynamic = courses.map((c) => c.subject).filter(Boolean) as string[];
+    return Array.from(new Set([...predefined, ...dynamic]));
   }, [courses]);
 
   const instructors = useMemo(() => {
-    return Array.from(new Set(courses.map((c) => c.instructor).filter(Boolean))) as string[];
+    const dynamic = courses.map((c) => c.instructor).filter(Boolean) as string[];
+    // Add dummy scholars as requested
+    return Array.from(new Set(["Maulana Ali", "Maulana Hasan", ...dynamic]));
   }, [courses]);
 
   // Compute filtered courses list
@@ -35,7 +41,9 @@ export default function CourseExplorer({ courses }: CourseExplorerProps) {
       const matchesSearch =
         searchQuery.trim() === "" ||
         course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (course.excerpt && course.excerpt.toLowerCase().includes(searchQuery.toLowerCase()));
+        (course.excerpt && course.excerpt.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (course.subject && formatSubjectLabel(course.subject).toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (course.instructor && course.instructor.toLowerCase().includes(searchQuery.toLowerCase()));
 
       const matchesSubject =
         selectedSubject === "" ||

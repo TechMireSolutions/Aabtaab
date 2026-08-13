@@ -25,9 +25,9 @@ describe("withoutHomeNavItems", () => {
 });
 
 describe("buildHeaderNavLinks", () => {
-  it("uses fallback nav and drops Home", () => {
+  it("uses fallback nav and keeps Home", () => {
     const links = buildHeaderNavLinks(undefined);
-    expect(links.some((l) => isHomeNavItem(l))).toBe(false);
+    expect(links.some((l) => isHomeNavItem(l))).toBe(true);
     expect(links.some((l) => /dar\s*ul\s*quran/i.test(l.label))).toBe(true);
   });
 

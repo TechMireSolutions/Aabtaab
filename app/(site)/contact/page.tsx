@@ -126,11 +126,13 @@ export default async function ContactPage() {
               )}
             </div>
 
-            <ContactForm
-              submitLabel={submitLabel}
-              courses={courses}
-              services={services}
-            />
+            <div className="lg:col-span-3">
+              <ContactForm
+                submitLabel={submitLabel}
+                courses={courses}
+                services={services}
+              />
+            </div>
           </div>
         </div>
       </div>
