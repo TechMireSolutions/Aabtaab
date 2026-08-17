@@ -28,6 +28,7 @@ export default function HomeServicesCarousel({
           .join(" · ")
       : (s.price ?? null),
     href: `/services/${s.slug.current}`,
+    ctaHref: "/contact",
     badge: null,
     ctaLabel: SERVICE_NESTED_CTA_LABELS.leaf,
   }));

@@ -8,6 +8,7 @@ interface ContentCardProps {
   title: string;
   description?: string | null;
   href: string;
+  ctaHref?: string;
   ctaLabel?: string;
   badge?: string | null;
   active?: boolean;
@@ -19,6 +20,7 @@ export default function ContentCard({
   title,
   description,
   href,
+  ctaHref,
   ctaLabel = SERVICE_NESTED_CTA_LABELS.leaf,
   badge,
   active = false,
@@ -78,12 +80,12 @@ export default function ContentCard({
         </h3>
 
         {description && (
-          <p className="mb-4 line-clamp-2 flex-1 text-sm-plus text-[var(--color-text-muted)] leading-relaxed">
+           <p className="mb-4 line-clamp-2 flex-1 text-sm-plus text-[var(--color-text-muted)] leading-relaxed">
             {description}
           </p>
         )}
 
-        <Link href={href} className="link-brand group/cta mt-auto inline-flex items-center gap-1 pt-0.5">
+        <Link href={ctaHref || href} className="link-brand group/cta mt-auto inline-flex items-center gap-1 pt-0.5">
           {ctaLabel}
           <ArrowUpRight
             size={12}

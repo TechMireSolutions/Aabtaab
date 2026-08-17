@@ -17,6 +17,7 @@ export default function ServicesGrid({ services }: ServicesGridProps) {
         <ContentCard
           key={service._id}
           href={`/services/${service.slug.current}`}
+          ctaHref="/contact"
           image={service.icon ? cardImageUrl(service.icon) : null}
           title={service.title}
           description={service.excerpt || service.price || null}

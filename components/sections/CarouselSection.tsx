@@ -12,6 +12,7 @@ export interface CarouselItem {
   title: string;
   description?: string | null;
   href: string;
+  ctaHref?: string;
   badge?: string | null;
   ctaLabel?: string;
 }
@@ -159,6 +160,7 @@ export default function CarouselSection({
                   title={item.title}
                   description={item.description}
                   href={item.href}
+                  ctaHref={item.ctaHref}
                   badge={item.badge}
                   ctaLabel={item.ctaLabel}
                   lazyImage={deferImages}

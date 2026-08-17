@@ -27,6 +27,7 @@ export default function HomeCoursesCarousel({
     title: normalizePublicTitle(c.title),
     description: formatPriceDuration(c.price, c.duration),
     href: `/online-courses/${c.slug.current}`,
+    ctaHref: "/contact",
     badge: c.subject ? formatSubjectLabel(c.subject) : null,
     ctaLabel: COURSE_NESTED_CTA_LABELS.leaf,
   }));

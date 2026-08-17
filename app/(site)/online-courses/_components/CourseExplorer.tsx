@@ -150,9 +150,10 @@ export default function CourseExplorer({ courses }: CourseExplorerProps) {
       ) : (
         <div className="grid-catalog-cards">
           {filteredCourses.map((course) => (
-            <ContentCard
+              <ContentCard
               key={course._id}
               href={`/online-courses/${course.slug.current}`}
+              ctaHref="/contact"
               image={
                 course.featuredImage ? cardImageUrl(course.featuredImage) : null
               }
