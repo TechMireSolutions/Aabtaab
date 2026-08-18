@@ -40,7 +40,7 @@ export default function CourseExplorer({ courses }: CourseExplorerProps) {
     return courses.filter((course) => {
       const matchesSearch =
         searchQuery.trim() === "" ||
-        course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        normalizePublicTitle(course.title).toLowerCase().includes(searchQuery.toLowerCase()) ||
         (course.excerpt && course.excerpt.toLowerCase().includes(searchQuery.toLowerCase())) ||
         (course.subject && formatSubjectLabel(course.subject).toLowerCase().includes(searchQuery.toLowerCase())) ||
         (course.instructor && course.instructor.toLowerCase().includes(searchQuery.toLowerCase()));

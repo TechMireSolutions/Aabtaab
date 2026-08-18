@@ -17,7 +17,7 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
   const [keywordMatch, setKeywordMatch] = useState<KeywordMatch | null>(null);
   const [suggestions, setSuggestions] = useState<KeywordMatch[]>([]);
   const [results, setResults] = useState<SiteSearchResult[]>([]);
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState(-1);
   const [, startTransition] = useTransition();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -74,7 +74,7 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
   const [prevTotal, setPrevTotal] = useState(totalItems);
   if (totalItems !== prevTotal) {
     setPrevTotal(totalItems);
-    setSelectedIndex(0);
+    setSelectedIndex(-1);
   }
 
   const handleSelect = useCallback(
@@ -100,16 +100,20 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
       } else if (e.key === "ArrowDown") {
         e.preventDefault();
         setSelectedIndex((prev) =>
-          totalItems > 0 ? (prev + 1) % totalItems : 0,
+          totalItems > 0 ? (prev + 1) % totalItems : -1,
         );
       } else if (e.key === "ArrowUp") {
         e.preventDefault();
         setSelectedIndex((prev) =>
-          totalItems > 0 ? (prev - 1 + totalItems) % totalItems : 0,
+          totalItems > 0 ? (prev === -1 ? totalItems - 1 : (prev - 1 + totalItems) % totalItems) : -1,
         );
       } else if (e.key === "Enter") {
         e.preventDefault();
-        if (keywordMatch && selectedIndex === 0) {
+        if (selectedIndex === -1) {
+          if (query.trim()) {
+            handleSelect(`/search?q=${encodeURIComponent(query)}`);
+          }
+        } else if (keywordMatch && selectedIndex === 0) {
           handleSelect(keywordMatch.href);
         } else {
           const adjustedIndex = keywordMatch
@@ -138,6 +142,7 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
     results,
     onClose,
     handleSelect,
+    query,
   ]);
 
   useEffect(() => {
