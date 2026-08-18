@@ -96,17 +96,17 @@ export default function HeroSection({
       <div className="pointer-events-none absolute -left-24 top-1/2 size-hero-glow -translate-y-1/2 rounded-full bg-hero-glow" />
 
       {heroImage && (
-        <div className="pointer-events-none absolute inset-0 hidden select-none md:inset-auto md:top-0 md:right-0 md:block md:h-full md:w-hero-image">
+        <div className="pointer-events-none absolute inset-0 select-none md:inset-auto md:top-0 md:right-0 md:h-full md:w-hero-image">
           <Image
             src={heroImage}
             alt={imageAlt}
             fill
-            sizes="(max-width: 768px) 0px, 55vw"
+            sizes="(max-width: 768px) 100vw, 55vw"
             priority
             fetchPriority="high"
             className="object-cover object-left-top"
           />
-          <div className="absolute inset-0 bg-linear-to-r from-white via-white/60 to-transparent dark:from-slate-950 dark:via-slate-950/60" />
+          <div className="absolute inset-0 bg-linear-to-r from-white via-white/90 to-white/20 dark:from-slate-950 dark:via-slate-950/90 dark:to-slate-950/20 md:via-white/60 md:to-transparent md:dark:via-slate-950/60 md:dark:to-transparent" />
           <div className="absolute inset-0 bg-linear-to-t from-white/15 to-transparent dark:from-slate-950/15" />
         </div>
       )}

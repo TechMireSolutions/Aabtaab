@@ -16,13 +16,34 @@ interface CourseExplorerProps {
   courses: TopLevelCourseSummary[];
 }
 
+function fuzzyMatch(str: string | null | undefined, query: string): boolean {
+  if (!str) return false;
+  const s = str.toLowerCase();
+  const q = query.toLowerCase().trim();
+  if (s.includes(q)) return true;
+  
+  const sWords = s.split(/\s+/);
+  const qWords = q.split(/\s+/).filter(Boolean);
+  if (qWords.length > 0 && qWords.every((qw) => sWords.some((sw) => sw.includes(qw)))) {
+    return true;
+  }
+  
+  const sClean = s.replace(/[^a-z0-9]/g, "");
+  const qClean = q.replace(/[^a-z0-9]/g, "");
+  if (!qClean) return false;
+  
+  let qIdx = 0;
+  for (let i = 0; i < sClean.length && qIdx < qClean.length; i++) {
+    if (sClean[i] === qClean[qIdx]) qIdx++;
+  }
+  return qIdx === qClean.length;
+}
+
 export default function CourseExplorer({ courses }: CourseExplorerProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedInstructor, setSelectedInstructor] = useState("");
 
-  // Dynamically derive unique filter lists from course objects
-  // Use predefined subjects as base, plus any dynamically found ones
   const subjects = useMemo(() => {
     const predefined = Object.keys(COURSE_SUBJECT_LABELS);
     const dynamic = courses.map((c) => c.subject).filter(Boolean) as string[];
@@ -31,19 +52,17 @@ export default function CourseExplorer({ courses }: CourseExplorerProps) {
 
   const instructors = useMemo(() => {
     const dynamic = courses.map((c) => c.instructor).filter(Boolean) as string[];
-    // Add dummy scholars as requested
     return Array.from(new Set(["Maulana Ali", "Maulana Hasan", ...dynamic]));
   }, [courses]);
 
-  // Compute filtered courses list
   const filteredCourses = useMemo(() => {
     return courses.filter((course) => {
       const matchesSearch =
         searchQuery.trim() === "" ||
-        normalizePublicTitle(course.title).toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (course.excerpt && course.excerpt.toLowerCase().includes(searchQuery.toLowerCase())) ||
-        (course.subject && formatSubjectLabel(course.subject).toLowerCase().includes(searchQuery.toLowerCase())) ||
-        (course.instructor && course.instructor.toLowerCase().includes(searchQuery.toLowerCase()));
+        fuzzyMatch(normalizePublicTitle(course.title), searchQuery) ||
+        fuzzyMatch(course.excerpt, searchQuery) ||
+        fuzzyMatch(formatSubjectLabel(course.subject), searchQuery) ||
+        fuzzyMatch(course.instructor, searchQuery);
 
       const matchesSubject =
         selectedSubject === "" ||
