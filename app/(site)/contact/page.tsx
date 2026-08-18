@@ -1,7 +1,19 @@
 import dynamic from "next/dynamic";
 import PageHeader from "@/components/layout/PageHeader";
 import ProseSection from "@/components/portable-text/ProseSection";
-import { FacebookIcon, YoutubeIcon } from "@/components/icons/SocialIcons";
+import {
+  FacebookIcon,
+  YoutubeIcon,
+  XIcon,
+  InstagramIcon,
+} from "@/components/icons/SocialIcons";
+
+const SOCIAL_ICONS = {
+  facebook: FacebookIcon,
+  youtube: YoutubeIcon,
+  x: XIcon,
+  instagram: InstagramIcon,
+} as const;
 import { defineCmsPageMetadata } from "@/lib/cms/page";
 import {
   getCmsPage,
@@ -107,11 +119,10 @@ export default async function ContactPage() {
                       {...EXTERNAL_LINK_PROPS}
                       className="chip-outline"
                     >
-                      {link.key === "facebook" ? (
-                        <FacebookIcon size={13} />
-                      ) : (
-                        <YoutubeIcon size={13} />
-                      )}{" "}
+                      {(() => {
+                        const Icon = SOCIAL_ICONS[link.key as keyof typeof SOCIAL_ICONS];
+                        return Icon ? <Icon size={13} /> : null;
+                      })()}{" "}
                       {link.label}
                       <OpensInNewTab />
                     </a>

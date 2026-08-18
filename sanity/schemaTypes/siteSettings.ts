@@ -51,6 +51,8 @@ export const siteSettings = defineType({
     }),
     defineField({ name: "facebook", type: "url" }),
     defineField({ name: "youtube", type: "url" }),
+    defineField({ name: "instagram", type: "url" }),
+    defineField({ name: "x", type: "url", title: "X (Twitter) URL" }),
     defineField({ name: "whatsapp", type: "string", title: "WhatsApp Number" }),
     defineField({
       name: "darulQuranUrl",

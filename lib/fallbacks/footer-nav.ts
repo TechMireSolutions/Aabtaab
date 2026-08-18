@@ -97,7 +97,7 @@ export interface FooterContactItem {
 }
 
 export interface FooterSocialLink {
-  key: "facebook" | "youtube" | "darulQuran";
+  key: "facebook" | "youtube" | "darulQuran" | "instagram" | "x";
   href: string;
   label: string;
   variant: "icon" | "pill";
@@ -302,6 +302,22 @@ export function buildFooterSocialLinks(
       key: "youtube",
       href: settings.youtube,
       label: "YouTube",
+      variant: "icon",
+    });
+  }
+  if (settings?.instagram) {
+    links.push({
+      key: "instagram",
+      href: settings.instagram,
+      label: "Instagram",
+      variant: "icon",
+    });
+  }
+  if (settings?.x) {
+    links.push({
+      key: "x",
+      href: settings.x,
+      label: "X (Twitter)",
       variant: "icon",
     });
   }

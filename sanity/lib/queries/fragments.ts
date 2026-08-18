@@ -14,7 +14,7 @@ export const SITE_SETTINGS_FRAGMENT = `
   siteName, description, favicon, logo, tagline,
   siteUrl, twitterHandle,
   email, phone, address, addressLink, workingHours, city, state, country,
-  facebook, youtube, whatsapp, darulQuranUrl, donateUrl,
+  facebook, youtube, instagram, x, whatsapp, darulQuranUrl, donateUrl,
   searchPlaceholder, contactFormSubjects, contactFormSubmitLabel,
   donateArabicVerse, donateHowToHeading, donateHowToText,
   donateClosingMessage, donatePayOnlineLabel, donateContactLabel,

@@ -210,9 +210,12 @@ async function SiteSchemas() {
         addressCountry: settings.country || "US",
       },
     }),
-    sameAs: [settings?.facebook, settings?.youtube].filter(
-      Boolean,
-    ) as string[],
+    sameAs: [
+      settings?.facebook,
+      settings?.youtube,
+      settings?.instagram,
+      settings?.x,
+    ].filter(Boolean) as string[],
   };
 
   return (

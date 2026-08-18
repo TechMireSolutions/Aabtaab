@@ -8,6 +8,8 @@ export interface SiteSettings {
   twitterHandle?: string;
   facebook?: string;
   youtube?: string;
+  instagram?: string;
+  x?: string;
   whatsapp?: string;
   darulQuranUrl?: string;
   donateUrl?: string;

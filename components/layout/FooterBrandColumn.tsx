@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ExternalLink } from "lucide-react";
 import type { FooterSocialLink } from "@/lib/fallbacks/footer-nav";
 import { FOOTER_SECTION_LABELS } from "@/lib/fallbacks/footer-nav";
-import { FacebookIcon, YoutubeIcon } from "@/components/icons/SocialIcons";
+import { FacebookIcon, YoutubeIcon, XIcon, InstagramIcon } from "@/components/icons/SocialIcons";
 import SiteBrandLogo from "@/components/layout/SiteBrandLogo";
 import OpensInNewTab from "@/components/ui/OpensInNewTab";
 import { EXTERNAL_LINK_PROPS } from "@/lib/urls";
@@ -10,6 +10,8 @@ import { EXTERNAL_LINK_PROPS } from "@/lib/urls";
 const SOCIAL_ICONS = {
   facebook: FacebookIcon,
   youtube: YoutubeIcon,
+  x: XIcon,
+  instagram: InstagramIcon,
 } as const;
 
 interface FooterBrandColumnProps {
