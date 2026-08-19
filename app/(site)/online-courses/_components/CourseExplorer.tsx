@@ -39,6 +39,23 @@ function fuzzyMatch(str: string | null | undefined, query: string): boolean {
   return qIdx === qClean.length;
 }
 
+function getEffectiveSubject(course: TopLevelCourseSummary): string | null {
+  if (course.subject) return formatSubjectLabel(course.subject);
+  
+  const titleKey = course.title?.trim().toLowerCase() || "";
+  if (COURSE_SUBJECT_LABELS[titleKey]) {
+    return COURSE_SUBJECT_LABELS[titleKey];
+  }
+  if (
+    titleKey === "nahjul balagha" ||
+    titleKey === "nejul balagha" ||
+    titleKey === "nehjul balagha"
+  ) {
+    return "Nahjul Balagha";
+  }
+  return null;
+}
+
 export default function CourseExplorer({ courses }: CourseExplorerProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedSubject, setSelectedSubject] = useState("");
@@ -47,12 +64,12 @@ export default function CourseExplorer({ courses }: CourseExplorerProps) {
   const subjects = useMemo(() => {
     const predefined = Object.keys(COURSE_SUBJECT_LABELS);
     const dynamic = courses.map((c) => c.subject).filter(Boolean) as string[];
-    return Array.from(new Set([...predefined, ...dynamic]));
+    return Array.from(new Set([...predefined, ...dynamic].map(formatSubjectLabel))).sort();
   }, [courses]);
 
   const instructors = useMemo(() => {
     const dynamic = courses.map((c) => c.instructor).filter(Boolean) as string[];
-    return Array.from(new Set(["Maulana Ali", "Maulana Hasan", ...dynamic]));
+    return Array.from(new Set(["Maulana Ali", "Maulana Hasan", ...dynamic])).sort();
   }, [courses]);
 
   const filteredCourses = useMemo(() => {
@@ -64,9 +81,10 @@ export default function CourseExplorer({ courses }: CourseExplorerProps) {
         fuzzyMatch(formatSubjectLabel(course.subject), searchQuery) ||
         fuzzyMatch(course.instructor, searchQuery);
 
+      const effectiveSubject = getEffectiveSubject(course);
       const matchesSubject =
         selectedSubject === "" ||
-        (course.subject && course.subject.toLowerCase() === selectedSubject.toLowerCase());
+        (effectiveSubject && effectiveSubject === selectedSubject);
 
       const matchesInstructor =
         selectedInstructor === "" ||
@@ -111,9 +129,9 @@ export default function CourseExplorer({ courses }: CourseExplorerProps) {
             className="select-field appearance-none cursor-pointer py-2.5 pr-8 pl-10"
           >
             <option value="">All Subjects</option>
-            {subjects.map((subject) => (
-              <option key={subject} value={subject}>
-                {formatSubjectLabel(subject)}
+            {subjects.map((subjectLabel) => (
+              <option key={subjectLabel} value={subjectLabel}>
+                {subjectLabel}
               </option>
             ))}
           </select>
@@ -177,9 +195,7 @@ export default function CourseExplorer({ courses }: CourseExplorerProps) {
                 course.featuredImage ? cardImageUrl(course.featuredImage) : null
               }
               title={normalizePublicTitle(course.title)}
-              badge={
-                course.subject ? formatSubjectLabel(course.subject) : null
-              }
+              badge={getEffectiveSubject(course)}
               description={
                 course.excerpt ||
                 formatPriceDuration(course.price, course.duration) ||
