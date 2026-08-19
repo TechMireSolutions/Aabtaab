@@ -44,6 +44,9 @@ jobs:
       - name: Security audit
         run: npm audit --audit-level=high
 
+      - name: Fix Ubuntu mirrors
+        run: sudo sed -i 's/azure\.archive\.ubuntu\.com/archive.ubuntu.com/g' /etc/apt/sources.list /etc/apt/sources.list.d/*.sources || true
+
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
 
