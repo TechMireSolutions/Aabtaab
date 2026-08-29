@@ -1,5 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const PORT = process.env.PORT || "3005";
+const BASE_URL = `http://localhost:${PORT}`;
+
 export default defineConfig({
   testDir: "./e2e",
   fullyParallel: true,
@@ -8,7 +11,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: "list",
   use: {
-    baseURL: "http://localhost:3000",
+    baseURL: BASE_URL,
     trace: "on-first-retry",
   },
   projects: [
@@ -16,14 +19,14 @@ export default defineConfig({
     { name: "mobile-chrome", use: { ...devices["Pixel 7"] } },
   ],
   webServer: {
-    command: "node scripts/run-next.mjs start --port 3000",
-    url: "http://localhost:3000",
-    reuseExistingServer: !process.env.CI,
+    command: `node scripts/run-next.mjs start --port ${PORT}`,
+    url: BASE_URL,
+    reuseExistingServer: false,
     timeout: 180_000,
     env: {
       NEXT_PUBLIC_SANITY_PROJECT_ID: "ci-placeholder",
       NEXT_PUBLIC_SANITY_DATASET: "production",
-      NEXT_PUBLIC_SITE_URL: "http://localhost:3000",
+      NEXT_PUBLIC_SITE_URL: BASE_URL,
       SANITY_API_TOKEN: "mock-api-token",
       SANITY_REVALIDATE_SECRET: "mock-revalidate-secret",
       NODE_ENV: "production",

@@ -4,6 +4,7 @@ import { z } from "zod";
 export const reviewBodySchema = z.object({
   name: z.string().trim().min(2, "Name is required").max(100),
   role: z.string().trim().max(100).optional(),
+  rating: z.number().int().min(1, "Rating must be between 1 and 5").max(5, "Rating must be between 1 and 5").optional(),
   quote: z
     .string()
     .trim()

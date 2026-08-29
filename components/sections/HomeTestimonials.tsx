@@ -33,7 +33,9 @@ export default function HomeTestimonials({
                 {Array.from({ length: 5 }).map((_, i) => (
                   <span
                     key={i}
-                    className="text-base-plus leading-none text-gold-400"
+                    className={`text-base-plus leading-none ${
+                      i < (t.rating ?? 5) ? "text-gold-400" : "text-slate-300 dark:text-slate-700"
+                    }`}
                   >
                     ★
                   </span>

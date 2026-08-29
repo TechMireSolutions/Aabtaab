@@ -44,7 +44,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: turnstileError }, { status: 400 });
     }
 
-    const { name, role, quote } = parsed.data;
+    const { name, role, quote, rating } = parsed.data;
 
     const doc = {
       _type: "testimonial",
@@ -52,6 +52,7 @@ export async function POST(req: Request) {
       name,
       role,
       quote,
+      rating: rating ?? 5,
       status: "pending",
       order: 99,
     };

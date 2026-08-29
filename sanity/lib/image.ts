@@ -3,7 +3,7 @@ import type { SanityImageSource } from "@sanity/image-url";
 import { getSanityClient } from "./client";
 
 export function urlFor(source: SanityImageSource) {
-  return createImageUrlBuilder(getSanityClient()).image(source);
+  return createImageUrlBuilder(getSanityClient()).image(source).auto("format");
 }
 
 export function cardImageUrl(source: SanityImageSource): string {

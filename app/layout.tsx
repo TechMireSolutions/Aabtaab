@@ -32,6 +32,7 @@ const nastaliq = Noto_Nastaliq_Urdu({
   weight: ["400", "700"],
   variable: "--font-nastaliq",
   display: "swap",
+  preload: false,
 });
 
 // ── Viewport (separate export — required in Next.js 15) ──────────────────────
@@ -241,8 +242,6 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://cdn.sanity.io" crossOrigin="" />
         <link rel="dns-prefetch" href="https://cdn.sanity.io" />
-        <link rel="preconnect" href="https://api.alquran.cloud" />
-        <link rel="dns-prefetch" href="https://api.alquran.cloud" />
       </head>
       <body
         className={`${inter.variable} ${playfair.variable} ${nastaliq.variable} font-sans antialiased relative`}

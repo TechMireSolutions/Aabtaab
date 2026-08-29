@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import DetailBackButton from "@/components/layout/DetailBackButton";
+import ReadingProgressBar from "@/components/layout/ReadingProgressBar";
 
 interface ArticleDetailShellProps {
   backHref: string;
@@ -15,6 +16,7 @@ export default function ArticleDetailShell({
 }: ArticleDetailShellProps) {
   return (
     <div className="min-h-screen bg-white dark:bg-slate-950">
+      <ReadingProgressBar />
       <DetailBackButton href={backHref} label={backLabel} />
       <article className="container-content section-y">{children}</article>
     </div>

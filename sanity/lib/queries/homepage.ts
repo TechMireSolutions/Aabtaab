@@ -33,7 +33,7 @@ export const homepageCarouselsQuery = `{
     donateQuoteReference, donateCtaLabel
   },
   "testimonials": *[_type == "testimonial" && status == "approved"] | order(order asc) {
-    _id, quote, name, role
+    _id, quote, name, role, rating
   },
   "upcomingEvents": *[_type == "event" && startDate >= now()] | order(startDate asc) {
     _id, title, slug, description, startDate, endDate,

@@ -60,7 +60,7 @@ export default function SiteBrandLogo({
         {logoUrl ? (
           <Image
             src={logoUrl}
-            alt={variant === "footer" ? siteName : ""}
+            alt=""
             width={size}
             height={size}
             sizes={`${size}px`}

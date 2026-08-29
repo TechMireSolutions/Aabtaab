@@ -10,6 +10,8 @@ type FormStatus = "idle" | "loading" | "success" | "error";
 export default function ReviewForm() {
   const [status, setStatus] = useState<FormStatus>("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const [rating, setRating] = useState(5);
+  const [hoveredRating, setHoveredRating] = useState<number | null>(null);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -21,6 +23,7 @@ export default function ReviewForm() {
     const data = {
       name: formData.get("name") as string,
       role: formData.get("role") as string,
+      rating,
       quote: formData.get("quote") as string,
       website: (formData.get("website") as string) || "",
     };
@@ -36,6 +39,7 @@ export default function ReviewForm() {
         body: JSON.stringify({
           name: validData.name,
           role: validData.role,
+          rating: validData.rating,
           quote: validData.quote,
           website: validData.website,
           token: turnstileToken,
@@ -51,6 +55,7 @@ export default function ReviewForm() {
 
       setStatus("success");
       form.reset();
+      setRating(5);
       resetTurnstile();
     } catch (err: unknown) {
       setStatus("error");
@@ -131,6 +136,48 @@ export default function ReviewForm() {
               className="input-field"
               disabled={status === "loading"}
             />
+          </div>
+          <div>
+            <span
+              id="review-rating-label"
+              className="mb-1.5 block text-caption font-semibold text-slate-700 dark:text-slate-300"
+            >
+              Rating <span className="text-red-500">*</span>
+            </span>
+            <div
+              role="radiogroup"
+              aria-labelledby="review-rating-label"
+              className="flex items-center gap-1.5 py-1"
+            >
+              {[1, 2, 3, 4, 5].map((star) => {
+                const isFilled = (hoveredRating ?? rating) >= star;
+                return (
+                  <button
+                    key={star}
+                    type="button"
+                    role="radio"
+                    aria-checked={rating === star}
+                    aria-label={`${star} star${star > 1 ? "s" : ""}`}
+                    disabled={status === "loading"}
+                    onClick={() => setRating(star)}
+                    onMouseEnter={() => setHoveredRating(star)}
+                    onMouseLeave={() => setHoveredRating(null)}
+                    className="p-1 text-2xl transition-transform hover:scale-110 active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 rounded-md cursor-pointer disabled:cursor-not-allowed"
+                  >
+                    <span
+                      className={`leading-none transition-colors ${
+                        isFilled ? "text-gold-400" : "text-gray-300 dark:text-slate-700"
+                      }`}
+                    >
+                      ★
+                    </span>
+                  </button>
+                );
+              })}
+              <span className="ml-2 text-xs font-semibold text-slate-500 dark:text-slate-400">
+                {hoveredRating ?? rating} of 5 stars
+              </span>
+            </div>
           </div>
           <div>
             <label

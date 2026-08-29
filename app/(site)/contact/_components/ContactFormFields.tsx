@@ -18,7 +18,7 @@ function FormLabel({
     <label
       htmlFor={htmlFor}
       id={id}
-      className="text-caption mb-1.5 block font-semibold text-slate-700"
+      className="text-caption mb-1.5 block font-semibold text-slate-700 dark:text-slate-300"
     >
       {children}
       {required && <span className="ml-0.5 text-red-500">*</span>}

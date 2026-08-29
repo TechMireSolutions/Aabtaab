@@ -38,6 +38,13 @@ export const testimonial = defineType({
       title: 'Role / Location (e.g. "Quran Student, UK")',
     }),
     defineField({
+      name: "rating",
+      type: "number",
+      title: "Rating (1-5 stars)",
+      initialValue: 5,
+      validation: (r) => r.min(1).max(5).integer(),
+    }),
+    defineField({
       name: "order",
       type: "number",
       title: "Display Order",

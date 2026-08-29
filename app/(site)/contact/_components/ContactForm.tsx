@@ -23,6 +23,7 @@ export default function ContactForm({
   const [purpose, setPurpose] = useState<ContactPurpose>("general");
   const [appliedFor, setAppliedFor] = useState("");
   const [status, setStatus] = useState<FormStatus>("idle");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const fieldIds = {
     firstName: `${formId}-firstName`,
@@ -39,6 +40,7 @@ export default function ContactForm({
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus("loading");
+    setErrorMessage("");
 
     const form = e.currentTarget;
     const getValue = (name: string) =>
@@ -73,13 +75,24 @@ export default function ContactForm({
         }),
       });
 
-      if (!res.ok) throw new Error("Failed");
+      if (!res.ok) {
+        const payload = (await res.json().catch(() => null)) as {
+          error?: string;
+        } | null;
+        throw new Error(payload?.error || "Failed to send message");
+      }
+
       setStatus("success");
       form.reset();
       setPurpose("general");
       setAppliedFor("");
-    } catch {
+    } catch (err: unknown) {
       setStatus("error");
+      if (err instanceof Error) {
+        setErrorMessage(err.message);
+      } else {
+        setErrorMessage("Something went wrong. Please try again or email us directly.");
+      }
     } finally {
       resetTurnstile();
     }
@@ -88,7 +101,7 @@ export default function ContactForm({
   const options = purpose === "course" ? courses : services;
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form onSubmit={handleSubmit} className="space-y-5" noValidate>
       <ContactFormFields
         fieldIds={fieldIds}
         purpose={purpose}
@@ -113,7 +126,7 @@ export default function ContactForm({
         <p
           role="status"
           aria-live="polite"
-          className="text-sm-plus font-medium text-green-700"
+          className="text-sm-plus font-medium text-green-700 dark:text-green-400"
         >
           Thank you! Your message has been sent successfully.
         </p>
@@ -122,9 +135,9 @@ export default function ContactForm({
         <p
           role="alert"
           aria-live="assertive"
-          className="text-sm-plus font-medium text-red-600"
+          className="text-sm-plus font-medium text-red-600 dark:text-red-400"
         >
-          Something went wrong. Please try again or email us directly.
+          {errorMessage || "Something went wrong. Please try again or email us directly."}
         </p>
       )}
     </form>

@@ -27,7 +27,7 @@ export const footerServicesQuery = `
 
 export const testimonialsQuery = `
   *[_type == "testimonial" && status == "approved"] | order(order asc) {
-    _id, quote, name, role
+    _id, quote, name, role, rating
   }
 `;
 

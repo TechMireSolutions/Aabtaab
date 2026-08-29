@@ -75,12 +75,22 @@ export default function Header({
             />
           </Link>
 
-          <MobileNavSidebarLoader
-            siteName={siteName}
-            logoUrl={logoUrl}
-            navLinks={navLinks}
-            onSearchClick={() => setSearchOpen(true)}
-          />
+          <div className="ml-auto flex items-center gap-1.5 lg:hidden">
+            <button
+              type="button"
+              onClick={() => setSearchOpen(true)}
+              aria-label="Search"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-gray-200 bg-white text-slate-600 transition-colors hover:border-gray-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 dark:hover:border-slate-700 cursor-pointer"
+            >
+              <Search className="size-4.5" aria-hidden="true" />
+            </button>
+            <MobileNavSidebarLoader
+              siteName={siteName}
+              logoUrl={logoUrl}
+              navLinks={navLinks}
+              onSearchClick={() => setSearchOpen(true)}
+            />
+          </div>
 
 
 
@@ -93,7 +103,7 @@ export default function Header({
 
           <Link
             href="/donate"
-            className="ml-auto hidden items-center gap-2 rounded-full bg-brand-600 px-5 py-2 text-sm-plus font-semibold text-white shadow-brand-sm animate-donate-glow transition-all duration-200 hover:bg-brand-700 hover:shadow-brand-lg hover:scale-105 active:scale-95 lg:inline-flex"
+            className="ml-auto hidden items-center gap-2 rounded-full bg-brand-700 px-5 py-2 text-sm-plus font-semibold text-white shadow-brand-sm transition-all duration-200 hover:bg-brand-800 hover:shadow-brand-lg hover:scale-105 active:scale-95 lg:inline-flex"
           >
             Donate
           </Link>

@@ -41,6 +41,18 @@ export default function ReviewsList({
                 className="absolute top-8 right-8 h-10 w-10 text-slate-200 dark:text-slate-800"
                 aria-hidden="true"
               />
+              <div className="mb-4 flex gap-1 text-gold-400">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <span
+                    key={i}
+                    className={`text-base leading-none ${
+                      i < (t.rating ?? 5) ? "text-gold-400" : "text-slate-300 dark:text-slate-700"
+                    }`}
+                  >
+                    ★
+                  </span>
+                ))}
+              </div>
               <blockquote className="mb-8 text-lg font-medium text-slate-700 dark:text-slate-300 italic leading-relaxed flex-1">
                 &ldquo;{t.quote}&rdquo;
               </blockquote>

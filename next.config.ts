@@ -93,6 +93,10 @@ const nextConfig: NextConfig = {
           },
           // Control referrer info for privacy
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          // Origin isolation for top-level window
+          { key: "Cross-Origin-Opener-Policy", value: "same-origin-allow-popups" },
+          // Enable DNS prefetching
+          { key: "X-DNS-Prefetch-Control", value: "on" },
           // Basic permissions policy
           {
             key: "Permissions-Policy",

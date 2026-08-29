@@ -15,7 +15,7 @@ interface FaqAccordionSectionProps {
 function FaqAnswer({ answer }: { answer: unknown[] | string }) {
   if (typeof answer === "string") {
     return (
-      <p className="border-t border-gray-100 px-5 pb-4 pt-1 text-sm-plus leading-relaxed text-gray-600">
+      <p className="border-t border-gray-100 dark:border-slate-800 px-5 pb-4 pt-1 text-sm-plus leading-relaxed text-gray-600 dark:text-slate-300">
         {answer}
       </p>
     );
@@ -24,7 +24,7 @@ function FaqAnswer({ answer }: { answer: unknown[] | string }) {
   if (!Array.isArray(answer) || answer.length === 0) return null;
 
   return (
-    <div className="prose prose-sm max-w-none border-t border-gray-50 px-6 pb-5 pt-1 text-sm-plus leading-relaxed text-gray-600">
+    <div className="prose prose-sm dark:prose-invert max-w-none border-t border-gray-50 dark:border-slate-800/80 px-6 pb-5 pt-1 text-sm-plus leading-relaxed text-gray-600 dark:text-slate-300">
       <PortableTextBody value={answer} />
     </div>
   );
@@ -61,16 +61,17 @@ export default function FaqAccordionSection({
               key={index}
               className="group card-surface overflow-hidden"
             >
-              <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 rounded-sm px-6 py-5 text-base-plus font-semibold text-slate-900 transition-colors hover:text-brand-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 [&::-webkit-details-marker]:hidden">
+              <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 rounded-sm px-6 py-5 text-base-plus font-semibold text-slate-900 dark:text-white transition-colors hover:text-brand-700 dark:hover:text-brand-400 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-600 [&::-webkit-details-marker]:hidden">
                 {item.question}
                 <ToggleIcon
                   aria-hidden="true"
                   size={icon === "chevron" ? 15 : 16}
                   strokeWidth={2}
-                  className={`shrink-0 text-gray-500 transition-transform duration-200 ${icon === "chevron"
+                  className={`shrink-0 text-gray-500 dark:text-slate-400 transition-transform duration-200 ${
+                    icon === "chevron"
                       ? "group-open:rotate-90"
                       : "group-open:rotate-45"
-                    }`}
+                  }`}
                 />
               </summary>
               {item.answer !== undefined && item.answer !== null && (

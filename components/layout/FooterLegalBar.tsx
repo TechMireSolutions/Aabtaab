@@ -14,7 +14,7 @@ export default function FooterLegalBar({ siteName }: FooterLegalBarProps) {
   return (
     <div className="footer-legal-bar">
       <div className="container-page flex flex-col items-center justify-between gap-4 py-5 sm:py-6 md:flex-row">
-        <p className="text-center text-sm text-slate-500 md:text-left">
+        <p className="text-center text-sm text-slate-400 md:text-left">
           {formatFooterCopyright(siteName)}
         </p>
         <nav aria-label={FOOTER_SECTION_LABELS.legal}>
