@@ -17,8 +17,8 @@ cd "$APP_DIR"
 
 echo "==> Deploying ${DEPLOY_SHA} in ${APP_DIR}"
 
-git fetch origin --prune
-git reset --hard "$DEPLOY_SHA"
+# Note: git fetch + git reset --hard are done by the deploy workflow (deploy.yml)
+# *before* this script is invoked. We only need to clean untracked files here.
 git clean -fd -e '.env.local' -e '.env.production.local' -e '.next.bak'
 
 ensure_node() {
