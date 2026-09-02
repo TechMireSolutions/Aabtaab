@@ -8,6 +8,7 @@ export const FALLBACK_NAV: NavItem[] = [
   { label: "Events", href: "/events" },
   { label: "Articles", href: "/posts" },
   { label: "Dar ul Quran", href: "/dar-ul-quran" },
+  { label: "Contact", href: "/contact" },
   { label: "Donate", href: "/donate" },
   { label: "About", href: "/about" },
 ];
@@ -53,6 +54,23 @@ export function buildHeaderNavLinks(
       external: !!darulQuranUrl,
     });
   }
+
+  // Ensure Articles link always appears
+  const hasArticles = base.some((item) => /^\/posts$/.test(item.href));
+  if (!hasArticles) {
+    const donateIdx = base.findIndex((item) => /donate/i.test(item.label));
+    const insertAt = donateIdx !== -1 ? donateIdx : base.length;
+    base.splice(insertAt, 0, { label: "Articles", href: "/posts" });
+  }
+
+  // Ensure Contact link always appears
+  const hasContact = base.some((item) => /^\/contact$/.test(item.href));
+  if (!hasContact) {
+    const donateIdx = base.findIndex((item) => /donate/i.test(item.label));
+    const insertAt = donateIdx !== -1 ? donateIdx : base.length;
+    base.splice(insertAt, 0, { label: "Contact", href: "/contact" });
+  }
+
   return base;
 }
 
