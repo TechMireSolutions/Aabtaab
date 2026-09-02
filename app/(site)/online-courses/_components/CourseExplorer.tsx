@@ -186,27 +186,31 @@ export default function CourseExplorer({ courses }: CourseExplorerProps) {
         </div>
       ) : (
         <div className="grid-catalog-cards">
-          {filteredCourses.map((course) => (
+          {filteredCourses.map((course) => {
+            const isParent = course.childCount && course.childCount > 0;
+            const courseHref = `/online-courses/${course.slug.current}`;
+            return (
               <ContentCard
-              key={course._id}
-              href={`/online-courses/${course.slug.current}`}
-              ctaHref="/contact"
-              image={
-                course.featuredImage ? cardImageUrl(course.featuredImage) : null
-              }
-              title={normalizePublicTitle(course.title)}
-              badge={getEffectiveSubject(course)}
-              description={
-                course.excerpt ||
-                formatPriceDuration(course.price, course.duration) ||
-                null
-              }
-              ctaLabel={nestedListCtaLabel(
-                course.childCount,
-                COURSE_NESTED_CTA_LABELS,
-              )}
-            />
-          ))}
+                key={course._id}
+                href={courseHref}
+                ctaHref={isParent ? courseHref : "/contact"}
+                image={
+                  course.featuredImage ? cardImageUrl(course.featuredImage) : null
+                }
+                title={normalizePublicTitle(course.title)}
+                badge={getEffectiveSubject(course)}
+                description={
+                  course.excerpt ||
+                  formatPriceDuration(course.price, course.duration) ||
+                  null
+                }
+                ctaLabel={nestedListCtaLabel(
+                  course.childCount,
+                  COURSE_NESTED_CTA_LABELS,
+                )}
+              />
+            );
+          })}
         </div>
       )}
     </div>

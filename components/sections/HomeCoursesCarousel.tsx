@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import { cardImageUrl } from "@/sanity/lib/image";
-import { formatPriceDuration, COURSE_NESTED_CTA_LABELS } from "@/lib/catalog/formatters";
+import { formatPriceDuration, nestedListCtaLabel, COURSE_NESTED_CTA_LABELS } from "@/lib/catalog/formatters";
 import {
   formatSubjectLabel,
   normalizePublicTitle,
@@ -21,16 +21,20 @@ export default function HomeCoursesCarousel({
   courses,
   homepage: hp,
 }: HomeCoursesCarouselProps) {
-  const items = (courses ?? []).map((c) => ({
-    id: c._id,
-    image: c.featuredImage ? cardImageUrl(c.featuredImage) : null,
-    title: normalizePublicTitle(c.title),
-    description: formatPriceDuration(c.price, c.duration),
-    href: `/online-courses/${c.slug.current}`,
-    ctaHref: "/contact",
-    badge: c.subject ? formatSubjectLabel(c.subject) : null,
-    ctaLabel: COURSE_NESTED_CTA_LABELS.leaf,
-  }));
+  const items = (courses ?? []).map((c) => {
+    const isParent = c.childCount && c.childCount > 0;
+    const courseHref = `/online-courses/${c.slug.current}`;
+    return {
+      id: c._id,
+      image: c.featuredImage ? cardImageUrl(c.featuredImage) : null,
+      title: normalizePublicTitle(c.title),
+      description: formatPriceDuration(c.price, c.duration),
+      href: courseHref,
+      ctaHref: isParent ? courseHref : "/contact",
+      badge: c.subject ? formatSubjectLabel(c.subject) : null,
+      ctaLabel: nestedListCtaLabel(c.childCount, COURSE_NESTED_CTA_LABELS),
+    };
+  });
 
   if (items.length === 0) return null;
 

@@ -17,6 +17,7 @@ export interface HomeCourseSummary {
   price?: string;
   duration?: string;
   subject?: string;
+  childCount?: number;
 }
 
 export interface HomeServiceSummary {
