@@ -56,6 +56,12 @@ const nextConfig: NextConfig = {
     ],
     // Modern formats: AVIF prioritized for supported browsers, WebP fallback
     formats: ["image/avif", "image/webp"],
+    // Align breakpoints with Tailwind sm/md/lg/xl/2xl — avoids generating
+    // unnecessary intermediate sizes and reduces LCP image payload on mobile.
+    deviceSizes: [375, 640, 768, 1024, 1280, 1440, 1920],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+    // Cache optimized images on CDN/proxy for 30 days
+    minimumCacheTTL: 2592000,
   },
 
   // ── HTTP Security & Cache Headers ─────────────────────────────────────────
