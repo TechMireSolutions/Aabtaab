@@ -24,7 +24,7 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: process.cwd(),
     resolveAlias: {
-      "../build/polyfills/polyfill-module": emptyPolyfillRelative,
+      "../build/polyfills/polyfill-module": emptyPolyfillRelative,  
     },
   },
 

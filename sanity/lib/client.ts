@@ -7,7 +7,19 @@ function createSanityClient(): SanityClient {
     projectId: env.NEXT_PUBLIC_SANITY_PROJECT_ID || "placeholder",
     dataset: env.NEXT_PUBLIC_SANITY_DATASET || "production",
     apiVersion: SANITY_API_VERSION,
-    useCdn: isProduction,
+    useCdn: false, // Next.js App Router unstable_cache handles all caching
+    maxRetries: 5,
+    fetch: async (url, init) => {
+      // Force connection close to bypass undici UND_ERR_SOCKET bug on Windows/GCP
+      return fetch(url, {
+        ...init,
+        keepalive: false,
+        headers: {
+          ...init?.headers,
+          Connection: "close",
+        },
+      });
+    },
   });
 }
 
