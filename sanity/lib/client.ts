@@ -9,7 +9,7 @@ function createSanityClient(): SanityClient {
     apiVersion: SANITY_API_VERSION,
     useCdn: false, // Next.js App Router unstable_cache handles all caching
     maxRetries: 5,
-    fetch: async (url, init) => {
+    fetch: (async (url: string | URL | globalThis.Request, init?: globalThis.RequestInit) => {
       // Force connection close to bypass undici UND_ERR_SOCKET bug on Windows/GCP
       return fetch(url, {
         ...init,
@@ -19,7 +19,7 @@ function createSanityClient(): SanityClient {
           Connection: "close",
         },
       });
-    },
+    }) as any,
   });
 }
 
