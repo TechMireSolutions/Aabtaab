@@ -9,7 +9,7 @@ HEALTH_RETRIES="${HEALTH_RETRIES:-30}"
 HEALTH_INTERVAL_SEC="${HEALTH_INTERVAL_SEC:-2}"
 # Cap Node heap so the Linux OOM killer is less likely during `next build` on small VPS.
 # Exit 139 (SIGSEGV) during webpack usually means native OOM under memory pressure — not a JS exception.
-NODE_BUILD_HEAP_MB="${NODE_BUILD_HEAP_MB:-1536}"
+NODE_BUILD_HEAP_MB="${NODE_BUILD_HEAP_MB:-3072}"
 # Other PM2 apps on the same host that hold RAM during our build (space-separated).
 PM2_STOP_DURING_BUILD="${PM2_STOP_DURING_BUILD:-darulquran-next}"
 
