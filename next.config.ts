@@ -20,6 +20,14 @@ const nextConfig: NextConfig = {
     inlineCss: true,
     // TypeScript 7 has no JS Compiler API — run project-local `tsc` instead
     useTypeScriptCli: true,
+    // Limit workers on small VPS to prevent OOM kills during static generation
+    ...(process.env.NEXT_BUILD_LOW_MEM === "1"
+      ? {
+          cpus: 1,
+          workerThreads: false,
+          memoryBasedWorkersCount: true,
+        }
+      : {}),
   },
 
   turbopack: {
