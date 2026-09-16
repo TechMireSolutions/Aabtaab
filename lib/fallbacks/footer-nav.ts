@@ -35,6 +35,7 @@ export const FALLBACK_QUICK_LINKS: NavItem[] = [
   { label: "About", href: "/about" },
   { label: "Courses", href: "/online-courses" },
   { label: "Services", href: "/services" },
+  { label: "Publications", href: "/publications" },
   { label: "Donate", href: "/donate" },
   { label: "Contact", href: "/contact" },
 ];
@@ -143,7 +144,14 @@ export function resolveFooterTagline(settings?: {
 export function resolveFooterQuickLinks(
   items?: NavItem[] | null,
 ): NavItem[] {
-  return items?.length ? items : FALLBACK_QUICK_LINKS;
+  const base = items?.length ? [...items] : [...FALLBACK_QUICK_LINKS];
+  const hasPublications = base.some((item) => /^\/publications$/.test(item.href));
+  if (!hasPublications) {
+    const donateIdx = base.findIndex((item) => /donate/i.test(item.label));
+    const insertAt = donateIdx !== -1 ? donateIdx : base.length;
+    base.splice(insertAt, 0, { label: "Publications", href: "/publications" });
+  }
+  return base;
 }
 
 /** Layout-data path: CMS footer nav or fallback, then empty-catalog filter. */

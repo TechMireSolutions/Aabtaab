@@ -6,3 +6,4 @@ export * from "./site";
 export * from "./search";
 export * from "./homepage";
 export * from "./payment";
+export * from "./publications";

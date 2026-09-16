@@ -31,4 +31,5 @@ export {
   getScholars,
   getCountries,
   getContactFormOptions,
+  getPublications,
 } from "@/lib/cms/queries-content";

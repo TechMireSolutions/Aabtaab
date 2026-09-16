@@ -11,6 +11,7 @@ import {
   testimonialsQuery,
   scholarsQuery,
   countriesQuery,
+  allPublicationsQuery,
 } from "@/sanity/lib/queries";
 import type { EventDetail, EventSummary } from "@/types/event";
 import type { CmsPageSummary, PostCardSummary } from "@/types/cms-page";
@@ -19,6 +20,7 @@ import type { Post } from "@/types/post";
 import type { Testimonial } from "@/types/testimonial";
 import type { Scholar } from "@/types/scholar";
 import type { Country } from "@/types/country";
+import type { Publication } from "@/types/publication";
 
 export const getCmsPage = cache(async (slug: string) => {
   return sanityFetch<CmsPageSummary | null>({
@@ -81,6 +83,13 @@ export const getCountries = cache(async () => {
   return sanityFetch<Country[]>({
     query: countriesQuery,
     tags: [CACHE_TAGS.countries],
+  });
+});
+
+export const getPublications = cache(async () => {
+  return sanityFetch<Publication[]>({
+    query: allPublicationsQuery,
+    tags: ["publications"],
   });
 });
 

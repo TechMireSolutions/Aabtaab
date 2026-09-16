@@ -7,6 +7,7 @@ export const FALLBACK_NAV: NavItem[] = [
   { label: "Services", href: "/services" },
   { label: "Events", href: "/events" },
   { label: "Articles", href: "/posts" },
+  { label: "Publications", href: "/publications" },
   { label: "Dar ul Quran", href: "/dar-ul-quran" },
   { label: "Contact", href: "/contact" },
   { label: "Donate", href: "/donate" },
@@ -63,6 +64,14 @@ export function buildHeaderNavLinks(
     base.splice(insertAt, 0, { label: "Articles", href: "/posts" });
   }
 
+  // Ensure Publications link always appears
+  const hasPublications = base.some((item) => /^\/publications$/.test(item.href));
+  if (!hasPublications) {
+    const donateIdx = base.findIndex((item) => /donate/i.test(item.label));
+    const insertAt = donateIdx !== -1 ? donateIdx : base.length;
+    base.splice(insertAt, 0, { label: "Publications", href: "/publications" });
+  }
+
   // Ensure Contact link always appears
   const hasContact = base.some((item) => /^\/contact$/.test(item.href));
   if (!hasContact) {
@@ -80,5 +89,6 @@ export const SEARCH_QUICK_LINKS = [
   { label: "Our Services", href: "/services" },
   { label: "Upcoming Events", href: "/events" },
   { label: "Articles", href: "/posts" },
+  { label: "Publications", href: "/publications" },
 ] as const;
 

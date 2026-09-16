@@ -16,6 +16,7 @@ import { quote } from "./quote";
 import { paymentMethod } from "./paymentMethod";
 import { scholar } from "./scholar";
 import { country } from "./country";
+import { publication } from "./publication";
 
 export const schemaTypes = [
   // Object types first — document schemas can reference them
@@ -38,4 +39,5 @@ export const schemaTypes = [
   paymentMethod,
   scholar,
   country,
+  publication,
 ];
