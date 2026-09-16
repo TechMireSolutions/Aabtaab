@@ -117,6 +117,7 @@ describe("FALLBACK_QUICK_LINKS + resolvers", () => {
       "/about",
       "/online-courses",
       "/services",
+      "/publications",
       "/donate",
       "/contact",
     ]);
@@ -125,7 +126,7 @@ describe("FALLBACK_QUICK_LINKS + resolvers", () => {
   it("resolveFooterQuickLinks prefers CMS items", () => {
     expect(
       resolveFooterQuickLinks([{ label: "Home", href: "/" }]).map((i) => i.href),
-    ).toEqual(["/"]);
+    ).toEqual(["/", "/publications"]);
   });
 
   it("resolveFooterQuickLinks falls back when empty", () => {
@@ -142,7 +143,7 @@ describe("FALLBACK_QUICK_LINKS + resolvers", () => {
         courses: 0,
         services: 0,
       }).map((i) => i.href),
-    ).toEqual(["/", "/about", "/donate", "/contact"]);
+    ).toEqual(["/", "/about", "/publications", "/donate", "/contact"]);
   });
 });
 
