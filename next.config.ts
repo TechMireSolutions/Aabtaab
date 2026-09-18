@@ -7,7 +7,7 @@ const emptyPolyfillAbsolute = path.join(process.cwd(), "lib/empty-polyfill.js");
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   trailingSlash: false,
-  productionBrowserSourceMaps: true,
+  productionBrowserSourceMaps: process.env.NEXT_BUILD_LOW_MEM !== "1",
 
   reactCompiler: process.env.NEXT_BUILD_LOW_MEM !== "1",
 
@@ -17,7 +17,7 @@ const nextConfig: NextConfig = {
 
 
   experimental: {
-    optimizePackageImports: ["lucide-react"],
+    optimizePackageImports: process.env.NEXT_BUILD_LOW_MEM !== "1" ? ["lucide-react"] : [],
     inlineCss: process.env.NEXT_BUILD_LOW_MEM !== "1",
     // TypeScript 7 has no JS Compiler API — run project-local `tsc` instead
     useTypeScriptCli: true,
