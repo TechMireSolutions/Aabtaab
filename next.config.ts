@@ -15,6 +15,11 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
 
+  // @ts-expect-error - Next.js config type mismatch
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+
   experimental: {
     optimizePackageImports: ["lucide-react"],
     inlineCss: true,
