@@ -9,20 +9,16 @@ const nextConfig: NextConfig = {
   trailingSlash: false,
   productionBrowserSourceMaps: true,
 
-  reactCompiler: true,
+  reactCompiler: process.env.NEXT_BUILD_LOW_MEM !== "1",
 
   typescript: {
     ignoreBuildErrors: true,
   },
 
-  // @ts-expect-error - Next.js config type mismatch
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
 
   experimental: {
     optimizePackageImports: ["lucide-react"],
-    inlineCss: true,
+    inlineCss: process.env.NEXT_BUILD_LOW_MEM !== "1",
     // TypeScript 7 has no JS Compiler API — run project-local `tsc` instead
     useTypeScriptCli: true,
     // Limit workers on small VPS to prevent OOM kills during static generation
