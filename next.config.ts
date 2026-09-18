@@ -25,7 +25,7 @@ const nextConfig: NextConfig = {
       ? {
           cpus: 1,
           workerThreads: false,
-          memoryBasedWorkersCount: true,
+          memoryBasedWorkersCount: false,
         }
       : {}),
   },
