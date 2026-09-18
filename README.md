@@ -15,7 +15,7 @@ npm run dev                    # https://aabtaab.com
 ### Required environment
 
 ```env
-NEXT_PUBLIC_SANITY_PROJECT_ID=
+NEXT_PUBLIC_SANITY_PRoJECT_ID=
 NEXT_PUBLIC_SANITY_DATASET=production
 SANITY_API_TOKEN=              # contact form writes
 SANITY_REVALIDATE_SECRET=      # webhook for on-demand ISR
