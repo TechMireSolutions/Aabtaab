@@ -106,8 +106,8 @@ export default function HeroSection({
             fetchPriority="high"
             className="object-cover object-left-top"
           />
-          <div className="absolute inset-0 bg-linear-to-r from-white via-white/90 to-white/20 dark:from-slate-950 dark:via-slate-950/90 dark:to-slate-950/20 md:via-white/60 md:to-transparent md:dark:via-slate-950/60 md:dark:to-transparent" />
-          <div className="absolute inset-0 bg-linear-to-t from-white/15 to-transparent dark:from-slate-950/15" />
+          <div className="absolute inset-0 bg-linear-to-r from-white via-white/90 to-white/20 dark:from-slate-950 dark:via-slate-950/90 dark:to-slate-950/20 md:via-white/60 md:to-white/0 md:dark:via-slate-950/60 md:dark:to-slate-950/0" />
+          <div className="absolute inset-0 bg-linear-to-t from-white/15 to-white/0 dark:from-slate-950/15 dark:to-slate-950/0" />
         </div>
       )}
 

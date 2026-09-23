@@ -767,7 +767,7 @@
 }
 
 @utility bg-hero-glow {
-  background: radial-gradient(circle, rgb(8 145 178 / 0.05) 0%, transparent 65%);
+  background: radial-gradient(circle, rgb(8 145 178 / 0.05) 0%, rgb(8 145 178 / 0) 65%);
 }
 
 @utility text-gradient-brand {
