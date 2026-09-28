@@ -6,7 +6,7 @@ export const allPublicationsQuery = groq`
     title,
     "slug": slug.current,
     description,
-    "fileUrl": file.asset->url,
+    "fileUrl": coalesce(pdfUrl, file.asset->url),
     "fileSize": file.asset->size,
     coverImage {
       asset-> {
