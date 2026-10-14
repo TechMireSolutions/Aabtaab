@@ -1,3 +1,4 @@
+import Link from "next/link";
 import PageHeader from "@/components/layout/PageHeader";
 import { BookOpen, Download } from "lucide-react";
 import { defineCmsPageMetadata } from "@/lib/cms/page";
@@ -41,12 +42,19 @@ export default async function PublicationsPage() {
           {publications && publications.length > 0 ? (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {publications.map((pub) => (
-                <div key={pub._id} className="card-surface card-hover-lift flex flex-col overflow-hidden">
-                  <div className="relative aspect-video w-full bg-gray-100 dark:bg-slate-800/50">
+                <div
+                  key={pub._id}
+                  className="card-surface card-hover-lift flex flex-col overflow-hidden"
+                >
+                  <Link
+                    href={`/publications/${pub.slug}`}
+                    className="group relative aspect-video w-full bg-gray-100 dark:bg-slate-800/50 block overflow-hidden"
+                    aria-label={`View details of ${pub.title}`}
+                  >
                     {pub.coverImage ? (
                       <Image
                         src={urlFor(pub.coverImage).width(600).height(338).url()}
-                        alt={pub.title}
+                        alt={pub.coverImage.alt || pub.title}
                         fill
                         className="object-cover transition-transform duration-300 group-hover:scale-105"
                       />
@@ -55,35 +63,54 @@ export default async function PublicationsPage() {
                         <BookOpen size={48} strokeWidth={1} />
                       </div>
                     )}
-                  </div>
+                  </Link>
                   <div className="flex flex-1 flex-col p-5 sm:p-6">
                     <h3 className="mb-2 text-xl font-semibold text-slate-900 dark:text-white line-clamp-2">
-                      {pub.title}
+                      <Link
+                        href={`/publications/${pub.slug}`}
+                        className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
+                      >
+                        {pub.title}
+                      </Link>
                     </h3>
+                    {pub.author && (
+                      <p className="mb-2 text-xs font-semibold text-brand-700 dark:text-brand-400">
+                        By {pub.author}
+                      </p>
+                    )}
                     {pub.description && (
                       <p className="mb-5 text-sm-plus text-gray-600 dark:text-slate-400 line-clamp-3">
                         {pub.description}
                       </p>
                     )}
-                    <div className="mt-auto pt-2">
+                    <div className="mt-auto pt-3 flex flex-col sm:flex-row gap-2">
+                      <Link
+                        href={`/publications/${pub.slug}`}
+                        className="btn-secondary w-full sm:w-auto flex-1 flex items-center justify-center gap-1 text-xs font-semibold py-2.5"
+                      >
+                        <span>View Details</span>
+                      </Link>
                       {pub.fileUrl ? (
                         <a
                           href={pub.fileUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="btn-primary w-full flex items-center justify-center gap-2"
+                          className="btn-primary w-full sm:w-auto flex-1 flex items-center justify-center gap-1.5 text-xs font-semibold py-2.5"
                         >
-                          <Download size={16} className="shrink-0" />
+                          <Download size={14} className="shrink-0" />
                           <span className="whitespace-nowrap">Download</span>
                           {pub.fileSize && (
-                            <span className="text-xs font-medium opacity-80 whitespace-nowrap">
-                              ({(pub.fileSize / 1024 / 1024).toFixed(1)} MB)
+                            <span className="text-2xs font-medium opacity-80 whitespace-nowrap">
+                              ({(pub.fileSize / 1024 / 1024).toFixed(1)}M)
                             </span>
                           )}
                         </a>
                       ) : (
-                        <button disabled className="btn-secondary w-full opacity-50 cursor-not-allowed">
-                          File unavailable
+                        <button
+                          disabled
+                          className="btn-secondary w-full sm:w-auto flex-1 opacity-50 cursor-not-allowed text-xs py-2.5"
+                        >
+                          Unavailable
                         </button>
                       )}
                     </div>

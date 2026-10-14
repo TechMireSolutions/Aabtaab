@@ -32,4 +32,5 @@ export {
   getCountries,
   getContactFormOptions,
   getPublications,
+  getPublicationBySlug,
 } from "@/lib/cms/queries-content";

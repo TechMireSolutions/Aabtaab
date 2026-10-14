@@ -68,6 +68,14 @@ export async function POST(request: NextRequest) {
           slug?.current,
         );
         break;
+      case "publication":
+        revalidateSlugCollection(
+          revalidated,
+          CACHE_TAGS.publications,
+          CACHE_TAGS.publication,
+          slug?.current,
+        );
+        break;
       case "siteSettings":
         revalidateTag(CACHE_TAGS.siteSettings, REVALIDATE_OPTIONS);
         revalidated.push(CACHE_TAGS.siteSettings);

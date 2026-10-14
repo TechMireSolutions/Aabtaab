@@ -101,6 +101,7 @@ describe("previewPath", () => {
   it("maps known types to internal paths", () => {
     expect(previewPath("post", "hello")).toBe("/posts/hello");
     expect(previewPath("course", "fiqh")).toBe("/online-courses/fiqh");
+    expect(previewPath("publication", "duas")).toBe("/publications/duas");
     expect(previewPath("homepageSettings", null)).toBe("/");
   });
 
@@ -113,5 +114,7 @@ describe("previewPath", () => {
   it("allows known internal absolute paths", () => {
     expect(previewPath(null, "/about")).toBe("/about");
     expect(previewPath(null, "/posts/x")).toBe("/posts/x");
+    expect(previewPath(null, "/publications")).toBe("/publications");
+    expect(previewPath(null, "/publications/duas")).toBe("/publications/duas");
   });
 });

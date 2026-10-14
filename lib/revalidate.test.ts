@@ -36,6 +36,23 @@ describe("revalidateSlugCollection", () => {
     expect(revalidated).toEqual([CACHE_TAGS.events]);
   });
 
+  it("revalidates publications collection and slug tag", () => {
+    const revalidated: string[] = [];
+
+    revalidateSlugCollection(
+      revalidated,
+      CACHE_TAGS.publications,
+      CACHE_TAGS.publication,
+      "al-sahifa",
+    );
+
+    expect(revalidateTag).toHaveBeenCalledTimes(2);
+    expect(revalidated).toEqual([
+      CACHE_TAGS.publications,
+      CACHE_TAGS.publication("al-sahifa"),
+    ]);
+  });
+
   it("passes expire:0 options to revalidateTag", () => {
     revalidateSlugCollection([], CACHE_TAGS.posts, CACHE_TAGS.post, "slug");
 

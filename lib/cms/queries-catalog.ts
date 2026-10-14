@@ -9,6 +9,7 @@ import {
   allServicePathsQuery,
   postSlugsQuery,
   eventSlugsQuery,
+  publicationSlugsQuery,
 } from "@/sanity/lib/queries";
 import type { SlugParent } from "@/types/sanity";
 import type { CourseDetail } from "@/types/course";
@@ -56,7 +57,7 @@ export const getSitemapSlugs = cache(async () => {
     parent?: SlugParent | null;
   };
 
-  const [posts, courses, services, events] = await Promise.all([
+  const [posts, courses, services, events, publications] = await Promise.all([
     sanityFetch<SitemapEntry[]>({
       query: postSlugsQuery,
       tags: [CACHE_TAGS.posts],
@@ -77,6 +78,11 @@ export const getSitemapSlugs = cache(async () => {
       tags: [CACHE_TAGS.events],
       revalidate: 3600,
     }),
+    sanityFetch<SitemapEntry[]>({
+      query: publicationSlugsQuery,
+      tags: [CACHE_TAGS.publications],
+      revalidate: 3600,
+    }),
   ]);
 
   return {
@@ -84,5 +90,6 @@ export const getSitemapSlugs = cache(async () => {
     courses: courses ?? [],
     services: services ?? [],
     events: events ?? [],
+    publications: publications ?? [],
   };
 });

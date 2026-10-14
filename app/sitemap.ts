@@ -15,7 +15,8 @@ function toLastModified(iso?: string): Date | undefined {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const { posts, courses, services, events } = await getSitemapSlugs();
+  const { posts, courses, services, events, publications } =
+    await getSitemapSlugs();
 
   const staticRoutes: MetadataRoute.Sitemap = [
     { url: absoluteUrl("/"), changeFrequency: "daily", priority: 1 },
@@ -68,6 +69,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.85,
     });
   }
+  if (publications && publications.length > 0) {
+    staticRoutes.push({
+      url: absoluteUrl("/publications"),
+      changeFrequency: "weekly",
+      priority: 0.85,
+    });
+  }
 
   const articleRoutes: MetadataRoute.Sitemap = posts.map(
     (post: SitemapSlug) => ({
@@ -105,11 +113,21 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }),
   );
 
+  const publicationRoutes: MetadataRoute.Sitemap = (publications ?? []).map(
+    (pub: SitemapSlug) => ({
+      url: absoluteUrl(`/publications/${pub.slug}`),
+      lastModified: toLastModified(pub.lastModified),
+      changeFrequency: "weekly",
+      priority: 0.75,
+    }),
+  );
+
   return [
     ...staticRoutes,
     ...articleRoutes,
     ...courseRoutes,
     ...serviceRoutes,
     ...eventRoutes,
+    ...publicationRoutes,
   ];
 }

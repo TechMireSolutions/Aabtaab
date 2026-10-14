@@ -5,6 +5,7 @@ export const SEARCH_TYPE_LABELS: Record<SearchResultType, string> = {
   course: "Course",
   service: "Service",
   event: "Event",
+  publication: "Publication",
 };
 
 /** Label for a CMS search type or keyword category (palette + /search). */

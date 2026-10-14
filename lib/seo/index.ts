@@ -7,6 +7,7 @@ export {
 export { resolveDocOgImage } from "./resolve-og-image";
 export { JsonLd } from "./json-ld";
 export { ArticleJsonLd } from "./json-ld-article";
+export { PublicationJsonLd } from "./json-ld-publication";
 export { CourseJsonLd, ServiceJsonLd } from "./json-ld-catalog";
 export { EventJsonLd } from "./json-ld-event";
 export { FaqPageJsonLd } from "./json-ld-faq";

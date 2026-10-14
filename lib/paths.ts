@@ -73,6 +73,7 @@ const ALLOWED_EXACT = new Set([
   "/events",
   "/online-courses",
   "/services",
+  "/publications",
 ]);
 
 const ALLOWED_PREFIXES = [
@@ -80,6 +81,7 @@ const ALLOWED_PREFIXES = [
   "/events/",
   "/online-courses/",
   "/services/",
+  "/publications/",
 ] as const;
 
 function isSafeInternalPath(path: string): boolean {
@@ -110,6 +112,9 @@ export function previewPath(
       break;
     case "service":
       path = slug ? `/services/${slug}` : "/services";
+      break;
+    case "publication":
+      path = slug ? `/publications/${slug}` : "/publications";
       break;
     case "page":
       path = slug ? `/${slug.replace(/^\/+/, "")}` : "/";

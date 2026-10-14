@@ -1,4 +1,4 @@
-export type SearchResultType = "post" | "course" | "service" | "event";
+export type SearchResultType = "post" | "course" | "service" | "event" | "publication";
 
 export interface SiteSearchResult {
   _id: string;

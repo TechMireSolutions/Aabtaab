@@ -22,8 +22,11 @@ export const searchSite = cache(async (term: string): Promise<SearchResponse> =>
   if (lowerTerm.includes("post") || lowerTerm.includes("blog") || lowerTerm.includes("article")) {
     matchTypes.push("post");
   }
+  if (lowerTerm.includes("publication") || lowerTerm.includes("book") || lowerTerm.includes("pdf") || lowerTerm.includes("ebook")) {
+    matchTypes.push("publication");
+  }
 
-  const genericWords = ["online", "course", "courses", "service", "services", "event", "events", "post", "posts", "blog", "blogs", "article", "articles"];
+  const genericWords = ["online", "course", "courses", "service", "services", "event", "events", "post", "posts", "blog", "blogs", "article", "articles", "publication", "publications", "book", "books", "pdf", "pdfs", "ebook", "ebooks"];
   const searchWords = lowerTerm.split(/\s+/).filter(word => !genericWords.includes(word));
   const refinedTerm = searchWords.join(" ");
 

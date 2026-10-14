@@ -8,18 +8,23 @@ import {
   ArrowRight,
   Sparkles,
 } from "lucide-react";
-import type { SiteSearchResult, KeywordMatch } from "@/types/search";
+import type {
+  SiteSearchResult,
+  KeywordMatch,
+  SearchResultType,
+} from "@/types/search";
 import {
   SearchQuickMatchBadge,
   SearchResultBody,
   SearchTypeBadge,
 } from "@/components/ui/SearchResultMeta";
 
-const TYPE_ICONS = {
+const TYPE_ICONS: Record<SearchResultType, typeof BookOpen> = {
   course: BookOpen,
   event: Calendar,
   post: FileText,
   service: Settings,
+  publication: BookOpen,
 };
 
 const SUGGESTION_ICONS: Record<string, typeof BookOpen> = {

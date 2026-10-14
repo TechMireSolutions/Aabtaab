@@ -1,7 +1,7 @@
 /** Unified site search across posts, courses, services, and events */
 export const siteSearchQuery = `
   *[
-    _type in ["post", "course", "service", "event"] &&
+    _type in ["post", "course", "service", "event", "publication"] &&
     (
       // Standard search: specific term matches, and if a category was named, restrict to that category
       (
@@ -35,7 +35,8 @@ export const siteSearchQuery = `
       _type == "post" => "/posts/" + slug.current,
       _type == "event" => "/events/" + slug.current,
       _type == "course" => "/online-courses/" + slug.current,
-      _type == "service" => "/services/" + slug.current
+      _type == "service" => "/services/" + slug.current,
+      _type == "publication" => "/publications/" + slug.current
     ),
     "summary": coalesce(excerpt, description)
   }

@@ -25,6 +25,8 @@ export const CACHE_TAGS = {
   testimonials: "sanity-testimonials",
   scholars: "sanity-scholars",
   countries: "sanity-countries",
+  publications: "sanity-publications",
+  publication: (slug: string) => `sanity-publication-${slug}`,
 } as const;
 
 interface SanityFetchOptions {

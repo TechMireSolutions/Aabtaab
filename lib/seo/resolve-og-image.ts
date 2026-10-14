@@ -10,6 +10,7 @@ interface OgImageSource {
   icon?: SanityImageRef;
   mainImage?: SanityImageRef;
   image?: SanityImageRef;
+  coverImage?: SanityImageRef;
 }
 
 /** Resolve OG image URL from CMS seo override or first available content image. */
@@ -20,6 +21,7 @@ export function resolveDocOgImage(doc?: OgImageSource | null): string | undefine
     doc.featuredImage ??
     doc.heroImage ??
     doc.mainImage ??
+    doc.coverImage ??
     doc.image ??
     doc.icon;
   return fallback && fallback.asset ? ogImageUrl(fallback) : undefined;
