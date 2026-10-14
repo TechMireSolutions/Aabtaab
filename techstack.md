@@ -17,7 +17,7 @@
 | Layer | Technology | Version | Operational & Architecture Notes |
 |-------|------------|---------|----------------------------------|
 | Runtime | Node.js | ≥ 22.12 (CI/Prod **24.18.0**) | Managed via NVM; required for Sanity v6 engine |
-| Framework | Next.js (App Router) | **16.2.12** (Active LTS) | Patched for July 2026 SSR/Server Action security advisories; Turbopack build engine |
+| Framework | Next.js (App Router) | **16.4.0** (Active LTS) | Patched for SSR/Server Action/metadata security advisories; Turbopack build engine |
 | UI Library | React / React DOM | **19.2.8** | RSC-first architecture; React Compiler 1.0 for memoization |
 | Language | TypeScript | **7.0.2** | Strict mode, target **ES2022**; Next uses `experimental.useTypeScriptCli` |
 | Styling | Tailwind CSS v4 | **4.3.3** | Native CSS-first theme engine (`@import "tailwindcss"`) |
@@ -188,7 +188,7 @@ scripts/run-next.mjs Dev/prod Next launcher (port 3000)
 | **ESLint** | Custom flat config with `@next/eslint-plugin-next` + react plugins — `eslint-config-next` embeds `typescript-eslint`, which rejects TS 7.0 |
 | **TypeScript** | **7.0.2** primary; Next requires `experimental.useTypeScriptCli: true` until TS 7.1 JS API |
 | **eslint-plugin-react** | Peer range still ends at ESLint 9 — install with `legacy-peer-deps=true` in `.npmrc`; pin `settings.react.version` |
-| **npm audit** | Transitive `sharp`/`adm-zip`/`minimatch`+`brace-expansion` pinned via `overrides` until upstream resolves |
+| **npm audit** | Transitive `sharp`/`adm-zip`/`minimatch`+`brace-expansion`/`dompurify`/`source-map-js` pinned via `overrides`; unpatchable upstream `braces` (GHSA-vfj7-8cjw-p6xm) handled via `npm run audit` |
 | **PM2** | Deploy deletes `aabtaab-next` before `pm2 start` so stale `args` are not retained |
 | **Next build TS** | `typescript.ignoreBuildErrors: true` — CI `typecheck` is authoritative |
 | **Node on VPS** | Deploy loads nvm from `.nvmrc` (24.18.0) |
@@ -205,7 +205,7 @@ Upgrade workflow: `.cursor/rules/05-dependencies-upgrade.mdc`.
 cp .env.example .env.local
 npm install
 npm run dev                  # http://127.0.0.1:3000
-npm run lint && npm run typecheck && npm run test && npm run build && npm audit --audit-level=high
+npm run lint && npm run typecheck && npm run test && npm run build && npm run audit
 ```
 
 Production (VPS):
