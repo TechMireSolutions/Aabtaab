@@ -32,6 +32,26 @@ describe("resolvePublicationImageUrls", () => {
     expect(coverImageUrl).toBeUndefined();
     expect(ogImageUrl).toBeUndefined();
   });
+
+  it("returns 3:4 cropped coverImageUrl when coverImage is provided", () => {
+    const pub: PublicationDetail = {
+      _id: "1",
+      title: "Test Book",
+      slug: "test-book",
+      coverImage: {
+        asset: {
+          _ref: "image-1234567890abcdef-1200x1600-jpg",
+        },
+        alt: "Test Book Cover",
+      },
+    };
+    const { coverImageUrl, ogImageUrl } = resolvePublicationImageUrls(pub);
+    expect(coverImageUrl).toBeDefined();
+    expect(coverImageUrl).toContain("w=900");
+    expect(coverImageUrl).toContain("h=1200");
+    expect(coverImageUrl).toContain("fit=crop");
+    expect(ogImageUrl).toBeDefined();
+  });
 });
 
 describe("buildPublicationPageMetadata", () => {

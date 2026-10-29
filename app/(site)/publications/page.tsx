@@ -5,7 +5,7 @@ import { defineCmsPageMetadata } from "@/lib/cms/page";
 import { getCmsPage, getPublications } from "@/lib/cms/queries";
 import ProseSection from "@/components/portable-text/ProseSection";
 import Image from "next/image";
-import { urlFor } from "@/sanity/lib/image";
+import { publicationThumbnailUrl } from "@/sanity/lib/image";
 
 export const generateMetadata = defineCmsPageMetadata("publications", {
   path: "/publications",
@@ -48,19 +48,23 @@ export default async function PublicationsPage() {
                 >
                   <Link
                     href={`/publications/${pub.slug}`}
-                    className="group relative aspect-video w-full bg-gray-100 dark:bg-slate-800/50 block overflow-hidden"
+                    className="group relative aspect-[3/4] w-full bg-gray-100 dark:bg-slate-800/50 block overflow-hidden"
                     aria-label={`View details of ${pub.title}`}
                   >
                     {pub.coverImage ? (
                       <Image
-                        src={urlFor(pub.coverImage).width(600).height(338).url()}
+                        src={publicationThumbnailUrl(pub.coverImage)}
                         alt={pub.coverImage.alt || pub.title}
                         fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                         className="object-cover transition-transform duration-300 group-hover:scale-105"
                       />
                     ) : (
-                      <div className="flex h-full w-full items-center justify-center text-gray-400 dark:text-slate-500">
+                      <div className="flex h-full w-full flex-col items-center justify-center p-6 text-gray-400 dark:text-slate-500 bg-gray-50 dark:bg-slate-900/50">
                         <BookOpen size={48} strokeWidth={1} />
+                        <span className="mt-3 text-xs font-medium text-center text-slate-500 dark:text-slate-400">
+                          Aabtaab Publications
+                        </span>
                       </div>
                     )}
                   </Link>
@@ -86,7 +90,7 @@ export default async function PublicationsPage() {
                     <div className="mt-auto pt-3 flex flex-col sm:flex-row gap-2">
                       <Link
                         href={`/publications/${pub.slug}`}
-                        className="btn-secondary w-full sm:w-auto flex-1 flex items-center justify-center gap-1 text-xs font-semibold py-2.5"
+                        className="btn-secondary w-full sm:w-auto flex-1 flex items-center justify-center gap-1 text-xs font-semibold py-2.5 min-h-[44px]"
                       >
                         <span>View Details</span>
                       </Link>
@@ -95,7 +99,7 @@ export default async function PublicationsPage() {
                           href={pub.fileUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="btn-primary w-full sm:w-auto flex-1 flex items-center justify-center gap-1.5 text-xs font-semibold py-2.5"
+                          className="btn-primary w-full sm:w-auto flex-1 flex items-center justify-center gap-1.5 text-xs font-semibold py-2.5 min-h-[44px]"
                         >
                           <Download size={14} className="shrink-0" />
                           <span className="whitespace-nowrap">Download</span>
@@ -108,7 +112,7 @@ export default async function PublicationsPage() {
                       ) : (
                         <button
                           disabled
-                          className="btn-secondary w-full sm:w-auto flex-1 opacity-50 cursor-not-allowed text-xs py-2.5"
+                          className="btn-secondary w-full sm:w-auto flex-1 opacity-50 cursor-not-allowed text-xs py-2.5 min-h-[44px]"
                         >
                           Unavailable
                         </button>

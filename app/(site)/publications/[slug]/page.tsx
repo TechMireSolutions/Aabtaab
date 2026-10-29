@@ -120,7 +120,7 @@ export default async function PublicationDetailPage({
               ) : (
                 <div className="flex h-full w-full flex-col items-center justify-center p-6 text-gray-400 dark:text-slate-500 bg-gray-50 dark:bg-slate-900/50">
                   <BookOpen size={64} strokeWidth={1} />
-                  <span className="mt-3 text-xs font-medium text-center">
+                  <span className="mt-3 text-xs font-medium text-center text-slate-500 dark:text-slate-400">
                     Aabtaab Publications
                   </span>
                 </div>

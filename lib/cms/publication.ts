@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { urlFor } from "@/sanity/lib/image";
+import { publicationCoverImageUrl } from "@/sanity/lib/image";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import { resolveDocOgImage } from "@/lib/seo/resolve-og-image";
 import type { PublicationDetail } from "@/types/publication";
@@ -8,7 +8,7 @@ import { getPublicationBySlug } from "./queries";
 
 export function resolvePublicationImageUrls(publication: PublicationDetail) {
   const coverImageUrl = publication.coverImage
-    ? urlFor(publication.coverImage).width(800).height(1066).url()
+    ? publicationCoverImageUrl(publication.coverImage)
     : undefined;
 
   const ogImageUrl = resolveDocOgImage(publication);

@@ -105,7 +105,7 @@ When adding or renaming CMS fields:
 
 ## Images
 
-Use `sanity/lib/image.ts` helpers: `cardImageUrl`, `heroImageUrl`, `ogImageUrl`, `articleHeroImageUrl`.
+Use `sanity/lib/image.ts` helpers: `cardImageUrl`, `heroImageUrl`, `ogImageUrl`, `articleHeroImageUrl`, `publicationThumbnailUrl`, `publicationCoverImageUrl`.
 
 * Prefer hotspot/crop-aware builders from the approved helpers — do not hand-roll CDN URLs.
 * Require alt text in schema (`Rule.required()`); render meaningful `alt` on the site.

@@ -25,3 +25,33 @@ export function heroImageUrl(
 ): string {
   return urlFor(source).width(width).height(height).url();
 }
+
+/**
+ * 3:4 portrait thumbnail URL for publication cards, book listings, etc.
+ * Crops to vertical 3:4 portrait dimensions (default 600x800).
+ */
+export function publicationThumbnailUrl(
+  source: SanityImageSource,
+  width = 600,
+  height = 800,
+): string {
+  return urlFor(source).width(width).height(height).fit("crop").url();
+}
+
+/**
+ * 3:4 portrait cover image URL for publication detail pages and book covers.
+ * Crops to vertical 3:4 portrait dimensions (default 900x1200).
+ */
+export function publicationCoverImageUrl(
+  source: SanityImageSource,
+  width = 900,
+  height = 1200,
+): string {
+  return urlFor(source).width(width).height(height).fit("crop").url();
+}
+
+// Aliases for book thumbnails, book covers, and generic 3:4 crops
+export const bookThumbnailUrl = publicationThumbnailUrl;
+export const bookCoverImageUrl = publicationCoverImageUrl;
+export const coverImageUrl = publicationCoverImageUrl;
+export const thumbnailUrl = publicationThumbnailUrl;
