@@ -26,22 +26,22 @@
     "@sanity/client": "^7.25.0",
     "@sanity/image-url": "^2.1.1",
     "@sanity/vision": "^6.7.0",
-    "@sentry/nextjs": "^10.68.0",
+    "@sentry/nextjs": "^10.78.0",
     "@upstash/ratelimit": "^2.0.8",
     "@upstash/redis": "^1.38.0",
     "lucide-react": "^1.27.0",
-    "next": "^16.4.0",
+    "next": "^16.4.3",
     "next-sanity": "^13.2.2",
-    "nodemailer": "^10.1.1",
+    "nodemailer": "^10.3.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "resend": "^6.18.1",
     "sanity": "^6.7.0",
     "styled-components": "^6.4.4",
-    "zod": "^4.4.3"
+    "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@next/eslint-plugin-next": "16.4.0",
+    "@next/eslint-plugin-next": "16.4.3",
     "@playwright/test": "^1.62.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@tailwindcss/typography": "^0.5.20",
@@ -49,7 +49,7 @@
     "@types/nodemailer": "^8.0.2",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
-    "@vitest/coverage-v8": "^4.1.10",
+    "@vitest/coverage-v8": "^4.1.12",
     "babel-plugin-react-compiler": "^1.0.0",
     "eslint": "^10.8.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
@@ -59,7 +59,7 @@
     "postcss": "^8.5.24",
     "tailwindcss": "^4.3.3",
     "typescript": "^7.0.2",
-    "vitest": "^4.1.10"
+    "vitest": "^4.1.12"
   },
   "overrides": {
     "postcss": "^8.5.24",
@@ -74,7 +74,8 @@
     "dompurify": "^3.4.17",
     "source-map-js": "^1.2.2",
     "postcss-selector-parser": "^7.1.6",
-    "undici": "^7.29.0"
+    "undici": "^7.30.1",
+    "vite": "^8.3.5"
   },
   "browserslist": [
     "chrome 111",
